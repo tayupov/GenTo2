@@ -1,5 +1,19 @@
+/* * {
+  background-color: rgb(119,136,153);
+  color: white;
+} */
+* {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: 'Roboto', sans-serif;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

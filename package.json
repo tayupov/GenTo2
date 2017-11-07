@@ -1,13 +1,24 @@
 {
-  "name": "GenTo2",
+  "name": "gento-react",
   "version": "0.1.0",
   "private": true,
-  "devDependencies": {
-    "react-scripts": "1.0.14"
-  },
   "dependencies": {
+    "chartjs": "^0.3.24",
+    "mobx": "^3.3.1",
+    "mobx-react": "^4.3.4",
+    "moment": "^2.19.1",
     "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react-alert": "^2.4.0",
+    "react-chartjs-2": "^2.6.4",
+    "react-dom": "^16.0.0",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.0.15",
+    "react-stepzilla": "^4.6.3",
+    "recharts": "^1.0.0-beta.0",
+    "semantic-ui-css": "^2.2.12",
+    "semantic-ui-react": "^0.75.1",
+    "web3": "0.19.0"
   },
   "scripts": {
     "start": "react-scripts start",
