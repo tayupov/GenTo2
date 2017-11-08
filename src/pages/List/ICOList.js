@@ -1,9 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { Card } from 'semantic-ui-react';
 
 const ICOList = ({ items }) => {
-    console.log(items);
     return items.map(item => (
         <Card
             key={item.address}
@@ -18,6 +18,10 @@ const ICOList = ({ items }) => {
             className='flex-center'
         />
     ))
+}
+
+ICOList.propTypes = {
+    items: PropTypes.array.isRequired
 }
 
 export default ICOList;

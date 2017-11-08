@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import { Grid, Header, Segment, Progress } from 'semantic-ui-react';
 import moment from 'moment';
@@ -51,11 +52,14 @@ class DetailsSection extends Component {
     componentWillMount() {
         this.setAuctionTimer();
         this.props.setSupplyInterval((obj) => {
+            console.log('&&&&&&&&&&&&');
+            console.log(obj);
             this.setState({
                 supplyObj: obj
             })
         });
         this.props.listenForTokenBuy((obj) => {
+            console.log(obj);
             this.setState({
                 supplyObj: obj
             })
@@ -136,6 +140,16 @@ class DetailsSection extends Component {
         </Grid>
         )
     }
+}
+
+DetailsSection.propTypes = {
+    details: PropTypes.object.isRequired,
+    priceDevelopmentString: PropTypes.string.isRequired,
+    timeCountDown: PropTypes.string.isRequired,
+    currentPercentage: PropTypes.number.isRequired,
+    status: PropTypes.string.isRequired,
+    setSupplyInterval: PropTypes.func.isRequired,
+    listenForTokenBuy: PropTypes.func.isRequired
 }
 
 export default DetailsSection;

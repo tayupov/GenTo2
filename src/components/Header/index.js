@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import { Divider } from 'semantic-ui-react';
 
 const Header = ({ text }) => (
@@ -7,5 +9,9 @@ const Header = ({ text }) => (
         <Divider />
     </div>
 )
+
+Header.propTypes = {
+    text: PropTypes.string.isRequired
+}
 
 export default Header;

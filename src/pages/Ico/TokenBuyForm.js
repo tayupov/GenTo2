@@ -33,6 +33,9 @@ class TokenBuyForm extends Component {
     }
 
     onSubmit = () => {
+        console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')        
+        console.log(JSON.stringify(this.state));
+        console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
         this.props.buyToken(
             this.state.amount,
             this.state.etherUnit
