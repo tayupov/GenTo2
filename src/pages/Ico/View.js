@@ -32,7 +32,12 @@ const View = ({
         />
         }
         <Chart />
-        {tokenCountMsg && <TokensSection tokenCountMsg={tokenCountMsg} buyToken={buyToken} />}
+        {tokenCountMsg &&
+        <TokensSection
+            tokenCountMsg={tokenCountMsg}
+            buyToken={buyToken} 
+        />
+        }
     </Container>
 )
 

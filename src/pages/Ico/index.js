@@ -8,6 +8,8 @@ import View from './View';
 import web3 from 'myWeb3';
 import moment from 'moment';
 
+let purchaseNotify;
+
 class Ico extends Component {
 
     constructor() {
@@ -237,7 +239,11 @@ class Ico extends Component {
                 }
                 let amount = result.args._value.toNumber();
                 if (amount > 0){
-                    console.log('Success!' + amount + " Token(s) purchased.");
+                    // if (!purchaseNotify) {
+                    //     this.props.notify('', 'remove');
+                    // }
+                    purchaseNotify = this.props.notify("Success! " + amount + " Token(s) purchased.", "success")
+
                     this.setMyTokenCount();
                 }
             }

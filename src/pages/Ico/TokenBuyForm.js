@@ -17,7 +17,7 @@ class TokenBuyForm extends Component {
 
         this.state = {
             amount: 0,
-            etherUnit: 'ether'
+            etherUnit: ''
         }
     }
 

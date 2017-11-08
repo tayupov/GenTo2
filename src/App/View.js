@@ -11,23 +11,23 @@ import Ico from 'pages/Ico';
 import TopNav from 'components/TopNav';
 
 const View = ({
-    account, network
+    account, network, notify
 }) => (
     <div>
         <TopNav />
         <Container style={{ width: '800px' }}>
             <Switch>
                 <Route exact path="/"
-                    render={(props) => (<About {...props} account={account} network={network} />)}
+                    render={(props) => (<About {...props} account={account} network={network} notify={notify} />)}
                 />
                 <Route path="/ico/:address"
-                    render={(props) => (<Ico {...props} account={account} network={network} />)}
+                    render={(props) => (<Ico {...props} account={account} network={network} notify={notify} />)}
                 />
                 <Route path="/list"
-                    render={(props) => (<List {...props} account={account} />)}
+                    render={(props) => (<List {...props} account={account} notify={notify} />)}
                 />
                 <Route path="/generate"
-                    render={(props) => (<GenerateICO {...props} account={account} />)}
+                    render={(props) => (<GenerateICO {...props} account={account} notify={notify} />)}
                 />
             </Switch>
         </Container>
