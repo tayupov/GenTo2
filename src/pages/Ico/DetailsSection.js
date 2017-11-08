@@ -20,34 +20,33 @@ class DetailsSection extends Component {
     }
 
     setAuctionTimer = () => {
-    const { details, status } = this.props;
-    let timeCountDown;
-    console.log(details);
+        const { details, status } = this.props;
+        let timeCountDown;
+        console.log(details);
 
-    if(status === "pending") {
-        timeCountDown = "Auction will start at " + moment.unix(details._saleStart).format('LLL');
-    } else if (status === "running") {
-        const endTime = moment.unix(details._saleEnd);
-        let duration = moment.duration(endTime.diff(moment()));
-        const interval = 1000;
+        if(status === "pending") {
+            timeCountDown = "Auction will start at " + moment.unix(details._saleStart).format('LLL');
+        } else if (status === "running") {
+            const endTime = moment.unix(details._saleEnd);
+            let duration = moment.duration(endTime.diff(moment()));
+            const interval = 1000;
 
-        timeCountDown = duration.days() + " d " + duration.hours() + " h " + duration.minutes() + " m " + duration.seconds() + " s left";
-
-        auctionInterval = setInterval(() => {
-            if(endTime.diff(moment()) < 0) {
-                this.setAuctionTimer();
-            }
-            duration = moment.duration(duration - interval);
             timeCountDown = duration.days() + " d " + duration.hours() + " h " + duration.minutes() + " m " + duration.seconds() + " s left";
-            let currentPercentage = ((endTime.diff(moment()) / endTime.diff(moment.unix(details._saleStart))) * 100).toFixed(2);
-            console.log(currentPercentage);
-            this.setState({
-                timeCountDown,
-                currentPercentage
-            })
-        }, interval)
+
+            auctionInterval = setInterval(() => {
+                if(endTime.diff(moment()) < 0) {
+                    this.setAuctionTimer();
+                }
+                duration = moment.duration(duration - interval);
+                timeCountDown = duration.days() + " d " + duration.hours() + " h " + duration.minutes() + " m " + duration.seconds() + " s left";
+                let currentPercentage = ((endTime.diff(moment()) / endTime.diff(moment.unix(details._saleStart))) * 100).toFixed(2);
+                this.setState({
+                    timeCountDown,
+                    currentPercentage
+                })
+            }, interval)
+        }
     }
-}
 
     componentWillMount() {
         this.setAuctionTimer();
@@ -56,7 +55,11 @@ class DetailsSection extends Component {
                 supplyObj: obj
             })
         });
-        
+        this.props.listenForTokenBuy((obj) => {
+            this.setState({
+                supplyObj: obj
+            })
+        })
     }
 
     render() {

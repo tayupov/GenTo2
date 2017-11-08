@@ -8,7 +8,15 @@ import Chart from './Chart';
 import TokensSection from './TokensSection';
 
 const View = ({
-    auctionDetailsParsed, priceDevelopmentString, timeCountDown, currentPercentage, status, tokenCountMsg, setSupplyInterval
+    auctionDetailsParsed,
+    priceDevelopmentString,
+    timeCountDown,
+    currentPercentage,
+    status,
+    tokenCountMsg,
+    setSupplyInterval,
+    buyToken,
+    listenForTokenBuy
 }) => (
     <Container style={{ width: '800px' }}>
         <HeaderSection />
@@ -20,10 +28,11 @@ const View = ({
             currentPercentage={currentPercentage}
             status={status} 
             setSupplyInterval={setSupplyInterval}
+            listenForTokenBuy={listenForTokenBuy}
         />
         }
         <Chart />
-        {tokenCountMsg && <TokensSection tokenCountMsg={tokenCountMsg} />}
+        {tokenCountMsg && <TokensSection tokenCountMsg={tokenCountMsg} buyToken={buyToken} />}
     </Container>
 )
 

@@ -4,7 +4,7 @@ import { Grid, Header, Segment } from 'semantic-ui-react';
 
 import TokenBuyForm from './TokenBuyForm';
 
-const TokensSection = ({ tokenCountMsg }) => (
+const TokensSection = ({ tokenCountMsg, buyToken }) => (
     <Grid>
         <Grid.Row>
             <Grid.Column width={8}>
@@ -21,7 +21,7 @@ const TokensSection = ({ tokenCountMsg }) => (
                 </Header>
                 <Segment attached padded raised textAlign='right' color='olive'>
                     {/* Give your investment amount:  */}
-                    <TokenBuyForm />
+                    <TokenBuyForm buyToken={buyToken} />
                 </Segment>
             </Grid.Column>
         </Grid.Row>

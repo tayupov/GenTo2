@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
 import { createAuctionTokenInstance } from 'contractInstances';
-
+import { auctionTokenData } from 'contracts';
+ 
 import View from './View';
 
 import web3 from 'myWeb3';
@@ -18,14 +19,14 @@ class Ico extends Component {
             auctionType: null,
             buyPriceStart: null,
             buyPriceEnd: null,
-            auctionDetails: null,
-            auctionDetailsParsed: null,
+            auctionDetails: {},
+            auctionDetailsParsed: {},
             tokenCount: 0,
             tokenCountMsg: null,
             accountChanged: false,
             priceDevelopmentString: null,
             currentPercentage: null,
-            timeCountDown: null
+            timeCountDown: null,
         }
     }
 
@@ -184,12 +185,73 @@ class Ico extends Component {
         }    
     }
 
+    buyToken = (amount, etherUnit) => {
+        const instance = createAuctionTokenInstance(this.props.match.params.address);
+        const buyer = this.props.account;
+        const value = web3.toWei(amount, etherUnit);
+
+        console.log('++BUY TOKEN++');
+        console.log(amount)
+        console.log(etherUnit)        
+        web3.eth.estimateGas({
+            data: auctionTokenData.unlinked_binary
+        }, (err, gas) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            instance.buy(
+                {
+                    from: buyer,
+                    data: auctionTokenData.unlinked_binary,
+                    value,
+                    gas
+                }, (error, result) => {
+                    if(error) {
+                        console.log('Error: Error processing transaction.');
+                        console.error(error);
+                    } else {
+                        console.log('result');
+                    }
+                }
+            )
+        })
+    }
+
+    listenForTokenBuy = (cb) => {
+        const data = this.state.auctionDetails;
+        const instance = createAuctionTokenInstance(this.props.match.params.address);
+
+        instance.Transfer((error, result) => {
+            if(error) {
+                console.error(error);
+            } else {
+                if (this.state.auctionDetails) {
+                    const remainingSupply = result.args._remainingSupply.toNumber();
+                    const supplyPct = (remainingSupply & data._totalSupply) * 100;
+                    const supplyString = `${remainingSupply} of ${data._totalSupply} left for sale`;
+                    cb({
+                        supplyPct,
+                        supplyString
+                    });
+                }
+                let amount = result.args._value.toNumber();
+                if (amount > 0){
+                    console.log('Success!' + amount + " Token(s) purchased.");
+                    this.setMyTokenCount();
+                }
+            }
+        })
+    }
+
     render() {
         return(
             <View
                 {...this.props}
                 {...this.state}
                 setSupplyInterval={this.setSupplyInterval}
+                buyToken={this.buyToken}
+                listenForTokenBuy={this.listenForTokenBuy}
             />
         )
     }
