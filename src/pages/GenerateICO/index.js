@@ -16,7 +16,7 @@ const steps = [
     {name: 'name', component: <Name />},
     {name: 'amount', component: <Amount /> },
     {name: 'auction', component: <Auction /> },
-    {name: 'pricing', component: <Pricing /> },    
+    {name: 'pricing', component: <Pricing /> },
 ]
 
 class MultiStepForm extends Component {
@@ -24,9 +24,9 @@ class MultiStepForm extends Component {
         return(
             <div className='step-progress' style={{ textAlign: 'center', marginTop: '1em' }}>
                 <Header text="GENERATE YOUR OWN ICO" />
-                <StepZilla steps={steps} />
+                <StepZilla  steps={steps}  />
             </div>
-        )   
+        )
     }
 }
 
