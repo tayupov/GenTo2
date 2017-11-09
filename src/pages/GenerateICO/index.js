@@ -11,14 +11,14 @@ import Amount from './Amount';
 import Auction from './Auction';
 import Pricing from './Pricing';
 
-import MultiStep from 'components/MultiStepForm'; 
+import MultiStep from 'components/MultiStepForm';
 
 
 const steps = [
     {name: 'name', component: <Name />},
     {name: 'amount', component: <Amount /> },
     {name: 'auction', component: <Auction /> },
-    {name: 'pricing', component: <Pricing /> },    
+    {name: 'pricing', component: <Pricing /> },
 ]
 
 class MultiStepForm extends Component {
@@ -29,7 +29,7 @@ class MultiStepForm extends Component {
             //     <StepZilla steps={steps} />
             // </div>
             <MultiStep />
-        )   
+        )
     }
 }
 

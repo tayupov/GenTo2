@@ -7,6 +7,7 @@ const Name = () => (
       <label>How shall your Token be named?</label>
       <br/>
       <input type="text" name="token-name"/>
+      <br/>
       <label>What would be your ticker symbol?</label>
       <br/>
       <input type="text" name="ticker-name"/>

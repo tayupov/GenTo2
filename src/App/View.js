@@ -15,7 +15,7 @@ const View = ({
 }) => (
     <div>
         <TopNav account={account} />
-        <Container style={{ width: '800px' }}>
+        <Container>
             <Switch>
                 <Route exact path="/"
                     render={(props) => (<About {...props} />)}
