@@ -11,6 +11,8 @@ import Amount from './Amount';
 import Auction from './Auction';
 import Pricing from './Pricing';
 
+import MultiStep from 'components/MultiStepForm'; 
+
 
 const steps = [
     {name: 'name', component: <Name />},
@@ -22,10 +24,11 @@ const steps = [
 class MultiStepForm extends Component {
     render() {
         return(
-            <div className='step-progress' style={{ textAlign: 'center', marginTop: '1em' }}>
-                <Header text="GENERATE YOUR OWN ICO" />
-                <StepZilla steps={steps} />
-            </div>
+            // <div className='step-progress' style={{ textAlign: 'center', marginTop: '1em' }}>
+            //     <Header text="GENERATE YOUR OWN ICO" />
+            //     <StepZilla steps={steps} />
+            // </div>
+            <MultiStep />
         )   
     }
 }
