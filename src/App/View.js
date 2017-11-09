@@ -14,7 +14,7 @@ const View = ({
     account, network, notify
 }) => (
     <div>
-        <TopNav />
+        <TopNav account={account} />
         <Container style={{ width: '800px' }}>
             <Switch>
                 <Route exact path="/"
