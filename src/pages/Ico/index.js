@@ -73,12 +73,12 @@ class Ico extends Component {
 
     checkSupply = (address, callback) => {
         
-        if(!(web3 && this.state.auctionDetails.contract.data && this.state.auctionDetails.contract.address && isFunction(callback))) {
+        if(!(web3 && this.state.auctionDetails && this.props.match.params.address && isFunction(callback))) {
             if (!web3) {
                 console.log("Web3 has closed!");
-            } else if (!this.state.auctionDetails.contract.data) {
+            } else if (!this.state.auctionDetails) {
                 console.log("The contract data isn't loaded in.");
-            } else if (!this.state.auctionDetails.contract.address) {
+            } else if (!this.props.match.params.address) {
                 console.log("The contract address isn't loaded in.");
             } else if (!isFunction(callback)) {
                 console.log("The callback is not a function!")
@@ -191,16 +191,15 @@ class Ico extends Component {
         })
     }
 
-    checkForError() {
-        if(!(web3 && this.state.auctionDetails.contract.data && this.state.auctionDetails.contract.address && this.state.auctionDetails.eth.network)) {
+    checkForError = () => {
+
+        if(!(web3 && this.state.auctionDetails && this.props.match.params.address)) {
             if (!web3) {
                 console.log("Web3 has closed!");
-            } else if (!this.state.auctionDetails.contract.data) {
+            } else if (!this.state.auctionDetails) {
                 console.log("The contract data isn't loaded in.");
-            } else if (!this.state.auctionDetails.contract.address) {
+            } else if (!this.props.match.params.address) {
                 console.log("The contract address isn't loaded in.");
-            } else if (!this.state.auctionDetails.eth.network) {
-                console.log("The Ethereum network is not working.")
             } else {
                 console.log("An unidentified error occurred!");
             }
@@ -312,6 +311,7 @@ class Ico extends Component {
 
 Ico.propTypes = {
     account: PropTypes.string.isRequired,
+    network: PropTypes.string.isRequired,
     notify: PropTypes.func.isRequired
 }
 
