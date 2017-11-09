@@ -1,22 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Card } from 'semantic-ui-react';
+import { Card, Item, Label } from 'semantic-ui-react';
 
 const ICOList = ({ items }) => {
     return items.map(item => (
-        <Card
-            key={item.address}
-            style={{ fontSize: '18px' }}
-            color='olive'
-            fluid
-            raised
-            href={`/ico/${item.address}`}
-            header={item.name}
-            meta={item.address}
-            extra={item.date}
-            className='flex-center'
-        />
+        <Item>
+            <Item.Content style={{flex:'15px 0', fontSize: '70px', marginRight: '20px', padding: "42px 16px 32px",
+                    background:"red", textAlign: "center", color: "white", minWidth:"186px"}} href={`/ico/${item.address}`} >
+                {item.name.substring(0, 3)}
+            </Item.Content>
+
+            <Item.Content href={`/ico/${item.address}`} >
+                <Item.Header as='a'>{item.name}</Item.Header>
+                <Item.Meta>
+                    <span className='cinema'>{item.date}</span>
+                </Item.Meta>
+                <Item.Description>{item.address}</Item.Description>
+                <Item.Extra>
+                    <Label>My ICO</Label>
+                    <Label>Active</Label>
+                    <Label>0/100 tokens sold</Label>
+                </Item.Extra>
+            </Item.Content>
+        </Item>
     ))
 }
 
