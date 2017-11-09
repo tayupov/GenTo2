@@ -18,10 +18,10 @@ const View = ({
         <Container style={{ width: '800px' }}>
             <Switch>
                 <Route exact path="/"
-                    render={(props) => (<About {...props} account={account} network={network} notify={notify} />)}
+                    render={(props) => (<About {...props} />)}
                 />
                 <Route path="/ico/:address"
-                    render={(props) => (<Ico {...props} account={account} network={network} notify={notify} />)}
+                    render={(props) => (<Ico {...props} account={account} notify={notify} />)}
                 />
                 <Route path="/list"
                     render={(props) => (<List {...props} account={account} notify={notify} />)}

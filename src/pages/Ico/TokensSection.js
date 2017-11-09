@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { Grid, Header, Segment } from 'semantic-ui-react';
 
@@ -27,5 +28,10 @@ const TokensSection = ({ tokenCountMsg, buyToken }) => (
         </Grid.Row>
     </Grid>
 )
+
+TokensSection.propTypes = {
+    tokenCountMsg: PropTypes.string.isRequired,
+    buyToken: PropTypes.func.isRequired
+};
 
 export default TokensSection;

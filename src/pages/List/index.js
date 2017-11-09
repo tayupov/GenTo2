@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { PropTypes } from 'prop-types';
 
 import { createGentoFactoryInstance, createAuctionTokenInstance } from 'contractInstances';
 
@@ -6,7 +7,7 @@ import View from './View';
 
 import moment from 'moment';
 
-class Home extends Component {
+class List extends Component {
   
   constructor() {
     super();
@@ -83,4 +84,9 @@ class Home extends Component {
   }
 }
 
-export default Home;
+List.propTypes = {
+  account: PropTypes.string.isRequired,
+  notify: PropTypes.func.isRequired
+}
+
+export default List;

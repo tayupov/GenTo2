@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+
 import { Menu, Segment } from 'semantic-ui-react';
 
 class TopNav extends Component {
@@ -10,7 +11,7 @@ class TopNav extends Component {
 
     render() {
         const { activeItem } = this.state
-        console.log("The current active item: " + activeItem)
+
         return (
             <Segment color='teal' size='small' inverted>
                 <Menu size='large' color='teal' inverted secondary borderless>

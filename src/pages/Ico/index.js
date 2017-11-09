@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import { createAuctionTokenInstance } from 'contractInstances';
 import { auctionTokenData } from 'contracts';
@@ -176,7 +177,7 @@ class Ico extends Component {
                     console.error(err);
                 } else {
                     supply = supply.toNumber();
-                    const supplyPct = (supply & data._totalSupply) * 100;
+                    const supplyPct = (supply / data._totalSupply) * 100;
                     const supplyString = `${supply} of ${data._totalSupply} left for sale`;
                     cb({
                         supplyPct,
@@ -191,10 +192,7 @@ class Ico extends Component {
         const instance = createAuctionTokenInstance(this.props.match.params.address);
         const buyer = this.props.account;
         const value = web3.toWei(amount, etherUnit);
-
-        console.log('++BUY TOKEN++');
-        console.log(amount)
-        console.log(etherUnit)        
+     
         web3.eth.estimateGas({
             data: auctionTokenData.unlinked_binary
         }, (err, gas) => {
@@ -210,10 +208,7 @@ class Ico extends Component {
                     gas
                 }, (error, result) => {
                     if(error) {
-                        console.log('Error: Error processing transaction.');
-                        console.error(error);
-                    } else {
-                        console.log('result');
+                        this.props.notify('Error processing transaction.', 'error');
                     }
                 }
             )
@@ -230,7 +225,7 @@ class Ico extends Component {
             } else {
                 if (this.state.auctionDetails) {
                     const remainingSupply = result.args._remainingSupply.toNumber();
-                    const supplyPct = (remainingSupply & data._totalSupply) * 100;
+                    const supplyPct = (remainingSupply / data._totalSupply) * 100;
                     const supplyString = `${remainingSupply} of ${data._totalSupply} left for sale`;
                     cb({
                         supplyPct,
@@ -262,5 +257,12 @@ class Ico extends Component {
         )
     }
 }
+
+Ico.propTypes = {
+    account: PropTypes.string.isRequired,
+    notify: PropTypes.func.isRequired
+}
+
+
 
 export default Ico;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { Divider } from 'semantic-ui-react';
 
@@ -11,5 +12,9 @@ const HeaderSection = ({ account }) => (
         <h3>{account}</h3>
     </div>
 )
+
+HeaderSection.propTypes = {
+    account: PropTypes.string.isRequired
+}
 
 export default HeaderSection;
