@@ -6,6 +6,7 @@ import { auctionTokenData } from 'contracts';
  
 import View from './View';
 
+import { isFunction } from 'utils';
 import web3 from 'myWeb3';
 import moment from 'moment';
 
@@ -71,6 +72,23 @@ class Ico extends Component {
     }
 
     checkSupply = (address, callback) => {
+        
+        if(!(web3 && this.state.auctionDetails && this.props.match.params.address && isFunction(callback))) {
+            if (!web3) {
+                console.log("Web3 has closed!");
+            } else if (!this.state.auctionDetails) {
+                console.log("The contract data isn't loaded in.");
+            } else if (!this.props.match.params.address) {
+                console.log("The contract address isn't loaded in.");
+            } else if (!isFunction(callback)) {
+                console.log("The callback is not a function!")
+            } else {
+                console.log("An unidentified error occurred!");
+            }
+            callback(new Error("Contract not ready for usage"));
+            return;
+        }
+
         const instance = createAuctionTokenInstance(this.props.match.params.address);
         instance.balanceOf(address, (error, result) => {
             if(error) {
@@ -151,11 +169,16 @@ class Ico extends Component {
     }
 
     getContractDetails = (address) => {
+
+        if(this.checkForError()) {
+            return;
+        }
+
         const instance = createAuctionTokenInstance(address);
 
         instance.getDetails((error, result) => {
             if(error) {
-                console.error(result);
+                console.error(error);
             } else {
                 let data = this.parseContractDetails(result);
                 this.setState({
@@ -166,6 +189,24 @@ class Ico extends Component {
                 this.setPriceDevelopmentString();
             }
         })
+    }
+
+    checkForError = () => {
+
+        if(!(web3 && this.state.auctionDetails && this.props.match.params.address)) {
+            if (!web3) {
+                console.log("Web3 has closed!");
+            } else if (!this.state.auctionDetails) {
+                console.log("The contract data isn't loaded in.");
+            } else if (!this.props.match.params.address) {
+                console.log("The contract address isn't loaded in.");
+            } else {
+                console.log("An unidentified error occurred!");
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     setSupplyInterval = (cb) => {
@@ -189,6 +230,11 @@ class Ico extends Component {
     }
 
     buyToken = (amount, etherUnit) => {
+
+        if(this.checkForError()) {
+            return;
+        }
+
         const instance = createAuctionTokenInstance(this.props.match.params.address);
         const buyer = this.props.account;
         const value = web3.toWei(amount, etherUnit);
@@ -216,6 +262,11 @@ class Ico extends Component {
     }
 
     listenForTokenBuy = (cb) => {
+
+        if(this.checkForError()) {
+            return;
+        }
+
         const data = this.state.auctionDetails;
         const instance = createAuctionTokenInstance(this.props.match.params.address);
 
@@ -260,6 +311,7 @@ class Ico extends Component {
 
 Ico.propTypes = {
     account: PropTypes.string.isRequired,
+    network: PropTypes.string.isRequired,
     notify: PropTypes.func.isRequired
 }
 

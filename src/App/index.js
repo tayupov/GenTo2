@@ -24,10 +24,30 @@ class App extends Component {
   
   updateNetwork = () => {
     web3.version.getNetwork((err, netId) => {
+      if (err) {
+        console.log('The network connection could not be established!');
+        console.error(err);
+      }
       this.setState({
         network: netId
       })
     })
+  }
+  
+  updateAccount = () => {
+    web3.eth.getAccounts((err, accounts) => {
+      if (err) {
+        console.log('The account could not be updated!');
+        console.error(err);
+      }
+      if(this.state.account !== accounts[0]){
+        if(this.state.account !== null)
+          this.notify('Account Switched!', 'info');
+        this.setState({
+          account: accounts[0]
+        })
+      }
+    });
   }
   
   alertOptions = {
@@ -37,7 +57,8 @@ class App extends Component {
     time: 5000,
     transition: 'fade'
   }
-
+  
+  
   notify = (message, type) => {
     switch(type) {
       case 'info':
@@ -50,23 +71,11 @@ class App extends Component {
         return this.msg.error(message);
         break;
       case 'remove':
-        console.log('REMOVE THIS DAMN THING!')
         return this.msg.removeAll();
         break;
     }
   }
 
-  updateAccount = () => {
-    web3.eth.getAccounts((err, accounts) => {
-      if(this.state.account !== accounts[0]){
-        if(this.state.account !== null)
-          this.notify('Account Switched!', 'info');
-        this.setState({
-          account: accounts[0]
-        })
-      }
-    });
-  }
 
   render() {  
     return (

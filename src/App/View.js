@@ -21,7 +21,7 @@ const View = ({
                     render={(props) => (<About {...props} />)}
                 />
                 <Route path="/ico/:address"
-                    render={(props) => (<Ico {...props} account={account} notify={notify} />)}
+                    render={(props) => (<Ico {...props} account={account} network={network} notify={notify} />)}
                 />
                 <Route path="/list"
                     render={(props) => (<List {...props} account={account} notify={notify} />)}
