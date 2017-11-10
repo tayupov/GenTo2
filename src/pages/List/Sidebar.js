@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Segment, Checkbox, Search } from 'semantic-ui-react';
 
-const Sidebar = ({style: style}) => (
+const Sidebar = () => (
     <Segment  style={{ flex: '0 250px', width: '250px', margin: '1.5em 20px 0 0 '}} >
         <h2>Filter</h2>
         <Search style={{marginBottom: '20px'}}

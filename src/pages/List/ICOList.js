@@ -4,11 +4,22 @@ import PropTypes from 'prop-types';
 import { Card, Item, Label } from 'semantic-ui-react';
 
 const ICOList = ({ items }) => {
+
+    const titleBoxStyle = {
+        flex:'15px 0',
+        fontSize: '70px',
+        marginRight: '20px',
+        padding: "42px 16px 32px",
+        background:"teal",
+        textAlign: "center",
+        color: "white",
+        minWidth:"186px"
+    }
+
     return items.map(item => (
         <Item>
-            <Item.Content style={{flex:'15px 0', fontSize: '70px', marginRight: '20px', padding: "42px 16px 32px",
-                    background:"red", textAlign: "center", color: "white", minWidth:"186px"}} href={`/ico/${item.address}`} >
-                {item.name.substring(0, 3)}
+            <Item.Content style={titleBoxStyle} href={`/ico/${item.address}`} >
+                {item.name.substring(0, 3).toUpperCase()}
             </Item.Content>
 
             <Item.Content href={`/ico/${item.address}`} >
