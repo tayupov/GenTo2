@@ -89,13 +89,14 @@ class Ico extends Component {
             return;
         }
 
-        const instance = createAuctionTokenInstance(this.props.match.params.address);
-        instance.balanceOf(address, (error, result) => {
-            if(error) {
-                callback(error);
-            } else {
-                callback(null, result);
-            }
+        createAuctionTokenInstance(this.props.match.params.address).then(instance => {
+            instance.balanceOf(address, (error, result) => {
+                if(error) {
+                    callback(error);
+                } else {
+                    callback(null, result);
+                }
+            })
         })
     }
 
@@ -174,20 +175,20 @@ class Ico extends Component {
             return;
         }
 
-        const instance = createAuctionTokenInstance(address);
-
-        instance.getDetails((error, result) => {
-            if(error) {
-                console.error(error);
-            } else {
-                let data = this.parseContractDetails(result);
-                this.setState({
-                    auctionDetailsParsed: data,
-                })
-                this.initAuctionDetails(data);
-
-                this.setPriceDevelopmentString();
-            }
+        createAuctionTokenInstance(address).then(instance => {
+            instance.getDetails((error, result) => {
+                if(error) {
+                    console.error(error);
+                } else {
+                    let data = this.parseContractDetails(result);
+                    this.setState({
+                        auctionDetailsParsed: data,
+                    })
+                    this.initAuctionDetails(data);
+    
+                    this.setPriceDevelopmentString();
+                }
+            })
         })
     }
 
@@ -235,7 +236,6 @@ class Ico extends Component {
             return;
         }
 
-        const instance = createAuctionTokenInstance(this.props.match.params.address);
         const buyer = this.props.account;
         const value = web3.toWei(amount, etherUnit);
      
@@ -246,18 +246,20 @@ class Ico extends Component {
                 console.error(err);
                 return;
             }
-            instance.buy(
-                {
-                    from: buyer,
-                    data: auctionTokenData.unlinked_binary,
-                    value,
-                    gas
-                }, (error, result) => {
-                    if(error) {
-                        this.props.notify('Error processing transaction.', 'error');
+            createAuctionTokenInstance(this.props.match.params.address).then(instance => {
+                instance.buy(
+                    {
+                        from: buyer,
+                        data: auctionTokenData.unlinked_binary,
+                        value,
+                        gas
+                    }, (error, result) => {
+                        if(error) {
+                            this.props.notify('Error processing transaction.', 'error');
+                        }
                     }
-                }
-            )
+                ) 
+            })
         })
     }
 
@@ -266,33 +268,33 @@ class Ico extends Component {
         if(this.checkForError()) {
             return;
         }
-
+        
         const data = this.state.auctionDetails;
-        const instance = createAuctionTokenInstance(this.props.match.params.address);
-
-        instance.Transfer((error, result) => {
-            if(error) {
-                console.error(error);
-            } else {
-                if (this.state.auctionDetails) {
-                    const remainingSupply = result.args._remainingSupply.toNumber();
-                    const supplyPct = (remainingSupply / data._totalSupply) * 100;
-                    const supplyString = `${remainingSupply} of ${data._totalSupply} left for sale`;
-                    cb({
-                        supplyPct,
-                        supplyString
-                    });
+        createAuctionTokenInstance(this.props.match.params.address).then(instance => {
+            instance.Transfer((error, result) => {
+                if(error) {
+                    console.error(error);
+                } else {
+                    if (this.state.auctionDetails) {
+                        const remainingSupply = result.args._remainingSupply.toNumber();
+                        const supplyPct = (remainingSupply / data._totalSupply) * 100;
+                        const supplyString = `${remainingSupply} of ${data._totalSupply} left for sale`;
+                        cb({
+                            supplyPct,
+                            supplyString
+                        });
+                    }
+                    let amount = result.args._value.toNumber();
+                    if (amount > 0){
+                        // if (!purchaseNotify) {
+                        //     this.props.notify('', 'remove');
+                        // }
+                        purchaseNotify = this.props.notify("Success! " + amount + " Token(s) purchased.", "success")
+    
+                        this.setMyTokenCount();
+                    }
                 }
-                let amount = result.args._value.toNumber();
-                if (amount > 0){
-                    // if (!purchaseNotify) {
-                    //     this.props.notify('', 'remove');
-                    // }
-                    purchaseNotify = this.props.notify("Success! " + amount + " Token(s) purchased.", "success")
-
-                    this.setMyTokenCount();
-                }
-            }
+            })
         })
     }
 
