@@ -162,7 +162,7 @@ class MultiStepForm extends Component {
         return(
             <div className='step-progress' style={{ textAlign: 'center', marginTop: '1em' }}>
                 <Header text="GENERATE YOUR OWN ICO" />
-                <StepZilla steps={steps} />
+                <StepZilla steps={steps} nextButtonCls="ui positive button" backButtonCls="ui positive button" />
             </div>
             // <MultiStep />
             //<Button onClick={this.submitTokenContract}>Create an ICO</Button>

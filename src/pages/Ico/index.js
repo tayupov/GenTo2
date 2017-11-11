@@ -246,7 +246,7 @@ class Ico extends Component {
                     console.error(err);
                 } else {
                     supply = supply.toNumber();
-                    const supplyPct = (supply / data._totalSupply) * 100;
+                    const supplyPct = ((supply / data._totalSupply) * 100).toFixed(2);
                     const supplyString = `${supply} of ${data._totalSupply} left for sale`;
                     cb({
                         supplyPct,

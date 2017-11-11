@@ -23,7 +23,7 @@ class Name extends Component {
 
   render() {
     return(
-      <div>
+      <div style={{ marginBottom: '1em' }}>
         <h1>Name</h1>
         <form id="name-form">
           <label>How shall your Token be named?</label>
