@@ -10,6 +10,8 @@ import web3 from 'myWeb3';
 
 import Header from 'components/Header';
 
+import './main.css';
+
 import Name from './Name';
 import Amount from './Amount';
 import Auction from './Auction';
@@ -144,15 +146,15 @@ class MultiStepForm extends Component {
 
     setNameState = (obj) => {
       this.setState({
-        tokenName: obj.name,
-        tickerSymbol: obj.symbol
+        tokenName: obj.tokenName,
+        tickerSymbol: obj.tickerSymbol
       })
     }
 
     render() {
 
       const steps = [
-          {name: 'name', component: <Name setNameState= {this.setNameState}/>, },
+          {name: 'name', component: <Name setNameState={this.setNameState}/>, },
           {name: 'amount', component: <Amount /> },
           {name: 'auction', component: <Auction /> },
           {name: 'pricing', component: <Pricing /> },

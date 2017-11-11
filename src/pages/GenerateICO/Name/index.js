@@ -6,7 +6,7 @@ class Name extends Component {
     super(props);
     this.state = {
       tokenName: '',
-      symbol: ''
+      tickerSymbol: ''
     };
   }
 
@@ -15,9 +15,9 @@ class Name extends Component {
     return true;
   }
 
-  onChange = (str) => {
+  onChange = e => {
     this.setState({
-      []: str
+       [e.target.name]: e.target.value
     })
   }
 
@@ -32,7 +32,7 @@ class Name extends Component {
           <br/>
           <label>What would be your ticker symbol?</label>
           <br/>
-          <input type="text" name="tickerName" onChange={this.onChange}/>
+          <input type="text" name="tickerSymbol" onChange={this.onChange}/>
         </form>
       </div>
     );
