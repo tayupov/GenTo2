@@ -51,15 +51,14 @@ class DetailsSection extends Component {
 
     componentWillMount() {
         this.setAuctionTimer();
+
         this.props.setSupplyInterval((obj) => {
-            console.log('&&&&&&&&&&&&');
-            console.log(obj);
             this.setState({
                 supplyObj: obj
             })
         });
+
         this.props.listenForTokenBuy((obj) => {
-            console.log(obj);
             this.setState({
                 supplyObj: obj
             })
@@ -67,7 +66,9 @@ class DetailsSection extends Component {
     }
 
     render() {
-        const { details, status } = this.props;
+        const { details, status, priceDevelopmentString } = this.props;
+        const { supplyObj, timeCountDown, currentPercentage } = this.state;
+
         return (
             <Grid>
             <Grid.Row>
@@ -76,7 +77,7 @@ class DetailsSection extends Component {
                         Token Name
                     </Header>
                     <Segment attached padded raised textAlign='left' color='olive'>
-                        {this.props.details._name}
+                        {details._name}
                     </Segment>
                 </Grid.Column>
                 <Grid.Column width={8}>
@@ -95,7 +96,7 @@ class DetailsSection extends Component {
                         Ticker Symbol
                     </Header>
                     <Segment attached padded raised textAlign='left' color='olive'>
-                        {this.props.details._symbol}
+                        {details._symbol}
                     </Segment>
                 </Grid.Column>
                 <Grid.Column width={8}>
@@ -114,7 +115,7 @@ class DetailsSection extends Component {
                         Number of Tokens
                     </Header>
                     <Segment attached padded raised textAlign='left' color='olive'>
-                        <Progress percent={this.state.supplyObj.supplyPct} indicating progress label={this.state.supplyObj.supplyString} />
+                        <Progress percent={supplyObj.supplyPct} indicating progress label={supplyObj.supplyString} />
                     </Segment>
                 </Grid.Column>
                 <Grid.Column width={8}>
@@ -122,7 +123,7 @@ class DetailsSection extends Component {
                         Period of Auction
                     </Header>
                     <Segment attached padded raised textAlign='right' color='olive'>
-                        <Progress percent={this.state.currentPercentage} indicating progress label={this.state.timeCountDown} />
+                        <Progress percent={currentPercentage} indicating progress label={timeCountDown} />
                     </Segment>
                 </Grid.Column>
             </Grid.Row>
@@ -133,7 +134,7 @@ class DetailsSection extends Component {
                         Price over time
                     </Header>
                     <Segment attached padded textAlign='center' color='olive'>
-                        <div dangerouslySetInnerHTML={{__html: this.props.priceDevelopmentString}}></div>
+                        <div dangerouslySetInnerHTML={{__html: priceDevelopmentString}}></div>
                     </Segment>
                 </Grid.Column>
             </Grid.Row>

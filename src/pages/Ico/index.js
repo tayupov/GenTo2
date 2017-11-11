@@ -31,6 +31,7 @@ class Ico extends Component {
             priceDevelopmentString: null,
             currentPercentage: null,
             timeCountDown: null,
+            chartDataArr: []
         }
     }
 
@@ -185,13 +186,38 @@ class Ico extends Component {
                         auctionDetailsParsed: data,
                     })
                     this.initAuctionDetails(data);
-    
+                    this.getChartData();                    
                     this.setPriceDevelopmentString();
                 }
             })
         })
     }
 
+    getChartData = () => {
+        const data = this.state.auctionDetails;
+        let cd = [];
+        cd.push({
+            x: moment.unix(data._saleStart).valueOf(),
+            y: this.state.buyPriceStart
+        });
+        const duration = data._saleEnd - data._saleStart;
+        if(this.state.status === 'running'){
+            const passed = moment().unix() - data._saleStart;
+            const currPrice = Math.floor(this.state.buyPriceStart + ((this.state.buyPriceEnd - this.state.buyPriceStart) * passed) / duration);
+            cd.push({
+                x: moment.unix(data._saleStart + passed).valueOf(),
+                y: currPrice
+            })
+        }
+        cd.push({
+            x: moment.unix(data._saleEnd).valueOf(),
+            y: this.state.buyPriceEnd
+        });
+        this.setState({
+            chartDataArr: cd
+        })
+    }
+ 
     checkForError = () => {
 
         if(!(web3 && this.state.auctionDetails && this.props.match.params.address)) {
@@ -268,7 +294,7 @@ class Ico extends Component {
         if(this.checkForError()) {
             return;
         }
-        
+
         const data = this.state.auctionDetails;
         createAuctionTokenInstance(this.props.match.params.address).then(instance => {
             instance.Transfer((error, result) => {
@@ -277,7 +303,7 @@ class Ico extends Component {
                 } else {
                     if (this.state.auctionDetails) {
                         const remainingSupply = result.args._remainingSupply.toNumber();
-                        const supplyPct = (remainingSupply / data._totalSupply) * 100;
+                        const supplyPct = ((remainingSupply / data._totalSupply) * 100).toFixed(2);
                         const supplyString = `${remainingSupply} of ${data._totalSupply} left for sale`;
                         cb({
                             supplyPct,

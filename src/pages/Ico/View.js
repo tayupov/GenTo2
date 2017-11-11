@@ -14,6 +14,7 @@ const View = ({
     currentPercentage,
     status,
     tokenCountMsg,
+    chartDataArr,
     setSupplyInterval,
     buyToken,
     listenForTokenBuy
@@ -31,7 +32,7 @@ const View = ({
             listenForTokenBuy={listenForTokenBuy}
         />
         }
-        <Chart />
+        <Chart chartDataArr={chartDataArr} />
         {tokenCountMsg &&
         <TokensSection
             tokenCountMsg={tokenCountMsg}
