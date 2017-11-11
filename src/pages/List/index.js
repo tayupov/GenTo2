@@ -64,7 +64,6 @@ class List extends Component {
   listIcos = () => {
     const owner = this.props.account;
     createGentoFactoryInstance().then(instance => {
-      console.log(instance);
       instance.getICOsFromOwner(owner, (err, res) => {
         if(err) {
           console.error(err);

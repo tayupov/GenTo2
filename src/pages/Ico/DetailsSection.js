@@ -23,7 +23,6 @@ class DetailsSection extends Component {
     setAuctionTimer = () => {
         const { details, status } = this.props;
         let timeCountDown;
-        console.log(details);
 
         if(status === "pending") {
             timeCountDown = "Auction will start at " + moment.unix(details._saleStart).format('LLL');

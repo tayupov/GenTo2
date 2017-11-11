@@ -46,6 +46,7 @@ class Ico extends Component {
         } else {
             console.log('Missing address parameter');
         }
+        setInterval(this.getChartData, 10000);
     }
 
     componentDidUpdate(nextProps) {
