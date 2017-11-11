@@ -7,21 +7,23 @@ import web3 from 'myWeb3';
 
 class App extends Component {
 
-  
+
   constructor() {
     super();
-    
+
     this.state = {
       account: null,
       network: null
     }
   }
-  
+
+
+
   componentWillMount() {
     this.updateNetwork();
     setInterval(this.updateAccount, 1000);
   }
-  
+
   updateNetwork = () => {
     web3.version.getNetwork((err, netId) => {
       if (err) {
@@ -33,7 +35,7 @@ class App extends Component {
       })
     })
   }
-  
+
   updateAccount = () => {
     web3.eth.getAccounts((err, accounts) => {
       if (err) {
@@ -49,7 +51,7 @@ class App extends Component {
       }
     });
   }
-  
+
   alertOptions = {
     offset: 14,
     position: 'bottom left',
@@ -57,8 +59,8 @@ class App extends Component {
     time: 5000,
     transition: 'fade'
   }
-  
-  
+
+
   notify = (message, type) => {
     switch(type) {
       case 'info':
@@ -77,12 +79,12 @@ class App extends Component {
   }
 
 
-  render() {  
+  render() {
     return (
       <div>
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
         <View
-          {...this.state}  
+          {...this.state}
           notify={this.notify}
         />
       </div>

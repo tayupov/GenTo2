@@ -18,12 +18,7 @@ import Pricing from './Pricing';
 import MultiStep from 'components/MultiStepForm';
 
 
-const steps = [
-    {name: 'name', component: <Name />},
-    {name: 'amount', component: <Amount /> },
-    {name: 'auction', component: <Auction /> },
-    {name: 'pricing', component: <Pricing /> },
-]
+
 
 class MultiStepForm extends Component {
 
@@ -46,7 +41,7 @@ class MultiStepForm extends Component {
 
     submitTokenContract = () => {
 
-        const { account, network, notify } = this.props; 
+        const { account, network, notify } = this.props;
         if(!(web3 && account && network)) {
             if (!web3) {
                 console.log("Web3 has closed!");
@@ -60,7 +55,7 @@ class MultiStepForm extends Component {
         return;
         }
 
-        const { 
+        const {
             tokenName,
             tickerSymbol,
             totalSupply,
@@ -79,13 +74,13 @@ class MultiStepForm extends Component {
             notify("Min > Max Your maximum token price needs to be higher than the minimum token price", "warninig");
             return;
         }
-        
+
         if (typeOfAuction === 'dutch') {
             const tmp = minimumPrice;
             minimumPrice = maximumPrice;
             maximumPrice = tmp;
         }
-        
+
         const sellPrice = maximumPrice;
 
         let saleStartForm = Math.floor(saleStart / 1000);
@@ -98,7 +93,7 @@ class MultiStepForm extends Component {
         }
 
         gentoFactoryData.then(contractData => {
-            createGentoFactoryInstance().then(instance => {
+            createGentoFactoryInstance(instance => {
                 web3.eth.estimateGas({
                     data: contractData.unlinked_binary
                 }, (err, gas) => {
@@ -125,8 +120,8 @@ class MultiStepForm extends Component {
                         }
                     )
                 })
-            })  
-        })      
+            })
+        })
     }
 
     handleContractCreatedEvent = (instance) => {
@@ -147,14 +142,29 @@ class MultiStepForm extends Component {
         })
     }
 
+    setNameState = (obj) => {
+      this.setState({
+        tokenName: obj.name,
+        tickerSymbol: obj.symbol
+      })
+    }
+
     render() {
+
+      const steps = [
+          {name: 'name', component: <Name setNameState= {this.setNameState}/>, },
+          {name: 'amount', component: <Amount /> },
+          {name: 'auction', component: <Auction /> },
+          {name: 'pricing', component: <Pricing /> },
+      ]
         return(
-            // <div className='step-progress' style={{ textAlign: 'center', marginTop: '1em' }}>
-            //     <Header text="GENERATE YOUR OWN ICO" />
-            //     <StepZilla steps={steps} />
-            // </div>
+            <div className='step-progress' style={{ textAlign: 'center', marginTop: '1em' }}>
+                <Header text="GENERATE YOUR OWN ICO" />
+                <StepZilla steps={steps} />
+            </div>
             // <MultiStep />
-            <Button onClick={this.submitTokenContract}>Create an ICO</Button>
+            //<Button onClick={this.submitTokenContract}>Create an ICO</Button>
+
         )
     }
 }

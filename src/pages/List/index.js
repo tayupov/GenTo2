@@ -8,10 +8,10 @@ import View from './View';
 import moment from 'moment';
 
 class List extends Component {
-  
+
   constructor() {
     super();
-    
+
     this.state = {
       items: [],
     }
@@ -20,7 +20,7 @@ class List extends Component {
   componentDidMount() {
     this.listIcos();
   }
-  
+
   componentDidUpdate(nextProps) {
     if (nextProps.account !== this.props.account) {
       this.setState({
@@ -40,15 +40,15 @@ class List extends Component {
           const creationDate = result[4].toNumber();
           const name = result[1];
           const date = moment.unix(creationDate).format('LL');
-          
+
           const item = {
             address: address,
             name: name,
             date: date
           }
-  
+
           let hasAddress = this.state.items.some( item => item['address'] === address )
-  
+
           if(!hasAddress) {
             const newItems = this.state.items;
             newItems.push(item);
@@ -63,7 +63,7 @@ class List extends Component {
 
   listIcos = () => {
     const owner = this.props.account;
-    createGentoFactoryInstance().then(instance => {
+    createGentoFactoryInstance(instance => {
       instance.getICOsFromOwner(owner, (err, res) => {
         if(err) {
           console.error(err);
@@ -74,7 +74,7 @@ class List extends Component {
       })
     })
   }
-  
+
 
   render() {
     return (
