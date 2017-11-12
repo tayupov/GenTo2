@@ -23,7 +23,6 @@ const View = ({
         <Button onClick={handleShow}>Create an ICO</Button>
         <Dimmer
             page
-            blurring
             inverted
             active={active}
         >

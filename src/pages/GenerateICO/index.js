@@ -161,7 +161,7 @@ class GenerateICO  extends Component {
           {name: 'NAME',component: <Name getStore={this.getStore} updateStore={this.updateStore} />, },
           {name: 'AMOUNT & TIME', component: <Amount getStore={this.getStore} updateStore={this.updateStore} /> },
           {name: 'AUCTION', component: <Auction getStore={this.getStore} updateStore={this.updateStore} /> },
-          {name: 'PRICING', component: <Pricing getStore={this.getStore} updateStore={this.updateStore} /> },
+          {name: 'PRICING', component: <Pricing getStore={this.getStore} updateStore={this.updateStore} submitTokenContract={this.submitTokenContract} /> },
       ]
 
         return(       

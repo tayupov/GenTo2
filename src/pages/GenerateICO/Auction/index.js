@@ -1,17 +1,92 @@
-import React from 'react';
+import React, {Component} from 'react';
 
-const Auction = () => (
-  <div>
-    <h1>Auction</h1>
-    <h2>Choose a type of Auction</h2>
-    <canvas id="auctionChart" width="400px" height="200px"></canvas>
-  </div>
+import { Form, Container, Checkbox } from 'semantic-ui-react';
 
-)
+import InlineError from 'components/messages/InlineError';
 
-var c = document.getElementById('auctionChart');
-//var ctx = c.getContext('2d');
-//var img = document.getElementById('image');
-//ctx.drawImage(img, 10,10);
+const styles = {
+  root: {
+    marginBottom: '1em'
+  },
+  firstLabel: {
+    fontSize: '18px',
+    marginTop: '3em',
+    marginBottom: '0.8em',
+    fontWeight: '300'
+  }
+}
 
-export default Auction;
+class Name extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: {
+        english: false,
+        dutch: false,
+      },
+      errors: { 
+        auctionType: ''
+      },
+      loading: false
+    };
+  }
+
+  isValidated() {
+    const errors = this.validate(this.state.data);
+    this.setState({ errors });
+    if (Object.keys(errors).length === 0) {
+      this.props.updateStore(this.state.data);
+      return true;
+    }
+    return false;
+  }
+
+  onChange = (e, data) => {
+    this.setState({
+      data: { ...this.state.data, [data.name]: data.checked }
+   })
+  }
+
+  validate = data => {
+    const errors = {};
+    console.log(data);
+    if (!(data.english || data.dutch)) errors.auctionType = 'The auction type has not been selected!';
+    return errors;
+  }
+
+  render() {
+
+    const { errors } = this.state;
+    
+    return(
+      <Container style={styles.root}>
+        <Form id="name-form" action=''>
+          <Form.Field error={!!errors.tokenName}>
+            <label style={styles.firstLabel}>Choose the auction type!</label>
+            <Checkbox
+              name="english"
+              id="english"
+              label="english"
+              onChange={this.onChange}
+              size='small'
+              style={styles.input}
+            />
+            <Checkbox
+              name="dutch"
+              id="dutch"
+              label="dutch"
+              onChange={this.onChange}
+              size='small'
+              style={styles.input}
+            />
+          </Form.Field>
+          {errors.auctionType && <InlineError text={errors.auctionType} />}
+        </Form>
+      </Container>
+    );
+  }
+
+}
+
+export default Name;

@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 
 import { Form, Input, Container } from 'semantic-ui-react';
 
+import InlineError from 'components/messages/InlineError';
+
 const styles = {
   root: {
     marginBottom: '1em'
@@ -27,27 +29,50 @@ class Name extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tokenName: '',
-      tickerSymbol: ''
+      data: {
+        tokenName: '',
+        tickerSymbol: '',
+      },
+      errors: { 
+        tokenName: '',
+        tickerSymbol: ''
+      },
+      loading: false
     };
   }
 
   isValidated() {
-    this.props.updateStore(this.state);
-    return true;
+    const errors = this.validate(this.state.data);
+    this.setState({ errors });
+    if (Object.keys(errors).length === 0) {
+      this.props.updateStore(this.state.data);
+      return true;
+    }
+    return false;
   }
 
   onChange = e => {
     this.setState({
-       [e.target.name]: e.target.value
+       data: { ...this.state.data, [e.target.name]: e.target.value }
     })
   }
 
+  validate = data => {
+    const errors = {};
+    if (!data.tokenName) errors.tokenName = "Can't be blank";
+    console.log(data.tickerSymbol.length);
+    if (data.tickerSymbol.length !== 3) errors.tickerSymbol = "The number of letters must equal 3";
+    return errors;
+  }
+
   render() {
+
+    const { errors } = this.state;
+    
     return(
       <Container style={styles.root}>
-        <Form id="name-form">
-          <Form.Field>
+        <Form id="name-form" action=''>
+          <Form.Field error={!!errors.tokenName}>
             <label style={styles.firstLabel}>How shall your Token be named?</label>
             <Input
               type="text"
@@ -58,9 +83,10 @@ class Name extends Component {
               style={styles.input}
             />
           </Form.Field>
-          <Form.Field>
+          {errors.tokenName && <InlineError text={errors.tokenName} />}
+          <Form.Field error={!!errors.tickerSymbol}>
             <label style={styles.label}>What would be your ticker symbol?</label>
-            <Input
+            <input
               type="text"
               name="tickerSymbol"
               id="tickerSymbol"
@@ -69,6 +95,7 @@ class Name extends Component {
               style={styles.input}
             />
           </Form.Field>
+          {errors.tickerSymbol && <InlineError text={errors.tickerSymbol} />}
         </Form>
       </Container>
     );
