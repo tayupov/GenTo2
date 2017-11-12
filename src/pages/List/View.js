@@ -10,8 +10,11 @@ const View = ({
 }) => (
     <div style={{display:'flex'}}>
         <Sidebar style={{ flex: '0 200px', width: '200px', marginRight: '20px'}}  />
-        <Item.Group divided  style={{ flex: 1}}>
-            <ICOList  items={items} />
+        <Item.Group 
+            divided 
+            style={{ flex: 1}}
+        >
+            <ICOList items={items} />
         </Item.Group>
 
     </div>

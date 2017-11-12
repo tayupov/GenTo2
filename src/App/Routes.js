@@ -7,7 +7,7 @@ import GenerateICO from 'pages/GenerateICO';
 import Ico from 'pages/Ico';
 
 
-const Routes = ({ account, network, notify }) => (
+const Routes = ({ account, network, notify, active, handleShow, handleHide }) => (
     <Switch>
         <Route exact path="/"
             render={(props) => (<About {...props} />)}
@@ -33,6 +33,9 @@ const Routes = ({ account, network, notify }) => (
                                     account={account}
                                     network={network}
                                     notify={notify}
+                                    active={active}
+                                    handleShow={handleShow}
+                                    handleHide={handleHide}
                                 />)}
         />
     </Switch>

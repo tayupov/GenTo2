@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Divider, Button } from 'semantic-ui-react';
+import { Divider, Button, Dimmer, Segment, Icon, Header, Container } from 'semantic-ui-react';
 
 import StepZilla from 'react-stepzilla';
 
@@ -8,7 +8,7 @@ import { gentoFactoryData } from 'contracts';
 import { createGentoFactoryInstance, createAuctionTokenInstance } from 'contractInstances';
 import web3 from 'myWeb3';
 
-import Header from 'components/Header';
+import HeaderSection from 'components/Header';
 
 import './main.css';
 
@@ -22,12 +22,16 @@ import MultiStep from 'components/MultiStepForm';
 
 
 
-class MultiStepForm extends Component {
+class GenerateICO  extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
+            deployedInstance: ''
+        }
+
+        this.store = {
             tokenName: 'MorrorToken',
             tickerSymbol: 'MOR',
             totalSupply: 9000,
@@ -36,8 +40,7 @@ class MultiStepForm extends Component {
             minimumPrice: 4000,
             maximumPrice: 9000,
             saleStart: 'Sat Nov 11 2017 13:54:52 GMT+0100 (W. Europe Standard Time)',
-            saleEnd: 'Mon Nov 13 2017 13:54:52 GMT+0100 (W. Europe Standard Time)',
-            deployedInstance: ''
+            saleEnd: 'Mon Nov 13 2017 13:54:52 GMT+0100 (W. Europe Standard Time)'
         }
     }
 
@@ -65,12 +68,12 @@ class MultiStepForm extends Component {
             selectedCurrency,
             saleStart,
             saleEnd
-         } = this.state;
+         } = this.store;
 
          let {
             minimumPrice,
             maximumPrice,
-         } = this.state;
+         } = this.store;
 
         if (maximumPrice < minimumPrice) {
             notify("Min > Max Your maximum token price needs to be higher than the minimum token price", "warninig");
@@ -144,31 +147,44 @@ class MultiStepForm extends Component {
         })
     }
 
-    setNameState = (obj) => {
-      this.setState({
-        tokenName: obj.tokenName,
-        tickerSymbol: obj.tickerSymbol
-      })
+    getStore = () => {
+        return this.store;
+    }
+
+    updateStore = (update) => {
+        this.store = {
+            ...this.sampleStore,
+            ...update
+        }
     }
 
     render() {
 
       const steps = [
-          {name: 'name', component: <Name setNameState={this.setNameState}/>, },
+          {name: 'name', component: <Name />, },
           {name: 'amount', component: <Amount /> },
           {name: 'auction', component: <Auction /> },
           {name: 'pricing', component: <Pricing /> },
       ]
-        return(
-            <div className='step-progress' style={{ textAlign: 'center', marginTop: '1em' }}>
-                <Header text="GENERATE YOUR OWN ICO" />
-                <StepZilla steps={steps} nextButtonCls="ui positive button" backButtonCls="ui positive button" />
-            </div>
-            // <MultiStep />
-            //<Button onClick={this.submitTokenContract}>Create an ICO</Button>
 
+      const { active, handleShow, handleHide } = this.props;
+
+        return(       
+            // <MultiStep />
+            <div>
+                <Dimmer page blurring inverted active={active}>
+                <Container style={{ width: '700px', position: 'relative' }}>
+                    <Button onClick={this.props.handleHide} icon='close' floated='right' basic circular />
+                    <div className='step-progress' style={{ width: '600px', marginLeft: '3.5em'  }}>
+                        <StepZilla steps={steps} nextButtonCls="ui positive button" backButtonCls="ui positive button" />
+                    </div>
+                </Container>
+                </Dimmer>
+                <HeaderSection text="GENERATE YOUR OWN ICO" />
+                <Button onClick={this.props.handleShow}>Create an ICO</Button>
+            </div>
         )
     }
 }
 
-export default MultiStepForm;
+export default GenerateICO;

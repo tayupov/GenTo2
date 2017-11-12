@@ -3,6 +3,8 @@ import { PropTypes } from 'prop-types';
 
 import { createGentoFactoryInstance, createAuctionTokenInstance } from 'contractInstances';
 
+import Header from 'components/Header';
+
 import View from './View';
 
 import moment from 'moment';
@@ -78,10 +80,13 @@ class List extends Component {
 
   render() {
     return (
-      <View
-        {...this.props}
-        {...this.state}
-      />
+      <div>
+        <Header text="TOKEN SALES (ICO)" />
+        <View
+          {...this.props}
+          {...this.state}
+        />
+      </div>
     );
   }
 }

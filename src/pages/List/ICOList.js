@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 
 import { Card, Item, Label } from 'semantic-ui-react';
 
-const ICOList = ({ items }) => {
-
-    const titleBoxStyle = {
+const styles = {
+    titleBox: {
         flex:'15px 0',
         fontSize: '70px',
         marginRight: '20px',
@@ -15,10 +14,13 @@ const ICOList = ({ items }) => {
         color: "white",
         minWidth:"186px"
     }
+}
+
+const ICOList = ({ items }) => {
 
     return items.map(item => (
         <Item>
-            <Item.Content style={titleBoxStyle} href={`/ico/${item.address}`} >
+            <Item.Content style={styles.titleBox} href={`/ico/${item.address}`} >
                 {item.name.substring(0, 3).toUpperCase()}
             </Item.Content>
 

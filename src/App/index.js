@@ -13,11 +13,13 @@ class App extends Component {
 
     this.state = {
       account: null,
-      network: null
+      network: null,
+      active: false
     }
   }
-
-
+  
+  handleShow = () => this.setState({ active: true })
+  handleHide = () => this.setState({ active: false })
 
   componentWillMount() {
     this.updateNetwork();
@@ -86,6 +88,8 @@ class App extends Component {
         <View
           {...this.state}
           notify={this.notify}
+          handleShow={this.handleShow}
+          handleHide={this.handleHide}
         />
       </div>
     );

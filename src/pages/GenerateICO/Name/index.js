@@ -1,5 +1,21 @@
 import React, {Component} from 'react';
 
+import { Form, Input, Container } from 'semantic-ui-react';
+
+const styles = {
+  root: {
+    marginBottom: '1em'
+  },
+  label: {
+    fontSize: '18px',
+    marginBottom: '0.5em',
+    marginTop: '1em'
+  },
+  input: {
+    width: '300px'
+  }
+}
+
 class Name extends Component {
 
   constructor(props) {
@@ -23,18 +39,32 @@ class Name extends Component {
 
   render() {
     return(
-      <div style={{ marginBottom: '1em' }}>
-        <h1>Name</h1>
-        <form id="name-form">
-          <label>How shall your Token be named?</label>
-          <br/>
-          <input type="text" name="tokenName" onChange={this.onChange}/>
-          <br/>
-          <label>What would be your ticker symbol?</label>
-          <br/>
-          <input type="text" name="tickerSymbol" onChange={this.onChange}/>
-        </form>
-      </div>
+      <Container style={styles.root}>
+        <Form id="name-form">
+          <Form.Field>
+            <label style={styles.label}>How shall your Token be named?</label>
+            <Input
+              type="text"
+              name="tokenName"
+              id="tokenName"
+              onChange={this.onChange}
+              size='small'
+              style={styles.input}
+            />
+          </Form.Field>
+          <Form.Field>
+            <label style={styles.label}>What would be your ticker symbol?</label>
+            <Input
+              type="text"
+              name="tickerSymbol"
+              id="tickerSymbol"
+              onChange={this.onChange}
+              size='small'
+              style={styles.input}
+            />
+          </Form.Field>
+        </Form>
+      </Container>
     );
   }
 
