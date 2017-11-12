@@ -1,26 +1,18 @@
 import React, { Component } from 'react';
 
-import { Divider, Button, Dimmer, Segment, Icon, Header, Container } from 'semantic-ui-react';
-
-import StepZilla from 'react-stepzilla';
-
 import { gentoFactoryData } from 'contracts';
 import { createGentoFactoryInstance, createAuctionTokenInstance } from 'contractInstances';
 import web3 from 'myWeb3';
 
-import HeaderSection from 'components/Header';
-
-import './main.css';
+import View from './View';
 
 import Name from './Name';
 import Amount from './Amount';
 import Auction from './Auction';
 import Pricing from './Pricing';
+import Created from './Created';
 
 import MultiStep from 'components/MultiStepForm';
-
-
-
 
 class GenerateICO  extends Component {
 
@@ -31,17 +23,19 @@ class GenerateICO  extends Component {
             deployedInstance: ''
         }
 
-        this.store = {
-            tokenName: 'MorrorToken',
-            tickerSymbol: 'MOR',
-            totalSupply: 9000,
-            typeOfAuction: 'english',
-            selectedCurrency: 'finney',
-            minimumPrice: 4000,
-            maximumPrice: 9000,
-            saleStart: 'Sat Nov 11 2017 13:54:52 GMT+0100 (W. Europe Standard Time)',
-            saleEnd: 'Mon Nov 13 2017 13:54:52 GMT+0100 (W. Europe Standard Time)'
-        }
+        // this.store = {
+        //     tokenName: 'MorrorToken',
+        //     tickerSymbol: 'MOR',
+        //     totalSupply: 9000,
+        //     typeOfAuction: 'english',
+        //     selectedCurrency: 'finney',
+        //     minimumPrice: 4000,
+        //     maximumPrice: 9000,
+        //     saleStart: 'Sat Nov 11 2017 13:54:52 GMT+0100 (W. Europe Standard Time)',
+        //     saleEnd: 'Mon Nov 13 2017 13:54:52 GMT+0100 (W. Europe Standard Time)'
+        // }
+
+        this.store = {}
     }
 
     submitTokenContract = () => {
@@ -153,36 +147,29 @@ class GenerateICO  extends Component {
 
     updateStore = (update) => {
         this.store = {
-            ...this.sampleStore,
+            ...this.store,
             ...update
         }
+        console.log('+++++++++++++++++++++++++++++++++++++++++++++++++');
+        console.log(this.store);        
+        console.log('+++++++++++++++++++++++++++++++++++++++++++++++++');
     }
 
     render() {
 
       const steps = [
-          {name: 'name', component: <Name />, },
-          {name: 'amount', component: <Amount /> },
-          {name: 'auction', component: <Auction /> },
-          {name: 'pricing', component: <Pricing /> },
+          {name: 'NAME',component: <Name getStore={this.getStore} updateStore={this.updateStore} />, },
+          {name: 'AMOUNT & TIME', component: <Amount getStore={this.getStore} updateStore={this.updateStore} /> },
+          {name: 'AUCTION', component: <Auction getStore={this.getStore} updateStore={this.updateStore} /> },
+          {name: 'PRICING', component: <Pricing getStore={this.getStore} updateStore={this.updateStore} /> },
       ]
 
-      const { active, handleShow, handleHide } = this.props;
-
         return(       
-            // <MultiStep />
-            <div>
-                <Dimmer page blurring inverted active={active}>
-                <Container style={{ width: '700px', position: 'relative' }}>
-                    <Button onClick={this.props.handleHide} icon='close' floated='right' basic circular />
-                    <div className='step-progress' style={{ width: '600px', marginLeft: '3.5em'  }}>
-                        <StepZilla steps={steps} nextButtonCls="ui positive button" backButtonCls="ui positive button" />
-                    </div>
-                </Container>
-                </Dimmer>
-                <HeaderSection text="GENERATE YOUR OWN ICO" />
-                <Button onClick={this.props.handleShow}>Create an ICO</Button>
-            </div>
+            <View
+                {...this.props}
+                {...this.state}
+                steps={steps}
+            />
         )
     }
 }

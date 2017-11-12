@@ -6,10 +6,16 @@ const styles = {
   root: {
     marginBottom: '1em'
   },
+  firstLabel: {
+    fontSize: '18px',
+    marginTop: '3em',
+    marginBottom: '0.8em',
+    fontWeight: '300'
+  },
   label: {
     fontSize: '18px',
-    marginBottom: '0.5em',
-    marginTop: '1em'
+    marginBottom: '1em',
+    fontWeight: '300'
   },
   input: {
     width: '300px'
@@ -27,7 +33,7 @@ class Name extends Component {
   }
 
   isValidated() {
-    this.props.setNameState(this.state);
+    this.props.updateStore(this.state);
     return true;
   }
 
@@ -42,7 +48,7 @@ class Name extends Component {
       <Container style={styles.root}>
         <Form id="name-form">
           <Form.Field>
-            <label style={styles.label}>How shall your Token be named?</label>
+            <label style={styles.firstLabel}>How shall your Token be named?</label>
             <Input
               type="text"
               name="tokenName"
