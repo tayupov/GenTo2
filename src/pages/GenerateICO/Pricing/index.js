@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import { Form, Input, Select, Container, Button } from 'semantic-ui-react';
 
+import InlineError from 'components/messages/InlineError';
+
 const styles = {
   root: {
     marginBottom: '1em'
@@ -27,15 +29,28 @@ const options = [
   { key: 'kether', text: 'kether', value: 'kether' },
   { key: 'ether', text: 'ether', value: 'ether' },
   { key: 'finney', text: 'finney', value: 'finney' },
-  { key: 'gwei', text: 'gwei', value: 'gwei' },    
-  { key: 'mwei', text: 'mwei', value: 'mwei' }, 
+  { key: 'gwei', text: 'gwei', value: 'gwei' },
+  { key: 'mwei', text: 'mwei', value: 'mwei' },
 ]
 class Amount extends Component {
 
   constructor(props) {
     super(props);
 
-    this.state = {}
+    this.state = {
+      data: {
+        selectedCurrency: '',
+        minPrice: 0,
+        maxPrice: 0,
+
+      },
+      errors: {
+        selectedCurrency: '',
+        minPrice: '',
+        maxPrice: '',
+        maxMinConstraint: ''
+      }
+    }
   }
 
   // isValidated() {
@@ -43,26 +58,63 @@ class Amount extends Component {
   //   return true;
   // }
 
+  isValidated() {
+    const errors = this.validate(this.state.data);
+    this.setState({ errors });
+    if (Object.keys(errors) === 0) {
+      this.props.updateStore(this.state.data);
+      return true;
+    }
+    return false;
+  }
+
+  validate = data => {
+    const errors = {};
+    if (data.selectedCurrency === '') errors.selectedCurrency = "You have to select a currency";
+    else if(data.maxPrice < data.minPrice) errors.maxMinConstraint = "Your min price should be smaller than your max price";
+    else if(data.maxPrice <= 0) errors.maxPrice = "Your max price should be greater than 0";
+    else if(data.minPrice < 0) errors.minPrice = "Your min price should be greater than 0";
+    return errors;
+
+  }
+
   onSubmit = () => {
     const { updateStore, submitTokenContract } = this.props;
 
-    updateStore(this.state);
+    updateStore(this.state.data);
     submitTokenContract();
   }
 
-  onChangeSelect = (e, { value }) => {
+  onChangeSelect = (e, {value}) => (
     this.setState({
+      data: {
+        ...this.state,
         selectedCurrency: value
-    });
-  }
+      }
+    })
+  )
+  // onChangeSelect = (e, { value }) => {
+  //   this.setState({
+  //       selectedCurrency: value
+  //   });
+  // }
 
   onChange = e => {
     this.setState({
-       [e.target.name]: e.target.value
+      data: {
+        ...this.state,
+        [e.target.name]: e.target.value
+      }
     })
   }
+  // onChange = e => {
+  //   this.setState({
+  //      [e.target.name]: e.target.value
+  //   })
+  // }
 
   render() {
+    const { errors } = this.state;
     return(
       <Container style={styles.root}>
         <Form id="name-form">
@@ -79,6 +131,7 @@ class Amount extends Component {
               onChange={this.onChangeSelect}
             />
           </Form.Field>
+          {errors.selectedCurrency && <InlineError text={errors.selectedCurrency} />}
           <Form.Field>
             <label style={styles.label}>Choose your MIN and MAX price!</label>
             <Input
@@ -91,6 +144,7 @@ class Amount extends Component {
               size="small"
               style={styles.input}
             />
+            {errors.minPrice && <InlineError text={errors.minPrice} />}
             <Input
               type="number"
               name="maxPrice"
@@ -101,7 +155,9 @@ class Amount extends Component {
               size="small"
               style={styles.input}
             />
+            {errors.maxPrice && <InlineError text={errors.maxPrice} />}
           </Form.Field>
+          {errors.minMaxConstraint && <InlineError text={errors.minMaxConstraint} />}
           <Button color='teal' onClick={this.onSubmit}>Create Contract</Button>
         </Form>
       </Container>
