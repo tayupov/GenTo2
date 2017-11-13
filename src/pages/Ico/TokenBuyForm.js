@@ -26,9 +26,9 @@ class TokenBuyForm extends Component {
             [e.target.name]: e.target.value
         });
 
-    onChangeSelect = (e, data) => {
+    onChangeSelect = (e, { value }) => {
         this.setState({
-            etherUnit: data.value
+            etherUnit: value
         });
     }
 

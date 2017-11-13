@@ -27,10 +27,10 @@ class GenerateICO  extends Component {
         //     tokenName: 'MorrorToken',
         //     tickerSymbol: 'MOR',
         //     totalSupply: 9000,
-        //     typeOfAuction: 'english',
+        //     auctionType: 'english',
         //     selectedCurrency: 'finney',
-        //     minimumPrice: 4000,
-        //     maximumPrice: 9000,
+        //     minPrice: 4000,
+        //     maxPrice: 9000,
         //     saleStart: 'Sat Nov 11 2017 13:54:52 GMT+0100 (W. Europe Standard Time)',
         //     saleEnd: 'Mon Nov 13 2017 13:54:52 GMT+0100 (W. Europe Standard Time)'
         // }
@@ -58,38 +58,51 @@ class GenerateICO  extends Component {
             tokenName,
             tickerSymbol,
             totalSupply,
-            typeOfAuction,
+            auctionType,
             selectedCurrency,
             saleStart,
             saleEnd
          } = this.store;
 
          let {
-            minimumPrice,
-            maximumPrice,
+            minPrice,
+            maxPrice,
          } = this.store;
 
-        if (maximumPrice < minimumPrice) {
+        if (maxPrice < minPrice) {
             notify("Min > Max Your maximum token price needs to be higher than the minimum token price", "warninig");
             return;
         }
 
-        if (typeOfAuction === 'dutch') {
-            const tmp = minimumPrice;
-            minimumPrice = maximumPrice;
-            maximumPrice = tmp;
+        if (auctionType === 'dutch') {
+            const tmp = minPrice;
+            minPrice = maxPrice;
+            maxPrice = tmp;
         }
 
-        const sellPrice = maximumPrice;
+        const sellPrice = maxPrice;
 
-        let saleStartForm = Math.floor(saleStart / 1000);
-        const saleEndForm = Math.floor(saleEnd / 1000);
+        const saleStartDate = new Date(saleStart);
+        const saleEndDate = new Date(saleEnd);
+
+        let saleStartForm = Math.floor(saleStartDate / 1000);
+        const saleEndForm = Math.floor(saleEndDate / 1000);
         const now = Math.floor(new Date() / 1000);
 
         if ((now >= saleStartForm) && (now <= saleStartForm + 86400)) {
             const tmpSaleStart = saleStartForm;
             saleStartForm += (now - tmpSaleStart);
         }
+
+        console.log("The store object: ");
+        console.log(this.store);
+
+        console.log("saleStartForm");
+        console.log(saleStartForm);
+        console.log("saleEndForm");
+        console.log(saleEndForm);
+        console.log("now");
+        console.log(now);
 
         gentoFactoryData.then(contractData => {
             createGentoFactoryInstance(instance => {
@@ -100,8 +113,8 @@ class GenerateICO  extends Component {
                         web3.toBigNumber(totalSupply).toString(10),
                         tickerSymbol,
                         tokenName,
-                        web3.toWei(minimumPrice, selectedCurrency),
-                        web3.toWei(maximumPrice, selectedCurrency),
+                        web3.toWei(minPrice, selectedCurrency),
+                        web3.toWei(maxPrice, selectedCurrency),
                         web3.toWei(sellPrice, selectedCurrency),
                         web3.toBigNumber(saleStartForm).toString(10),
                         web3.toBigNumber(saleEndForm).toString(10),

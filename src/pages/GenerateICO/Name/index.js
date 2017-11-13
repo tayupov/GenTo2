@@ -1,28 +1,7 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
-import { Form, Input, Container } from 'semantic-ui-react';
-
-import InlineError from 'components/messages/InlineError';
-
-const styles = {
-  root: {
-    marginBottom: '1em'
-  },
-  firstLabel: {
-    fontSize: '18px',
-    marginTop: '3em',
-    marginBottom: '0.8em',
-    fontWeight: '300'
-  },
-  label: {
-    fontSize: '18px',
-    marginBottom: '1em',
-    fontWeight: '300'
-  },
-  input: {
-    width: '300px'
-  }
-}
+import View from './View';
 
 class Name extends Component {
 
@@ -36,16 +15,19 @@ class Name extends Component {
       errors: { 
         tokenName: '',
         tickerSymbol: ''
-      },
-      loading: false
+      }
     };
   }
 
   isValidated() {
-    const errors = this.validate(this.state.data);
+    const { data } = this.state;
+    const { updateStore } = this.props;
+
+    const errors = this.validate(data);
+
     this.setState({ errors });
     if (Object.keys(errors).length === 0) {
-      this.props.updateStore(this.state.data);
+      updateStore(data);
       return true;
     }
     return false;
@@ -53,54 +35,35 @@ class Name extends Component {
 
   onChange = e => {
     this.setState({
-       data: { ...this.state.data, [e.target.name]: e.target.value }
+       data: {
+         ...this.state.data,
+         [e.target.name]: e.target.value,
+         tickerSymbol: e.target.value.slice(0, 3).toUpperCase() 
+      }
     })
   }
 
   validate = data => {
     const errors = {};
-    if (!data.tokenName) errors.tokenName = "Can't be blank";
-    console.log(data.tickerSymbol.length);
-    if (data.tickerSymbol.length !== 3) errors.tickerSymbol = "The number of letters must equal 3";
+    if (!data.tokenName) errors.tokenName = "Can't be blank!";
+    // if (data.tickerSymbol.length !== 3) errors.tickerSymbol = "The number of letters must equal 3";
     return errors;
   }
 
   render() {
-
-    const { errors } = this.state;
     
     return(
-      <Container style={styles.root}>
-        <Form id="name-form" action=''>
-          <Form.Field error={!!errors.tokenName}>
-            <label style={styles.firstLabel}>How shall your Token be named?</label>
-            <Input
-              type="text"
-              name="tokenName"
-              id="tokenName"
-              onChange={this.onChange}
-              size='small'
-              style={styles.input}
-            />
-          </Form.Field>
-          {errors.tokenName && <InlineError text={errors.tokenName} />}
-          <Form.Field error={!!errors.tickerSymbol}>
-            <label style={styles.label}>What would be your ticker symbol?</label>
-            <input
-              type="text"
-              name="tickerSymbol"
-              id="tickerSymbol"
-              onChange={this.onChange}
-              size='small'
-              style={styles.input}
-            />
-          </Form.Field>
-          {errors.tickerSymbol && <InlineError text={errors.tickerSymbol} />}
-        </Form>
-      </Container>
+      <View
+        {...this.state}
+        onChange={this.onChange}
+      />
     );
   }
 
+}
+
+Name.propTypes = {
+  updateStore: PropTypes.func.isRequired
 }
 
 export default Name;

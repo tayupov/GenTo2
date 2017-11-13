@@ -19,8 +19,11 @@ const View = ({
 }) => (
     // <MultiStep />
     <div>
-        <HeaderSection text="GENERATE YOUR OWN ICO" />
-        <Button onClick={handleShow}>Create an ICO</Button>
+        <HeaderSection text="GENERATE YOUR OWN SMART CONTRACTS" />
+        <Button onClick={handleShow} color='teal'>Create an ICO</Button>
+        <br />
+        <br />
+        <Button color='teal'>Create a DAO</Button>
         <Dimmer
             page
             inverted

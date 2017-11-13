@@ -13,6 +13,9 @@ const styles = {
     marginTop: '3em',
     marginBottom: '0.8em',
     fontWeight: '300'
+  },
+  input: {
+    margin: '1em 1em'
   }
 }
 
@@ -22,8 +25,7 @@ class Name extends Component {
     super(props);
     this.state = {
       data: {
-        english: false,
-        dutch: false,
+        auctionType: ''
       },
       errors: { 
         auctionType: ''
@@ -42,16 +44,15 @@ class Name extends Component {
     return false;
   }
 
-  onChange = (e, data) => {
+  onChange = (e, { value }) => {
     this.setState({
-      data: { ...this.state.data, [data.name]: data.checked }
+      data: { ...this.state.data, auctionType: value }
    })
   }
 
   validate = data => {
     const errors = {};
-    console.log(data);
-    if (!(data.english || data.dutch)) errors.auctionType = 'The auction type has not been selected!';
+    if (!data.auctionType) errors.auctionType = 'The auction type has not been selected!';
     return errors;
   }
 
@@ -65,17 +66,21 @@ class Name extends Component {
           <Form.Field error={!!errors.tokenName}>
             <label style={styles.firstLabel}>Choose the auction type!</label>
             <Checkbox
+              radio
               name="english"
-              id="english"
-              label="english"
+              label="English"
+              value="english"
+              checked={this.state.data.auctionType === 'english'}
               onChange={this.onChange}
               size='small'
               style={styles.input}
             />
             <Checkbox
+              radio
               name="dutch"
-              id="dutch"
-              label="dutch"
+              label="Dutch"
+              value="dutch"
+              checked={this.state.data.auctionType === 'dutch'}
               onChange={this.onChange}
               size='small'
               style={styles.input}
