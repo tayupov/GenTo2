@@ -14,7 +14,7 @@ import HeaderSection from 'components/Header';
 
 import './main.css';
 
-const View = ({
+const GenerateICO = ({
     handleShow, handleHide, active, steps
 }) => (
     // <MultiStep />
@@ -54,4 +54,4 @@ const View = ({
     </div>
 )
 
-export default View;
+export default GenerateICO;

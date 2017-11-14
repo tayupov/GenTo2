@@ -2,10 +2,10 @@ import React from 'react';
 
 import { Container } from 'semantic-ui-react';
 
-import HeaderSection from './HeaderSection';
-import DetailsSection from './DetailsSection';
-import Chart from './Chart';
-import TokensSection from './TokensSection';
+import HeaderSection from './components/HeaderSection';
+import DetailsSection from './components/DetailsSection';
+import Chart from './components/Chart';
+import TokenSection from './components/TokenSection';
 
 const View = ({
     auctionDetailsParsed,
@@ -34,7 +34,7 @@ const View = ({
         }
         <Chart chartDataArr={chartDataArr} />
         {tokenCountMsg &&
-        <TokensSection
+        <TokenSection
             tokenCountMsg={tokenCountMsg}
             buyToken={buyToken} 
         />

@@ -5,7 +5,7 @@ import { Grid, Header, Segment } from 'semantic-ui-react';
 
 import TokenBuyForm from './TokenBuyForm';
 
-const TokensSection = ({ tokenCountMsg, buyToken }) => (
+const TokenSection = ({ tokenCountMsg, buyToken }) => (
     <Grid>
         <Grid.Row>
             <Grid.Column width={8}>
@@ -29,9 +29,9 @@ const TokensSection = ({ tokenCountMsg, buyToken }) => (
     </Grid>
 )
 
-TokensSection.propTypes = {
+TokenSection.propTypes = {
     tokenCountMsg: PropTypes.string.isRequired,
     buyToken: PropTypes.func.isRequired
 };
 
-export default TokensSection;
+export default TokenSection;
