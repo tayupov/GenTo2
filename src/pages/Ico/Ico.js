@@ -7,7 +7,7 @@ import DetailsSection from './components/DetailsSection';
 import Chart from './components/Chart';
 import TokenSection from './components/TokenSection';
 
-const View = ({
+const Ico = ({
     auctionDetailsParsed,
     priceDevelopmentString,
     timeCountDown,
@@ -42,4 +42,4 @@ const View = ({
     </Container>
 )
 
-export default View;
+export default Ico;

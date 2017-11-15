@@ -5,6 +5,7 @@ import About from 'pages/About';
 import List from 'pages/List';
 import GenerateICO from 'pages/GenerateICO';
 import Ico from 'pages/Ico';
+import Error from 'pages/Error';
 
 
 const Routes = ({ account, network, notify, active, handleShow, handleHide }) => (
@@ -38,6 +39,7 @@ const Routes = ({ account, network, notify, active, handleShow, handleHide }) =>
                                     handleHide={handleHide}
                                 />)}
         />
+        <Route component={Error} />
     </Switch>
 )
 

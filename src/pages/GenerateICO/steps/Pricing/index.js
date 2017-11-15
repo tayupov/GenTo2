@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { Form, Input, Select, Container, Button } from 'semantic-ui-react';
 
-import InlineError from 'components/messages/InlineError';
+import InlineError from 'components/InlineError';
 
 const styles = {
   root: {
@@ -32,7 +32,7 @@ const options = [
   { key: 'gwei', text: 'gwei', value: 'gwei' },
   { key: 'mwei', text: 'mwei', value: 'mwei' },
 ]
-class Amount extends Component {
+class Pricing extends Component {
 
   constructor(props) {
     super(props);
@@ -42,7 +42,6 @@ class Amount extends Component {
         selectedCurrency: '',
         minPrice: 0,
         maxPrice: 0,
-
       },
       errors: {
         selectedCurrency: '',
@@ -52,11 +51,6 @@ class Amount extends Component {
       }
     }
   }
-
-  // isValidated() {
-  //   this.props.updateStore(this.state);
-  //   return true;
-  // }
 
   isValidated() {
     const errors = this.validate(this.state.data);
@@ -75,7 +69,6 @@ class Amount extends Component {
     else if(data.maxPrice <= 0) errors.maxPrice = "Your max price should be greater than 0";
     else if(data.minPrice < 0) errors.minPrice = "Your min price should be greater than 0";
     return errors;
-
   }
 
   onSubmit = () => {
@@ -85,24 +78,25 @@ class Amount extends Component {
     submitTokenContract();
   }
 
-  onChangeSelect = (e, {value}) => (
+  onChangeSelect = (e, {value}) => {
+    console.log(JSON.stringify(this.state));
+    console.log(JSON.stringify(this.props.getStore()))
     this.setState({
       data: {
-        ...this.state,
+        ...this.state.data,
         selectedCurrency: value
       }
     })
-  )
-  // onChangeSelect = (e, { value }) => {
-  //   this.setState({
-  //       selectedCurrency: value
-  //   });
-  // }
+  }
 
   onChange = e => {
+    console.log(JSON.stringify(this.state));
+    console.log(e.target.name);
+    console.log(e.target.value);
+    console.log(JSON.stringify(this.props.getStore()))
     this.setState({
       data: {
-        ...this.state,
+        ...this.state.data,
         [e.target.name]: e.target.value
       }
     })
@@ -166,7 +160,7 @@ class Amount extends Component {
 
 }
 
-export default Amount;
+export default Pricing;
 
 
 // import React from 'react';

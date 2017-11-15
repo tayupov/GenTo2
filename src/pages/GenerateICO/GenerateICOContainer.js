@@ -163,6 +163,7 @@ class GenerateICOContainer  extends Component {
             ...this.store,
             ...update
         }
+        console.log(update);
         console.log('+++++++++++++++++++++++++++++++++++++++++++++++++');
         console.log(this.store);        
         console.log('+++++++++++++++++++++++++++++++++++++++++++++++++');

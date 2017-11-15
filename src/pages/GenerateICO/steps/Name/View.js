@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Form, Input, Container } from 'semantic-ui-react';
 
-import InlineError from 'components/messages/InlineError';
+import InlineError from 'components/InlineError';
 
 const styles = {
   root: {
