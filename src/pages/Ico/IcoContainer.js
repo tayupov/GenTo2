@@ -296,9 +296,14 @@ class IcoContainer extends Component {
             return;
         }
 
+        console.log('Wurde wenigstens aufrufen!');
+
         const data = this.state.auctionDetails;
         createAuctionTokenInstance(this.props.match.params.address).then(instance => {
-            instance.Transfer((error, result) => {
+
+            const transfers = instance.Transfer();
+
+            transfers.watch((error, result) => {
                 if(error) {
                     console.error(error);
                 } else {
@@ -312,14 +317,23 @@ class IcoContainer extends Component {
                         });
                     }
                     let amount = result.args._value.toNumber();
-                    if (amount > 0){
-                        // if (!purchaseNotify) {
-                        //     this.props.notify('', 'remove');
-                        // }
-                        purchaseNotify = this.props.notify("Success! " + amount + " Token(s) purchased.", "success")
+                     
+                    const transaction = JSON.parse(localStorage.getItem(result.transactionHash));
+
+                    console.log('transaction');
+                    console.log(transaction);
+                    console.log('result.transactionHash');
+                    console.log(result.transactionHash);
+                    console.log('result');
+                    console.log(result);
     
+                    if (amount > 0 && !transaction) {
+                        this.props.notify("Success! " + amount + " Token(s) purchased.", "success")
                         this.setMyTokenCount();
+                        localStorage.setItem(result.transactionHash, JSON.stringify(result.transactionHash));
                     }
+    
+                    // transfers.stopWatching();
                 }
             })
         })
@@ -338,7 +352,7 @@ class IcoContainer extends Component {
     }
 }
 
-Ico.propTypes = {
+IcoContainer.propTypes = {
     account: PropTypes.string.isRequired,
     network: PropTypes.string.isRequired,
     notify: PropTypes.func.isRequired

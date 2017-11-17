@@ -137,7 +137,7 @@ class GenerateICOContainer  extends Component {
     }
 
     handleContractCreatedEvent = (instance) => {
-        instance.ContractCreated({
+        const contractCreated = instance.ContractCreated({
             owner: this.props.account
         }, (err, res) => {
             if(!err) {
@@ -147,6 +147,7 @@ class GenerateICOContainer  extends Component {
                         deployedInstance: address
                     });
                     this.props.notify("ICO created", "success");
+                    contractCreated.stopWatching();
                 }
             } else {
                 console.error(err);

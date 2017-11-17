@@ -57,6 +57,8 @@ class DetailsSection extends Component {
             })
         });
 
+        console.log('DetailsSection!!!');
+
         this.props.listenForTokenBuy((obj) => {
             this.setState({
                 supplyObj: obj

@@ -5,6 +5,7 @@ import About from 'pages/About';
 import List from 'pages/List';
 import GenerateICO from 'pages/GenerateICO';
 import Ico from 'pages/Ico';
+import Poll from 'pages/Poll';
 import Error from 'pages/Error';
 
 
@@ -37,6 +38,15 @@ const Routes = ({ account, network, notify, active, handleShow, handleHide }) =>
                                     active={active}
                                     handleShow={handleShow}
                                     handleHide={handleHide}
+                                />)}
+        />
+        <Route path="/poll"
+            render={(props) => (<Poll
+                                    {...props}
+                                    account={account}
+                                    network={network}
+                                    notify={notify}
+                                    active={active}
                                 />)}
         />
         <Route component={Error} />

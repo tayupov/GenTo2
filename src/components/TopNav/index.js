@@ -7,13 +7,12 @@ import { PropTypes } from 'prop-types';
 
 class TopNav extends Component {
 
-    state = {
-    }
+    state = {}
 
     handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
     render() {
-        const { activeItem } = this.state
+        const { activeItem } = this.state;
 
         return (
             <Segment color='teal' size='small' inverted>
@@ -23,6 +22,7 @@ class TopNav extends Component {
                         <Menu.Menu position='right'>
                             <Menu.Item><Button inverted color="teal">{this.props.account}</Button></Menu.Item>
                             <Menu.Item name='generate' as={ Link } to='/generate' active={activeItem === 'generate'} onClick={this.handleItemClick} />
+                            <Menu.Item name='poll' as={ Link } to='/poll' active={activeItem === 'poll'} onClick={this.handleItemClick} />                            
                             <Menu.Item name='list' as={ Link } to='/list' active={activeItem === 'list'} onClick={this.handleItemClick} />
                         </Menu.Menu>
                     </Menu>
