@@ -11,10 +11,10 @@ const styles = {
 const PollList = ({
     onClick
 }) => (
-    <Card.Group>
-        <Card onClick={onClick} style={styles.card} fluid raised color='teal' header='Do we want to raise the value?' />
-        <Card onClick={onClick} style={styles.card} fluid raised color='teal' header='Do we want to change our location?' />
-        <Card onClick={onClick} style={styles.card} fluid raised color='teal' header='Do we want to make a difference in the world?' />                        
+    <Card.Group style={{marginTop: '1.8em'}}>
+        <Card onClick={onClick} style={styles.card} fluid raised color='teal' header='Issue 99 CVS shares' />
+        <Card onClick={onClick} style={styles.card} fluid raised color='teal' header='Create a stock sale to raise 10 ETH at 0.1 ETH per CVS share' />
+        <Card onClick={onClick} style={styles.card} fluid raised color='teal' header="For Begin stock sale a minimum status of 'executive' will be needed" />                        
     </Card.Group>
 )
 

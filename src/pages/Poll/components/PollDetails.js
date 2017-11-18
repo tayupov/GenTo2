@@ -1,36 +1,60 @@
 import React from 'react';
 
-import { Divider} from 'semantic-ui-react';
+import { Divider, Button } from 'semantic-ui-react';
 import { Doughnut } from  'react-chartjs-2';
 
-const data = {
+const dataTokens = {
 	labels: [
-		'Red',
-		'Green',
-		'Yellow'
+		'Tokens for',
+		'Tokens against'
 	],
 	datasets: [{
-		data: [300, 50, 100],
+		data: [300, 50],
 		backgroundColor: [
-		'#FF6384',
-		'#36A2EB',
-		'#FFCE56'
+		'#1ecc9b',
+		'#778899'
 		],
 		hoverBackgroundColor: [
-		'#FF6384',
-		'#36A2EB',
-		'#FFCE56'
+		'#1ecc9b',
+		'#778899'
 		]
 	}]
 };
 
+const dataAddresses = {
+	labels: [
+		'Addresses for',
+		'Addresses against'
+	],
+	datasets: [{
+		data: [200, 50],
+		backgroundColor: [
+		'#1ecc9b',
+		'#778899'
+		],
+		hoverBackgroundColor: [
+		'#1ecc9b',
+		'#778899'
+		]
+	}]
+};
+
+const votingClosed = false;
+
 const PollDetails = ({
     header
 }) => (
-    <div>
-        <h1 style={{ textAlign: 'center' }}>{header}</h1>
+    <div className="flex-center" style={{flexDirection: 'column'}}>
+        <h2 style={{ textAlign: 'center', marginTop: '1em' }}>{header}</h2>
         <Divider />
-        <Doughnut data={data} />
+		{votingClosed && <Doughnut data={dataTokens} />}
+		{votingClosed && <Doughnut data={dataAddresses} />}
+		<Divider />
+		{!votingClosed && <Button.Group>
+			<Button positive>Approve</Button>
+			<Button.Or />
+			<Button negative style={{ marginRight: '1em' }}>Reject</Button>
+		</Button.Group>}
     </div>
 )
 

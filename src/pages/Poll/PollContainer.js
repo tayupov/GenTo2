@@ -8,14 +8,31 @@ class PollContainer extends Component {
         super(props);
 
         this.state = {
-            header: ''
+            polls: [],
+            header: 'Do we want to raise the value?'
         };
+    }
+
+    componentDidMount() {
+        this.listPolls();
+    }
+
+    componentDidUpdate(nextProps) {
+        if (nextProps.account !== this.props.account) {
+            this.setState({
+                polls: [],
+            }, this.listPolls())
+        }
     }
 
     onClick = (e, { header }) => {
         this.setState({
             header
         })
+    }
+
+    listPolls = () => {
+        
     }
 
     render() {
