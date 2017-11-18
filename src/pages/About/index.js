@@ -4,9 +4,9 @@ import Header from 'components/Header';
 
 const About = () => (
     <div>
-        <Header text='ABOUT GENTO' />
+        <Header text='ABOUT GENTO' id='header' />
         <p style={{ fontSize: '20px' }}>
-                GenTo is a platform that facilitates Initial Coin Offerings. 
+                GenTo is a platform that facilitates Initial Coin Offerings.
                 It creates user-defined
                 Smart Contracts and automatically deploys them to the blockchain - without the need
                 to write a single line of code!

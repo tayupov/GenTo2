@@ -17,3 +17,7 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+#header {
+  color: blue;
+}
