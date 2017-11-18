@@ -16,9 +16,8 @@ const styles = {
     }
 }
 
-const ICOList = ({ items }) => {
-
-    return items.map(item => (
+const ICOList = ({ items }) => (
+    items.map(item => (
         <Item>
             <Item.Content style={styles.titleBox} href={`/ico/${item.address}`} >
                 {item.name.substring(0, 3).toUpperCase()}
@@ -38,7 +37,7 @@ const ICOList = ({ items }) => {
             </Item.Content>
         </Item>
     ))
-}
+)
 
 ICOList.propTypes = {
     items: PropTypes.array.isRequired

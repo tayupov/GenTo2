@@ -80,10 +80,12 @@ class App extends Component {
     }
   }
 
+  handleContextRef = contextRef => this.setState({ contextRef });
+
 
   render() {
     return (
-      <div>
+      <div ref={this.handleContextRef}>
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
         <View
           {...this.state}

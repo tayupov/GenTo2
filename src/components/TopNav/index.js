@@ -5,6 +5,12 @@ import { Menu, Segment, Button, Container, Dropdown } from 'semantic-ui-react';
 
 import { PropTypes } from 'prop-types';
 
+const styles = {
+    dropDownMenu: {
+        marginTop: '1em',
+    }
+}
+
 class TopNav extends Component {
 
     state = {}
@@ -27,28 +33,28 @@ class TopNav extends Component {
                         <Menu.Item name='home' to='/' active={activeItem === 'home'} as={ Link }  onClick={this.handleItemClick} header style={{ fontSize: '18px' }}>GENTO</Menu.Item>
                         <Menu.Menu position='right'>
 
-                          <Menu.Item compact>
-                            <Dropdown to='/list' text='ICO'>
-                                <Dropdown.Menu>
-                                  <Dropdown.Item as={Link} text='Create ICO' to='/generate' />
+                          <Menu.Item>
+                            <Dropdown text='ICO'>
+                                <Dropdown.Menu style={ styles.dropDownMenu }>
+                                  <Dropdown.Item as={Link} text='Create an ICO' to='/generate' />
                                   <Dropdown.Item as={Link} text='List all ICOs' to='/list' />
                                 </Dropdown.Menu>
                             </Dropdown>
                           </Menu.Item>
 
-                          <Menu.Item compact>
+                          <Menu.Item>
                             <Dropdown text='DAO'>
-                                <Dropdown.Menu>
-                                  <Dropdown.Item text='Create DAO' />
+                                <Dropdown.Menu style={ styles.dropDownMenu }>
+                                  <Dropdown.Item text='Create a DAO' />
                                   <Dropdown.Item text='List all DAOs' />
                                 </Dropdown.Menu>
                             </Dropdown>
                           </Menu.Item>
 
-                          <Menu.Item compact>
+                          <Menu.Item>
                             <Dropdown text='Voting'>
-                                <Dropdown.Menu>
-                                  <Dropdown.Item text='Create Voting' />
+                                <Dropdown.Menu style={ styles.dropDownMenu }>
+                                  <Dropdown.Item text='Create a voting' />
                                   <Dropdown.Item as={Link} text='List all votings' to='/poll' />
                                 </Dropdown.Menu>
                             </Dropdown>

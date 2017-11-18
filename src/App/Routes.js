@@ -9,7 +9,7 @@ import Poll from 'pages/Poll';
 import Error from 'pages/Error';
 
 
-const Routes = ({ account, network, notify, active, handleShow, handleHide }) => (
+const Routes = ({ account, network, notify, active, handleShow, handleHide, contextRef }) => (
     <Switch>
         <Route exact path="/"
             render={(props) => (<About {...props} />)}
@@ -47,6 +47,7 @@ const Routes = ({ account, network, notify, active, handleShow, handleHide }) =>
                                     network={network}
                                     notify={notify}
                                     active={active}
+                                    contextRef={contextRef}
                                 />)}
         />
         <Route component={Error} />
