@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 import { Menu, Segment, Button, Container, Dropdown } from 'semantic-ui-react';
 
@@ -27,16 +27,16 @@ class TopNav extends Component {
                         <Menu.Item name='home' to='/' active={activeItem === 'home'} as={ Link }  onClick={this.handleItemClick} header style={{ fontSize: '18px' }}>GENTO</Menu.Item>
                         <Menu.Menu position='right'>
 
-                          <Menu.Item compact >
-                            <Dropdown text='ICO'>
+                          <Menu.Item compact>
+                            <Dropdown to='/list' text='ICO'>
                                 <Dropdown.Menu>
-                                  <Dropdown.Item text='Create ICO' />
-                                  <Dropdown.Item text='List all ICOs' />
+                                  <Dropdown.Item as={Link} text='Create ICO' to='/generate' />
+                                  <Dropdown.Item as={Link} text='List all ICOs' to='/list' />
                                 </Dropdown.Menu>
                             </Dropdown>
                           </Menu.Item>
 
-                          <Menu.Item compact >
+                          <Menu.Item compact>
                             <Dropdown text='DAO'>
                                 <Dropdown.Menu>
                                   <Dropdown.Item text='Create DAO' />
@@ -45,11 +45,11 @@ class TopNav extends Component {
                             </Dropdown>
                           </Menu.Item>
 
-                          <Menu.Item compact >
+                          <Menu.Item compact>
                             <Dropdown text='Voting'>
                                 <Dropdown.Menu>
                                   <Dropdown.Item text='Create Voting' />
-                                  <Dropdown.Item text='List all votings' />
+                                  <Dropdown.Item as={Link} text='List all votings' to='/poll' />
                                 </Dropdown.Menu>
                             </Dropdown>
                           </Menu.Item>
