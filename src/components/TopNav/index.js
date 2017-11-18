@@ -17,14 +17,8 @@ class TopNav extends Component {
       return firstTenSigns;
     };
 
-
-
     render() {
         const { activeItem } = this.state;
-
-        const icoOptions = [
-          {key: 1, text: 'Create ICO', value: 1}
-        ];
 
         const daoOptions = [
           {key: 1, text: 'Create DAO', value: 1}
@@ -42,8 +36,13 @@ class TopNav extends Component {
                         <Menu.Item name='home' to='/' active={activeItem === 'home'} as={ Link }  onClick={this.handleItemClick} header style={{ fontSize: '18px' }}>GENTO</Menu.Item>
                         <Menu.Menu position='right'>
 
-                          <Menu.Item compact >
-                            <Dropdown text='ICO' options={icoOptions} simple item />
+                          {/* <Menu.Item compact >
+                            <Dropdown text='ICO' simple item>
+                                <Dropdown.Menu>
+                                  <Dropdown.Item text='Create ICO' />
+                                  <Dropdown.Item text='Create DAO' />
+                                </Dropdown.Menu>
+                            </Dropdown>
                           </Menu.Item>
 
                           <Menu.Item compact>
@@ -52,7 +51,10 @@ class TopNav extends Component {
 
                           <Menu.Item compact>
                             <Dropdown text='POLL' options={pollOptions} simple item />
-                          </Menu.Item>
+                          </Menu.Item> */}
+
+                        <Menu.Item name='list' to='/list' active={activeItem === 'list'} as={ Link }  onClick={this.handleItemClick} header style={{ fontSize: '18px' }}>ICO</Menu.Item>
+                        <Menu.Item name='ico' to='/poll' active={activeItem === 'poll'} as={ Link }  onClick={this.handleItemClick} header style={{ fontSize: '18px' }}>POLL</Menu.Item>                        
 
                           {this.props.account && <Menu.Item><Button inverted color='teal'>Account: {this.hideAccountHash()}</Button></Menu.Item>}
                         </Menu.Menu>
@@ -63,28 +65,3 @@ class TopNav extends Component {
     }
 }
 export default TopNav;
-
-/*<Menu.Item name='generate-ico' class='ui compact menu' as={ Link } to='/list' active={activeItem === 'list'} onClick={this.handleItemClick} >
-  <div class='ui simple dropdown item'>ICO <i class='dropdown icon'></i>
-    <div class='menu'>
-      <div name='generate' class='item' as={ Link } to='/generate' active={activeItem === 'generate'} onClick={this.handleItemClick}>Create ICO</div>
-    </div>
-  </div>
-</Menu.Item>
-
-<Menu.Item name='generate-dao' class='ui compact menu' as={ Link } to='/generate' active={activeItem === 'generate'} onClick={this.handleItemClick} >
-  <div class='ui simple dropdown item'>DAO <i class='dropdown icon'></i>
-    <div class='menu'>
-      <div name='dao' class='item' as={Link} to='/dao' active={activeItem === 'dao'} onClick={this.handleItemClick}>Create DAO</div>
-    </div>
-  </div>
-</Menu.Item>
-
-<Menu.Item name='poll'  class='ui compact menu' as={ Link } to='/poll' active={activeItem === 'poll'} onClick={this.handleItemClick} >
-  <div class='ui simple dropdown item'>Poll <i class='dropdown icon'></i>
-    <div class='menu'>
-      <div name='poll' class='item' as={Link} to='/poll' active={activeItem === 'poll'} onClick={this.handleItemClick}>Create a poll</div>
-      <div name='vote' class='item' to='/vote' active={activeItem === 'vote'} onClick={this.handleItemClick}>Create a vote</div>
-    </div>
-  </div>
-</Menu.Item> */

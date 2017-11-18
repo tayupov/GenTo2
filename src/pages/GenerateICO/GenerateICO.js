@@ -17,13 +17,9 @@ import './main.css';
 const GenerateICO = ({
     handleShow, handleHide, active, steps
 }) => (
-    // <MultiStep />
     <div>
         <HeaderSection text="GENERATE YOUR OWN SMART CONTRACTS" />
         <Button onClick={handleShow} color='teal'>Create an ICO</Button>
-        <br />
-        <br />
-        <Button color='teal'>Create a DAO</Button>
         <Dimmer
             page
             inverted

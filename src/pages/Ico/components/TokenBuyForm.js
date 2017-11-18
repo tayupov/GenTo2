@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Button, Select, Input } from 'semantic-ui-react';
+import { Form, Button, Select, Input, Dropdown } from 'semantic-ui-react';
 
 const options = [
     { key: 'kether', text: 'kether', value: 'kether' },
@@ -60,14 +60,15 @@ class TokenBuyForm extends Component {
                         value={amount}
                         onChange={this.onChange}
                     />
-                    <Select
+                    <Dropdown
                         id='etherUnit'
                         name='etherUnit'
+                        selection
+                        upward
                         compact
                         options={options}
                         defaultValue='ether'
                         style={{ minWidth: '100px' }}
-                        required
                         onChange={this.onChangeSelect}
                     />
                     <Button type='submit' color='teal'>
