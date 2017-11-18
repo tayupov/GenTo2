@@ -12,11 +12,9 @@ class TopNav extends Component {
     handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
     hideAccountHash = () => {
-      var accountHash = this.props.account;
-      console.log('str: ' + accountHash);
-      var firstTenSigns = accountHash.replace(accountHash.substring(10,accountHash.length-1), '*');
+      const accountHash = this.props.account;
+      const firstTenSigns = accountHash.replace(accountHash.substring(10,accountHash.length-1), '***');
       return firstTenSigns;
-
     };
 
 
@@ -56,9 +54,7 @@ class TopNav extends Component {
                             <Dropdown text='POLL' options={pollOptions} simple item />
                           </Menu.Item>
 
-                          {console.log(this.props.account)}
-
-                          <Menu.Item><Button inverted color='teal'>Account: {this.props.account}</Button></Menu.Item>
+                          {this.props.account && <Menu.Item><Button inverted color='teal'>Account: {this.hideAccountHash()}</Button></Menu.Item>}
                         </Menu.Menu>
                     </Menu>
                 </Container>
