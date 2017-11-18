@@ -33,7 +33,7 @@ const PollDetails = ({
 				'Addresses against'
 			],
 			datasets: [{
-				data: [200, 50],
+				data: [200, 170],
 				backgroundColor: [
 				'#1ecc9b',
 				'#778899'
