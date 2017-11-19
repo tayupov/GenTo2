@@ -30,23 +30,23 @@ const GenerateICO = ({
           <Modal.Content>
             <HeaderSection text="GENERATE YOUR OWN SMART CONTRACTS" />
             <Button onClick={handleShow} color='teal'>Create an ICO</Button>
-                  <Button
-                      onClick={handleHide}
-                      icon='close'
-                      floated='right'
-                      basic
-                      circular
-                  />
-                  <div
-                      className='step-progress'
-                      style={{ width: '600px', marginLeft: '3.3em' }}
-                  >
-                    <StepZilla
-                      steps={steps}
-                    />
-                  </div>
-        </Modal.Content>
-      </Modal>
+              <Button
+                  onClick={handleHide}
+                  icon='close'
+                  floated='right'
+                  basic
+                  circular
+              />
+              <div
+                  className='step-progress'
+                  style={{ width: '600px', marginLeft: '3.3em' }}
+              >
+                <StepZilla
+                  steps={steps}
+                />
+              </div>
+          </Modal.Content>
+        </Modal>
       </div>
 )
 

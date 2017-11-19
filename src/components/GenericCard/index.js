@@ -9,9 +9,16 @@ const styles = {
 }
 
 const GenericCard = ({
-    header, onClick
+    header, onClick, handleOpen
 }) => (
-    <Card onClick={onClick} style={styles.card} fluid raised color='teal' header={header}>
+    <Card
+      style={styles.card}
+      fluid
+      raised
+      color='teal'
+      onClick={onClick}
+      header={header}
+    >
       <Card.Content>
         <Card.Header>
             {header}
@@ -25,8 +32,22 @@ const GenericCard = ({
       </Card.Content>
       <Card.Content extra>
         <div className='ui two buttons'>
-          <Button basic color='green'>Approve</Button>
-          <Button basic color='red'>Decline</Button>
+          <Button
+            basic
+            color='green'
+            id='approve'
+            onClick={handleOpen}
+          >
+            Approve
+          </Button>
+          <Button
+            basic
+            color='red'
+            onClick={handleOpen}
+            id='decline'
+          >
+            Decline
+          </Button>
         </div>
       </Card.Content>
     </Card>

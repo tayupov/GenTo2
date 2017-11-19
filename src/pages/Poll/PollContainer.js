@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import Poll from './Poll';
 
+import Modal from 'components/Modal';
+
 class PollContainer extends Component {
 
     constructor(props) {
@@ -9,7 +11,9 @@ class PollContainer extends Component {
 
         this.state = {
             polls: [],
-            header: 'Do we want to raise the value?'
+            header: 'Do we want to raise the value?',
+            modalOpen: false,
+            modalState: ''
         };
     }
 
@@ -30,6 +34,10 @@ class PollContainer extends Component {
             header
         })
     }
+
+    handleOpen = (e) => {this.setState({ modalOpen: true, modalState: e.target.id })}
+    
+    handleClose = () => this.setState({ modalOpen: false })
 
     listPolls = () => {
         this.setState({
@@ -96,12 +104,23 @@ class PollContainer extends Component {
     }
 
     render() {
+        const { header, modalOpen, modalState } = this.state;
+
         return (
-            <Poll
-                {...this.props}
-                {...this.state}
-                onClick={this.onClick}
-            />
+            <div>
+                <Modal
+                    header = {header}
+                    modalOpen={modalOpen}
+                    modalState={modalState}
+                    handleClose={this.handleClose}
+                />
+                <Poll
+                    {...this.props}
+                    {...this.state}
+                    onClick={this.onClick}
+                    handleOpen={this.handleOpen}
+                />
+            </div>
         )
     }
 
