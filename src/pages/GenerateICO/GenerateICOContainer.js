@@ -21,8 +21,8 @@ class GenerateICOContainer  extends Component {
 
         this.state = {
             deployedInstance: '',
-            open: false
         }
+
 
         // this.store = {
         //     tokenName: 'MorrorToken',
@@ -38,14 +38,6 @@ class GenerateICOContainer  extends Component {
 
         this.store = {}
     }
-
-    closeConfigShow = (closeOnRootNodeClick) => () => {
-      this.setState({closeOnRootNodeClick, open: true })
-    }
-
-    close = () => this.setState({ open: false })
-
-
 
     submitTokenContract = () => {
 
@@ -181,8 +173,6 @@ class GenerateICOContainer  extends Component {
 
     render() {
 
-      const { open, closeOnRootNodeClick } = this.state
-
       const steps = [
           {name: 'NAME',component: <Name getStore={this.getStore} updateStore={this.updateStore} />, },
           {name: 'AMOUNT & TIME', component: <Amount getStore={this.getStore} updateStore={this.updateStore} /> },
@@ -195,8 +185,6 @@ class GenerateICOContainer  extends Component {
                 {...this.props}
                 {...this.state}
                 steps={steps}
-                close={this.close}
-                closeConfigShow={this.closeConfigShow}
             />
         )
     }

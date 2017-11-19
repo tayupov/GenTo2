@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 
-import { Form, Container, Checkbox } from 'semantic-ui-react';
-
-import InlineError from 'components/InlineError';
+import View from './View'
 
 const styles = {
   root: {
@@ -19,7 +17,7 @@ const styles = {
   }
 }
 
-class Name extends Component {
+class Auction extends Component {
 
   constructor(props) {
     super(props);
@@ -27,7 +25,7 @@ class Name extends Component {
       data: {
         auctionType: ''
       },
-      errors: { 
+      errors: {
         auctionType: ''
       },
       loading: false
@@ -59,39 +57,17 @@ class Name extends Component {
   render() {
 
     const { errors } = this.state;
-    
+
     return(
-      <Container style={styles.root}>
-        <Form id="name-form" action=''>
-          <Form.Field error={!!errors.tokenName}>
-            <label style={styles.firstLabel}>Choose the auction type!</label>
-            <Checkbox
-              radio
-              name="english"
-              label="English"
-              value="english"
-              checked={this.state.data.auctionType === 'english'}
-              onChange={this.onChange}
-              size='small'
-              style={styles.input}
-            />
-            <Checkbox
-              radio
-              name="dutch"
-              label="Dutch"
-              value="dutch"
-              checked={this.state.data.auctionType === 'dutch'}
-              onChange={this.onChange}
-              size='small'
-              style={styles.input}
-            />
-          </Form.Field>
-          {errors.auctionType && <InlineError text={errors.auctionType} />}
-        </Form>
-      </Container>
+
+      <View
+        {...this.state}
+        onChange={this.onChange}
+        styles={styles}
+      />
     );
   }
 
 }
 
-export default Name;
+export default Auction;

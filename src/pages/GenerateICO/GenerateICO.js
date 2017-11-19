@@ -16,39 +16,25 @@ import HeaderSection from 'components/Header';
 import './main.css';
 
 const GenerateICO = ({
-    handleShow, handleHide, active, steps, open, closeOnRootNodeClick, close
+    handleShow, handleHide, active, steps, open, closeOnRootNodeClick, close, closeConfigShow
 }) => (
-      <div>
-        <Modal
-          open={open}
-          closeOnRootNodeClick={closeOnRootNodeClick}
-          onClose={close}
+
+  <div>
+    <h1>hallo</h1>
+    <Modal trigger={<Button onClick={handleShow}>Show Modal</Button>} closeIcon>
+      <Header content='Create an ICO'></Header>
+      <Modal.Content>
+        <StepZilla
+          steps={steps}
+          showNavigation= {true}
         >
-          <Modal.Header>
-            Create an ICO
-          </Modal.Header>
-          <Modal.Content>
-            <HeaderSection text="GENERATE YOUR OWN SMART CONTRACTS" />
-            <Button onClick={handleShow} color='teal'>Create an ICO</Button>
-                  <Button
-                      onClick={handleHide}
-                      icon='close'
-                      floated='right'
-                      basic
-                      circular
-                  />
-                  <div
-                      className='step-progress'
-                      style={{ width: '600px', marginLeft: '3.3em' }}
-                  >
-                    <StepZilla
-                      steps={steps}
-                    />
-                  </div>
-        </Modal.Content>
-      </Modal>
-      </div>
+        </StepZilla>
+      </Modal.Content>
+    </Modal>
+  </div>
 )
+
+
 
 
 export default GenerateICO;

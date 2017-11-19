@@ -12,7 +12,7 @@ class Name extends Component {
         tokenName: '',
         tickerSymbol: '',
       },
-      errors: { 
+      errors: {
         tokenName: '',
         tickerSymbol: ''
       }
@@ -38,7 +38,7 @@ class Name extends Component {
        data: {
          ...this.state.data,
          [e.target.name]: e.target.value,
-         tickerSymbol: e.target.value.slice(0, 3).toUpperCase() 
+         //tickerSymbol: e.target.value.slice(0, 3).toUpperCase() 
       }
     })
   }
@@ -51,7 +51,7 @@ class Name extends Component {
   }
 
   render() {
-    
+
     return(
       <View
         {...this.state}

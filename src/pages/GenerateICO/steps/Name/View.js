@@ -41,7 +41,8 @@ const View = ({
                 />
             </Form.Field>
             {errors.tokenName && <InlineError text={errors.tokenName} />}
-            {data.tokenName &&  
+            {data.tokenName}
+
             <Form.Field error={!!errors.tickerSymbol}>
                 <label style={styles.label}>What will be your ticker symbol?</label>
                 <input
@@ -53,7 +54,7 @@ const View = ({
                     size='small'
                     style={styles.input}
                 />
-            </Form.Field>}
+            </Form.Field>
             {errors.tickerSymbol && <InlineError text={errors.tickerSymbol} />}
         </Form>
     </Container>
