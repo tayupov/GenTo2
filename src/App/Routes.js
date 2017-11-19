@@ -4,12 +4,13 @@ import { Switch, Route } from 'react-router-dom';
 import About from 'pages/About';
 import List from 'pages/List';
 import GenerateICO from 'pages/GenerateICO';
+import GeneratePoll from 'pages/GeneratePoll';
 import Ico from 'pages/Ico';
 import Poll from 'pages/Poll';
 import Error from 'pages/Error';
 
 
-const Routes = ({ account, network, notify, active, handleShow, handleHide }) => (
+const Routes = ({ account, network, notify, active, handleShow, handleHide, contextRef }) => (
     <Switch>
         <Route exact path="/"
             render={(props) => (<About {...props} />)}
@@ -40,6 +41,17 @@ const Routes = ({ account, network, notify, active, handleShow, handleHide }) =>
                                     handleHide={handleHide}
                                 />)}
         />
+        <Route path="/generatePoll"
+               render={(props) => (<GeneratePoll
+                                {...props}
+                                account={account}
+                                network={network}
+                                notify={notify}
+                                active={active}
+                                handleShow={handleShow}
+                                handleHide={handleHide}
+                            />)}
+        />
         <Route path="/poll"
             render={(props) => (<Poll
                                     {...props}
@@ -47,6 +59,7 @@ const Routes = ({ account, network, notify, active, handleShow, handleHide }) =>
                                     network={network}
                                     notify={notify}
                                     active={active}
+                                    contextRef={contextRef}
                                 />)}
         />
         <Route component={Error} />

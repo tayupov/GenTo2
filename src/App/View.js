@@ -7,7 +7,7 @@ import TopNav from 'components/TopNav';
 import Routes from './Routes';
 
 const View = ({
-    account, network, notify, active, handleShow, handleHide
+    account, network, notify, active, handleShow, handleHide, contextRef
 }) => (
     <div>
         <TopNav account={account} />
@@ -19,6 +19,7 @@ const View = ({
                 active={active}
                 handleShow={handleShow}
                 handleHide={handleHide}
+                contextRef={contextRef}
             />
         </Container>
     </div>
