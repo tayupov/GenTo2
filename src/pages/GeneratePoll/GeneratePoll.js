@@ -8,45 +8,30 @@ import {
     Header,
     Container 
 } from 'semantic-ui-react';
+
 import StepZilla from 'react-stepzilla';
+
+import withModal from 'hoc/withModal';
 
 import HeaderSection from 'components/Header';
 
 import './main.css';
+
+const MultiStepWithModal = withModal(StepZilla);
 
 const GeneratePoll = ({
     handleShow, handleHide, active, steps
 }) => (
     <div>
         <HeaderSection text="GENERATE YOUR POLL" />
-        <Button onClick={handleShow} color='teal'>Create a Poll</Button>
-        <Dimmer
-            page
-            inverted
-            active={active}
-        >
-            <Container
-                style={{ width: '700px', position: 'relative' }}
-            >
-                <Button
-                    onClick={handleHide}
-                    icon='close'
-                    floated='right'
-                    basic
-                    circular 
-                />
-                <div
-                    className='step-progress'
-                    style={{ width: '600px', marginLeft: '3.3em' }}
-                >
-                    <StepZilla
-                        steps={steps}
-                        nextButtonCls="ui positive button"
-                        backButtonCls="ui positive button"
-                    />
-                </div>
-            </Container>
-        </Dimmer>
+        <Button onClick={handleShow} color='teal'>
+            Create a Poll
+        </Button>
+        <MultiStepWithModal
+            steps={steps}
+            nextButtonCls="ui positive button"
+            backButtonCls="ui positive button"
+        />
     </div>
 )
 

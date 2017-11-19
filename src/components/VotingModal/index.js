@@ -8,7 +8,12 @@ import {
 } from 'semantic-ui-react';
 
 const votingModal = ({
-    modalOpen, modalState, modalSubmitted, handleClose, handleOk, header
+    modalOpen,
+    modalState,
+    modalSubmitted,
+    handleClose,
+    handleOk,
+    header
 }) => {
 
     if (modalSubmitted) {

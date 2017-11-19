@@ -10,7 +10,7 @@ import {
 const SearchNav = ({
 
 }) => (
-    <div className='flex-center'>
+    <div className='flex-center' style={{ marginBottom: '1em' }}>
         <Button color='teal'>
             Create a Voting
         </Button>
