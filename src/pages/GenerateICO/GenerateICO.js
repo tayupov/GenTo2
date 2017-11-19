@@ -16,19 +16,20 @@ import HeaderSection from 'components/Header';
 import './main.css';
 
 const GenerateICO = ({
-    handleShow, handleHide, active, steps
+    handleShow, handleHide, active, steps, open, closeOnRootNodeClick, close
 }) => (
-
       <div>
-          <HeaderSection text="GENERATE YOUR OWN SMART CONTRACTS" />
-          <Button onClick={handleShow} color='teal'>Create an ICO</Button>
-          <Dimmer
-              page
-              active={active}
-          >
-              <Container
-                  style={{ width: '700px', position: 'relative' }}
-              >
+        <Modal
+          open={open}
+          closeOnRootNodeClick={closeOnRootNodeClick}
+          onClose={close}
+        >
+          <Modal.Header>
+            Create an ICO
+          </Modal.Header>
+          <Modal.Content>
+            <HeaderSection text="GENERATE YOUR OWN SMART CONTRACTS" />
+            <Button onClick={handleShow} color='teal'>Create an ICO</Button>
                   <Button
                       onClick={handleHide}
                       icon='close'
@@ -40,10 +41,12 @@ const GenerateICO = ({
                       className='step-progress'
                       style={{ width: '600px', marginLeft: '3.3em' }}
                   >
-
+                    <StepZilla
+                      steps={steps}
+                    />
                   </div>
-              </Container>
-          </Dimmer>
+        </Modal.Content>
+      </Modal>
       </div>
 )
 

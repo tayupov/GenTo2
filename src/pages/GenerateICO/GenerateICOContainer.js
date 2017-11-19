@@ -191,23 +191,13 @@ class GenerateICOContainer  extends Component {
       ]
 
         return(
-
-          <Modal
-          open={open}
-          closeOnRootNodeClick={closeOnRootNodeClick}
-          onClose={this.close}
-        >
-          <Modal.Header>
-            Create an ICO
-          </Modal.Header>
-          <Modal.Content>
             <GenerateICO
                 {...this.props}
                 {...this.state}
                 steps={steps}
+                close={this.close}
+                closeConfigShow={this.closeConfigShow}
             />
-          </Modal.Content>
-        </Modal>
         )
     }
 }
