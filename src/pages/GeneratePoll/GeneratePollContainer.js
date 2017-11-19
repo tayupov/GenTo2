@@ -41,7 +41,8 @@ class GeneratePollContainer  extends Component {
 
         const {
             pollName,
-            pollEnd
+            pollEnd,
+            pollDescription
          } = this.store;
 
 
@@ -50,6 +51,7 @@ class GeneratePollContainer  extends Component {
 
         // TODO create poll using contract
         console.log("Poll "+ pollName + " was created with end date " + saleEndDate);
+        console.log("Poll description: "+ pollDescription);
     };
 
     handleContractCreatedEvent = (instance) => {
@@ -82,7 +84,7 @@ class GeneratePollContainer  extends Component {
         }
         console.log(update);
         console.log('+++++++++++++++++++++++++++++++++++++++++++++++++');
-        console.log(this.store);        
+        console.log(this.store);
         console.log('+++++++++++++++++++++++++++++++++++++++++++++++++');
     }
 
@@ -93,7 +95,7 @@ class GeneratePollContainer  extends Component {
           {name: 'Organisational', component: <Organisational getStore={this.getStore} updateStore={this.updateStore} submitTokenContract={this.submitTokenContract} /> },
       ]
 
-        return(       
+        return(
             <GeneratePoll
                 {...this.props}
                 {...this.state}

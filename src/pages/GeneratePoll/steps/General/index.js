@@ -9,10 +9,12 @@ class General extends Component {
 
     this.state = {
       data: {
-        pollName: ''
+        pollName: '',
+        pollDescription: ''
       },
       errors: {
-        pollName: ''
+        pollName: '',
+        pollDescription: ''
       }
     }
   }
@@ -47,6 +49,7 @@ class General extends Component {
     console.log(data.totalSupply);
     const errors = {};
     if ( data.pollName.length < 3) errors.pollName = "Poll name must have at least 3 characters";
+    if ( data.pollDescription.length < 10) errors.pollDescription = "Poll description must have at least 10 characters";
     return errors;
   }
 
