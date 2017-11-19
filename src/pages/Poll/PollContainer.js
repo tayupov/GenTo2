@@ -15,7 +15,8 @@ class PollContainer extends Component {
             polls: [],
             header: 'Do we want to raise the value?',
             modalOpen: false,
-            modalState: ''
+            modalState: '',
+            modalSubmitted: false
         };
     }
 
@@ -39,7 +40,9 @@ class PollContainer extends Component {
 
     handleOpen = (e) => {this.setState({ modalOpen: true, modalState: e.target.id })}
     
-    handleClose = () => this.setState({ modalOpen: false })
+    handleClose = () => this.setState({ modalOpen: false, modalSubmitted: false })
+
+    handleOk = () => this.setState({ modalSubmitted: true })
 
     listPolls = () => {
         this.setState({
@@ -106,7 +109,7 @@ class PollContainer extends Component {
     }
 
     render() {
-        const { header, modalOpen, modalState } = this.state;
+        const { header, modalOpen, modalState, modalSubmitted } = this.state;
 
         return (
             <div>
@@ -115,7 +118,9 @@ class PollContainer extends Component {
                     header = {header}
                     modalOpen={modalOpen}
                     modalState={modalState}
+                    modalSubmitted={modalSubmitted}
                     handleClose={this.handleClose}
+                    handleOk={this.handleOk}
                 />
                 <Poll
                     {...this.props}
