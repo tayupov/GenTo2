@@ -6,34 +6,8 @@ import React, { Component } from 'react';
 
 import View from './View'
 
-const styles = {
-  root: {
-    marginBottom: '1em'
-  },
-  firstLabel: {
-    fontSize: '18px',
-    marginTop: '3em',
-    marginBottom: '0.8em',
-    fontWeight: '300'
-  },
-  label: {
-    fontSize: '18px',
-    marginBottom: '1em',
-    fontWeight: '300'
-  },
-  input: {
-    width: '150px',
-    margin: '0em 3em'
-  }
-}
 
-const options = [
-  { key: 'kether', text: 'kether', value: 'kether' },
-  { key: 'ether', text: 'ether', value: 'ether' },
-  { key: 'finney', text: 'finney', value: 'finney' },
-  { key: 'gwei', text: 'gwei', value: 'gwei' },
-  { key: 'mwei', text: 'mwei', value: 'mwei' },
-]
+
 class Pricing extends Component {
 
   constructor(props) {
@@ -41,7 +15,7 @@ class Pricing extends Component {
 
     this.state = {
       data: {
-        selectedCurrency: '',
+        selectedCurrency: 'ether',
         minPrice: 0,
         maxPrice: 0,
       },
@@ -57,8 +31,13 @@ class Pricing extends Component {
   isValidated() {
     const errors = this.validate(this.state.data);
     this.setState({ errors });
-    if (Object.keys(errors) === 0) {
+    console.log(errors);
+    if (Object.keys(errors).length === 0) {
+      console.log(this.state.data);
       this.props.updateStore(this.state.data);
+      //this.props.submitTokenContract(() => {});
+
+      //this.props.submitTokenContract().then(data => {console.log(data)}) ;
       return true;
     }
     return false;
@@ -71,13 +50,6 @@ class Pricing extends Component {
     else if(data.maxPrice <= 0) errors.maxPrice = "Your max price should be greater than 0";
     else if(data.minPrice < 0) errors.minPrice = "Your min price should be greater than 0";
     return errors;
-  }
-
-  onSubmit = () => {
-    const { updateStore, submitTokenContract } = this.props;
-
-    updateStore(this.state.data);
-    submitTokenContract();
   }
 
   onChangeSelect = (e, {value}) => {
@@ -116,7 +88,9 @@ class Pricing extends Component {
       <View
         {...this.state}
         onChange={this.onChange}
-        options={this.options}
+        onSubmit={this.onSubmit}
+        onChangeSelect={this.onChangeSelect}
+
       />
     );
   }

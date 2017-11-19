@@ -9,15 +9,19 @@ class Amount extends Component {
 
     this.state = {
       data: {
-        totalSupply: 0,
-        saleStart: '',
-        saleEnd: ''
+        totalSupply: props.getStore().totalSupply,
+        saleStart: props.getStore().saleStart,
+        saleEnd: props.getStore().saleEnd
       },
       errors: {
         totalSupply: '',
         date: ''
       }
     }
+  }
+
+  componentWillUnmount() {
+
   }
 
   isValidated() {

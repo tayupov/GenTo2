@@ -9,14 +9,18 @@ class Name extends Component {
     super(props);
     this.state = {
       data: {
-        tokenName: '',
-        tickerSymbol: '',
+        tokenName: props.getStore().tokenName,
+        tickerSymbol: props.getStore().tickerSymbol,
       },
       errors: {
         tokenName: '',
         tickerSymbol: ''
       }
     };
+  }
+
+  componentDidUnmount() {
+
   }
 
   isValidated() {
@@ -38,7 +42,7 @@ class Name extends Component {
        data: {
          ...this.state.data,
          [e.target.name]: e.target.value,
-         //tickerSymbol: e.target.value.slice(0, 3).toUpperCase() 
+         tickerSymbol: e.target.value.slice(0, 3).toUpperCase()
       }
     })
   }

@@ -21,6 +21,7 @@ class GenerateICOContainer  extends Component {
 
         this.state = {
             deployedInstance: '',
+            icoCreated: false
         }
 
 
@@ -40,6 +41,8 @@ class GenerateICOContainer  extends Component {
     }
 
     submitTokenContract = () => {
+
+      console.log('test');
 
         const { account, network, notify } = this.props;
         if(!(web3 && account && network)) {
@@ -105,7 +108,7 @@ class GenerateICOContainer  extends Component {
         console.log("now");
         console.log(now);
 
-        gentoFactoryData.then(contractData => {
+        return gentoFactoryData.then(contractData => {
             createGentoFactoryInstance(instance => {
                 web3.eth.estimateGas({
                     data: contractData.unlinked_binary
@@ -129,6 +132,10 @@ class GenerateICOContainer  extends Component {
                             } else {
                                 this.handleContractCreatedEvent(instance);
                                 console.log(result);
+                                this.setState({icoCreated: true});
+                                /*return new Promise((resolve, reject) => {
+                                  resolve(result);
+                                });*/
                             }
                         }
                     )
@@ -178,6 +185,7 @@ class GenerateICOContainer  extends Component {
           {name: 'AMOUNT & TIME', component: <Amount getStore={this.getStore} updateStore={this.updateStore} /> },
           {name: 'AUCTION', component: <Auction getStore={this.getStore} updateStore={this.updateStore} /> },
           {name: 'PRICING', component: <Pricing getStore={this.getStore} updateStore={this.updateStore} submitTokenContract={this.submitTokenContract} /> },
+          {name: 'CREATED',component: <Created /> }
       ]
 
         return(

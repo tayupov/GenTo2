@@ -2,21 +2,6 @@ import React, {Component} from 'react';
 
 import View from './View'
 
-const styles = {
-  root: {
-    marginBottom: '1em'
-  },
-  firstLabel: {
-    fontSize: '18px',
-    marginTop: '3em',
-    marginBottom: '0.8em',
-    fontWeight: '300'
-  },
-  input: {
-    margin: '1em 1em'
-  }
-}
-
 class Auction extends Component {
 
   constructor(props) {
@@ -43,6 +28,7 @@ class Auction extends Component {
   }
 
   onChange = (e, { value }) => {
+    console.log(value);
     this.setState({
       data: { ...this.state.data, auctionType: value }
    })
@@ -63,7 +49,6 @@ class Auction extends Component {
       <View
         {...this.state}
         onChange={this.onChange}
-        styles={styles}
       />
     );
   }
