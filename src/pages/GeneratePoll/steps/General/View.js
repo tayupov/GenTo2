@@ -43,7 +43,7 @@ const View = ({
           </Form.Field>
           {errors.pollName && <InlineError text={errors.pollName} />}
           <Form.Field>
-            <label style={styles.firstLabel}>What is the Description of the poll?</label>
+            <label style={styles.label}>What is the Description of the poll?</label>
             <Input
               type="text"
               name="pollDescription"

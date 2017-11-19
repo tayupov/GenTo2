@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
 
-//import { Form, Input, Select, Container, Button } from 'semantic-ui-react';
-
-//import InlineError from 'components/InlineError';
-
 import View from './View'
 
 
@@ -13,11 +9,13 @@ class Pricing extends Component {
   constructor(props) {
     super(props);
 
+    console.log(JSON.stringify(props.getStore())) ;
+
     this.state = {
       data: {
-        selectedCurrency: 'ether',
-        minPrice: 0,
-        maxPrice: 0,
+        selectedCurrency: props.getStore().selectedCurrency,
+        minPrice: props.getStore().minPrice,
+        maxPrice: props.getStore().maxPrice,
       },
       errors: {
         selectedCurrency: '',
@@ -35,8 +33,7 @@ class Pricing extends Component {
     if (Object.keys(errors).length === 0) {
       console.log(this.state.data);
       this.props.updateStore(this.state.data);
-      //this.props.submitTokenContract(() => {});
-
+      this.props.submitTokenContract();
       //this.props.submitTokenContract().then(data => {console.log(data)}) ;
       return true;
     }
@@ -94,41 +91,6 @@ class Pricing extends Component {
       />
     );
   }
-
 }
 
 export default Pricing;
-
-
-// import React from 'react';
-
-// const Pricing = () => (
-//   <div>
-//     <h1>Pricing</h1>
-//     <h2>What is the tokens Minimum and Maximum price during the auction?</h2>
-//     <select>
-//       <option value="kether-grand">kether / grand</option>
-//       <option value="ether">ether</option>
-//       <option value="finney">finney</option>
-//       <option value="gwei-shannon">gwei / shannon</option>
-//       <option value="mwei-babbage">mwei / babbage</option>
-//     </select>
-
-//     <h2>Choose your <strong>Min</strong> and <strong>Max</strong> price</h2>
-
-//     <form id="price-form">
-//       <label>Minimum</label>
-//       <br/>
-//       <input type="number" name="minimum-price"/>
-//       <br/>
-//       <label>Maximum</label>
-//       <br/>
-//       <input type="number" name="maximum-price"/>
-//       <br/>
-//       <input type="submit" name="create-button" value="Create Contract"/>
-//     </form>
-//   </div>
-
-// )
-
-// export default Pricing;

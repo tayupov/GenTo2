@@ -48,6 +48,7 @@ const View = ({
             compact
             options={options}
             defaultValue='ether'
+            value={data.selectedCurrency}
             style={styles.input}
             required
             onChange={onChangeSelect}
@@ -62,6 +63,7 @@ const View = ({
             label="MIN"
             labelPosition="left"
             id="saleStart"
+            value={data.minPrice}
             onChange={onChange}
             size="small"
             style={styles.input}
@@ -73,6 +75,7 @@ const View = ({
             label="MAX"
             labelPosition="right"
             id="saleEnd"
+            value={data.maxPrice}
             onChange={onChange}
             size="small"
             style={styles.input}

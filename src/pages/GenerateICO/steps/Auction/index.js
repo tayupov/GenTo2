@@ -8,7 +8,7 @@ class Auction extends Component {
     super(props);
     this.state = {
       data: {
-        auctionType: ''
+        auctionType: props.getStore().auctionType
       },
       errors: {
         auctionType: ''

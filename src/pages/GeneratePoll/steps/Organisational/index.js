@@ -15,7 +15,8 @@ const styles = {
     fontWeight: '300'
   },
   input: {
-    margin: '1em 1em'
+    margin: '1em 1em',
+    width: '200px'
   }
 }
 
@@ -71,7 +72,7 @@ class Organisational extends Component {
       <Container style={styles.root}>
         <Form id="name-form" action=''>
           <Form.Field>
-            <label style={styles.label}>How long should the poll last?</label>
+            <label style={styles.firstLabel}>How long should the poll last?</label>
             <Input
                 type="date"
                 name="pollEnd"
