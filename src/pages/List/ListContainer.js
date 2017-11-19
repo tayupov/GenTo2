@@ -16,6 +16,7 @@ class ListContainer extends Component {
 
     this.state = {
       items: [],
+      isLoading: true
     }
   }
 
@@ -73,6 +74,9 @@ class ListContainer extends Component {
         for(let x = 0; x < res.length; x++) {
           this.addIcoEntry(res[x]);
         }
+        this.setState({
+          isLoading: false
+        })
       })
     })
   }

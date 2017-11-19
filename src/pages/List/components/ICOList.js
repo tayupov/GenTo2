@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Card, Item, Label } from 'semantic-ui-react';
+import { Card, Item, Label, Dimmer, Loader } from 'semantic-ui-react';
 
 const styles = {
     titleBox: {
@@ -16,8 +16,9 @@ const styles = {
     }
 }
 
-const ICOList = ({ items }) => (
-    items.map(item => (
+const ICOList = ({ items, isLoading }) => {
+
+    return items.map(item => (
         <Item>
             <Item.Content style={styles.titleBox} href={`/ico/${item.address}`} >
                 {item.name.substring(0, 3).toUpperCase()}
@@ -37,7 +38,7 @@ const ICOList = ({ items }) => (
             </Item.Content>
         </Item>
     ))
-)
+}
 
 ICOList.propTypes = {
     items: PropTypes.array.isRequired

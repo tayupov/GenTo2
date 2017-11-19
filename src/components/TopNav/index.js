@@ -53,7 +53,7 @@ class TopNav extends Component {
 
                           <Menu.Item>
                             <Dropdown text='Voting'>
-                                <Dropdown.Menu>
+                                <Dropdown.Menu style={ styles.dropDownMenu }>
                                   <Dropdown.Item text='Create a Voting' as={Link} to="/generatePoll" />
                                   <Dropdown.Item as={Link} text='List all votings' to='/poll' />
                                 </Dropdown.Menu>
