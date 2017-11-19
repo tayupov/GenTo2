@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 
 import Poll from './Poll';
 
+
+import Header from 'components/Header';
+import VotingModal from 'components/VotingModal';
+
 class PollContainer extends Component {
 
     constructor(props) {
@@ -9,7 +13,10 @@ class PollContainer extends Component {
 
         this.state = {
             polls: [],
-            header: 'Do we want to raise the value?'
+            header: 'Do we want to raise the value?',
+            modalOpen: false,
+            modalState: '',
+            modalSubmitted: false
         };
     }
 
@@ -30,6 +37,12 @@ class PollContainer extends Component {
             header
         })
     }
+
+    handleOpen = (e) => {this.setState({ modalOpen: true, modalState: e.target.id })}
+    
+    handleClose = () => this.setState({ modalOpen: false, modalSubmitted: false })
+
+    handleOk = () => this.setState({ modalSubmitted: true })
 
     listPolls = () => {
         this.setState({
@@ -96,12 +109,26 @@ class PollContainer extends Component {
     }
 
     render() {
+        const { header, modalOpen, modalState, modalSubmitted } = this.state;
+
         return (
-            <Poll
-                {...this.props}
-                {...this.state}
-                onClick={this.onClick}
-            />
+            <div>
+                <Header text='LIST OF VOTINGS' />
+                <VotingModal
+                    header = {header}
+                    modalOpen={modalOpen}
+                    modalState={modalState}
+                    modalSubmitted={modalSubmitted}
+                    handleClose={this.handleClose}
+                    handleOk={this.handleOk}
+                />
+                <Poll
+                    {...this.props}
+                    {...this.state}
+                    onClick={this.onClick}
+                    handleOpen={this.handleOpen}
+                />
+            </div>
         )
     }
 
