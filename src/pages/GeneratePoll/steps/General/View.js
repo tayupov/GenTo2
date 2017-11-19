@@ -42,6 +42,19 @@ const View = ({
             />
           </Form.Field>
           {errors.pollName && <InlineError text={errors.pollName} />}
+          <Form.Field>
+            <label style={styles.firstLabel}>What is the Description of the poll?</label>
+            <Input
+              type="text"
+              name="pollDescription"
+              id="pollDescription"
+              onChange={onChange}
+              defaultValue={data.pollDescription}
+              size='small'
+              style={styles.input}
+            />
+          </Form.Field>
+          {errors.pollDescription && <InlineError text={errors.pollDescription} />}
         </Form>
     </Container>
 )

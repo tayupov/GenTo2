@@ -41,7 +41,8 @@ class GeneratePollContainer  extends Component {
 
         const {
             pollName,
-            pollEnd
+            pollEnd,
+            pollDescription
          } = this.store;
 
 
@@ -50,6 +51,7 @@ class GeneratePollContainer  extends Component {
 
         // TODO create poll using contract
         console.log("Poll "+ pollName + " was created with end date " + saleEndDate);
+        console.log("Poll description: "+ pollDescription);
     };
 
     handleContractCreatedEvent = (instance) => {
