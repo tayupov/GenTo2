@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 
 import Poll from './Poll';
 
-import Modal from 'components/Modal';
+
+import Header from 'components/Header';
+import VotingModal from 'components/VotingModal';
 
 class PollContainer extends Component {
 
@@ -108,7 +110,8 @@ class PollContainer extends Component {
 
         return (
             <div>
-                <Modal
+                <Header text='LIST OF VOTINGS' />
+                <VotingModal
                     header = {header}
                     modalOpen={modalOpen}
                     modalState={modalState}

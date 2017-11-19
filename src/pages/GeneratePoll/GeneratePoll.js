@@ -11,7 +11,6 @@ import {
 import StepZilla from 'react-stepzilla';
 
 import HeaderSection from 'components/Header';
-import Modal from 'components/Modal';
 
 import './main.css';
 
@@ -19,7 +18,6 @@ const GeneratePoll = ({
     handleShow, handleHide, active, steps
 }) => (
     <div>
-        <Modal />
         <HeaderSection text="GENERATE YOUR POLL" />
         <Button onClick={handleShow} color='teal'>Create a Poll</Button>
         <Dimmer
