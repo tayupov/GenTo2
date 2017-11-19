@@ -20,7 +20,8 @@ class GenerateICOContainer  extends Component {
         super(props);
 
         this.state = {
-            deployedInstance: ''
+            deployedInstance: '',
+            open: false
         }
 
         // this.store = {
@@ -37,6 +38,14 @@ class GenerateICOContainer  extends Component {
 
         this.store = {}
     }
+
+    closeConfigShow = (closeOnRootNodeClick) => () => {
+      this.setState({closeOnRootNodeClick, open: true })
+    }
+
+    close = () => this.setState({ open: false })
+
+
 
     submitTokenContract = () => {
 
@@ -166,11 +175,13 @@ class GenerateICOContainer  extends Component {
         }
         console.log(update);
         console.log('+++++++++++++++++++++++++++++++++++++++++++++++++');
-        console.log(this.store);        
+        console.log(this.store);
         console.log('+++++++++++++++++++++++++++++++++++++++++++++++++');
     }
 
     render() {
+
+      const { open, closeOnRootNodeClick } = this.state
 
       const steps = [
           {name: 'NAME',component: <Name getStore={this.getStore} updateStore={this.updateStore} />, },
@@ -179,12 +190,24 @@ class GenerateICOContainer  extends Component {
           {name: 'PRICING', component: <Pricing getStore={this.getStore} updateStore={this.updateStore} submitTokenContract={this.submitTokenContract} /> },
       ]
 
-        return(       
+        return(
+
+          <Modal
+          open={open}
+          closeOnRootNodeClick={closeOnRootNodeClick}
+          onClose={this.close}
+        >
+          <Modal.Header>
+            Create an ICO
+          </Modal.Header>
+          <Modal.Content>
             <GenerateICO
                 {...this.props}
                 {...this.state}
                 steps={steps}
             />
+          </Modal.Content>
+        </Modal>
         )
     }
 }
