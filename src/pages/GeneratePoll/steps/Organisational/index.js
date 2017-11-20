@@ -42,7 +42,7 @@ class Organisational extends Component {
       this.props.updateStore(this.state.data);
       return true;
     }
-    return false;
+    return true;
   }
 
   onSubmit = () => {
@@ -83,7 +83,6 @@ class Organisational extends Component {
             />
           </Form.Field>
           {errors.date && <InlineError text={errors.date} />}
-          <Button color='teal' onClick={this.onSubmit}>Create Poll</Button>
         </Form>
       </Container>
     );

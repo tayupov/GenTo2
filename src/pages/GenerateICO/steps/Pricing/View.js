@@ -82,7 +82,7 @@ const View = ({
           />
           {errors.maxPrice && <InlineError text={errors.maxPrice} />}
         </Form.Field>
-        {errors.minMaxConstraint && <InlineError text={errors.minMaxConstraint} />}
+        {errors.maxMinConstraint && <InlineError text={errors.maxMinConstraint} />}
       </Form>
     </Container>
 )

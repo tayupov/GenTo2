@@ -10,6 +10,11 @@ const Poll = ({
     header, onClick, handleOpen, polls, contextRef
 }) => (
     <Grid columns={2}>
+        <Grid.Column width={6}>
+            <Sticky context={contextRef}>
+                <PollDetails header={header} />
+            </Sticky>
+        </Grid.Column>
         <Grid.Column width={10}>
             <SearchNav />
             <PollList 
@@ -17,11 +22,6 @@ const Poll = ({
                 handleOpen={handleOpen}
                 polls={polls}
             />
-        </Grid.Column>
-        <Grid.Column width={6}>
-            <Sticky context={contextRef}>
-                <PollDetails header={header} />
-            </Sticky>
         </Grid.Column>
     </Grid>
 )

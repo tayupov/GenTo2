@@ -8,6 +8,7 @@ import GeneratePoll from './GeneratePoll';
 
 import General from './steps/General';
 import Organisational from './steps/Organisational';
+import Created from './steps/Created';
 
 import MultiStep from 'components/MultiStepForm';
 
@@ -91,8 +92,9 @@ class GeneratePollContainer  extends Component {
     render() {
 
       const steps = [
-          {name: 'GENERAL',component: <General getStore={this.getStore} updateStore={this.updateStore} />, },
-          {name: 'Organisational', component: <Organisational getStore={this.getStore} updateStore={this.updateStore} submitTokenContract={this.submitTokenContract} /> },
+          {name: 'GENERAL',component: <General getStore={this.getStore} updateStore={this.updateStore} />},
+          {name: 'ORGANISATIONAL', component: <Organisational getStore={this.getStore} updateStore={this.updateStore} submitTokenContract={this.submitTokenContract} /> },
+          {name: 'POLL CREATED', component: <Created />}
       ]
 
         return(

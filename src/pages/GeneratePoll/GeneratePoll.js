@@ -31,7 +31,7 @@ const GeneratePoll = ({
             steps={steps}
             nextButtonCls="ui positive button"
             backButtonCls="ui positive button"
-            
+            nextTextOnFinalActionStep="Submit Poll"
         />
     </div>
 )

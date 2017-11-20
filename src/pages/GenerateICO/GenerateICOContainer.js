@@ -37,7 +37,17 @@ class GenerateICOContainer  extends Component {
         //     saleEnd: 'Mon Nov 13 2017 13:54:52 GMT+0100 (W. Europe Standard Time)'
         // }
 
-        this.store = {}
+        this.store = {
+            tokenName: '',
+            tickerSymbol: '',
+            totalSupply: 0,
+            auctionType: '',
+            selectedCurrency: 'finney',
+            minPrice: 0,
+            maxPrice: 1,
+            saleStart: '',
+            saleEnd: ''
+        }
     }
 
     submitTokenContract = () => {
@@ -185,7 +195,7 @@ class GenerateICOContainer  extends Component {
           {name: 'AMOUNT & TIME', component: <Amount getStore={this.getStore} updateStore={this.updateStore} /> },
           {name: 'AUCTION', component: <Auction getStore={this.getStore} updateStore={this.updateStore} /> },
           {name: 'PRICING', component: <Pricing getStore={this.getStore} updateStore={this.updateStore} submitTokenContract={this.submitTokenContract} /> },
-          {name: 'CREATED',component: <Created /> }
+          {name: 'CREATED', component: <Created /> }
       ]
 
         return(

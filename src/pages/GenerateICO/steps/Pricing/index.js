@@ -29,6 +29,7 @@ class Pricing extends Component {
   isValidated() {
     const errors = this.validate(this.state.data);
     this.setState({ errors });
+    console.log('ERRORS______ERRORS');
     console.log(errors);
     if (Object.keys(errors).length === 0) {
       console.log(this.state.data);
@@ -42,6 +43,8 @@ class Pricing extends Component {
 
   validate = data => {
     const errors = {};
+    console.log('DATA_____DATA');
+    console.log(data);
     if (data.selectedCurrency === '') errors.selectedCurrency = "You have to select a currency";
     else if(data.maxPrice < data.minPrice) errors.maxMinConstraint = "Your min price should be smaller than your max price";
     else if(data.maxPrice <= 0) errors.maxPrice = "Your max price should be greater than 0";
@@ -72,11 +75,6 @@ class Pricing extends Component {
       }
     })
   }
-  // onChange = e => {
-  //   this.setState({
-  //      [e.target.name]: e.target.value
-  //   })
-  // }
 
   render() {
     const { errors } = this.state;
@@ -87,7 +85,6 @@ class Pricing extends Component {
         onChange={this.onChange}
         onSubmit={this.onSubmit}
         onChangeSelect={this.onChangeSelect}
-
       />
     );
   }

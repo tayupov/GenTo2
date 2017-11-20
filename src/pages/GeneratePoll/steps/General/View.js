@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Form, Input, Container } from 'semantic-ui-react';
+import { Form, Input, Container, TextArea } from 'semantic-ui-react';
 
 import InlineError from 'components/InlineError';
 
@@ -20,7 +20,7 @@ const styles = {
       fontWeight: '300'
     },
     input: {
-      width: '200px'
+      width: '280px'
     }
   }
 
@@ -44,7 +44,7 @@ const View = ({
           {errors.pollName && <InlineError text={errors.pollName} />}
           <Form.Field>
             <label style={styles.label}>What is the Description of the poll?</label>
-            <Input
+            <TextArea
               type="text"
               name="pollDescription"
               id="pollDescription"

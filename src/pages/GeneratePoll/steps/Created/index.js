@@ -5,7 +5,7 @@ import { Button } from 'semantic-ui-react';
 
 const Created = () => (
     <div>
-        <h1>Your ICO has been successfully created!</h1>
+        <h1>You have successfully submitted your Poll!</h1>
         <Link to='/'>
             <Button positive style={{ marginBottom: '1em' }}>
                 Back to Home Page

@@ -20,7 +20,7 @@ const votingModal = ({
         return (
             <Modal
                 open={modalOpen}
-                basic
+                
                 size='small'
             >
                 <Header icon='checkmark box' />
@@ -40,7 +40,6 @@ const votingModal = ({
     return (
         <Modal
             open={modalOpen}
-            basic
             size='small'
             closeOnDimmerClick={false}
             closeOnEscape={false}

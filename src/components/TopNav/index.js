@@ -59,6 +59,7 @@ class TopNav extends Component {
                                 </Dropdown.Menu>
                             </Dropdown>
                           </Menu.Item>
+                        {!this.props.account && <Menu.Item><Button inverted color='teal'>Account: Please Log in through MetaMask!</Button></Menu.Item>}
                         {this.props.account && <Menu.Item><Button inverted color='teal'>Account: {this.hideAccountHash()}</Button></Menu.Item>}
                         </Menu.Menu>
                     </Menu>
