@@ -9,6 +9,10 @@
 # production
 /build
 
+# development
+/solidity/build
+/src/assets/contracts
+
 # misc
 .DS_Store
 .env.local

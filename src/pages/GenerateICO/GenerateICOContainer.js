@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { gentoFactoryData } from 'contracts';
+import { gentoFactoryData, auctionTokenData } from 'contracts';
 import { createGentoFactoryInstance, createAuctionTokenInstance } from 'contractInstances';
 import web3 from 'myWeb3';
 
