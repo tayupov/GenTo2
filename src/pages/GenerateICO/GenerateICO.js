@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import StepZilla from 'react-stepzilla';
 
 import {
     Button,
@@ -9,13 +10,11 @@ import {
     Container,
     Modal
 } from 'semantic-ui-react';
-import StepZilla from 'react-stepzilla';
 
 import withModal from 'hoc/withModal';
-
 import HeaderSection from 'components/Header';
 
-import './main.css';
+import './GenerateICO.css';
 
 const MultiStepWithModal = withModal(StepZilla);
 

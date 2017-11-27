@@ -1,4 +1,5 @@
 import React from 'react';
+import StepZilla from 'react-stepzilla';
 
 import { 
     Button,
@@ -9,13 +10,10 @@ import {
     Container 
 } from 'semantic-ui-react';
 
-import StepZilla from 'react-stepzilla';
-
 import withModal from 'hoc/withModal';
-
 import HeaderSection from 'components/Header';
 
-import './main.css';
+import './GeneratePoll.css';
 
 const MultiStepWithModal = withModal(StepZilla);
 
