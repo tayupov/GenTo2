@@ -1,9 +1,7 @@
 import React from 'react';
-
 import { Container } from 'semantic-ui-react';
 
 import TopNav from 'components/TopNav';
-
 import Routes from './Routes';
 
 const View = ({

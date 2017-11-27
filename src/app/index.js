@@ -7,10 +7,8 @@ import web3 from 'myWeb3';
 
 class App extends Component {
 
-
   constructor() {
     super();
-
     this.state = {
       account: null,
       network: null,
@@ -67,21 +65,16 @@ class App extends Component {
     switch(type) {
       case 'info':
         return this.msg.info(message);
-        break;
       case 'success':
         return this.msg.success(message);
-        break;
       case 'error':
         return this.msg.error(message);
-        break;
       case 'remove':
         return this.msg.removeAll();
-        break;
     }
   }
 
   handleContextRef = contextRef => this.setState({ contextRef });
-
 
   render() {
     return (

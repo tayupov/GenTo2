@@ -6,7 +6,7 @@ import { auctionTokenData } from 'contracts';
  
 import Ico from './Ico';
 
-import { isFunction } from 'utils';
+import { isFunction } from 'utils/functional';
 import web3 from 'myWeb3';
 import moment from 'moment';
 

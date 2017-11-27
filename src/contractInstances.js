@@ -13,12 +13,6 @@ export const createAuctionTokenInstance = (address) => {
     const AuctionToken = web3.eth.contract(auctionTokenData.abi);
     const instance = AuctionToken.at(address);
     return instance;
-
-    // return auctionTokenData.then((data) => {
-    //     const AuctionToken = web3.eth.contract(data.abi);
-    //     const instance = AuctionToken.at(address);
-    //     return instance;
-    // })
 }
 
 const getNetworkId = (callback) => {

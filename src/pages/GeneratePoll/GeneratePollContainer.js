@@ -10,8 +10,6 @@ import General from './steps/General';
 import Organisational from './steps/Organisational';
 import Created from './steps/Created';
 
-import MultiStep from 'components/MultiStepForm';
-
 class GeneratePollContainer  extends Component {
 
     constructor(props) {

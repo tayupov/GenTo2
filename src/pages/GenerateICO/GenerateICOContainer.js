@@ -12,8 +12,6 @@ import Auction from './steps/Auction';
 import Pricing from './steps/Pricing';
 import Created from './steps/Created';
 
-import MultiStep from 'components/MultiStepForm';
-
 class GenerateICOContainer  extends Component {
 
     constructor(props) {
@@ -23,19 +21,6 @@ class GenerateICOContainer  extends Component {
             deployedInstance: '',
             icoCreated: false
         }
-
-
-        // this.store = {
-        //     tokenName: 'MorrorToken',
-        //     tickerSymbol: 'MOR',
-        //     totalSupply: 9000,
-        //     auctionType: 'english',
-        //     selectedCurrency: 'finney',
-        //     minPrice: 4000,
-        //     maxPrice: 9000,
-        //     saleStart: 'Sat Nov 11 2017 13:54:52 GMT+0100 (W. Europe Standard Time)',
-        //     saleEnd: 'Mon Nov 13 2017 13:54:52 GMT+0100 (W. Europe Standard Time)'
-        // }
 
         this.store = {
             tokenName: '',
@@ -51,8 +36,6 @@ class GenerateICOContainer  extends Component {
     }
 
     submitTokenContract = () => {
-
-      console.log('test');
 
         const { account, network, notify } = this.props;
         if(!(web3 && account && network)) {
@@ -107,21 +90,10 @@ class GenerateICOContainer  extends Component {
             const tmpSaleStart = saleStartForm;
             saleStartForm += (now - tmpSaleStart);
         }
-
-        console.log("The store object: ");
-        console.log(this.store);
-
-        console.log("saleStartForm");
-        console.log(saleStartForm);
-        console.log("saleEndForm");
-        console.log(saleEndForm);
-        console.log("now");
-        console.log(now);
-
-        return gentoFactoryData.then(contractData => {
-            createGentoFactoryInstance(instance => {
+        
+        return createGentoFactoryInstance(instance => {
                 web3.eth.estimateGas({
-                    data: contractData.unlinked_binary
+                    data: gentoFactoryData.unlinked_binary
                 }, (err, gas) => {
                     instance.createContract(
                         web3.toBigNumber(totalSupply).toString(10),
@@ -134,7 +106,7 @@ class GenerateICOContainer  extends Component {
                         web3.toBigNumber(saleEndForm).toString(10),
                         {
                             from: this.props.account,
-                            data: contractData.unlinked_binary,
+                            data: gentoFactoryData.unlinked_binary,
                             gas: gas
                         }, (err, result) => {
                             if (err) {
@@ -143,15 +115,11 @@ class GenerateICOContainer  extends Component {
                                 this.handleContractCreatedEvent(instance);
                                 console.log(result);
                                 this.setState({icoCreated: true});
-                                /*return new Promise((resolve, reject) => {
-                                  resolve(result);
-                                });*/
                             }
                         }
                     )
                 })
             })
-        })
     }
 
     handleContractCreatedEvent = (instance) => {
@@ -182,10 +150,6 @@ class GenerateICOContainer  extends Component {
             ...this.store,
             ...update
         }
-        console.log(update);
-        console.log('+++++++++++++++++++++++++++++++++++++++++++++++++');
-        console.log(this.store);
-        console.log('+++++++++++++++++++++++++++++++++++++++++++++++++');
     }
 
     render() {
