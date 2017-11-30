@@ -11,7 +11,7 @@ const View = ({
     <div>
         <TopNav account={account} />
         <SideBar />
-        <Container>
+        <Container style={{ paddingLeft: '6em' }}>
             <Routes
                 account={account}
                 network={network}
