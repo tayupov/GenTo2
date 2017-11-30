@@ -2,6 +2,7 @@ import React from 'react';
 import { Container } from 'semantic-ui-react';
 
 import TopNav from 'components/TopNav';
+import SideBar from 'components/SideBar';
 import Routes from './Routes';
 
 const View = ({
@@ -9,6 +10,7 @@ const View = ({
 }) => (
     <div>
         <TopNav account={account} />
+        <SideBar />
         <Container>
             <Routes
                 account={account}
