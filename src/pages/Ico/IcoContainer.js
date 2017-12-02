@@ -31,7 +31,6 @@ class IcoContainer extends Component {
             priceDevelopmentString: null,
             currentPercentage: null,
             timeCountDown: null,
-            chartDataArr: []
         }
     }
 
@@ -46,7 +45,6 @@ class IcoContainer extends Component {
         } else {
             console.log('Missing address parameter');
         }
-        setInterval(this.getChartData, 10000);
     }
 
     componentDidUpdate(nextProps) {
@@ -177,48 +175,8 @@ class IcoContainer extends Component {
             return;
         }
 
-        createAuctionTokenInstance(address).then(instance => {
-            instance.getDetails((error, result) => {
-                if(error) {
-                    console.error(error);
-                } else {
-                    let data = this.parseContractDetails(result);
-                    this.setState({
-                        auctionDetailsParsed: data,
-                    })
-                    this.initAuctionDetails(data);
-                    this.getChartData();                    
-                    this.setPriceDevelopmentString();
-                }
-            })
-        })
+        this.initAuctionDetails({});
     }
-
-    getChartData = () => {
-        const data = this.state.auctionDetails;
-        let cd = [];
-        cd.push({
-            x: moment.unix(data._saleStart).valueOf(),
-            y: this.state.buyPriceStart
-        });
-        const duration = data._saleEnd - data._saleStart;
-        if(this.state.status === 'running'){
-            const passed = moment().unix() - data._saleStart;
-            const currPrice = Math.floor(this.state.buyPriceStart + ((this.state.buyPriceEnd - this.state.buyPriceStart) * passed) / duration);
-            cd.push({
-                x: moment.unix(data._saleStart + passed).valueOf(),
-                y: currPrice
-            })
-        }
-        cd.push({
-            x: moment.unix(data._saleEnd).valueOf(),
-            y: this.state.buyPriceEnd
-        });
-        this.setState({
-            chartDataArr: cd
-        })
-    }
- 
     checkForError = () => {
 
         if(!(web3 && this.state.auctionDetails && this.props.match.params.address)) {

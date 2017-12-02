@@ -37,7 +37,7 @@ class TopNav extends Component {
                             <Dropdown text='ICO'>
                                 <Dropdown.Menu style={ styles.dropDownMenu }>
                                   <Dropdown.Item as={Link} text='Create an ICO' to='/generate' />
-                                  <Dropdown.Item as={Link} text='List all ICOs' to='/list' />
+                                  <Dropdown.Item as={Link} text='List all ICOs' to='/icoList' />
                                 </Dropdown.Menu>
                             </Dropdown>
                           </Menu.Item>
@@ -45,8 +45,7 @@ class TopNav extends Component {
                           <Menu.Item>
                             <Dropdown text='DAO'>
                                 <Dropdown.Menu style={ styles.dropDownMenu }>
-                                  <Dropdown.Item text='Create a DAO' />
-                                  <Dropdown.Item text='List all DAOs' />
+                                  <Dropdown.Item as={Link} text='List all DAOs' to="/daoList" />
                                 </Dropdown.Menu>
                             </Dropdown>
                           </Menu.Item>
