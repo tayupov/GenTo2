@@ -21,7 +21,7 @@ const DAOList = ({ items, isLoading }) => {
     return items.map(item => (
         <Item>
             <Item.Content style={styles.titleBox} href={`/dao/${item.address}`} >
-                {item.name.substring(0, 3).toUpperCase()}
+                {item.shortName}
             </Item.Content>
 
             <Item.Content href={`/dao/${item.address}`} >
@@ -31,9 +31,9 @@ const DAOList = ({ items, isLoading }) => {
                 </Item.Meta>
                 <Item.Description>{item.address}</Item.Description>
                 <Item.Extra>
-                    <Label>My ICO</Label>
-                    <Label>Active</Label>
-                    <Label>0/100 tokens sold</Label>
+                    <Label>12/3000 tokens owned</Label>
+                    <Label>3 open polls</Label>
+                    <Label>77 voting power</Label>
                 </Item.Extra>
             </Item.Content>
         </Item>

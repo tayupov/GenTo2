@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Grid, Header, Segment, Progress } from 'semantic-ui-react';
+import { Grid, Header, Segment, Progress, Input } from 'semantic-ui-react';
 import moment from 'moment';
 
 let auctionInterval;
@@ -22,13 +22,12 @@ class DetailsSection extends Component {
 
 
     componentWillMount() {
-        this.setAuctionTimer();
-
-        this.props.setSupplyInterval((obj) => {
-            this.setState({
-                supplyObj: obj
-            })
-        });
+        //
+        // this.props.setSupplyInterval((obj) => {
+        //     this.setState({
+        //         supplyObj: obj
+        //     })
+        // });
     }
 
     render() {
@@ -40,7 +39,7 @@ class DetailsSection extends Component {
             <Grid.Row>
                 <Grid.Column width={8}>
                     <Header as='h2' attached textAlign='left'>
-                        Token Name
+                        Dao Name
                     </Header>
                     <Segment attached padded raised textAlign='left' color='olive'>
                         {details._name}
@@ -51,7 +50,7 @@ class DetailsSection extends Component {
                         Created at
                     </Header>
                     <Segment attached padded raised textAlign='right' color='olive'>
-                        {moment.unix(details._creationDate).format('LLL')}
+                        aaaaaaa
                     </Segment>
                 </Grid.Column>
             </Grid.Row>
@@ -78,29 +77,124 @@ class DetailsSection extends Component {
             <Grid.Row>
                 <Grid.Column width={8}>
                     <Header as='h2' attached textAlign='left'>
-                        Number of Tokens
+                        Number of tokens owned
                     </Header>
                     <Segment attached padded raised textAlign='left' color='olive'>
-                        <Progress percent={supplyObj.supplyPct} indicating progress label={supplyObj.supplyString} />
+                        12/1000
                     </Segment>
                 </Grid.Column>
                 <Grid.Column width={8}>
                     <Header as='h2' attached textAlign='right'>
-                        Period of Auction
+                        Total voting power
                     </Header>
                     <Segment attached padded raised textAlign='right' color='olive'>
-                        <Progress percent={currentPercentage} indicating progress label={timeCountDown} />
+                        78
                     </Segment>
                 </Grid.Column>
             </Grid.Row>
     
             <Grid.Row>
-                <Grid.Column>
+                <Grid.Column width={8}>
                     <Header as='h2' attached textAlign='center'>
-                        Price over time
+                        Voting power
                     </Header>
                     <Segment attached padded textAlign='center' color='olive'>
-                        <div dangerouslySetInnerHTML={{__html: priceDevelopmentString}}></div>
+                        <Grid>
+                            <Grid.Row>
+                                <Grid.Column width={8}>
+                                    Field of work
+                                </Grid.Column>
+                                <Grid.Column width={4}>
+                                    voting power
+                                </Grid.Column>
+                                <Grid.Column width={4}>
+                                    voting points
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Grid.Column width={8}>
+                                    Organisational
+                                </Grid.Column>
+                                <Grid.Column width={4}>
+                                    16/1000
+                                </Grid.Column>
+                                <Grid.Column width={4}>
+                                    1
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Grid.Column width={8}>
+                                    Product
+                                </Grid.Column>
+                                <Grid.Column width={4}>
+                                    5/1000
+                                </Grid.Column>
+                                <Grid.Column width={4}>
+                                    0
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Grid.Column width={8}>
+                                    Finance
+                                </Grid.Column>
+                                <Grid.Column width={4}>
+                                    50
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Grid.Column width={8}>
+                                    Marketing
+                                </Grid.Column>
+                                <Grid.Column width={4}>
+                                    0/1000
+                                </Grid.Column>
+                                <Grid.Column width={4}>
+                                    0
+                                </Grid.Column>
+                            </Grid.Row>
+                        </Grid>
+                    </Segment>
+                </Grid.Column>
+                <Grid.Column width={8}>
+                    <Header as='h2' attached textAlign='center'>
+                        Transfer Voting power
+                    </Header>
+                    <Segment attached padded textAlign='center' color='olive'>
+                        <Grid>
+                            <Grid.Row>
+                                <Grid.Column width={8}>
+                                    Organisational
+                                </Grid.Column>
+                                <Grid.Column width={8}>
+                                    <Input name="foo" type="text" placeholder="Username" value="" class="prompt" autocomplete="on" />
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Grid.Column width={8}>
+                                    Product
+                                </Grid.Column>
+                                <Grid.Column width={8}>
+                                    <Input name="foo" type="text" placeholder="Username" value="" class="prompt" autocomplete="on" />
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Grid.Column width={8}>
+                                    Finance
+                                </Grid.Column>
+                                <Grid.Column width={8}>
+                                    <Input name="foo" type="text" placeholder="Username" value="" class="prompt" autocomplete="on" />
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Grid.Column width={8}>
+                                    Marketing
+                                </Grid.Column>
+                                <Grid.Column width={8}>
+                                    <Input name="foo" type="text" placeholder="Username" value="" class="prompt" autocomplete="on"
+                                           defaultValue='eji3r212hio12epq' />
+                                </Grid.Column>
+                            </Grid.Row>
+                        </Grid>
                     </Segment>
                 </Grid.Column>
             </Grid.Row>

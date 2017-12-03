@@ -17,7 +17,8 @@ class DaoContainer extends Component {
 
         this.state = {
             totalToke: 1000,
-            ownToken: 12
+            ownToken: 12,
+            auctionDetailsParsed: {}
         }
     }
 
@@ -81,10 +82,18 @@ class DaoContainer extends Component {
             return 'fixed';
         }
     }
+
+
     initAuctionDetails = (data) => {
         this.setState({
+            auctionDetails: data,
+            buyPriceStart: parseInt(web3.fromWei(data._buyPriceStart, this.state.unit), 10),
+            buyPriceEnd: parseInt(web3.fromWei(data._buyPriceEnd, this.state.unit), 10),
+            status: this.getCurrentStatus(data),
+            auctionType: this.getAuctionType(data)
         })
     }
+
 
     getContractDetails = (address) => {
 
@@ -93,10 +102,12 @@ class DaoContainer extends Component {
         }
 
         // TODO Get data from smart contrat
-        this.setState({
-            auctionDetailsParsed: {},
-        })
-        this.initAuctionDetails({});
+        var details = {_name: "sdf",
+                _owner:"liawdawjd",
+                _symbol: "asdf"
+        };
+        this.setState({auctionDetailsParsed:details});
+        // this.initAuctionDetails(details);
         this.setPriceDevelopmentString();
     }
 

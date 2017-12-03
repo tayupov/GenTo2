@@ -73,7 +73,7 @@ class DaoListContainer extends Component {
   render() {
     return (
       <div>
-        <Header text="TOKEN SALES (ICO)" />
+        <Header text="DAOs" />
         <DaoList
           {...this.props}
           {...this.state}

@@ -8,9 +8,10 @@ const Sidebar = () => (
         <Search style={{marginBottom: '20px'}}
                 loading={false}
         />
-        <Checkbox style={{marginBottom: '20px'}} label='Only own ICOs' defaultChecked />
-        <Checkbox style={{marginBottom: '20px'}} label='ICOs I invested in'/>
-        <Checkbox style={{marginBottom: '20px'}} label='only running ICOs' defaultChecked />
+        <Checkbox style={{marginBottom: '20px'}} label='Only own DAOs' defaultChecked />
+        <Checkbox style={{marginBottom: '20px'}} label='DAOs I invested in'/>
+        <Checkbox style={{marginBottom: '20px'}} label='DAOs with voting power' defaultChecked />
+        <Checkbox style={{marginBottom: '20px'}} label='DAOs with open polls' defaultChecked />
     </Segment>
 )
 
