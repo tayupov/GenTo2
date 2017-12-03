@@ -34,18 +34,11 @@ class TopNav extends Component {
                         <Menu.Menu position='right'>
 
                           <Menu.Item>
-                            <Dropdown text='ICO'>
-                                <Dropdown.Menu style={ styles.dropDownMenu }>
-                                  <Dropdown.Item as={Link} text='Create an ICO' to='/generate' />
-                                  <Dropdown.Item as={Link} text='List all ICOs' to='/icoList' />
-                                </Dropdown.Menu>
-                            </Dropdown>
-                          </Menu.Item>
-
-                          <Menu.Item>
                             <Dropdown text='DAO'>
                                 <Dropdown.Menu style={ styles.dropDownMenu }>
-                                  <Dropdown.Item as={Link} text='List all DAOs' to="/daoList" />
+                                  <Dropdown.Item as={Link} text='Create a DAO' to='/generate' />
+                                  <Dropdown.Item text='List all DAOs' />
+                                  <Dropdown.Item as={Link} text='List all ICOs' to='/list' />                                  
                                 </Dropdown.Menu>
                             </Dropdown>
                           </Menu.Item>
@@ -53,7 +46,7 @@ class TopNav extends Component {
                           <Menu.Item>
                             <Dropdown text='Voting'>
                                 <Dropdown.Menu style={ styles.dropDownMenu }>
-                                  <Dropdown.Item text='Create a Voting' as={Link} to="/generatePoll" />
+                                  <Dropdown.Item as={Link} text='Create a Voting' to="/generatePoll" />
                                   <Dropdown.Item as={Link} text='List all votings' to='/poll' />
                                 </Dropdown.Menu>
                             </Dropdown>

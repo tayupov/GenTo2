@@ -1,15 +1,15 @@
 {
   "contractName": "SafeMath",
   "abi": [],
-  "bytecode": "0x60606040523415600e57600080fd5b603580601b6000396000f3006060604052600080fd00a165627a7a72305820a48d2bdc3c229eb5dab53f659bab1564a8de5393ccd660c5afa484ee08054c570029",
-  "deployedBytecode": "0x6060604052600080fd00a165627a7a72305820a48d2bdc3c229eb5dab53f659bab1564a8de5393ccd660c5afa484ee08054c570029",
+  "bytecode": "0x60606040523415600e57600080fd5b603580601b6000396000f3006060604052600080fd00a165627a7a7230582039cfc23b189ef44445796855492914f14cdb5ec9af8c34a74479f9bfe64fecf20029",
+  "deployedBytecode": "0x6060604052600080fd00a165627a7a7230582039cfc23b189ef44445796855492914f14cdb5ec9af8c34a74479f9bfe64fecf20029",
   "sourceMap": "117:698:0:-;;;;;;;;;;;;;;;;;",
   "deployedSourceMap": "117:698:0:-;;;;;",
   "source": "pragma solidity ^0.4.11;\n\n\n/**\n * @title SafeMath\n * @dev Math operations with safety checks that throw on error\n */\nlibrary SafeMath {\n  function mul(uint256 a, uint256 b) internal constant returns (uint256) {\n    uint256 c = a * b;\n    assert(a == 0 || c / a == b);\n    return c;\n  }\n\n  function div(uint256 a, uint256 b) internal constant returns (uint256) {\n    // assert(b > 0); // Solidity automatically throws when dividing by 0\n    uint256 c = a / b;\n    // assert(a == b * c + a % b); // There is no case in which this doesn't hold\n    return c;\n  }\n\n  function sub(uint256 a, uint256 b) internal constant returns (uint256) {\n    assert(b <= a);\n    return a - b;\n  }\n\n  function add(uint256 a, uint256 b) internal constant returns (uint256) {\n    uint256 c = a + b;\n    assert(c >= a);\n    return c;\n  }\n}\n",
-  "sourcePath": "/home/roman/devLocal/university/GenTo2/node_modules/zeppelin-solidity/contracts/math/SafeMath.sol",
+  "sourcePath": "C:\\Users\\Theo\\Desktop\\Projects\\GenTo2\\node_modules\\zeppelin-solidity\\contracts\\math\\SafeMath.sol",
   "ast": {
     "attributes": {
-      "absolutePath": "/home/roman/devLocal/university/GenTo2/node_modules/zeppelin-solidity/contracts/math/SafeMath.sol",
+      "absolutePath": "/C/Users/Theo/Desktop/Projects/GenTo2/node_modules/zeppelin-solidity/contracts/math/SafeMath.sol",
       "exportedSymbols": {
         "SafeMath": [
           94
@@ -1319,5 +1319,5 @@
   },
   "networks": {},
   "schemaVersion": "1.0.1",
-  "updatedAt": "2017-11-27T14:14:34.788Z"
+  "updatedAt": "2017-12-03T07:55:36.549Z"
 }

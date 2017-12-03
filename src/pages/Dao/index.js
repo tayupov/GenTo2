@@ -1,3 +1,3 @@
-import Ico from './DaoContainer';
+import Dao from './DaoContainer';
 
-export default Ico;
+export default Dao;

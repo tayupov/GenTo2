@@ -90,6 +90,9 @@ class GenerateICOContainer  extends Component {
             const tmpSaleStart = saleStartForm;
             saleStartForm += (now - tmpSaleStart);
         }
+
+        console.log("gentoFactory Unlinked Binary");
+        console.log(gentoFactoryData.unlinked_binary);
         
         return createGentoFactoryInstance(instance => {
                 web3.eth.estimateGas({

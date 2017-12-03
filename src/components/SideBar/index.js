@@ -21,7 +21,7 @@ class SideBar extends Component {
                 <div className='full height'>
                     <div className='toc'>
                         <Menu className='vertical left fixed'>              
-                            <Menu.Menu style={{ background: '#00b5ad', height: '72px' }}>
+                            <Menu.Menu style={{ background: '#00b5ad', height: '72.5px' }}>
                                 <Menu.Item
                                     name='home'
                                     to='/'
@@ -29,7 +29,7 @@ class SideBar extends Component {
                                     as={ Link }
                                     onClick={this.handleItemClick}
                                     header
-                                    style={{ fontSize: '28px', color: 'white', textAlign: 'center', height: '72px', paddingTop: '0.7em' }}
+                                    style={{ fontSize: '28px', color: 'white', textAlign: 'center', height: '72.5px', paddingTop: '0.7em' }}
                                 >
                                     GENTO
                                 </Menu.Item>
@@ -45,7 +45,7 @@ class SideBar extends Component {
                                     as={ Link }
                                     onClick={this.handleItemClick}
                                     header
-                                    style={{ fontSize: '18px', textAlign: 'center' }}
+                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
                                 >
                                     DAO
                                 </Menu.Item>
@@ -56,7 +56,7 @@ class SideBar extends Component {
                                     as={ Link }
                                     onClick={this.handleItemClick}
                                     header
-                                    style={{ fontSize: '18px', textAlign: 'center' }}
+                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
                                 >
                                     ROI
                                 </Menu.Item>
@@ -67,7 +67,7 @@ class SideBar extends Component {
                                     as={ Link }
                                     onClick={this.handleItemClick}
                                     header
-                                    style={{ fontSize: '18px', textAlign: 'center' }}
+                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
                                 >
                                     LAO
                                 </Menu.Item>
@@ -78,7 +78,7 @@ class SideBar extends Component {
                                     as={ Link }
                                     onClick={this.handleItemClick}
                                     header
-                                    style={{ fontSize: '18px', textAlign: 'center' }}
+                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
                                 >
                                     OVA
                                 </Menu.Item>
@@ -95,7 +95,7 @@ class SideBar extends Component {
                                     as={ Link }
                                     onClick={this.handleItemClick}
                                     header
-                                    style={{ fontSize: '18px', textAlign: 'center' }}
+                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
                                 >
                                     MUL
                                 </Menu.Item>
@@ -106,7 +106,7 @@ class SideBar extends Component {
                                     as={ Link }
                                     onClick={this.handleItemClick}
                                     header
-                                    style={{ fontSize: '18px', textAlign: 'center' }}
+                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
                                 >
                                     LUC
                                 </Menu.Item>
@@ -117,7 +117,7 @@ class SideBar extends Component {
                                     as={ Link }
                                     onClick={this.handleItemClick}
                                     header
-                                    style={{ fontSize: '18px', textAlign: 'center' }}
+                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
                                 >
                                     WIN
                                 </Menu.Item>
@@ -128,7 +128,7 @@ class SideBar extends Component {
                                     as={ Link }
                                     onClick={this.handleItemClick}
                                     header
-                                    style={{ fontSize: '18px', textAlign: 'center' }}
+                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
                                 >
                                     MOK
                                 </Menu.Item>
