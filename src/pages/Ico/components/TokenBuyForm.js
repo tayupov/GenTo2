@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Button, Select, Input, Dropdown } from 'semantic-ui-react';
+import { Form, Button, Input, Dropdown } from 'semantic-ui-react';
 
 const options = [
     { key: 'kether', text: 'kether', value: 'kether' },
@@ -33,9 +33,6 @@ class TokenBuyForm extends Component {
     }
 
     onSubmit = () => {
-        console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')        
-        console.log(JSON.stringify(this.state));
-        console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
         this.props.buyToken(
             this.state.amount,
             this.state.etherUnit
@@ -43,7 +40,7 @@ class TokenBuyForm extends Component {
     }
 
     render() {
-        const { amount, etherUnit } = this.state;
+        const { amount } = this.state;
 
         return (
             <Form onSubmit={this.onSubmit}>

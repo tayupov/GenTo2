@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 
-import { createGentoFactoryInstance, createAuctionTokenInstance } from 'contractInstances';
+import { createGentoFactoryInstance, createAuctionTokenInstance } from 'utils/contractInstances';
 
 import Header from 'components/Header';
 import List from './List';

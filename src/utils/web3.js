@@ -13,6 +13,4 @@ const web3Init = () => {
 }
 
 const web3 = web3Init();
-
-
 export default web3;

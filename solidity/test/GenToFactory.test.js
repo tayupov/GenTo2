@@ -21,7 +21,6 @@ async function createNewICO(owner, overrideData) {
     data.sellPrice,
     data.saleStart,
     data.saleEnd)
-  console.log(contract)
   let icos = await genToFactory.getICOsFromOwner.call(owner)
 
   let instance = await AuctionToken.at(icos[icos.length-1]) // It will always be the newest ICO as long as we dont run tests in parallel

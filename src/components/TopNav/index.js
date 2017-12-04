@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-
 import { Menu, Segment, Button, Container, Dropdown } from 'semantic-ui-react';
-
-import { PropTypes } from 'prop-types';
 
 const styles = {
     dropDownMenu: {
@@ -24,13 +21,10 @@ class TopNav extends Component {
     };
 
     render() {
-        const { activeItem } = this.state;
-
         return (
             <Segment color='teal' size='small' inverted>
                 <Container>
                     <Menu size='large' color='teal' inverted secondary borderless>
-                        {/* <Menu.Item name='home' to='/' active={activeItem === 'home'} as={ Link }  onClick={this.handleItemClick} header style={{ fontSize: '18px' }}>GENTO</Menu.Item> */}
                         <Menu.Menu position='right'>
 
                           <Menu.Item>

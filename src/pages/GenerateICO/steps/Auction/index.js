@@ -28,7 +28,6 @@ class Auction extends Component {
   }
 
   onChange = (e, { value }) => {
-    console.log(value);
     this.setState({
       data: { ...this.state.data, auctionType: value }
    })
@@ -41,18 +40,13 @@ class Auction extends Component {
   }
 
   render() {
-
-    const { errors } = this.state;
-
     return(
-
       <View
         {...this.state}
         onChange={this.onChange}
       />
     );
   }
-
 }
 
 export default Auction;

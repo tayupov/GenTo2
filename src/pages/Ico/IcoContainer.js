@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 
-import { createAuctionTokenInstance } from 'contractInstances';
-import { auctionTokenData } from 'contracts';
+import web3 from 'utils/web3';
+import { isFunction } from 'utils/functional';
+
+import AuctionToken from 'assets/contracts/AuctionToken.json'
+import { createAuctionTokenInstance } from 'utils/contractInstances';
  
 import Ico from './Ico';
-
-import { isFunction } from 'utils/functional';
-import web3 from 'myWeb3';
-import moment from 'moment';
-
-let purchaseNotify;
 
 class IcoContainer extends Component {
 
@@ -125,7 +123,6 @@ class IcoContainer extends Component {
     }
 
     getPriceDevelopmentString = () => {
-        const data = this.state.auctionDetails;
         let priceDev = "The token price ";
         if(this.state.auctionType === "dutch") {
             priceDev += "will <strong>decrease</strong> from <strong>" + this.state.buyPriceStart + "</strong> to <strong>" + this.state.buyPriceEnd + "</strong>";
@@ -265,7 +262,7 @@ class IcoContainer extends Component {
         const value = web3.toWei(amount, etherUnit);
      
         web3.eth.estimateGas({
-            data: auctionTokenData.unlinked_binary
+            data: AuctionToken.unlinked_binary
         }, (err, gas) => {
             if (err) {
                 console.error(err);
@@ -275,7 +272,7 @@ class IcoContainer extends Component {
                 instance.buy(
                     {
                         from: buyer,
-                        data: auctionTokenData.unlinked_binary,
+                        data: AuctionToken.unlinked_binary,
                         value,
                         gas
                     }, (error, result) => {

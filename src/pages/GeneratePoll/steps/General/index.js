@@ -26,9 +26,7 @@ class General extends Component {
     const errors = this.validate(data);
 
     this.setState({ errors });
-    console.log(errors);
     if (Object.keys(errors).length === 0) {
-      console.log('Does it never get set?');
       updateStore(data);
       return true;
     }
@@ -36,7 +34,6 @@ class General extends Component {
   }
 
   onChange = e => {
-    console.log(e.target.value);
     this.setState({
       data: {
         ...this.state.data,
@@ -46,7 +43,6 @@ class General extends Component {
   }
 
   validate = data => {
-    console.log(data.totalSupply);
     const errors = {};
     if ( data.pollName.length < 3) errors.pollName = "Poll name must have at least 3 characters";
     if ( data.pollDescription.length < 10) errors.pollDescription = "Poll description must have at least 10 characters";

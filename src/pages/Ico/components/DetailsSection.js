@@ -6,8 +6,6 @@ import moment from 'moment';
 
 let auctionInterval;
 
-const tokenPriceIncrease = 'The token price will <strong>increase</strong> from <strong>1000</strong> to <strong>10000</strong> finney'
-
 class DetailsSection extends Component {
     
     constructor(props) {
@@ -57,8 +55,6 @@ class DetailsSection extends Component {
             })
         });
 
-        console.log('DetailsSection!!!');
-
         this.props.listenForTokenBuy((obj) => {
             this.setState({
                 supplyObj: obj
@@ -67,7 +63,7 @@ class DetailsSection extends Component {
     }
 
     render() {
-        const { details, status, priceDevelopmentString } = this.props;
+        const { details, priceDevelopmentString } = this.props;
         const { supplyObj, timeCountDown, currentPercentage } = this.state;
 
         return (

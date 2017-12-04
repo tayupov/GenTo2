@@ -3,7 +3,7 @@ import React from 'react';
 import Sidebar from './components/Sidebar';
 import ICOList from './components/ICOList';
 
-import { Container, Item } from 'semantic-ui-react';
+import { Item } from 'semantic-ui-react';
 import { compose } from 'recompose';
 
 import { withLoadingIndicator, withItemsNull, withItemsEmpty } from 'hoc/list';
