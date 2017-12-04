@@ -31,6 +31,7 @@ class IcoContainer extends Component {
             priceDevelopmentString: null,
             currentPercentage: null,
             timeCountDown: null,
+            chartDataArr: []
         }
     }
 
@@ -45,6 +46,7 @@ class IcoContainer extends Component {
         } else {
             console.log('Missing address parameter');
         }
+        setInterval(this.getChartData, 10000);
     }
 
     componentDidUpdate(nextProps) {
@@ -89,14 +91,13 @@ class IcoContainer extends Component {
             return;
         }
 
-        createAuctionTokenInstance(this.props.match.params.address).then(instance => {
-            instance.balanceOf(address, (error, result) => {
-                if(error) {
-                    callback(error);
-                } else {
-                    callback(null, result);
-                }
-            })
+        createAuctionTokenInstance(this.props.match.params.address)
+        .balanceOf(address, (error, result) => {
+            if(error) {
+                callback(error);
+            } else {
+                callback(null, result);
+            }
         })
     }
 
@@ -175,8 +176,47 @@ class IcoContainer extends Component {
             return;
         }
 
-        this.initAuctionDetails({});
+        createAuctionTokenInstance(address)
+        .getDetails((error, result) => {
+            if(error) {
+                console.error(error);
+            } else {
+                let data = this.parseContractDetails(result);
+                this.setState({
+                    auctionDetailsParsed: data,
+                })
+                this.initAuctionDetails(data);
+                this.getChartData();                    
+                this.setPriceDevelopmentString();
+            }
+        })
     }
+
+    getChartData = () => {
+        const data = this.state.auctionDetails;
+        let cd = [];
+        cd.push({
+            x: moment.unix(data._saleStart).valueOf(),
+            y: this.state.buyPriceStart
+        });
+        const duration = data._saleEnd - data._saleStart;
+        if(this.state.status === 'running'){
+            const passed = moment().unix() - data._saleStart;
+            const currPrice = Math.floor(this.state.buyPriceStart + ((this.state.buyPriceEnd - this.state.buyPriceStart) * passed) / duration);
+            cd.push({
+                x: moment.unix(data._saleStart + passed).valueOf(),
+                y: currPrice
+            })
+        }
+        cd.push({
+            x: moment.unix(data._saleEnd).valueOf(),
+            y: this.state.buyPriceEnd
+        });
+        this.setState({
+            chartDataArr: cd
+        })
+    }
+ 
     checkForError = () => {
 
         if(!(web3 && this.state.auctionDetails && this.props.match.params.address)) {
@@ -257,43 +297,32 @@ class IcoContainer extends Component {
         console.log('Wurde wenigstens aufrufen!');
 
         const data = this.state.auctionDetails;
-        createAuctionTokenInstance(this.props.match.params.address).then(instance => {
+        const instance = createAuctionTokenInstance(this.props.match.params.address)
+        const transfers = instance.Transfer();
 
-            const transfers = instance.Transfer();
-
-            transfers.watch((error, result) => {
-                if(error) {
-                    console.error(error);
-                } else {
-                    if (this.state.auctionDetails) {
-                        const remainingSupply = result.args._remainingSupply.toNumber();
-                        const supplyPct = ((remainingSupply / data._totalSupply) * 100).toFixed(2);
-                        const supplyString = `${remainingSupply} of ${data._totalSupply} left for sale`;
-                        cb({
-                            supplyPct,
-                            supplyString
-                        });
-                    }
-                    let amount = result.args._value.toNumber();
-                     
-                    const transaction = JSON.parse(localStorage.getItem(result.transactionHash));
-
-                    console.log('transaction');
-                    console.log(transaction);
-                    console.log('result.transactionHash');
-                    console.log(result.transactionHash);
-                    console.log('result');
-                    console.log(result);
-    
-                    if (amount > 0 && !transaction) {
-                        this.props.notify("Success! " + amount + " Token(s) purchased.", "success")
-                        this.setMyTokenCount();
-                        localStorage.setItem(result.transactionHash, JSON.stringify(result.transactionHash));
-                    }
-    
-                    // transfers.stopWatching();
+        transfers.watch((error, result) => {
+            if(error) {
+                console.error(error);
+            } else {
+                if (this.state.auctionDetails) {
+                    const remainingSupply = result.args._remainingSupply.toNumber();
+                    const supplyPct = ((remainingSupply / data._totalSupply) * 100).toFixed(2);
+                    const supplyString = `${remainingSupply} of ${data._totalSupply} left for sale`;
+                    cb({
+                        supplyPct,
+                        supplyString
+                    });
                 }
-            })
+                let amount = result.args._value.toNumber();
+                    
+                const transaction = JSON.parse(localStorage.getItem(result.transactionHash));
+
+                if (amount > 0 && !transaction) {
+                    this.props.notify("Success! " + amount + " Token(s) purchased.", "success")
+                    this.setMyTokenCount();
+                    localStorage.setItem(result.transactionHash, JSON.stringify(result.transactionHash));
+                }
+            }
         })
     }
 
