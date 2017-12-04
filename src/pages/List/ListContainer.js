@@ -33,9 +33,7 @@ class ListContainer extends Component {
   }
 
   addIcoEntry = (address) => {
-
-    createAuctionTokenInstance(address).then(instance => {
-      instance.getDetails((err, result) => {
+    createAuctionTokenInstance(address).getDetails((err, result) => {
         if(err) {
           console.error(err);
           return;
@@ -61,7 +59,6 @@ class ListContainer extends Component {
           }
         }
       })
-    })
   }
 
   listIcos = () => {

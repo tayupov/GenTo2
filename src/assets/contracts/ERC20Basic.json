@@ -12,8 +12,8 @@
         }
       ],
       "payable": false,
-      "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "stateMutability": "view"
     },
     {
       "constant": true,
@@ -31,8 +31,8 @@
         }
       ],
       "payable": false,
-      "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "stateMutability": "view"
     },
     {
       "constant": false,
@@ -54,8 +54,8 @@
         }
       ],
       "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
+      "type": "function",
+      "stateMutability": "nonpayable"
     },
     {
       "anonymous": false,
@@ -85,10 +85,10 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity ^0.4.11;\n\n\n/**\n * @title ERC20Basic\n * @dev Simpler version of ERC20 interface\n * @dev see https://github.com/ethereum/EIPs/issues/179\n */\ncontract ERC20Basic {\n  uint256 public totalSupply;\n  function balanceOf(address who) public constant returns (uint256);\n  function transfer(address to, uint256 value) public returns (bool);\n  event Transfer(address indexed from, address indexed to, uint256 value);\n}\n",
-  "sourcePath": "C:\\Users\\Theo\\Desktop\\Projects\\GenTo2\\node_modules\\zeppelin-solidity\\contracts\\token\\ERC20Basic.sol",
+  "sourcePath": "/home/roman/devLocal/university/GenTo2/node_modules/zeppelin-solidity/contracts/token/ERC20Basic.sol",
   "ast": {
     "attributes": {
-      "absolutePath": "/C/Users/Theo/Desktop/Projects/GenTo2/node_modules/zeppelin-solidity/contracts/token/ERC20Basic.sol",
+      "absolutePath": "/home/roman/devLocal/university/GenTo2/node_modules/zeppelin-solidity/contracts/token/ERC20Basic.sol",
       "exportedSymbols": {
         "ERC20Basic": [
           243
@@ -470,5 +470,5 @@
   },
   "networks": {},
   "schemaVersion": "1.0.1",
-  "updatedAt": "2017-12-03T07:55:36.551Z"
+  "updatedAt": "2017-11-27T14:14:34.779Z"
 }

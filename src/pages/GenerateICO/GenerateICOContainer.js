@@ -90,13 +90,10 @@ class GenerateICOContainer  extends Component {
             const tmpSaleStart = saleStartForm;
             saleStartForm += (now - tmpSaleStart);
         }
-
-        console.log("gentoFactory Unlinked Binary");
-        console.log(gentoFactoryData.unlinked_binary);
         
         return createGentoFactoryInstance(instance => {
                 web3.eth.estimateGas({
-                    data: gentoFactoryData.unlinked_binary
+                    data: gentoFactoryData.bytecode
                 }, (err, gas) => {
                     instance.createContract(
                         web3.toBigNumber(totalSupply).toString(10),
@@ -109,7 +106,7 @@ class GenerateICOContainer  extends Component {
                         web3.toBigNumber(saleEndForm).toString(10),
                         {
                             from: this.props.account,
-                            data: gentoFactoryData.unlinked_binary,
+                            data: gentoFactoryData.bytecode,
                             gas: gas
                         }, (err, result) => {
                             if (err) {
