@@ -33,7 +33,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "test:truffle": "cd solidity && truffle test",
-    "build:contracts": "cd solidity && truffle.cmd migrate && rimraf ../src/assets/contracts/* && cp -R build/contracts ../src/assets"
+    "build:contracts": "cd solidity && truffle migrate && rimraf ../src/assets/contracts/* && cp -R build/contracts ../src/assets"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
