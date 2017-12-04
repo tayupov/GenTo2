@@ -21,8 +21,8 @@
         }
       ],
       "payable": false,
-      "type": "function",
-      "stateMutability": "nonpayable"
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
       "constant": true,
@@ -35,8 +35,8 @@
         }
       ],
       "payable": false,
-      "type": "function",
-      "stateMutability": "view"
+      "stateMutability": "view",
+      "type": "function"
     },
     {
       "constant": false,
@@ -62,8 +62,8 @@
         }
       ],
       "payable": false,
-      "type": "function",
-      "stateMutability": "nonpayable"
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
       "constant": true,
@@ -81,8 +81,8 @@
         }
       ],
       "payable": false,
-      "type": "function",
-      "stateMutability": "view"
+      "stateMutability": "view",
+      "type": "function"
     },
     {
       "constant": false,
@@ -104,8 +104,8 @@
         }
       ],
       "payable": false,
-      "type": "function",
-      "stateMutability": "nonpayable"
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
       "constant": true,
@@ -127,8 +127,8 @@
         }
       ],
       "payable": false,
-      "type": "function",
-      "stateMutability": "view"
+      "stateMutability": "view",
+      "type": "function"
     },
     {
       "anonymous": false,
@@ -180,10 +180,10 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity ^0.4.11;\n\n\nimport './ERC20Basic.sol';\n\n\n/**\n * @title ERC20 interface\n * @dev see https://github.com/ethereum/EIPs/issues/20\n */\ncontract ERC20 is ERC20Basic {\n  function allowance(address owner, address spender) public constant returns (uint256);\n  function transferFrom(address from, address to, uint256 value) public returns (bool);\n  function approve(address spender, uint256 value) public returns (bool);\n  event Approval(address indexed owner, address indexed spender, uint256 value);\n}\n",
-  "sourcePath": "/home/roman/devLocal/university/GenTo2/node_modules/zeppelin-solidity/contracts/token/ERC20.sol",
+  "sourcePath": "C:\\Users\\Theo\\Desktop\\Projects\\GenTo2\\node_modules\\zeppelin-solidity\\contracts\\token\\ERC20.sol",
   "ast": {
     "attributes": {
-      "absolutePath": "/home/roman/devLocal/university/GenTo2/node_modules/zeppelin-solidity/contracts/token/ERC20.sol",
+      "absolutePath": "/C/Users/Theo/Desktop/Projects/GenTo2/node_modules/zeppelin-solidity/contracts/token/ERC20.sol",
       "exportedSymbols": {
         "ERC20": [
           214
@@ -207,7 +207,7 @@
       {
         "attributes": {
           "SourceUnit": 244,
-          "absolutePath": "/home/roman/devLocal/university/GenTo2/node_modules/zeppelin-solidity/contracts/token/ERC20Basic.sol",
+          "absolutePath": "/C/Users/Theo/Desktop/Projects/GenTo2/node_modules/zeppelin-solidity/contracts/token/ERC20Basic.sol",
           "file": "./ERC20Basic.sol",
           "scope": 215,
           "symbolAliases": [
@@ -741,5 +741,5 @@
   },
   "networks": {},
   "schemaVersion": "1.0.1",
-  "updatedAt": "2017-11-27T14:14:34.791Z"
+  "updatedAt": "2017-12-03T07:55:36.550Z"
 }
