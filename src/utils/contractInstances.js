@@ -1,16 +1,18 @@
-import { auctionTokenData, gentoFactoryData } from 'contracts';
-import web3 from 'myWeb3';
+import web3 from 'utils/web3';
+
+import AuctionTokenContract from 'assets/contracts/AuctionToken.json'
+import GenToFactoryContract from 'assets/contracts/GenToFactory.json'
 
 export const createGentoFactoryInstance = (callback) => {
-      const GenToFactory = web3.eth.contract(gentoFactoryData.abi);
+      const GenToFactory = web3.eth.contract(GenToFactoryContract.abi);
       getNetworkId(netId => {
-        const instance = GenToFactory.at(gentoFactoryData.networks[netId.toString()].address);
+        const instance = GenToFactory.at(GenToFactoryContract.networks[netId.toString()].address);
         callback(instance);
       })
 }
 
 export const createAuctionTokenInstance = (address) => {
-    const AuctionToken = web3.eth.contract(auctionTokenData.abi);
+    const AuctionToken = web3.eth.contract(AuctionTokenContract.abi);
     const instance = AuctionToken.at(address);
     return instance;
 }

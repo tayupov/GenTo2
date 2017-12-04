@@ -1,14 +1,9 @@
 import React from 'react';
 
-import {
-    Input,
-    Icon,
-    Button,
-    Header
-} from 'semantic-ui-react';
+import { Input, Icon, Button } from 'semantic-ui-react';
 
 const SearchNav = ({
-
+    
 }) => (
     <div className='flex-center' style={{ marginBottom: '1em' }}>
         <Input icon placeholder='Search...'>

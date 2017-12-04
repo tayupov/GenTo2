@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import web3 from 'utils/web3';
 
-import { gentoFactoryData, auctionTokenData } from 'contracts';
-import { createGentoFactoryInstance, createAuctionTokenInstance } from 'contractInstances';
-import web3 from 'myWeb3';
+import GenToFactory from 'assets/contracts/GenToFactory.json';
+import { createGentoFactoryInstance } from 'utils/contractInstances';
 
 import GenerateICO from './GenerateICO';
 
@@ -93,7 +93,7 @@ class GenerateICOContainer  extends Component {
         
         return createGentoFactoryInstance(instance => {
                 web3.eth.estimateGas({
-                    data: gentoFactoryData.bytecode
+                    data: GenToFactory.bytecode
                 }, (err, gas) => {
                     instance.createContract(
                         web3.toBigNumber(totalSupply).toString(10),
@@ -106,14 +106,13 @@ class GenerateICOContainer  extends Component {
                         web3.toBigNumber(saleEndForm).toString(10),
                         {
                             from: this.props.account,
-                            data: gentoFactoryData.bytecode,
+                            data: GenToFactory.bytecode,
                             gas: gas
                         }, (err, result) => {
                             if (err) {
                                 console.error(err);
                             } else {
                                 this.handleContractCreatedEvent(instance);
-                                console.log(result);
                                 this.setState({icoCreated: true});
                             }
                         }

@@ -1,14 +1,7 @@
 import React from 'react';
 import StepZilla from 'react-stepzilla';
 
-import { 
-    Button,
-    Dimmer,
-    Segment,
-    Icon,
-    Header,
-    Container 
-} from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 
 import withModal from 'hoc/withModal';
 import HeaderSection from 'components/Header';

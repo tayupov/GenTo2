@@ -3,8 +3,6 @@ import React from 'react';
 import { Divider, Button } from 'semantic-ui-react';
 import { Doughnut } from  'react-chartjs-2';
 
-const votingClosed = false;
-
 const PollDetails = ({
     header
 }) => {

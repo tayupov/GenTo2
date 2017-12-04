@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Form, Input, Select, Container, Button } from 'semantic-ui-react';
+import { Form, Input, Select, Container } from 'semantic-ui-react';
 
 import InlineError from 'components/InlineError';
 

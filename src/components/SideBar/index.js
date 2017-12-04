@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
-
-import { Dropdown, Icon, Input, Menu, Divider } from 'semantic-ui-react';
+import { Menu } from 'semantic-ui-react';
 
 import './index.css';
 

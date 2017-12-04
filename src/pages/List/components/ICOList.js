@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Card, Item, Label, Dimmer, Loader } from 'semantic-ui-react';
+import { Item, Label } from 'semantic-ui-react';
 
 const styles = {
     titleBox: {

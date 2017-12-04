@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 
-import { createGentoFactoryInstance, createAuctionTokenInstance } from 'contractInstances';
-
 import Header from 'components/Header';
 import DaoList from './DaoList';
-
-
-import moment from 'moment';
 
 class DaoListContainer extends Component {
 
@@ -33,9 +28,7 @@ class DaoListContainer extends Component {
   }
 
   addDaoEntry = (address) => {
-
-    // TODO fetch real DAO
-    const creationDate = 12345;
+    // TODO: fetch data 
     const name = "Test";
     const date =1234;
 
@@ -57,9 +50,7 @@ class DaoListContainer extends Component {
 
   }
 
-  listDaos = () => {
-    const owner = this.props.account;
-  
+  listDaos = () => {  
     // TODO: Fetch DAOS from smart contract
       for(let x = 0; x < 4; x++) {
         this.addDaoEntry(8);

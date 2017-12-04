@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-
-import { gentoFactoryData } from 'contracts';
-import { createGentoFactoryInstance, createAuctionTokenInstance } from 'contractInstances';
-import web3 from 'myWeb3';
-
-import GeneratePoll from './GeneratePoll';
+import web3 from 'utils/web3';
 
 import General from './steps/General';
+import GeneratePoll from './GeneratePoll'
+;
 import Organisational from './steps/Organisational';
 import Created from './steps/Created';
 
@@ -24,7 +21,7 @@ class GeneratePollContainer  extends Component {
 
     submitTokenContract = () => {
 
-        const { account, network, notify } = this.props;
+        const { account, network } = this.props;
         if(!(web3 && account && network)) {
             if (!web3) {
                 console.log("Web3 has closed!");
