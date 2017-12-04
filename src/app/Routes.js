@@ -7,11 +7,7 @@ import GenerateICO from 'pages/GenerateICO';
 import GeneratePoll from 'pages/GeneratePoll';
 import Ico from 'pages/Ico';
 import Dao from 'pages/Dao';
-<<<<<<< ff20625797572dedc9ef6956d11553fb7702199c
-import DaoSettings from 'pages/DaoSettings';
 import DaoList from 'pages/DaoList';
-=======
->>>>>>> Adjust the layout
 import Poll from 'pages/Poll';
 import Error from 'pages/Error';
 
@@ -34,25 +30,10 @@ const Routes = ({ account, network, notify, active, handleShow, handleHide, cont
                                     {...props}
                                     account={account}
                                     network={network}
-<<<<<<< ff20625797572dedc9ef6956d11553fb7702199c
-                                    notify={notify}
-                                />)}
-        />
-        <Route path="/daoSettings/:address"
-            render={(props) => (<DaoSettings
-                                    {...props}
-                                    account={account}
-                                    network={network}
-                                    notify={notify}
-                                />)}
-        />
-        <Route path="/icoList"
-=======
                                     notify={notify}  
                                 />)}
         />
         <Route path="/list"
->>>>>>> Adjust the layout
             render={(props) => (<List
                                     {...props}
                                     account={account}
