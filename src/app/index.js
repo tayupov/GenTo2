@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import View from './View';
 
 import AlertContainer from 'react-alert';
-import web3 from 'myWeb3';
+import web3 from 'utils/web3';
 
 class App extends Component {
 

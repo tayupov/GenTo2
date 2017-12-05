@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
-import { gentoFactoryData, auctionTokenData } from 'contracts';
-import { createGentoFactoryInstance, createAuctionTokenInstance } from 'contractInstances';
-import web3 from 'myWeb3';
+import web3 from 'utils/web3';
+
+import GenToFactory from 'assets/contracts/GenToFactory.json';
+import { createGentoFactoryInstance } from 'utils/contractInstances';
 
 import GenerateDAO from './GenerateDAO';
 
@@ -111,7 +112,7 @@ class GenerateDAOContainer  extends Component {
         
         return createGentoFactoryInstance(instance => {
             web3.eth.estimateGas({
-                data: gentoFactoryData.bytecode
+                data: GenToFactory.bytecode
             }, (err, gas) => {
                 instance.createContract(
                     web3.toBigNumber(totalSupply).toString(10),
@@ -124,7 +125,7 @@ class GenerateDAOContainer  extends Component {
                     web3.toBigNumber(saleEndForm).toString(10),
                     {
                         from: this.props.account,
-                        data: gentoFactoryData.unlinked_binary,
+                        data: GenToFactory.bytecode,
                         gas: gas
                     }, (err, result) => {
                         if (err) {
