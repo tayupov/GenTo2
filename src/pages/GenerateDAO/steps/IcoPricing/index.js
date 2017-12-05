@@ -29,6 +29,8 @@ class IcoPricing extends Component {
   isValidated() {
     const errors = this.validate(this.state.data);
     this.setState({ errors });
+    console.log('ERRORS______ERRORS');
+    console.log(errors);
     if (Object.keys(errors).length === 0) {
       console.log(this.state.data);
       this.props.updateStore(this.state.data);
@@ -41,6 +43,8 @@ class IcoPricing extends Component {
 
   validate = data => {
     const errors = {};
+    console.log('DATA_____DATA');
+    console.log(data);
     if (data.selectedCurrency === '') errors.selectedCurrency = "You have to select a currency";
     else if(data.maxPrice < data.minPrice) errors.maxMinConstraint = "Your min price should be smaller than your max price";
     else if(data.maxPrice <= 0) errors.maxPrice = "Your max price should be greater than 0";
@@ -49,6 +53,8 @@ class IcoPricing extends Component {
   }
 
   onChangeSelect = (e, {value}) => {
+    console.log(JSON.stringify(this.state));
+    console.log(JSON.stringify(this.props.getStore()))
     this.setState({
       data: {
         ...this.state.data,
@@ -58,6 +64,10 @@ class IcoPricing extends Component {
   }
 
   onChange = e => {
+    console.log(JSON.stringify(this.state));
+    console.log(e.target.name);
+    console.log(e.target.value);
+    console.log(JSON.stringify(this.props.getStore()))
     this.setState({
       data: {
         ...this.state.data,
