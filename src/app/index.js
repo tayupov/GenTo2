@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import View from './View';
 
 import AlertContainer from 'react-alert';
-import web3 from 'utils/web3';
+import web3 from 'myWeb3';
 
 class App extends Component {
 
@@ -12,7 +12,8 @@ class App extends Component {
     this.state = {
       account: null,
       network: null,
-      active: false
+      active: false,
+      daoDetails: {}
     }
   }
   
@@ -22,6 +23,13 @@ class App extends Component {
   componentWillMount() {
     this.updateNetwork();
     setInterval(this.updateAccount, 1000);
+  }
+
+  // temporary function for creating DAOs
+  createDAO = (daoDetails) => {
+    this.setState({
+      daoDetails
+    })
   }
 
   updateNetwork = () => {
@@ -85,6 +93,7 @@ class App extends Component {
           notify={this.notify}
           handleShow={this.handleShow}
           handleHide={this.handleHide}
+          createDAO={this.createDAO}
         />
       </div>
     );
