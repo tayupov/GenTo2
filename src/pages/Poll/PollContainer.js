@@ -39,15 +39,24 @@ class PollContainer extends Component {
         })
     }
 
-    handleOpen = (e) => {this.setState({ modalOpen: true, modalState: e.target.id })}
+    handleOpen = (e) => this.setState({ modalOpen: true, modalState: e.target.id })
     
     handleClose = () => this.setState({ modalOpen: false, modalSubmitted: false })
+
+    handleReset = () => {
+        const currIndex = this.state.polls.findIndex(obj => obj.header === this.state.header);
+        const currAccountIndex = this.state.polls[currIndex].voterAddresses.findIndex(address => address === this.props.account);
+        this.state.polls[currIndex].voterAddresses.splice(currAccountIndex, 1);
+        // TODO: temporary solution for resetting address votes
+        this.state.modalState === 'approve' ? this.state.polls[currIndex].addressesFor-- : this.state.polls[currIndex].addressesAgainst--;
+    }
 
     handleOk = (e) => {
         this.setState({ 
             modalSubmitted: true,
         })
         const currIndex = this.state.polls.findIndex(obj => obj.header === this.state.header);
+        this.state.modalState === 'approve' ? this.state.polls[currIndex].addressesFor++ : this.state.polls[currIndex].addressesAgainst++;
         this.state.polls[currIndex].voterAddresses.push(this.props.account);
     }
 
@@ -117,6 +126,7 @@ class PollContainer extends Component {
                     {...this.state}
                     onClick={this.onClick}
                     handleOpen={this.handleOpen}
+                    handleReset={this.handleReset}
                 />}
             </div>
         )
