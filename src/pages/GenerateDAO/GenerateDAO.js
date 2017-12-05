@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import StepZilla from 'react-stepzilla';
 
 import { Button } from 'semantic-ui-react';
@@ -6,11 +6,11 @@ import { Button } from 'semantic-ui-react';
 import withModal from 'hoc/withModal';
 import HeaderSection from 'components/Header';
 
-import './GenerateICO.css';
+import './GenerateDAO.css';
 
 const MultiStepWithModal = withModal(StepZilla);
 
-const GenerateICO = ({
+const GenerateDAO = ({
     handleShow, handleHide, active, steps, open, closeOnRootNodeClick, close
 }) => (
     <div>
@@ -21,9 +21,11 @@ const GenerateICO = ({
           nextButtonCls="ui positive button"
           backButtonCls="ui positive button"
           nextTextOnFinalActionStep="Create ICO"
+          active={active}
+          handleHide={handleHide}
         />
     </div>
 )
 
 
-export default GenerateICO;
+export default GenerateDAO;

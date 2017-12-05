@@ -29,8 +29,35 @@ const View = ({
 }) => (
     <Container style={styles.root}>
         <Form id="name-form">
+          <Form.Field error={!!errors.tokenName}>
+            <label style={styles.firstLabel}>How shall your Token be named?</label>
+            <Input
+                type="text"
+                name="tokenName"
+                id="tokenName"
+                onChange={onChange}
+                size='small'
+                style={styles.input}
+            />
+          </Form.Field>
+          {errors.tokenName && <InlineError text={errors.tokenName} />}
+          {data.tokenName &&
+          <Form.Field error={!!errors.tickerSymbol}>
+            <label style={styles.label}>What will be your ticker symbol?</label>
+            <input
+                type="text"
+                name="tickerSymbol"
+                id="tickerSymbol"
+                value={data.tokenName.slice(0, 3).toUpperCase()}
+                onChange={onChange}
+                size='small'
+                style={styles.input}
+            />
+          </Form.Field>}
+            {errors.tickerSymbol && <InlineError text={errors.tickerSymbol} />}
+          {data.tokenName &&
           <Form.Field>
-            <label style={styles.firstLabel}>How many tokens do you want to emmit?</label>
+            <label style={styles.label}>How many tokens do you want to emmit?</label>
             <Input
               type="number"
               name="totalSupply"
@@ -41,8 +68,9 @@ const View = ({
               size='small'
               style={styles.input}
             />
-          </Form.Field>
+          </Form.Field>}
           {errors.totalSupply && <InlineError text={errors.totalSupply} />}
+          {data.totalSupply &&
           <Form.Field>
             <label style={styles.label}>Time your ICO!</label>
             <Input
@@ -63,7 +91,7 @@ const View = ({
               size='small'
               style={styles.input}
             />
-          </Form.Field>
+          </Form.Field>}
           {errors.date && <InlineError text={errors.date} />}
         </Form>
     </Container>
