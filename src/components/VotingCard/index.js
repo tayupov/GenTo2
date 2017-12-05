@@ -11,7 +11,7 @@ const styles = {
 }
 
 const VotingCard = ({
-    header, onClick, handleOpen, voterAddresses, account
+    header, onClick, handleOpen, handleReset, voterAddresses, account
 }) => (
     <Card
       style={styles.card}
@@ -46,10 +46,23 @@ const VotingCard = ({
           <Button
             basic
             color='red'
-            onClick={handleOpen}
             id='decline'
+            onClick={handleOpen}
           >
             Decline
+          </Button>
+        </div>}
+        {(isInArray(account, voterAddresses)) &&
+        <div>
+          <h4>You already voted on this Proposal!</h4>
+          <Button
+            basic
+            color='green'
+            id='edit'
+            onClick={handleReset}
+            float='right'
+          >
+            Vote again
           </Button>
         </div>}
       </Card.Content>

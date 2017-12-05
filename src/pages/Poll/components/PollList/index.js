@@ -3,7 +3,7 @@ import React from 'react';
 import VotingCard from 'components/VotingCard';
 
 const PollList = ({
-    onClick, handleOpen, polls, account
+    onClick, handleOpen, handleReset, polls, account
 }) => (
     polls.map(poll => (
         <VotingCard
@@ -11,6 +11,7 @@ const PollList = ({
             voterAddresses={poll.voterAddresses}
             onClick={onClick}
             handleOpen={handleOpen}
+            handleReset={handleReset}
             account={account}
         />
     ))
