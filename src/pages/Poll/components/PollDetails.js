@@ -59,7 +59,7 @@ const PollDetails = ({
 	const votingClosed = true;
 	
 	return (
-		<div>
+		<div className="flex-center" style={{flexDirection: 'column'}}>
 			<h2 style={{ textAlign: 'center', marginTop: '0' }}>{header}</h2>
 			<Divider />
 			{votingClosed && <Doughnut data={data.dataTokens} />}

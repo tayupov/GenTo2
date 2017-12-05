@@ -104,6 +104,17 @@ class SideBar extends Component {
                                 >
                                     Marooz
                                 </Menu.Item>
+                            </Menu.Menu>
+                            </Menu.Item>
+                            <Menu.Item style={{ paddingLeft: '3em' }}>
+                                <Button color='teal'>
+                                    Create a DAO
+                                </Button>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <h2 style={{ textAlign: 'center', fontWeight: '500' }}>Your ICOs</h2>
+                                
+                            <Menu.Menu style={{ marginTop: '2em' }}>
                                 <Menu.Item
                                     name='WIN'
                                     to='/'
