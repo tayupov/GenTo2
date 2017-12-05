@@ -26,7 +26,7 @@ class TopNav extends Component {
                 <Container>
                     <Menu size='large' color='teal' inverted secondary borderless>
                         <Menu.Menu style={{ paddingLeft: '3em' }} position='left'>
-                            <Menu.Item header>{`CURRENT DAO: DIGIX`}</Menu.Item>
+                            <Menu.Item header>CURRENT DAO : <span style={{ letterSpacing: '0.05em', paddingLeft: '0.5em' }}>DIGIX</span></Menu.Item>
                         </Menu.Menu>
                         <Menu.Menu position='right'>
 
