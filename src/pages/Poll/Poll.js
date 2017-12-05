@@ -7,16 +7,16 @@ import SearchNav from './components/PollList/components/SearchNav';
 import PollDetails from './components/PollDetails';
 
 const Poll = ({
-    header, onClick, handleOpen, handleReset, polls, contextRef, account, currDaoDetails, onChange
+    header, onClick, handleOpen, polls, contextRef, account
 }) => (
     <Grid columns={2}>
         <Grid.Column width={6}>
-            {polls && <Sticky context={contextRef}>
+            <Sticky context={contextRef}>
                 <PollDetails
                     header={header}
                     polls={polls}
                 />
-            </Sticky>}
+            </Sticky>
         </Grid.Column>
         <Grid.Column width={10}>
             <SearchNav onChange={onChange} />
