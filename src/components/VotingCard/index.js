@@ -8,7 +8,7 @@ const styles = {
     }
 }
 
-const GenericCard = ({
+const VotingCard = ({
     header, onClick, handleOpen
 }) => (
     <Card
@@ -53,4 +53,4 @@ const GenericCard = ({
     </Card>
 )
 
-export default GenericCard;
+export default VotingCard;
