@@ -1,27 +1,26 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
 import View from './View';
 
-class Amount extends Component {
+class FieldsOfWork extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       data: {
-        totalSupply: props.getStore().totalSupply,
-        saleStart: props.getStore().saleStart,
-        saleEnd: props.getStore().saleEnd
+        minPartic: props.getStore().minPartic,
+        decidingPercentage: props.getStore().decidingPercentage,
+        minVoting: props.getStore().minVoting,
+        maxVoting: props.getStore().maxVoting,        
       },
       errors: {
-        totalSupply: '',
-        date: ''
+        minPartic: '',
+        decidingPercentage: '',
+        minVoting: '',
+        maxVoting: '',
       }
-    }
-  }
-
-  componentWillUnmount() {
-
+    };
   }
 
   isValidated() {
@@ -35,21 +34,20 @@ class Amount extends Component {
       updateStore(data);
       return true;
     }
-    return true;
+    return false;
   }
 
   onChange = e => {
     this.setState({
-      data: {
-        ...this.state.data,
-        [e.target.name]: e.target.value
+       data: {
+         ...this.state.data,
+         [e.target.name]: e.target.value,
       }
     })
   }
 
   validate = data => {
     const errors = {};
-    if (data.totalSupply <= 0) errors.totalSupply = "Your total token supply must be larger than 0";
     return errors;
   }
 
@@ -64,4 +62,8 @@ class Amount extends Component {
 
 }
 
-export default Amount;
+FieldsOfWork.propTypes = {
+  updateStore: PropTypes.func.isRequired
+}
+
+export default FieldsOfWork;

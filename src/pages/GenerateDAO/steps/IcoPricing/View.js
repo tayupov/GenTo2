@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Form, Input, Select, Container } from 'semantic-ui-react';
+import { Form, Input, Select, Container, Button } from 'semantic-ui-react';
 
 import InlineError from 'components/InlineError';
 
@@ -56,11 +56,11 @@ const View = ({
         </Form.Field>
         {errors.selectedCurrency && <InlineError text={errors.selectedCurrency} />}
         <Form.Field>
-          <label style={styles.label}>Choose your MIN and MAX price!</label>
+          <label style={styles.label}>Choose your START and END price!</label>
           <Input
             type="number"
             name="minPrice"
-            label="MIN"
+            label="START"
             labelPosition="left"
             id="saleStart"
             value={data.minPrice}
@@ -72,7 +72,7 @@ const View = ({
           <Input
             type="number"
             name="maxPrice"
-            label="MAX"
+            label="END"
             labelPosition="right"
             id="saleEnd"
             value={data.maxPrice}

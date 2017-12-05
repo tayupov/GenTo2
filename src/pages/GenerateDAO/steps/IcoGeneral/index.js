@@ -1,25 +1,30 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 import View from './View';
 
-class Name extends Component {
+class IcoGeneral extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       data: {
         tokenName: props.getStore().tokenName,
         tickerSymbol: props.getStore().tickerSymbol,
+        totalSupply: props.getStore().totalSupply,
+        saleStart: props.getStore().saleStart,
+        saleEnd: props.getStore().saleEnd
       },
       errors: {
         tokenName: '',
-        tickerSymbol: ''
+        tickerSymbol: '',
+        totalSupply: '',
+        date: ''
       }
-    };
+    }
   }
 
-  componentDidUnmount() {
+  componentWillUnmount() {
 
   }
 
@@ -30,11 +35,13 @@ class Name extends Component {
     const errors = this.validate(data);
 
     this.setState({ errors });
+    console.log(errors);
     if (Object.keys(errors).length === 0) {
+      console.log('Does it never get set?');
       updateStore(data);
       return true;
     }
-    return false;
+    return true;
   }
 
   onChange = e => {
@@ -48,14 +55,13 @@ class Name extends Component {
   }
 
   validate = data => {
+    console.log(data.totalSupply);
     const errors = {};
-    if (!data.tokenName) errors.tokenName = "Can't be blank!";
-    // if (data.tickerSymbol.length !== 3) errors.tickerSymbol = "The number of letters must equal 3";
+    if (data.totalSupply <= 0) errors.totalSupply = "Your total token supply must be larger than 0";
     return errors;
   }
 
   render() {
-
     return(
       <View
         {...this.state}
@@ -66,8 +72,4 @@ class Name extends Component {
 
 }
 
-Name.propTypes = {
-  updateStore: PropTypes.func.isRequired
-}
-
-export default Name;
+export default IcoGeneral;
