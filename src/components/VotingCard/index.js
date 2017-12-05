@@ -2,6 +2,8 @@ import React from 'react';
 
 import { Card, Button } from 'semantic-ui-react';
 
+import { isInArray } from 'utils/functional';
+
 const styles = {
     card : {
         margin: '0.3em auto'
@@ -9,7 +11,7 @@ const styles = {
 }
 
 const VotingCard = ({
-    header, onClick, handleOpen
+    header, onClick, handleOpen, voterAddresses, account
 }) => (
     <Card
       style={styles.card}
@@ -31,6 +33,7 @@ const VotingCard = ({
         </Card.Description>
       </Card.Content>
       <Card.Content extra>
+        {(!isInArray(account, voterAddresses)) &&
         <div className='ui two buttons'>
           <Button
             basic
@@ -48,7 +51,7 @@ const VotingCard = ({
           >
             Decline
           </Button>
-        </div>
+        </div>}
       </Card.Content>
     </Card>
 )
