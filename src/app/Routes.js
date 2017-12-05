@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import About from 'pages/About';
 import List from 'pages/List';
-import GenerateICO from 'pages/GenerateICO';
+import GenerateDAO from 'pages/GenerateDAO';
 import GeneratePoll from 'pages/GeneratePoll';
 import Ico from 'pages/Ico';
 import Dao from 'pages/Dao';
@@ -12,7 +12,7 @@ import Poll from 'pages/Poll';
 import Error from 'pages/Error';
 
 
-const Routes = ({ account, network, notify, active, handleShow, handleHide, contextRef }) => (
+const Routes = ({ account, network, notify, active, handleShow, handleHide, contextRef, createDAO }) => (
     <Switch>
         <Route exact path="/"
             render={(props) => (<About {...props} />)}
@@ -48,7 +48,7 @@ const Routes = ({ account, network, notify, active, handleShow, handleHide, cont
                                 />)}
         />
         <Route path="/generate"
-            render={(props) => (<GenerateICO
+            render={(props) => (<GenerateDAO
                                     {...props}
                                     account={account}
                                     network={network}
@@ -56,6 +56,7 @@ const Routes = ({ account, network, notify, active, handleShow, handleHide, cont
                                     active={active}
                                     handleShow={handleShow}
                                     handleHide={handleHide}
+                                    createDAO={createDAO}
                                 />)}
         />
         <Route path="/generatePoll"
