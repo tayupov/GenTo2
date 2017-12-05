@@ -78,19 +78,15 @@ class GeneratePollContainer  extends Component {
             ...this.store,
             ...update
         }
-        console.log(update);
-        console.log('+++++++++++++++++++++++++++++++++++++++++++++++++');
-        console.log(this.store);
-        console.log('+++++++++++++++++++++++++++++++++++++++++++++++++');
     }
 
     render() {
 
-      const steps = [
-          {name: 'GENERAL',component: <General getStore={this.getStore} updateStore={this.updateStore} />},
-          {name: 'ORGANISATIONAL', component: <Organisational getStore={this.getStore} updateStore={this.updateStore} submitTokenContract={this.submitTokenContract} /> },
-          {name: 'POLL CREATED', component: <Created />}
-      ]
+        const steps = [
+            {name: 'GENERAL',component: <General getStore={this.getStore} updateStore={this.updateStore} />},
+            {name: 'ORGANISATIONAL', component: <Organisational getStore={this.getStore} updateStore={this.updateStore} submitTokenContract={this.submitTokenContract} /> },
+            {name: 'POLL CREATED', component: <Created />}
+        ]
 
         return(
             <GeneratePoll
