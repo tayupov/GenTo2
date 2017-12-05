@@ -71,7 +71,8 @@ class PollContainer extends Component {
                     addressesAgainst: 1,
                     tokensFor: 250,
                     tokensAgainst: 30,
-                    voterAddresses: []
+                    voterAddresses: [],
+                    done: false
                 },
                 {
                     header: 'Create a stock sale to raise 10 ETH at 0.1 ETH per CVS share',
@@ -81,7 +82,8 @@ class PollContainer extends Component {
                     addressesAgainst: 8,
                     tokensFor: 300,
                     tokensAgainst: 120,
-                    voterAddresses: []
+                    voterAddresses: [],
+                    done: false
                 },
                 {
                     header: "For Begin stock sale a minimum status of 'executive' will be needed",
@@ -91,7 +93,8 @@ class PollContainer extends Component {
                     addressesAgainst: 1,
                     tokensFor: 70,
                     tokensAgainst: 30,
-                    voterAddresses: []
+                    voterAddresses: [],
+                    done: false
                 },
                 {
                     header: 'Create a stock sale to raise 50 ETH at 0.1 ETH per CVS share',
@@ -101,7 +104,41 @@ class PollContainer extends Component {
                     addressesAgainst: 1,
                     tokensFor: 97,
                     tokensAgainst: 31,
-                    voterAddresses: []
+                    voterAddresses: [],
+                    done: false
+                },
+                {
+                    header: 'Create a stock sale to raise 1000 ETH at 0.1 ETH per CVS share',
+                    endDate: new Date(),
+                    description: '',
+                    addressesFor: 3,
+                    addressesAgainst: 1,
+                    tokensFor: 97,
+                    tokensAgainst: 31,
+                    voterAddresses: [],
+                    done: true
+                },
+                {
+                    header: 'Create a stock sale to raise 300 ETH at 0.1 ETH per CVS share',
+                    endDate: new Date(),
+                    description: '',
+                    addressesFor: 3,
+                    addressesAgainst: 1,
+                    tokensFor: 97,
+                    tokensAgainst: 31,
+                    voterAddresses: [],
+                    done: true
+                },
+                {
+                    header: 'Create a stock sale to raise 50 ETH at 0.5 ETH per CVS share',
+                    endDate: new Date(),
+                    description: '',
+                    addressesFor: 3,
+                    addressesAgainst: 1,
+                    tokensFor: 97,
+                    tokensAgainst: 31,
+                    voterAddresses: [],
+                    done: true
                 },
             ]
         })
