@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
-import { Menu } from 'semantic-ui-react';
+import { Menu, Button } from 'semantic-ui-react';
 
 import './index.css';
 
@@ -82,6 +82,11 @@ class SideBar extends Component {
                                     Marooz
                                 </Menu.Item>
                             </Menu.Menu>
+                            </Menu.Item>
+                            <Menu.Item style={{ paddingLeft: '3em' }}>
+                                <Button color='teal'>
+                                    Create a DAO
+                                </Button>
                             </Menu.Item>
                             <Menu.Item>
                                 <h2 style={{ textAlign: 'center', fontWeight: '500' }}>Your ICOs</h2>

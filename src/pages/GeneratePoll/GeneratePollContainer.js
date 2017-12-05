@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import web3 from 'utils/web3';
 
 import General from './steps/General';
-import GeneratePoll from './GeneratePoll'
-;
+import GeneratePoll from './GeneratePoll';
 import Organisational from './steps/Organisational';
 import Created from './steps/Created';
 
