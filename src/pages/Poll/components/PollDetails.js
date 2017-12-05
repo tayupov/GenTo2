@@ -1,11 +1,23 @@
 import React from 'react';
 
-import { Divider, Button } from 'semantic-ui-react';
+import { Divider, Button, Segment, Progress } from 'semantic-ui-react';
 import { Doughnut } from  'react-chartjs-2';
 
 const PollDetails = ({
-    header
+    header, polls
 }) => {
+
+	console.log('polls');
+	console.log(polls);
+
+	console.log(header);
+
+	const currPoll = polls.filter(obj => obj.header === header)[0];
+	
+	const tokensFor = currPoll.tokensFor;
+	const tokensAgainst = currPoll.tokensAgainst;
+	const addressesFor = currPoll.addressesFor;
+	const addressesAgainst = currPoll.addressesAgainst;
 
 	const data = {
 		dataTokens : {
@@ -14,7 +26,7 @@ const PollDetails = ({
 				'Tokens against'
 			],
 			datasets: [{
-				data: [300, 50],
+				data: [tokensFor, tokensAgainst],
 				backgroundColor: [
 				'#1ecc9b',
 				'#778899'
@@ -31,7 +43,7 @@ const PollDetails = ({
 				'Addresses against'
 			],
 			datasets: [{
-				data: [200, 170],
+				data: [addressesFor, addressesAgainst],
 				backgroundColor: [
 				'#1ecc9b',
 				'#778899'
@@ -53,6 +65,12 @@ const PollDetails = ({
 			{votingClosed && <Doughnut data={data.dataTokens} />}
 			{votingClosed && <Doughnut data={data.dataAddresses} />}
 			<Divider />
+			
+                <Progress percent={71} indicating progress label='Tokens have already voted' />
+           
+			
+                <Progress percent={35} indicating progress label='Adresses have already voted' />
+            
 			{!votingClosed &&
 			<div style={{ marginBottom: '1em' }}>
 				<h3>Detailed information about the Voting:</h3>

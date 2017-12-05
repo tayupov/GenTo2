@@ -46,7 +46,7 @@ class SideBar extends Component {
                                     header
                                     style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
                                 >
-                                    DAO
+                                    Digix
                                 </Menu.Item>
                                 <Menu.Item
                                     name='roi'
@@ -57,7 +57,7 @@ class SideBar extends Component {
                                     header
                                     style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
                                 >
-                                    ROI
+                                    District0x
                                 </Menu.Item>
                                 <Menu.Item
                                     name='lao'
@@ -68,7 +68,7 @@ class SideBar extends Component {
                                     header
                                     style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
                                 >
-                                    LAO
+                                    Lane
                                 </Menu.Item>
                                 <Menu.Item
                                     name='ova'
@@ -79,7 +79,7 @@ class SideBar extends Component {
                                     header
                                     style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
                                 >
-                                    OVA
+                                    Marooz
                                 </Menu.Item>
                             </Menu.Menu>
                             </Menu.Item>
@@ -130,6 +130,28 @@ class SideBar extends Component {
                                     style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
                                 >
                                     MOK
+                                </Menu.Item>
+                                <Menu.Item
+                                    name='MOK'
+                                    to='/'
+                                    active={activeItem === 'MOK'}
+                                    as={ Link }
+                                    onClick={this.handleItemClick}
+                                    header
+                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
+                                >
+                                    TUI
+                                </Menu.Item>
+                                <Menu.Item
+                                    name='MOK'
+                                    to='/'
+                                    active={activeItem === 'MOK'}
+                                    as={ Link }
+                                    onClick={this.handleItemClick}
+                                    header
+                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
+                                >
+                                    LIM
                                 </Menu.Item>
                             </Menu.Menu>
                             </Menu.Item>
