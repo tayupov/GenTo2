@@ -33,10 +33,9 @@ class TopNav extends Component {
             <Segment color='teal' size='small' inverted>
                 <Container>
                     <Menu size='large' color='teal' inverted secondary borderless>
-                        {this.state.currDaoDetails &&
                         <Menu.Menu style={{ paddingLeft: '3em' }} position='left'>
-                            <Menu.Item header>CURRENT DAO : <span style={{ letterSpacing: '0.05em', padding: '0 0.5em' }}>{this.state.currDaoDetails.daoName}</span> YOU OWN : {this.state.currDaoDetails.shTokens} {this.state.currDaoDetails.tickerSymbol}</Menu.Item>
-                        </Menu.Menu>}
+                            <Menu.Item header>{`CURRENT DAO: DIGIX`}</Menu.Item>
+                        </Menu.Menu>
                         <Menu.Menu position='right'>
 
                           <Menu.Item>

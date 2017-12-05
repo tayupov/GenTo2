@@ -55,43 +55,43 @@ class PollContainer extends Component {
 
         this.setState({
             polls: [
-                    ...currDaoActivePolls,
-                    ...createdActivePolls
-            ],
-            header: currDaoActivePolls[0].header
-        })
-    }
-
-    handleReset = () => {
-        const currIndex = this.state.polls.findIndex(obj => obj.header === this.state.header);
-        const currAccountIndex = this.state.polls[currIndex].voterAddresses.findIndex(address => address === this.props.account);
-        this.state.polls[currIndex].voterAddresses.splice(currAccountIndex, 1);
-        // TODO: temporary solution for resetting votes
-        this.state.modalState === 'approve' ? this.state.polls[currIndex].addressesFor-- : this.state.polls[currIndex].addressesAgainst--;
-        this.state.modalState === 'approve' ? this.state.polls[currIndex].tokensFor -= this.state.currDaoDetails.shTokens : this.state.polls[currIndex].tokensAgainst -= this.state.currDaoDetails.shTokens;
-    }
-
-    handleOk = (e) => {
-        this.setState({ 
-            modalSubmitted: true,
-        })
-        const currIndex = this.state.polls.findIndex(obj => obj.header === this.state.header);
-        this.state.modalState === 'approve' ? this.state.polls[currIndex].addressesFor++ : this.state.polls[currIndex].addressesAgainst++;
-        this.state.modalState === 'approve' ? this.state.polls[currIndex].tokensFor += this.state.currDaoDetails.shTokens : this.state.polls[currIndex].tokensAgainst += this.state.currDaoDetails.shTokens;
-        this.state.polls[currIndex].voterAddresses.push(this.props.account);
-    }
-
-    listPolls = (currDaoName, createdPolls) => {
-        const currDaoPolls = polls.filter(poll => poll.daoName === currDaoName)[0].polls;
-        const currDaoActivePolls = currDaoPolls.filter(poll => poll.state === 'active');
-
-        this.setState({
-            createdPolls: createdPolls,
-            polls: [
-                ...currDaoActivePolls,
-                ...createdPolls
-            ],
-            header: currDaoActivePolls[0].header
+                {
+                    header: 'Issue 99 CVS shares',
+                    endDate: new Date(),
+                    description: '',
+                    addressesFor: 8,
+                    addressesAgainst: 0,
+                    tokensFor: 250,
+                    tokensAgainst: 0
+                },
+                {
+                    header: 'Create a stock sale to raise 10 ETH at 0.1 ETH per CVS share',
+                    endDate: new Date(),
+                    description: '',
+                    addressesFor: 10,
+                    addressesAgainst: 8,
+                    tokensFor: 300,
+                    tokensAgainst: 120
+                },
+                {
+                    header: "For Begin stock sale a minimum status of 'executive' will be needed",
+                    endDate: new Date(),
+                    description: '',
+                    addressesFor: 2,
+                    addressesAgainst: 1,
+                    tokensFor: 70,
+                    tokensAgainst: 30
+                },
+                {
+                    header: 'Create a stock sale to raise 10 ETH at 0.1 ETH per CVS share',
+                    endDate: new Date(),
+                    description: '',
+                    addressesFor: 3,
+                    addressesAgainst: 1,
+                    tokensFor: 97,
+                    tokensAgainst: 31
+                },
+            ]
         })
     }
 
@@ -114,8 +114,6 @@ class PollContainer extends Component {
                     {...this.state}
                     onClick={this.onClick}
                     handleOpen={this.handleOpen}
-                    handleReset={this.handleReset}
-                    onChange={this.onChange}
                 />}
             </div>
         )

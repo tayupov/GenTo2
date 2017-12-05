@@ -9,14 +9,8 @@ const View = ({
     account, network, notify, active, handleShow, handleHide, setCurrDao, getCurrDao, contextRef, daos, currDao, currPoll, setCurrPoll
 }) => (
     <div>
-        <TopNav
-            account={account}
-            getCurrDao={getCurrDao}
-        />
-        <SideBar
-            daos={daos}
-            setCurrDao={setCurrDao}
-        />
+        <TopNav account={account} />
+        <SideBar />
         <Container style={{ paddingLeft: '8em' }}>
             <Routes
                 account={account}

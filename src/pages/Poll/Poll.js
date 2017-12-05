@@ -11,13 +11,12 @@ const Poll = ({
 }) => (
     <Grid columns={2}>
         <Grid.Column width={6}>
-            <Sticky context={contextRef}>
+            {polls && <Sticky context={contextRef}>
                 <PollDetails
                     header={header}
                     polls={polls}
-                    currDaoDetails={currDaoDetails}
                 />
-            </Sticky>
+            </Sticky>}
         </Grid.Column>
         <Grid.Column width={10}>
             <SearchNav onChange={onChange} />

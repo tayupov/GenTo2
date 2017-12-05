@@ -4,7 +4,7 @@ import { Divider, Button, Segment, Progress } from 'semantic-ui-react';
 import { Doughnut } from  'react-chartjs-2';
 
 const PollDetails = ({
-    header, polls, currDaoDetails
+    header, polls
 }) => {
 
 	console.log('polls');
@@ -65,8 +65,12 @@ const PollDetails = ({
 			{votingClosed && <Doughnut data={data.dataTokens} />}
 			{votingClosed && <Doughnut data={data.dataAddresses} />}
 			<Divider />
-                <Progress percent={(((tokensFor + tokensAgainst) / currDaoDetails.totalSupply) * 100).toFixed(2)} indicating progress label='Tokens have already voted' />
-                <Progress percent={(((addressesFor + addressesAgainst) / currDaoDetails.totalAddresses) * 100).toFixed(2)} indicating progress label='Adresses have already voted' />
+			
+                <Progress percent={71} indicating progress label='Tokens have already voted' />
+           
+			
+                <Progress percent={35} indicating progress label='Adresses have already voted' />
+            
 			{!votingClosed &&
 			<div style={{ marginBottom: '1em' }}>
 				<h3>Detailed information about the Voting:</h3>

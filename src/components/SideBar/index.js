@@ -61,7 +61,29 @@ class SideBar extends Component {
                                 
                             <Menu.Menu style={{ marginTop: '2em' }}>
                                 <Menu.Item
-                                    name='MUL'
+                                    name='dao'
+                                    to='/'
+                                    active={activeItem === 'dao'}
+                                    as={ Link }
+                                    onClick={this.handleItemClick}
+                                    header
+                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
+                                >
+                                    Digix
+                                </Menu.Item>
+                                <Menu.Item
+                                    name='roi'
+                                    to='/'
+                                    active={activeItem === 'roi'}
+                                    as={ Link }
+                                    onClick={this.handleItemClick}
+                                    header
+                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
+                                >
+                                    District0x
+                                </Menu.Item>
+                                <Menu.Item
+                                    name='lao'
                                     to='/'
                                     active={activeItem === 'MUL'}
                                     as={ Link }
@@ -69,7 +91,7 @@ class SideBar extends Component {
                                     header
                                     style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
                                 >
-                                    MUL
+                                    Lane
                                 </Menu.Item>
                                 <Menu.Item
                                     name='LUC'
@@ -80,7 +102,7 @@ class SideBar extends Component {
                                     header
                                     style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
                                 >
-                                    LUC
+                                    Marooz
                                 </Menu.Item>
                                 <Menu.Item
                                     name='WIN'
@@ -103,6 +125,28 @@ class SideBar extends Component {
                                     style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
                                 >
                                     MOK
+                                </Menu.Item>
+                                <Menu.Item
+                                    name='MOK'
+                                    to='/'
+                                    active={activeItem === 'MOK'}
+                                    as={ Link }
+                                    onClick={this.handleItemClick}
+                                    header
+                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
+                                >
+                                    TUI
+                                </Menu.Item>
+                                <Menu.Item
+                                    name='MOK'
+                                    to='/'
+                                    active={activeItem === 'MOK'}
+                                    as={ Link }
+                                    onClick={this.handleItemClick}
+                                    header
+                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
+                                >
+                                    LIM
                                 </Menu.Item>
                                 <Menu.Item
                                     name='MOK'
