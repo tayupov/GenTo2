@@ -5,7 +5,7 @@ import View from './View';
 import daos from 'daos';
 
 import AlertContainer from 'react-alert';
-import web3 from 'myWeb3';
+import web3 from 'utils/web3';
 
 class App extends Component {
 
