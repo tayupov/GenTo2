@@ -11,7 +11,7 @@ const View = ({
     <div>
         <TopNav
             account={account}
-            currDao={currDao}
+            getCurrDao={getCurrDao}
         />
         <SideBar
             daos={daos}

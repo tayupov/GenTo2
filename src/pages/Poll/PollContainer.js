@@ -43,8 +43,9 @@ class PollContainer extends Component {
         const currIndex = this.state.polls.findIndex(obj => obj.header === this.state.header);
         const currAccountIndex = this.state.polls[currIndex].voterAddresses.findIndex(address => address === this.props.account);
         this.state.polls[currIndex].voterAddresses.splice(currAccountIndex, 1);
-        // TODO: temporary solution for resetting address votes
+        // TODO: temporary solution for resetting votes
         this.state.modalState === 'approve' ? this.state.polls[currIndex].addressesFor-- : this.state.polls[currIndex].addressesAgainst--;
+        this.state.modalState === 'approve' ? this.state.polls[currIndex].tokensFor -= this.state.currDaoDetails.shTokens : this.state.polls[currIndex].tokensAgainst -= this.state.currDaoDetails.shTokens;
     }
 
     handleOk = (e) => {
@@ -53,12 +54,13 @@ class PollContainer extends Component {
         })
         const currIndex = this.state.polls.findIndex(obj => obj.header === this.state.header);
         this.state.modalState === 'approve' ? this.state.polls[currIndex].addressesFor++ : this.state.polls[currIndex].addressesAgainst++;
+        this.state.modalState === 'approve' ? this.state.polls[currIndex].tokensFor += this.state.currDaoDetails.shTokens : this.state.polls[currIndex].tokensAgainst += this.state.currDaoDetails.shTokens;
         this.state.polls[currIndex].voterAddresses.push(this.props.account);
     }
 
     listPolls = (currDaoName) => {
         const currDaoPolls = polls.filter(poll => poll.daoName === currDaoName)[0].polls;
-        
+
         this.setState({
             polls: currDaoPolls,
             header: currDaoPolls[0].header

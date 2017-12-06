@@ -10,7 +10,15 @@ const styles = {
 
 class TopNav extends Component {
 
-    state = {}
+    state = {
+        currDaoDetails: {}
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            currDaoDetails: this.props.getCurrDao()
+        })
+    }
 
     handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
@@ -25,9 +33,10 @@ class TopNav extends Component {
             <Segment color='teal' size='small' inverted>
                 <Container>
                     <Menu size='large' color='teal' inverted secondary borderless>
+                        {this.state.currDaoDetails &&
                         <Menu.Menu style={{ paddingLeft: '3em' }} position='left'>
-                            <Menu.Item header>CURRENT DAO : <span style={{ letterSpacing: '0.05em', paddingLeft: '0.5em' }}>{this.props.currDao}</span></Menu.Item>
-                        </Menu.Menu>
+                            <Menu.Item header>CURRENT DAO : <span style={{ letterSpacing: '0.05em', padding: '0 0.5em' }}>{this.state.currDaoDetails.daoName}</span> YOU OWN : {this.state.currDaoDetails.shTokens} DGX</Menu.Item>
+                        </Menu.Menu>}
                         <Menu.Menu position='right'>
 
                           <Menu.Item>
@@ -39,7 +48,7 @@ class TopNav extends Component {
                                 </Dropdown.Menu>
                             </Dropdown>
                           </Menu.Item>
-
+                          {this.state.currDaoDetails &&
                           <Menu.Item>
                             <Dropdown text='Voting'>
                                 <Dropdown.Menu style={ styles.dropDownMenu }>
@@ -47,7 +56,7 @@ class TopNav extends Component {
                                   <Dropdown.Item as={Link} text='List all votings' to='/poll' />
                                 </Dropdown.Menu>
                             </Dropdown>
-                          </Menu.Item>
+                          </Menu.Item>}
                         {!this.props.account && <Menu.Item><Button inverted color='teal'>Account: Please Log in through MetaMask!</Button></Menu.Item>}
                         {this.props.account && <Menu.Item><Button inverted color='teal'>Account: {this.hideAccountHash()}</Button></Menu.Item>}
                         </Menu.Menu>
