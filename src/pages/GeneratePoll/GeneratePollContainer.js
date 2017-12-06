@@ -15,10 +15,17 @@ class GeneratePollContainer  extends Component {
             deployedInstance: ''
         }
 
-        this.store = {}
+        this.store = {
+            pollName: '',
+            pollCategory: 'organisational',
+            pollDescription: '',
+            pollEnd: new Date()
+        }
     }
 
     submitTokenContract = () => {
+
+        this.props.setCurrPoll(this.store);
 
         const { account, network } = this.props;
         if(!(web3 && account && network)) {
@@ -39,8 +46,6 @@ class GeneratePollContainer  extends Component {
             pollEnd,
             pollDescription
          } = this.store;
-
-
 
         const saleEndDate = new Date(pollEnd);
 

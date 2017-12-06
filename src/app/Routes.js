@@ -12,7 +12,7 @@ import Poll from 'pages/Poll';
 import Error from 'pages/Error';
 
 
-const Routes = ({ account, network, notify, active, handleShow, handleHide, getCurrDao, contextRef, createDAO, daos }) => (
+const Routes = ({ account, network, notify, active, handleShow, handleHide, getCurrDao, contextRef, createDAO, daos, setCurrPoll, currPoll }) => (
     <Switch>
         <Route exact path="/"
             render={(props) => (<About {...props} />)}
@@ -68,6 +68,7 @@ const Routes = ({ account, network, notify, active, handleShow, handleHide, getC
                                     active={active}
                                     handleShow={handleShow}
                                     handleHide={handleHide}
+                                    setCurrPoll={setCurrPoll}
                                 />)}
         />
         <Route path="/poll"
@@ -79,6 +80,7 @@ const Routes = ({ account, network, notify, active, handleShow, handleHide, getC
                                     active={active}
                                     contextRef={contextRef}
                                     getCurrDao={getCurrDao}
+                                    currPoll={currPoll}
                                 />)}
         />
         <Route component={Error} />

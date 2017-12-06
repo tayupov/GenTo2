@@ -16,7 +16,25 @@ class App extends Component {
       network: null,
       active: false,
       daos: [],
-      currDao: ''
+      currDao: '',
+      currPoll: [ 
+        {
+          daoName: 'Lizax',
+          polls: []
+        },
+        {
+          daoName: 'TorX',
+          polls: []
+        },
+        {
+          daoName: 'Mint',
+          polls: []
+        },
+        {
+          daoName: 'Zeltox',
+          polls: []
+        }
+      ]
     }
   }
   
@@ -36,6 +54,23 @@ class App extends Component {
   }
 
   getCurrDao = () => this.state.daos.filter(dao => dao.daoName === this.state.currDao)[0]
+
+  setCurrPoll = (poll) => {
+    const currPoll = {
+      header: poll.pollName,
+      endDate: new Date(poll.pollEnd),
+      description: poll.pollDescription,
+      addressesFor: 0,
+      addressesAgainst: 0,
+      tokensFor: 0,
+      tokensAgainst: 0,
+      voterAddresses: [],
+      category: poll.pollCategory,
+      state: 'active'
+    }
+
+    this.state.currPoll.filter(poll => poll.daoName === this.state.currDao)[0].polls.push(currPoll);
+  } 
 
   listDaos = () => {
     this.setState({
@@ -114,6 +149,7 @@ class App extends Component {
           createDAO={this.createDAO}
           setCurrDao={this.setCurrDao}
           getCurrDao={this.getCurrDao}
+          setCurrPoll={this.setCurrPoll}
         />
       </div>
     );

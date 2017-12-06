@@ -9,11 +9,13 @@ class General extends Component {
 
     this.state = {
       data: {
-        pollName: '',
-        pollDescription: ''
+        pollName: props.getStore().pollName,
+        pollCategory: props.getStore().pollCategory,
+        pollDescription: props.getStore().pollDescription
       },
       errors: {
         pollName: '',
+        pollCategory: '',
         pollDescription: ''
       }
     }
@@ -26,11 +28,13 @@ class General extends Component {
     const errors = this.validate(data);
 
     this.setState({ errors });
+    console.log('errors');
+    console.log(errors);
     if (Object.keys(errors).length === 0) {
       updateStore(data);
       return true;
     }
-    return true;
+    return false;
   }
 
   onChange = e => {
@@ -38,6 +42,15 @@ class General extends Component {
       data: {
         ...this.state.data,
         [e.target.name]: e.target.value
+      }
+    })
+  }
+
+  onChangeSelect = (e, {value}) => {
+    this.setState({
+      data: {
+        ...this.state.data,
+        pollCategory: value
       }
     })
   }
@@ -54,6 +67,7 @@ class General extends Component {
       <View
         {...this.state}
         onChange={this.onChange}
+        onChangeSelect={this.onChangeSelect}
       />
     );
   }

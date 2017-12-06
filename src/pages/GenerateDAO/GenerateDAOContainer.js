@@ -169,8 +169,6 @@ class GenerateDAOContainer  extends Component {
             ...this.store,
             ...update
         }
-        console.log('updateStore()');
-        console.log(this.store);
     }
 
     render() {
