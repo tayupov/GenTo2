@@ -39,6 +39,18 @@ class PollContainer extends Component {
     
     handleClose = () => this.setState({ modalOpen: false, modalSubmitted: false })
 
+    onChange = (e, { value }) => {
+        console.log('onChange')
+        console.log(value);
+        const currDaoPolls = polls.filter(poll => poll.daoName === this.props.getCurrDao().daoName)[0].polls;
+        const currDaoActivePolls = currDaoPolls.filter(poll => poll.state === value);
+
+        this.setState({
+            polls: currDaoActivePolls,
+            header: currDaoActivePolls[0].header
+        })
+    }
+
     handleReset = () => {
         const currIndex = this.state.polls.findIndex(obj => obj.header === this.state.header);
         const currAccountIndex = this.state.polls[currIndex].voterAddresses.findIndex(address => address === this.props.account);
@@ -60,10 +72,11 @@ class PollContainer extends Component {
 
     listPolls = (currDaoName) => {
         const currDaoPolls = polls.filter(poll => poll.daoName === currDaoName)[0].polls;
+        const currDaoActivePolls = currDaoPolls.filter(poll => poll.state === 'active');
 
         this.setState({
-            polls: currDaoPolls,
-            header: currDaoPolls[0].header
+            polls: currDaoActivePolls,
+            header: currDaoActivePolls[0].header
         })
     }
 
@@ -87,6 +100,7 @@ class PollContainer extends Component {
                     onClick={this.onClick}
                     handleOpen={this.handleOpen}
                     handleReset={this.handleReset}
+                    onChange={this.onChange}
                 />}
             </div>
         )
