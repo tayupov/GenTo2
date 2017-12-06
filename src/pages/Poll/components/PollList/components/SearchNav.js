@@ -12,7 +12,7 @@ import withModal from 'hoc/withModal';
 const MultiStepWithModal = withModal(StepZilla);
 
 const options = [
-    { key: 'running', text: 'running', value: 'running' },
+    { key: 'active', text: 'active', value: 'active' },
     { key: 'completed', text: 'completed', value: 'completed' },
   ]
 
@@ -22,13 +22,12 @@ const steps = [
     {name: 'POLL CREATED', component: <Created />}
 ]
 
-
 const SearchNav = ({
     onChange
 }) => (
     <div style={{ marginBottom: '1em', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Input
-            action={<Dropdown button basic floating options={options} defaultValue='running' />}
+            action={<Dropdown button basic floating options={options} onChange={onChange} defaultValue='active' />}
             icon='search'
             iconPosition='left'
             placeholder='Search...'
