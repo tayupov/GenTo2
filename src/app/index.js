@@ -60,7 +60,8 @@ class App extends Component {
           minPrice: 20000,
           maxPrice: 23500,
           saleStart: new Date('06/12/2017'),
-          saleEnd: new Date('12/12/2017')
+          saleEnd: new Date('12/12/2017'),
+          shTokens: 478
         },
         {
           daoName: 'TorX',
@@ -77,12 +78,13 @@ class App extends Component {
           maxVoting: 50,
           tokenName: 'TorXToken',
           tickerSymbol: 'TRX',
-          totalSupply: 15000,
+          totalSupply: 9000,
           selectedCurrency: 'finney',
           minPrice: 20000,
           maxPrice: 23500,
           saleStart: new Date('06/12/2017'),
-          saleEnd: new Date('12/12/2017')
+          saleEnd: new Date('12/12/2017'),
+          shTokens: 235
         },
         {
           daoName: 'Mint',
@@ -99,12 +101,13 @@ class App extends Component {
           maxVoting: 50,
           tokenName: 'MintToken',
           tickerSymbol: 'MNT',
-          totalSupply: 15000,
+          totalSupply: 18000,
           selectedCurrency: 'finney',
           minPrice: 20000,
           maxPrice: 23500,
           saleStart: new Date('06/12/2017'),
-          saleEnd: new Date('12/12/2017')
+          saleEnd: new Date('12/12/2017'),
+          shTokens: 780
         },
         {
           daoName: 'Zeltox',
@@ -126,7 +129,8 @@ class App extends Component {
           minPrice: 18000,
           maxPrice: 23500,
           saleStart: new Date('06/12/2017'),
-          saleEnd: new Date('12/12/2017')
+          saleEnd: new Date('12/12/2017'),
+          shTokens: 13000
         },
       ]
     })
