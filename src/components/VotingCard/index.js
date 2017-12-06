@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Card, Button } from 'semantic-ui-react';
+import { Card, Button, Icon } from 'semantic-ui-react';
 
 import { isInArray } from 'utils/functional';
 
@@ -11,7 +11,7 @@ const styles = {
 }
 
 const VotingCard = ({
-    header, onClick, handleOpen, handleReset, voterAddresses, account
+    header, onClick, handleOpen, handleReset, voterAddresses, pollState, pollCategory, pollDate, account
 }) => (
     <Card
       style={styles.card}
@@ -26,12 +26,33 @@ const VotingCard = ({
             {header}
         </Card.Header>
         <Card.Meta>
-          5 days left
+            {pollDate.toString()}
         </Card.Meta>
         <Card.Description>
           More information on the Voting
         </Card.Description>
       </Card.Content>
+      {(pollCategory === 'finance') &&
+      <Card.Content extra>
+        <Icon name='money' />
+        Finance
+      </Card.Content>}
+      {(pollCategory === 'product') &&
+      <Card.Content extra>
+        <Icon name='product' />
+        Product
+      </Card.Content>}
+      {(pollCategory === 'organisation') &&
+      <Card.Content extra>
+        <Icon name='money' />
+        Organisation
+      </Card.Content>}
+      {(pollCategory === 'partnership') &&
+      <Card.Content extra>
+        <Icon name='money' />
+        Partnership
+      </Card.Content>}
+      {(pollState === 'active') &&
       <Card.Content extra>
         {(!isInArray(account, voterAddresses)) &&
         <div className='ui two buttons'>
@@ -66,7 +87,7 @@ const VotingCard = ({
             Vote again
           </Button>
         </div>}
-      </Card.Content>
+      </Card.Content>}
     </Card>
 )
 
