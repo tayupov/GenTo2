@@ -26,10 +26,10 @@ class Organisational extends Component {
     super(props);
     this.state = {
       data: {
-        auctionType: ''
+        pollEnd: props.getStore().pollEnd
       },
       errors: { 
-        auctionType: ''
+        pollEnd: ''
       },
       loading: false
     };
@@ -40,16 +40,10 @@ class Organisational extends Component {
     this.setState({ errors });
     if (Object.keys(errors).length === 0) {
       this.props.updateStore(this.state.data);
+      this.props.submitTokenContract();
       return true;
     }
-    return true;
-  }
-
-  onSubmit = () => {
-    const { updateStore, submitTokenContract } = this.props;
-
-    updateStore(this.state.data);
-    submitTokenContract();
+    return false;
   }
 
   onChange = (e, { value }) => {

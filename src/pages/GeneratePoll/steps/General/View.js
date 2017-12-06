@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Form, Input, Container, TextArea } from 'semantic-ui-react';
+import { Form, Input, Container, TextArea, Select} from 'semantic-ui-react';
 
 import InlineError from 'components/InlineError';
 
@@ -24,32 +24,53 @@ const styles = {
     }
   }
 
+const options = [
+  { key: 'finance', text: 'finance', value: 'finance' },
+  { key: 'product', text: 'product', value: 'product' },
+  { key: 'organisational', text: 'organisational', value: 'organisational' },
+  { key: 'marketing', text: 'marketing', value: 'marketing' }
+]
+  
+
 const View = ({
-    onChange, data, errors
+    onChange, onChangeSelect, data, errors
 }) => (
     <Container style={styles.root}>
         <Form id="name-form">
           <Form.Field>
-            <label style={styles.firstLabel}>What is the title of the poll?</label>
+            <label style={styles.firstLabel}>Enter the voting title</label>
             <Input
               type="text"
               name="pollName"
               id="pollName"
               onChange={onChange}
-              defaultValue={data.pollName}
+              value={data.pollName}
               size='small'
               style={styles.input}
             />
           </Form.Field>
           {errors.pollName && <InlineError text={errors.pollName} />}
           <Form.Field>
-            <label style={styles.label}>What is the Description of the poll?</label>
+            <label style={styles.label}>Choose the field of work</label>
+            <Select
+              id='pollCategory'
+              name='pollCategory'
+              compact
+              options={options}
+              value={data.pollCategory}
+              style={styles.input}
+              required
+              onChange={onChangeSelect}
+            />
+          </Form.Field>
+          <Form.Field>
+            <label style={styles.label}>Enter the voting description</label>
             <TextArea
               type="text"
               name="pollDescription"
               id="pollDescription"
               onChange={onChange}
-              defaultValue={data.pollDescription}
+              value={data.pollDescription}
               size='small'
               style={styles.input}
             />
