@@ -12,7 +12,12 @@ import Poll from 'pages/Poll';
 import Error from 'pages/Error';
 import DaoSettings from 'pages/DaoSettings';
 
+<<<<<<< 6be5fec34f24f447fc25915357374bea98d943af
 const Routes = ({ account, network, notify, active, handleShow, handleHide, contextRef, createDAO }) => (
+=======
+
+const Routes = ({ account, network, notify, active, handleShow, handleHide, getCurrDao, contextRef, createDAO, daos }) => (
+>>>>>>> Add DAO details and votings for each DAO
     <Switch>
         <Route exact path="/"
             render={(props) => (<About {...props} />)}
@@ -76,7 +81,6 @@ const Routes = ({ account, network, notify, active, handleShow, handleHide, cont
                                     active={active}
                                     handleShow={handleShow}
                                     handleHide={handleHide}
-                                    setCurrPoll={setCurrPoll}
                                 />)}
         />
         <Route path="/poll"
@@ -88,7 +92,6 @@ const Routes = ({ account, network, notify, active, handleShow, handleHide, cont
                                     active={active}
                                     contextRef={contextRef}
                                     getCurrDao={getCurrDao}
-                                    currPoll={currPoll}
                                 />)}
         />
         <Route component={Error} />

@@ -6,11 +6,17 @@ import SideBar from 'components/SideBar';
 import Routes from './Routes';
 
 const View = ({
-    account, network, notify, active, handleShow, handleHide, setCurrDao, getCurrDao, contextRef, daos, currDao, currPoll, setCurrPoll
+    account, network, notify, active, handleShow, handleHide, setCurrDao, getCurrDao, contextRef, daos, currDao
 }) => (
     <div>
-        <TopNav account={account} />
-        <SideBar />
+        <TopNav
+            account={account}
+            currDao={currDao}
+        />
+        <SideBar
+            daos={daos}
+            setCurrDao={setCurrDao}
+        />
         <Container style={{ paddingLeft: '8em' }}>
             <Routes
                 account={account}
@@ -20,8 +26,6 @@ const View = ({
                 handleShow={handleShow}
                 handleHide={handleHide}
                 getCurrDao={getCurrDao}
-                setCurrPoll={setCurrPoll}
-                currPoll={currPoll}
                 contextRef={contextRef}
                 daos={daos}
             />
