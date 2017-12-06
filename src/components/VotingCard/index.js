@@ -54,13 +54,14 @@ const VotingCard = ({
         </div>}
         {(isInArray(account, voterAddresses)) &&
         <div>
-          <h4>You already voted on this Proposal!</h4>
+          <h4 style={{ textAlign: 'center' }}>You already voted on this Proposal!</h4>
           <Button
             basic
             color='green'
             id='edit'
             onClick={handleReset}
             float='right'
+            style={{ width: '100%' }}
           >
             Vote again
           </Button>
