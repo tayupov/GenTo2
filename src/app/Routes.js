@@ -12,7 +12,7 @@ import Poll from 'pages/Poll';
 import Error from 'pages/Error';
 
 
-const Routes = ({ account, network, notify, active, handleShow, handleHide, contextRef, createDAO }) => (
+const Routes = ({ account, network, notify, active, handleShow, handleHide, getCurrDao, contextRef, createDAO, daos }) => (
     <Switch>
         <Route exact path="/"
             render={(props) => (<About {...props} />)}
@@ -30,7 +30,7 @@ const Routes = ({ account, network, notify, active, handleShow, handleHide, cont
                                     {...props}
                                     account={account}
                                     network={network}
-                                    notify={notify}  
+                                    notify={notify}
                                 />)}
         />
         <Route path="/list"
@@ -60,15 +60,15 @@ const Routes = ({ account, network, notify, active, handleShow, handleHide, cont
                                 />)}
         />
         <Route path="/generatePoll"
-               render={(props) => (<GeneratePoll
-                                {...props}
-                                account={account}
-                                network={network}
-                                notify={notify}
-                                active={active}
-                                handleShow={handleShow}
-                                handleHide={handleHide}
-                            />)}
+            render={(props) => (<GeneratePoll
+                                    {...props}
+                                    account={account}
+                                    network={network}
+                                    notify={notify}
+                                    active={active}
+                                    handleShow={handleShow}
+                                    handleHide={handleHide}
+                                />)}
         />
         <Route path="/poll"
             render={(props) => (<Poll
@@ -78,6 +78,7 @@ const Routes = ({ account, network, notify, active, handleShow, handleHide, cont
                                     notify={notify}
                                     active={active}
                                     contextRef={contextRef}
+                                    getCurrDao={getCurrDao}
                                 />)}
         />
         <Route component={Error} />

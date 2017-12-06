@@ -7,10 +7,10 @@ import './index.css';
 class SideBar extends Component {
     state = {}
 
-    handleItemClick = (e, { name }) => this.setState({ activeItem: name })
-
-
-    componentDidMount() {}
+    handleItemClick = (e, { name }) => {
+        this.setState({ activeItem: name });
+        this.props.setCurrDao(name);
+    }
 
     render() {
         const { activeItem } = this.state
@@ -34,53 +34,21 @@ class SideBar extends Component {
                                 </Menu.Item>
                             </Menu.Menu>
                             <Menu.Item>
-                                <h2 style={{ textAlign: 'center', fontWeight: '500' }}>Your DAOs</h2>
-                                
+                                <h2 style={{ textAlign: 'center', fontWeight: '500' }}>Your DAOs</h2> 
                             <Menu.Menu style={{ marginTop: '2em' }}>
-                                <Menu.Item
-                                    name='dao'
-                                    to='/'
-                                    active={activeItem === 'dao'}
-                                    as={ Link }
-                                    onClick={this.handleItemClick}
-                                    header
-                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
-                                >
-                                    Digix
-                                </Menu.Item>
-                                <Menu.Item
-                                    name='roi'
-                                    to='/'
-                                    active={activeItem === 'roi'}
-                                    as={ Link }
-                                    onClick={this.handleItemClick}
-                                    header
-                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
-                                >
-                                    District0x
-                                </Menu.Item>
-                                <Menu.Item
-                                    name='lao'
-                                    to='/'
-                                    active={activeItem === 'lao'}
-                                    as={ Link }
-                                    onClick={this.handleItemClick}
-                                    header
-                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
-                                >
-                                    Lane
-                                </Menu.Item>
-                                <Menu.Item
-                                    name='ova'
-                                    to='/'
-                                    active={activeItem === 'ova'}
-                                    as={ Link }
-                                    onClick={this.handleItemClick}
-                                    header
-                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
-                                >
-                                    Marooz
-                                </Menu.Item>
+                                {this.props.daos.map(dao => (
+                                     <Menu.Item
+                                        name={dao.daoName}
+                                        to={`dao/${dao.daoName}`}
+                                        active={activeItem === dao.daoName}
+                                        as={ Link }
+                                        onClick={this.handleItemClick}
+                                        header
+                                        style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
+                                    >
+                                        {dao.daoName}
+                                    </Menu.Item>
+                                ))}
                             </Menu.Menu>
                             </Menu.Item>
                             <Menu.Item style={{ paddingLeft: '3em' }}>
