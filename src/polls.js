@@ -12,7 +12,7 @@ const polls =
                 tokensFor: 250,
                 tokensAgainst: 30,
                 voterAddresses: [],
-                done: false
+                state: 'active'
             },
             {
                 header: 'Create a stock sale to raise 10 ETH at 0.1 ETH per CVS share',
@@ -23,7 +23,7 @@ const polls =
                 tokensFor: 300,
                 tokensAgainst: 120,
                 voterAddresses: [],
-                done: false
+                state: 'active'
             },
             {
                 header: "For Begin stock sale a minimum status of 'executive' will be needed",
@@ -34,7 +34,7 @@ const polls =
                 tokensFor: 70,
                 tokensAgainst: 30,
                 voterAddresses: [],
-                done: false
+                state: 'active'
             },
             {
                 header: 'Create a stock sale to raise 50 ETH at 0.1 ETH per CVS share',
@@ -45,7 +45,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
-                done: false
+                state: 'active'
             },
             {
                 header: 'Create a stock sale to raise 1000 ETH at 0.1 ETH per CVS share',
@@ -56,7 +56,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
-                done: true
+                state: 'completed'
             },
             {
                 header: 'Create a stock sale to raise 300 ETH at 0.1 ETH per CVS share',
@@ -67,7 +67,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
-                done: true
+                state: 'completed'
             },
             {
                 header: 'Create a stock sale to raise 50 ETH at 0.5 ETH per CVS share',
@@ -78,7 +78,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
-                done: true
+                state: 'completed'
             },
         ]
     },
@@ -94,7 +94,7 @@ const polls =
                 tokensFor: 250,
                 tokensAgainst: 30,
                 voterAddresses: [],
-                done: false
+                state: 'active'
             },
             {
                 header: 'Create a stock sale to raise 10 ETH at 0.1 ETH per CVS share',
@@ -105,7 +105,7 @@ const polls =
                 tokensFor: 300,
                 tokensAgainst: 120,
                 voterAddresses: [],
-                done: false
+                state: 'active'
             },
             {
                 header: "For Begin stock sale a minimum status of 'executive' will be needed",
@@ -116,7 +116,7 @@ const polls =
                 tokensFor: 70,
                 tokensAgainst: 30,
                 voterAddresses: [],
-                done: false
+                state: 'active'
             },
             {
                 header: 'Create a stock sale to raise 50 ETH at 0.1 ETH per CVS share',
@@ -127,7 +127,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
-                done: false
+                state: 'active'
             },
             {
                 header: 'Create a stock sale to raise 1000 ETH at 0.1 ETH per CVS share',
@@ -138,7 +138,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
-                done: true
+                state: 'completed'
             },
             {
                 header: 'Create a stock sale to raise 300 ETH at 0.1 ETH per CVS share',
@@ -149,7 +149,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
-                done: true
+                state: 'completed'
             },
             {
                 header: 'Create a stock sale to raise 50 ETH at 0.5 ETH per CVS share',
@@ -160,7 +160,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
-                done: true
+                state: 'completed'
             },
         ]
     },
@@ -176,7 +176,7 @@ const polls =
                 tokensFor: 250,
                 tokensAgainst: 30,
                 voterAddresses: [],
-                done: false
+                state: 'active'
             },
             {
                 header: 'Create a stock sale to raise 10 ETH at 0.1 ETH per CVS share',
@@ -187,7 +187,7 @@ const polls =
                 tokensFor: 300,
                 tokensAgainst: 120,
                 voterAddresses: [],
-                done: false
+                state: 'active'
             },
             {
                 header: "For Begin stock sale a minimum status of 'executive' will be needed",
@@ -198,7 +198,7 @@ const polls =
                 tokensFor: 70,
                 tokensAgainst: 30,
                 voterAddresses: [],
-                done: false
+                state: 'active'
             },
             {
                 header: 'Create a stock sale to raise 50 ETH at 0.1 ETH per CVS share',
@@ -209,7 +209,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
-                done: false
+                state: 'active'
             },
             {
                 header: 'Create a stock sale to raise 1000 ETH at 0.1 ETH per CVS share',
@@ -220,7 +220,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
-                done: true
+                state: 'completed'
             },
             {
                 header: 'Create a stock sale to raise 300 ETH at 0.1 ETH per CVS share',
@@ -231,7 +231,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
-                done: true
+                state: 'completed'
             },
             {
                 header: 'Create a stock sale to raise 50 ETH at 0.5 ETH per CVS share',
@@ -242,7 +242,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
-                done: true
+                state: 'completed'
             },
         ]
     },
@@ -258,7 +258,7 @@ const polls =
                 tokensFor: 250,
                 tokensAgainst: 30,
                 voterAddresses: [],
-                done: false
+                state: 'active'
             },
             {
                 header: 'Create a stock sale to raise 10 ETH at 0.1 ETH per CVS share',
@@ -269,7 +269,7 @@ const polls =
                 tokensFor: 300,
                 tokensAgainst: 120,
                 voterAddresses: [],
-                done: false
+                state: 'active'
             },
             {
                 header: "For Begin stock sale a minimum status of 'executive' will be needed",
@@ -280,7 +280,7 @@ const polls =
                 tokensFor: 70,
                 tokensAgainst: 30,
                 voterAddresses: [],
-                done: false
+                state: 'active'
             },
             {
                 header: 'Create a stock sale to raise 50 ETH at 0.1 ETH per CVS share',
@@ -291,7 +291,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
-                done: false
+                state: 'active'
             },
             {
                 header: 'Create a stock sale to raise 1000 ETH at 0.1 ETH per CVS share',
@@ -302,7 +302,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
-                done: true
+                state: 'completed'
             },
             {
                 header: 'Create a stock sale to raise 300 ETH at 0.1 ETH per CVS share',
@@ -313,7 +313,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
-                done: true
+                state: 'completed'
             },
             {
                 header: 'Create a stock sale to raise 50 ETH at 0.5 ETH per CVS share',
@@ -324,7 +324,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
-                done: true
+                state: 'completed'
             },
         ]
     },
