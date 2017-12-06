@@ -23,6 +23,8 @@ const GeneratePoll = ({
             nextButtonCls="ui positive button"
             backButtonCls="ui positive button"
             nextTextOnFinalActionStep="Submit Poll"
+            active={active}
+            handleHide={handleHide}
         />
     </div>
 )

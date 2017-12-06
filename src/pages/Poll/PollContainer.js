@@ -17,15 +17,22 @@ class PollContainer extends Component {
             modalOpen: false,
             modalState: '',
             modalSubmitted: false,
-            currDaoDetails: {}
+            currDaoDetails: {},
+            createdPolls: []
         };
     }
 
     componentDidMount() {
-        this.listPolls(this.props.getCurrDao().daoName);
+        console.log('this.props.currPoll');
+        console.log(this.props.currPoll);
+        const createdPolls = this.props.currPoll.filter(poll => poll.daoName === this.props.getCurrDao().daoName)[0].polls;
+        this.listPolls(this.props.getCurrDao().daoName, createdPolls);
         this.setState({
             currDaoDetails: this.props.getCurrDao()
         })
+
+        console.log('Polls');
+        console.log(this.state.polls);
     }
 
     onClick = (e, { header }) => {
@@ -44,9 +51,13 @@ class PollContainer extends Component {
         console.log(value);
         const currDaoPolls = polls.filter(poll => poll.daoName === this.props.getCurrDao().daoName)[0].polls;
         const currDaoActivePolls = currDaoPolls.filter(poll => poll.state === value);
+        const createdActivePolls = this.state.createdPolls.filter(poll => poll.state === value)
 
         this.setState({
-            polls: currDaoActivePolls,
+            polls: [
+                    ...currDaoActivePolls,
+                    ...createdActivePolls
+            ],
             header: currDaoActivePolls[0].header
         })
     }
@@ -70,12 +81,16 @@ class PollContainer extends Component {
         this.state.polls[currIndex].voterAddresses.push(this.props.account);
     }
 
-    listPolls = (currDaoName) => {
+    listPolls = (currDaoName, createdPolls) => {
         const currDaoPolls = polls.filter(poll => poll.daoName === currDaoName)[0].polls;
         const currDaoActivePolls = currDaoPolls.filter(poll => poll.state === 'active');
 
         this.setState({
-            polls: currDaoActivePolls,
+            createdPolls: createdPolls,
+            polls: [
+                ...currDaoActivePolls,
+                ...createdPolls
+            ],
             header: currDaoActivePolls[0].header
         })
     }
