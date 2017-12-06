@@ -33,17 +33,17 @@ ol.progtrckr {
   
   ol.progtrckr li.progtrckr-todo {
     color: silver;
-    border-bottom: 4px solid silver;
+    border-bottom: 10px solid rgb(10, 166, 238);
   }
   
   ol.progtrckr li.progtrckr-doing {
     color: black;
-    border-bottom: 4px solid #CCCCCC;
+    border-bottom: 10px solid #CCCCCC;
   }
   
   ol.progtrckr li.progtrckr-done {
     color: black;
-    border-bottom: 4px solid #5cb85c;
+    border-bottom: 10px solid #5cb85c;
   }
   
   ol.progtrckr li:after {
