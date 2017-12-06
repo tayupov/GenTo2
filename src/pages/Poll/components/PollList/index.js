@@ -9,6 +9,9 @@ const PollList = ({
         <VotingCard
             header={poll.header}
             voterAddresses={poll.voterAddresses}
+            pollState={poll.state}
+            pollCategory={poll.category}
+            pollDate={poll.endDate}
             onClick={onClick}
             handleOpen={handleOpen}
             handleReset={handleReset}
