@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Poll from './Poll';
-import polls from './polls';
+import polls from 'polls';
 
 import Header from 'components/Header';
 import VotingModal from 'components/VotingModal';

@@ -7,7 +7,7 @@ import SearchNav from './components/PollList/components/SearchNav';
 import PollDetails from './components/PollDetails';
 
 const Poll = ({
-    header, onClick, handleOpen, handleReset, polls, contextRef, account
+    header, onClick, handleOpen, handleReset, polls, contextRef, account, currDaoDetails
 }) => (
     <Grid columns={2}>
         <Grid.Column width={6}>
@@ -15,6 +15,7 @@ const Poll = ({
                 <PollDetails
                     header={header}
                     polls={polls}
+                    currDaoDetails={currDaoDetails}
                 />
             </Sticky>
         </Grid.Column>
