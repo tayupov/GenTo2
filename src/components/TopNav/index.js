@@ -43,8 +43,8 @@ class TopNav extends Component {
                             <Dropdown text='DAO'>
                                 <Dropdown.Menu style={ styles.dropDownMenu }>
                                   <Dropdown.Item as={Link} text='Create a DAO' to='/generate' />
-                                  <Dropdown.Item text='List all DAOs' />
-                                  <Dropdown.Item as={Link} text='List all ICOs' to='/list' />                                  
+                                  <Dropdown.Item as={Link} to='/daoList' text='List all DAOs' />
+                                  <Dropdown.Item as={Link} text='List all ICOs' to='/list' />
                                 </Dropdown.Menu>
                             </Dropdown>
                           </Menu.Item>

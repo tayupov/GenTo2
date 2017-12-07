@@ -10,6 +10,7 @@ import Dao from 'pages/Dao';
 import DaoList from 'pages/DaoList';
 import Poll from 'pages/Poll';
 import Error from 'pages/Error';
+import DaoSettings from 'pages/DaoSettings';
 
 
 const Routes = ({ account, network, notify, active, handleShow, handleHide, getCurrDao, contextRef, createDAO, daos, setCurrPoll, currPoll }) => (
@@ -22,7 +23,7 @@ const Routes = ({ account, network, notify, active, handleShow, handleHide, getC
                                     {...props}
                                     account={account}
                                     network={network}
-                                    notify={notify} 
+                                    notify={notify}
                                 />)}
         />
         <Route path="/dao/:address"
@@ -37,11 +38,19 @@ const Routes = ({ account, network, notify, active, handleShow, handleHide, getC
             render={(props) => (<List
                                     {...props}
                                     account={account}
-                                    notify={notify} 
+                                    notify={notify}
                                 />)}
         />
         <Route path="/daoList"
+
             render={(props) => (<DaoList
+                                    {...props}
+                                    account={account}
+                                    notify={notify}
+                                />)}
+        />
+        <Route path="/daoSettings/:address"
+            render={(props) => (<DaoSettings
                                     {...props}
                                     account={account}
                                     notify={notify}

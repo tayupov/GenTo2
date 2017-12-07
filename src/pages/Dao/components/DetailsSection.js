@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Grid, Header, Segment, Progress, Input } from 'semantic-ui-react';
+import { Grid, Header, Segment, Checkbox, Input } from 'semantic-ui-react';
 import moment from 'moment';
 
 let auctionInterval;
@@ -98,7 +98,7 @@ class DetailsSection extends Component {
                     <Header as='h2' attached textAlign='center'>
                         Voting power
                     </Header>
-                    <Segment attached padded textAlign='center' color='olive'>
+                    <Segment attached padded color='olive'>
                         <Grid>
                             <Grid.Row>
                                 <Grid.Column width={8}>
@@ -138,6 +138,9 @@ class DetailsSection extends Component {
                                     Finance
                                 </Grid.Column>
                                 <Grid.Column width={4}>
+                                    50/1000
+                                </Grid.Column>
+                                <Grid.Column width={4}>
                                     50
                                 </Grid.Column>
                             </Grid.Row>
@@ -159,38 +162,38 @@ class DetailsSection extends Component {
                     <Header as='h2' attached textAlign='center'>
                         Transfer Voting power
                     </Header>
-                    <Segment attached padded textAlign='center' color='olive'>
+                    <Segment attached padded  color='olive'>
                         <Grid>
                             <Grid.Row>
                                 <Grid.Column width={8}>
-                                    Organisational
+                                    <Checkbox label='Organisational' />
                                 </Grid.Column>
                                 <Grid.Column width={8}>
-                                    <Input name="foo" type="text" placeholder="Username" value="" class="prompt" autocomplete="on" />
-                                </Grid.Column>
-                            </Grid.Row>
-                            <Grid.Row>
-                                <Grid.Column width={8}>
-                                    Product
-                                </Grid.Column>
-                                <Grid.Column width={8}>
-                                    <Input name="foo" type="text" placeholder="Username" value="" class="prompt" autocomplete="on" />
+                                    <Input name="foo" type="text" placeholder="adress" value="" class="prompt" autocomplete="on" />
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
                                 <Grid.Column width={8}>
-                                    Finance
+                                    <Checkbox label='Product' />
                                 </Grid.Column>
                                 <Grid.Column width={8}>
-                                    <Input name="foo" type="text" placeholder="Username" value="" class="prompt" autocomplete="on" />
+                                    <Input name="foo" type="text" placeholder="adress" value="" class="prompt" autocomplete="on" />
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
                                 <Grid.Column width={8}>
-                                    Marketing
+                                    <Checkbox label='Finance' />
                                 </Grid.Column>
                                 <Grid.Column width={8}>
-                                    <Input name="foo" type="text" placeholder="Username" value="" class="prompt" autocomplete="on"
+                                    <Input name="foo" type="text" placeholder="adress" value="" class="prompt" autocomplete="on" />
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Grid.Column width={8}>
+                                    <Checkbox label='Marketing' />
+                                </Grid.Column>
+                                <Grid.Column width={8}>
+                                    <Input name="foo" type="text" placeholder="adress" value="" class="prompt" autocomplete="on"
                                            defaultValue='eji3r212hio12epq' />
                                 </Grid.Column>
                             </Grid.Row>
