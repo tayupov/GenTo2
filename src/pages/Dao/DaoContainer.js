@@ -16,38 +16,14 @@ class DaoContainer extends Component {
         this.state = {
             totalToke: 1000,
             ownToken: 12,
-            auctionDetailsParsed: {}
+            daoDetailsParsed: {}
         }
     }
 
     componentWillMount() {
-        let contractAddress = this.props.match.params.address;
-        if (contractAddress) {
-            this.getContractDetails(contractAddress);
-            
-        } else {
-            console.log('Missing address parameter');
-        }
-    }
-
-
-    getContractDetails = (address) => {
-
-        if(this.checkForError()) {
-            return;
-        }
-
-        // TODO Get data from smart contrat
-        var details = {_name: "sdf",
-            _owner:"liawdawjd",
-            _symbol: "asdf"
-        };
-        this.setState({auctionDetailsParsed:details});
-    }
-
-
-    checkForError = () => {
-        
+        this.setState({
+            daoDetailsParsed: this.props.getCurrDao()
+        })
     }
 
 
@@ -56,9 +32,6 @@ class DaoContainer extends Component {
             <Dao
                 {...this.props}
                 {...this.state}
-                setSupplyInterval={this.setSupplyInterval}
-                buyToken={this.buyToken}
-                listenForTokenBuy={this.listenForTokenBuy}
             />
         )
     }

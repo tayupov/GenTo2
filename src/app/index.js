@@ -93,9 +93,6 @@ class App extends Component {
 
     this.state.daos.push(daoDetails);
 
-    console.log('daos');
-    console.log(daos);
-
     this.setState({
       daoDetails: daoDetails
     })
