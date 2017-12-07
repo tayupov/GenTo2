@@ -4,6 +4,8 @@ import { Card, Button, Icon } from 'semantic-ui-react';
 
 import { isInArray } from 'utils/functional';
 
+import moment from 'moment';
+
 const styles = {
     card : {
         margin: '0.3em auto'
@@ -26,7 +28,7 @@ const VotingCard = ({
             {header}
         </Card.Header>
         <Card.Meta>
-            {pollDate.toString()}
+            {moment(pollDate).fromNow()}
         </Card.Meta>
         <Card.Description>
             {pollDescription}

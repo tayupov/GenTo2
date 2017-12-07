@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const daos =
 [
     {
@@ -19,8 +21,8 @@ const daos =
       selectedCurrency: 'finney',
       minPrice: 20000,
       maxPrice: 23500,
-      saleStart: new Date('06/12/2017'),
-      saleEnd: new Date('12/12/2017'),
+      saleStart: moment("20171206", "YYYYMMDD").format('LL'),
+      saleEnd: moment("20171212", "YYYYMMDD").format('LL'),
       shTokens: 478,
       totalAddresses: 60
     },
@@ -43,8 +45,8 @@ const daos =
       selectedCurrency: 'finney',
       minPrice: 20000,
       maxPrice: 23500,
-      saleStart: new Date('06/12/2017'),
-      saleEnd: new Date('12/12/2017'),
+      saleStart: moment("20171206", "YYYYMMDD").format('LL'),
+      saleEnd: moment("20171212", "YYYYMMDD").format('LL'),
       shTokens: 235,
       totalAddresses: 23
     },
@@ -67,8 +69,8 @@ const daos =
       selectedCurrency: 'finney',
       minPrice: 20000,
       maxPrice: 23500,
-      saleStart: new Date('06/12/2017'),
-      saleEnd: new Date('12/12/2017'),
+      saleStart: moment("20171206", "YYYYMMDD").format('LL'),
+      saleEnd: moment("20171212", "YYYYMMDD").format('LL'),
       shTokens: 780,
       totalAddresses: 31
     },
@@ -91,8 +93,8 @@ const daos =
       selectedCurrency: 'finney',
       minPrice: 18000,
       maxPrice: 23500,
-      saleStart: new Date('06/12/2017'),
-      saleEnd: new Date('12/12/2017'),
+      saleStart: moment("20171206", "YYYYMMDD").format('LL'),
+      saleEnd: moment("20171212", "YYYYMMDD").format('LL'),
       shTokens: 130,
       totalAddresses: 80
     },
