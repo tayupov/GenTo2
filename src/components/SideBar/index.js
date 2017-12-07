@@ -39,7 +39,7 @@ class SideBar extends Component {
                                 {this.props.daos.map(dao => (
                                      <Menu.Item
                                         name={dao.daoName}
-                                        to={`dao/${dao.daoName}`}
+                                        to={`/dao/${dao.daoName}`}
                                         active={activeItem === dao.daoName}
                                         as={ Link }
                                         onClick={this.handleItemClick}
