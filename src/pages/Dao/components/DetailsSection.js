@@ -42,7 +42,7 @@ class DetailsSection extends Component {
                         Dao Name
                     </Header>
                     <Segment attached padded raised textAlign='left' color='olive'>
-                        {details._name}
+                        {details.daoName}
                     </Segment>
                 </Grid.Column>
                 <Grid.Column width={8}>
@@ -50,7 +50,7 @@ class DetailsSection extends Component {
                         Created at
                     </Header>
                     <Segment attached padded raised textAlign='right' color='olive'>
-                        aaaaaaa
+                        {details.saleEnd.toString()}
                     </Segment>
                 </Grid.Column>
             </Grid.Row>
@@ -61,7 +61,7 @@ class DetailsSection extends Component {
                         Ticker Symbol
                     </Header>
                     <Segment attached padded raised textAlign='left' color='olive'>
-                        {details._symbol}
+                        {details.tickerSymbol}
                     </Segment>
                 </Grid.Column>
                 <Grid.Column width={8}>
@@ -69,7 +69,7 @@ class DetailsSection extends Component {
                         Owned By
                     </Header>
                     <Segment attached padded raised textAlign='right' color='olive'>
-                        {details._owner}
+                        0xfew432dfdw33erLk
                     </Segment>
                 </Grid.Column>
             </Grid.Row>
@@ -80,7 +80,7 @@ class DetailsSection extends Component {
                         Number of tokens owned
                     </Header>
                     <Segment attached padded raised textAlign='left' color='olive'>
-                        12/1000
+                        {details.shTokens}
                     </Segment>
                 </Grid.Column>
                 <Grid.Column width={8}>

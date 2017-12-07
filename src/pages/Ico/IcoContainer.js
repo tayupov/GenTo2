@@ -65,7 +65,7 @@ class IcoContainer extends Component {
                 this.setState({
                     tokenCount: amount
                 });
-                msg = "You own <strong>" + amount + " </strong>" + this.state.auctionDetails._symbol + " <strong>(=" + (amount * 100 / this.state.auctionDetails._totalSupply).toFixed(2) + "%)</strong> "
+                msg = "You own <strong>" + amount + " </strong>" + this.state.auctionDetails._symbol + " <strong>(=" + (amount * 100 / this.state.auctionDetails._totalSupply).toFixed(0) + "%)</strong> "
             }
             this.setState({
                 tokenCountMsg: msg
@@ -243,7 +243,7 @@ class IcoContainer extends Component {
                     console.error(err);
                 } else {
                     supply = supply.toNumber();
-                    const supplyPct = ((supply / data._totalSupply) * 100).toFixed(2);
+                    const supplyPct = ((supply / data._totalSupply) * 100).toFixed(0);
                     const supplyString = `${supply} of ${data._totalSupply} left for sale`;
                     cb({
                         supplyPct,
@@ -306,7 +306,7 @@ class IcoContainer extends Component {
             } else {
                 if (this.state.auctionDetails) {
                     const remainingSupply = result.args._remainingSupply.toNumber();
-                    const supplyPct = ((remainingSupply / data._totalSupply) * 100).toFixed(2);
+                    const supplyPct = ((remainingSupply / data._totalSupply) * 100).toFixed(0);
                     const supplyString = `${remainingSupply} of ${data._totalSupply} left for sale`;
                     cb({
                         supplyPct,

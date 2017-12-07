@@ -14,8 +14,8 @@ const GenerateDAO = ({
     handleShow, handleHide, active, steps, open, closeOnRootNodeClick, close
 }) => (
     <div>
-        <HeaderSection text="GENERATE YOUR OWN SMART CONTRACTS" />
-        <Button onClick={handleShow} color='teal'>Create an ICO</Button>
+        <HeaderSection text="GENERATE YOUR OWN DAO" />
+        <Button onClick={handleShow} color='teal'>Create a DAO  </Button>
         <MultiStepWithModal
             steps={steps}
             nextButtonCls="ui positive button"

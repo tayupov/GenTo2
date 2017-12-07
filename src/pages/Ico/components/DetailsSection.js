@@ -37,7 +37,7 @@ class DetailsSection extends Component {
                 }
                 duration = moment.duration(duration - interval);
                 timeCountDown = duration.days() + " d " + duration.hours() + " h " + duration.minutes() + " m " + duration.seconds() + " s left";
-                let currentPercentage = ((endTime.diff(moment()) / endTime.diff(moment.unix(details._saleStart))) * 100).toFixed(2);
+                let currentPercentage = ((endTime.diff(moment()) / endTime.diff(moment.unix(details._saleStart))) * 100).toFixed(0);
                 this.setState({
                     timeCountDown,
                     currentPercentage

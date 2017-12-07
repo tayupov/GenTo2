@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const polls =
 [
     {
@@ -5,7 +7,7 @@ const polls =
         polls: [
             {
                 header: 'Issue 99 CVS shares',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 8,
                 addressesAgainst: 1,
@@ -17,7 +19,7 @@ const polls =
             },
             {
                 header: 'Create a stock sale to raise 10 ETH at 0.1 ETH per CVS share',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 10,
                 addressesAgainst: 8,
@@ -29,7 +31,7 @@ const polls =
             },
             {
                 header: "For Begin stock sale a minimum status of 'executive' will be needed",
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 2,
                 addressesAgainst: 1,
@@ -41,7 +43,7 @@ const polls =
             },
             {
                 header: 'Create a stock sale to raise 50 ETH at 0.1 ETH per CVS share',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,
@@ -53,7 +55,7 @@ const polls =
             },
             {
                 header: 'Create a stock sale to raise 1000 ETH at 0.1 ETH per CVS share',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,
@@ -65,7 +67,7 @@ const polls =
             },
             {
                 header: 'Create a stock sale to raise 300 ETH at 0.1 ETH per CVS share',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,
@@ -77,7 +79,7 @@ const polls =
             },
             {
                 header: 'Create a stock sale to raise 50 ETH at 0.5 ETH per CVS share',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,
@@ -94,7 +96,7 @@ const polls =
         polls: [
             {
                 header: 'Issue 88 CVS shares',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 8,
                 addressesAgainst: 1,
@@ -106,7 +108,7 @@ const polls =
             },
             {
                 header: 'Create a stock sale to raise 10 ETH at 0.1 ETH per CVS share',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 10,
                 addressesAgainst: 8,
@@ -118,7 +120,7 @@ const polls =
             },
             {
                 header: "For Begin stock sale a minimum status of 'executive' will be needed",
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 2,
                 addressesAgainst: 1,
@@ -130,7 +132,7 @@ const polls =
             },
             {
                 header: 'Create a stock sale to raise 50 ETH at 0.1 ETH per CVS share',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,
@@ -142,7 +144,7 @@ const polls =
             },
             {
                 header: 'Create a stock sale to raise 1000 ETH at 0.1 ETH per CVS share',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,
@@ -154,7 +156,7 @@ const polls =
             },
             {
                 header: 'Create a stock sale to raise 300 ETH at 0.1 ETH per CVS share',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,
@@ -166,7 +168,7 @@ const polls =
             },
             {
                 header: 'Create a stock sale to raise 50 ETH at 0.5 ETH per CVS share',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,
@@ -183,7 +185,7 @@ const polls =
         polls: [
             {
                 header: 'Issue 77 CVS shares',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 8,
                 addressesAgainst: 1,
@@ -195,7 +197,7 @@ const polls =
             },
             {
                 header: 'Create a stock sale to raise 10 ETH at 0.1 ETH per CVS share',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 10,
                 addressesAgainst: 8,
@@ -207,7 +209,7 @@ const polls =
             },
             {
                 header: "For Begin stock sale a minimum status of 'executive' will be needed",
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 2,
                 addressesAgainst: 1,
@@ -219,7 +221,7 @@ const polls =
             },
             {
                 header: 'Create a stock sale to raise 50 ETH at 0.1 ETH per CVS share',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,
@@ -231,7 +233,7 @@ const polls =
             },
             {
                 header: 'Create a stock sale to raise 1000 ETH at 0.1 ETH per CVS share',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,
@@ -243,7 +245,7 @@ const polls =
             },
             {
                 header: 'Create a stock sale to raise 300 ETH at 0.1 ETH per CVS share',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,
@@ -255,7 +257,7 @@ const polls =
             },
             {
                 header: 'Create a stock sale to raise 50 ETH at 0.5 ETH per CVS share',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,
@@ -272,7 +274,7 @@ const polls =
         polls: [
             {
                 header: 'Issue 55 CVS shares',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 8,
                 addressesAgainst: 1,
@@ -284,7 +286,7 @@ const polls =
             },
             {
                 header: 'Create a stock sale to raise 10 ETH at 0.1 ETH per CVS share',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 10,
                 addressesAgainst: 8,
@@ -296,7 +298,7 @@ const polls =
             },
             {
                 header: "For Begin stock sale a minimum status of 'executive' will be needed",
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 2,
                 addressesAgainst: 1,
@@ -308,7 +310,7 @@ const polls =
             },
             {
                 header: 'Create a stock sale to raise 50 ETH at 0.1 ETH per CVS share',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,
@@ -320,7 +322,7 @@ const polls =
             },
             {
                 header: 'Create a stock sale to raise 1000 ETH at 0.1 ETH per CVS share',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,
@@ -332,7 +334,7 @@ const polls =
             },
             {
                 header: 'Create a stock sale to raise 300 ETH at 0.1 ETH per CVS share',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,
@@ -344,7 +346,7 @@ const polls =
             },
             {
                 header: 'Create a stock sale to raise 50 ETH at 0.5 ETH per CVS share',
-                endDate: new Date('12/06/2017'),
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,

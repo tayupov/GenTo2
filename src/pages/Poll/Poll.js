@@ -11,7 +11,7 @@ const Poll = ({
 }) => (
     <Grid columns={2}>
         <Grid.Column width={6}>
-            <Sticky context={contextRef}>
+            <Sticky context={contextRef} offset={80}>
                 <PollDetails
                     header={header}
                     polls={polls}

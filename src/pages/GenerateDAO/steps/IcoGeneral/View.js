@@ -92,7 +92,7 @@ const View = ({
               style={styles.input}
             />
           </Form.Field>}
-          {errors.date && <InlineError text={errors.date} />}
+          {errors.saleEnd && <InlineError text={errors.saleEnd} />}
         </Form>
     </Container>
 )
