@@ -32,6 +32,7 @@ const Routes = ({ account, network, notify, active, handleShow, handleHide, getC
                                     {...props}
                                     account={account}
                                     key={props.match.params.address}
+                                    getCurrDao={getCurrDao}
                                     network={network}
                                     notify={notify}
                                 />)}

@@ -4,12 +4,11 @@ import { Link } from 'react-router-dom';
 import { Header, Icon, Container, Button } from 'semantic-ui-react';
 
 const HeaderSection  = () => (<Header >
-        <Container  textAlign="right">
-            <Button  as={Link}  to={`/daoSettings/8`}  > <Icon name='settings'/> </Button>
-            <Button  as={Link} to='/poll' >
+        {/* <Container  textAlign="right">
+            <Button  as={Link} to='/poll' color='teal'>
                 Go to votings
             </Button>
-        </Container>
+        </Container> */}
 
         <h1 style={{textAlign: 'center' }}>Dao Details</h1>
         <Header.Subheader style={{ marginTop: '1em', fontSize: '18px',textAlign: 'center' }}>

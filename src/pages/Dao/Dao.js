@@ -6,13 +6,14 @@ import HeaderSection from './components/HeaderSection';
 import DetailsSection from './components/DetailsSection';
 
 const Dao = ({
-    auctionDetailsParsed
+    daoDetailsParsed
 }) => (
     <Container style={{ width: '800px' }}>
         <HeaderSection />
+        {daoDetailsParsed &&
         <DetailsSection
-            details={auctionDetailsParsed}
-        />
+            details={daoDetailsParsed}
+        />}
     </Container>
 )
 
