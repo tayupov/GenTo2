@@ -16,6 +16,7 @@ class App extends Component {
       network: null,
       active: false,
       daos: [],
+      icos: [],
       currDao: '',
       currPoll: [ 
         {
@@ -34,7 +35,8 @@ class App extends Component {
           daoName: 'Zeltox',
           polls: []
         }
-      ]
+      ],
+      daoDetails: {}
     }
   }
   
@@ -70,7 +72,7 @@ class App extends Component {
     }
 
     this.state.currPoll.filter(poll => poll.daoName === this.state.currDao)[0].polls.push(currPoll);
-  } 
+  }
 
   listDaos = () => {
     this.setState({
@@ -78,10 +80,24 @@ class App extends Component {
     })
   }
 
+  setIcos = (icos) => {
+    this.setState({
+      icos: icos
+    })
+  }
+
   // temporary function for creating DAOs
   createDAO = (daoDetails) => {
+    daoDetails['shTokens'] = 0;
+    daoDetails['totalAddresses'] = 0;
+
+    this.state.daos.push(daoDetails);
+
+    console.log('daos');
+    console.log(daos);
+
     this.setState({
-      daoDetails
+      daoDetails: daoDetails
     })
   }
 
@@ -150,6 +166,7 @@ class App extends Component {
           setCurrDao={this.setCurrDao}
           getCurrDao={this.getCurrDao}
           setCurrPoll={this.setCurrPoll}
+          setIcos={this.setIcos}
         />
       </div>
     );

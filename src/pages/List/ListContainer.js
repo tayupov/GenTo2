@@ -56,6 +56,7 @@ class ListContainer extends Component {
             this.setState({
               items: newItems
             })
+            this.props.setIcos(newItems);
           }
         }
       })

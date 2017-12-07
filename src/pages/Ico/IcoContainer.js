@@ -44,6 +44,8 @@ class IcoContainer extends Component {
         } else {
             console.log('Missing address parameter');
         }
+
+        this.setMyTokenCount();
         setInterval(this.getChartData, 10000);
     }
 
@@ -260,19 +262,21 @@ class IcoContainer extends Component {
 
         const buyer = this.props.account;
         const value = web3.toWei(amount, etherUnit);
+        console.log('buyToken');
+        console.log(amount);
      
         web3.eth.estimateGas({
-            data: AuctionToken.unlinked_binary
+            data: AuctionToken.bytecode
         }, (err, gas) => {
             if (err) {
                 console.error(err);
                 return;
             }
-            createAuctionTokenInstance(this.props.match.params.address).then(instance => {
-                instance.buy(
+            createAuctionTokenInstance(this.props.match.params.address)
+                .buy(
                     {
                         from: buyer,
-                        data: AuctionToken.unlinked_binary,
+                        data: AuctionToken.bytecode,
                         value,
                         gas
                     }, (error, result) => {
@@ -282,8 +286,7 @@ class IcoContainer extends Component {
                     }
                 ) 
             })
-        })
-    }
+        }
 
     listenForTokenBuy = (cb) => {
 
@@ -328,6 +331,7 @@ class IcoContainer extends Component {
             <Ico
                 {...this.props}
                 {...this.state}
+                key={this.props.match.params.address}
                 setSupplyInterval={this.setSupplyInterval}
                 buyToken={this.buyToken}
                 listenForTokenBuy={this.listenForTokenBuy}

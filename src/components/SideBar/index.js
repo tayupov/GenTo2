@@ -10,6 +10,7 @@ class SideBar extends Component {
     handleItemClick = (e, { name }) => {
         this.setState({ activeItem: name });
         this.props.setCurrDao(name);
+        console.log(this.props.icos);
     }
 
     render() {
@@ -58,74 +59,20 @@ class SideBar extends Component {
                             </Menu.Item>
                             <Menu.Item>
                                 <h2 style={{ textAlign: 'center', fontWeight: '500' }}>Your ICOs</h2>
-                                
                             <Menu.Menu style={{ marginTop: '2em' }}>
-                                <Menu.Item
-                                    name='WIN'
-                                    to='/'
-                                    active={activeItem === 'WIN'}
-                                    as={ Link }
-                                    onClick={this.handleItemClick}
-                                    header
-                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
-                                >
-                                    WIN
-                                </Menu.Item>
-                                <Menu.Item
-                                    name='MOK'
-                                    to='/'
-                                    active={activeItem === 'MOK'}
-                                    as={ Link }
-                                    onClick={this.handleItemClick}
-                                    header
-                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
-                                >
-                                    MOK
-                                </Menu.Item>
-                                <Menu.Item
-                                    name='MOK'
-                                    to='/'
-                                    active={activeItem === 'MOK'}
-                                    as={ Link }
-                                    onClick={this.handleItemClick}
-                                    header
-                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
-                                >
-                                    TUI
-                                </Menu.Item>
-                                <Menu.Item
-                                    name='MOK'
-                                    to='/'
-                                    active={activeItem === 'MOK'}
-                                    as={ Link }
-                                    onClick={this.handleItemClick}
-                                    header
-                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
-                                >
-                                    LIM
-                                </Menu.Item>
-                                <Menu.Item
-                                    name='MOK'
-                                    to='/'
-                                    active={activeItem === 'MOK'}
-                                    as={ Link }
-                                    onClick={this.handleItemClick}
-                                    header
-                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
-                                >
-                                    TUI
-                                </Menu.Item>
-                                <Menu.Item
-                                    name='MOK'
-                                    to='/'
-                                    active={activeItem === 'MOK'}
-                                    as={ Link }
-                                    onClick={this.handleItemClick}
-                                    header
-                                    style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
-                                >
-                                    LIM
-                                </Menu.Item>
+                                {this.props.icos.map(ico => (
+                                     <Menu.Item
+                                        name={ico.name}
+                                        to={`/ico/${ico.address}`}
+                                        active={activeItem === ico.name}
+                                        as={ Link }
+                                        onClick={this.handleItemClick}
+                                        header
+                                        style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
+                                    >
+                                        {ico.name.substring(0, 3).toUpperCase()}
+                                    </Menu.Item>
+                                ))}
                             </Menu.Menu>
                             </Menu.Item>
                         </Menu>

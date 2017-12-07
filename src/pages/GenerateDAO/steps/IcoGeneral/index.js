@@ -37,7 +37,6 @@ class IcoGeneral extends Component {
     this.setState({ errors });
     console.log(errors);
     if (Object.keys(errors).length === 0) {
-      console.log('Does it never get set?');
       updateStore(data);
       return true;
     }
