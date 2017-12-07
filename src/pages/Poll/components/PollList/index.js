@@ -11,6 +11,7 @@ const PollList = ({
             voterAddresses={poll.voterAddresses}
             pollState={poll.state}
             pollCategory={poll.category}
+            pollDescription={poll.description}
             pollDate={poll.endDate}
             onClick={onClick}
             handleOpen={handleOpen}

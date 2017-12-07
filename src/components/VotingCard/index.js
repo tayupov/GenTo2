@@ -11,7 +11,7 @@ const styles = {
 }
 
 const VotingCard = ({
-    header, onClick, handleOpen, handleReset, voterAddresses, pollState, pollCategory, pollDate, account
+    header, onClick, handleOpen, handleReset, voterAddresses, pollState, pollCategory, pollDescription, pollDate, account
 }) => (
     <Card
       style={styles.card}
@@ -29,7 +29,7 @@ const VotingCard = ({
             {pollDate.toString()}
         </Card.Meta>
         <Card.Description>
-          More information on the Voting
+            {pollDescription}
         </Card.Description>
       </Card.Content>
       {(pollCategory === 'finance') &&

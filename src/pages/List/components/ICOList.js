@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import { Item, Label } from 'semantic-ui-react';
 
@@ -20,11 +21,11 @@ const ICOList = ({ items, isLoading }) => {
 
     return items.map(item => (
         <Item>
-            <Item.Content style={styles.titleBox} href={`/ico/${item.address}`} >
+            <Item.Content style={styles.titleBox} to={`/ico/${item.address}`} >
                 {item.name.substring(0, 3).toUpperCase()}
             </Item.Content>
 
-            <Item.Content href={`/ico/${item.address}`} >
+            <Item.Content as={Link} to={`/ico/${item.address}`} >
                 <Item.Header as='a'>{item.name}</Item.Header>
                 <Item.Meta>
                     <span className='cinema'>{item.date}</span>
