@@ -48,62 +48,30 @@ class PollContainer extends Component {
         this.setState({
             polls: [
                 {
-                    header: 'Issue 99 CVS shares'
+                    header: 'Pay out 100 eth in dividend in Beginning of Q1',
+                    fieldOfWork: "finance"
                 },
                 {
-                    header: 'Create a stock sale to raise 10 ETH at 0.1 ETH per CVS share'
+                    header: 'Switch to battery Tesla 48V 35Ah 1000W Li-Ion',
+                    fieldOfWork: "product"
+                },
+
+                {
+                    header: 'Offer bike in additional color #992020',
+                    fieldOfWork: "product"
                 },
                 {
-                    header: "For Begin stock sale a minimum status of 'executive' will be needed"
+                    header: "Change decision maker reward for product to 10eth/quarter starting Q2 2018",
+                    fieldOfWork: "organisation"
                 },
                 {
-                    header: 'Create a stock sale to raise 10 ETH at 0.1 ETH per CVS share'
+                    header: 'Offer free Strava bike app with every bike for 150eth',
+                    fieldOfWork: "partnership"
                 },
                 {
-                    header: 'Change companies logo'
-                },
-                {
-                    header: 'Issue 1000 CVS shares'
-                },
-                {
-                    header: 'Issue 1000 CVS shares'
-                },
-                {
-                    header: 'Issue 1000 CVS shares'
-                },
-                {
-                    header: 'Issue 1000 CVS shares'
-                },
-                {
-                    header: 'Issue 1000 CVS shares'
-                },
-                {
-                    header: 'Issue 1000 CVS shares'
-                },
-                {
-                    header: 'Issue 1000 CVS shares'
-                },
-                {
-                    header: 'Issue 1000 CVS shares'
-                },
-                {
-                    header: 'Issue 1000 CVS shares'
-                },
-                {
-                    header: 'Issue 1000 CVS shares'
-                },
-                {
-                    header: 'Issue 1000 CVS shares'
-                },
-                {
-                    header: 'Issue 1000 CVS shares'
-                },
-                {
-                    header: 'Issue 1000 CVS shares'
-                },
-                {
-                    header: 'Issue 1000 CVS shares'
-                },
+                    header: 'Change company Logo (see attachment)',
+                    fieldOfWork: "product"
+                }
             ]
         })
     }
