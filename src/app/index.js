@@ -75,10 +75,16 @@ class App extends Component {
   }
 
   listDaos = () => {
-    this.setState({
-      daos: daos
-    })
-  }
+    web3.eth.getAccounts((err, accounts) => {
+          console.log(accounts[0]);
+          if (accounts[0] == "0x882891c8ecac0fc6337f78aaedad07ba9e8fa92c") {
+            console.log(accounts[0])
+            this.setState({
+              daos: daos
+            })
+          } 
+        })
+      }
 
   setIcos = (icos) => {
     this.setState({
@@ -122,6 +128,7 @@ class App extends Component {
         this.setState({
           account: accounts[0]
         })
+        this.listDaos();
       }
     });
   }

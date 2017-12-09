@@ -14,9 +14,9 @@ const GeneratePoll = ({
     handleShow, handleHide, active, steps
 }) => (
     <div>
-        <HeaderSection text="GENERATE YOUR POLL" />
+        <HeaderSection text="GENERATE YOUR VOTING" />
         <Button onClick={handleShow} color='teal'>
-            Create a Poll
+            Create a Voting
         </Button>
         <MultiStepWithModal
             steps={steps}
