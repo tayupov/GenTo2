@@ -50,7 +50,7 @@ class DetailsSection extends Component {
                         Created at
                     </Header>
                     <Segment attached padded raised textAlign='right' color='olive'>
-                        {details.saleEnd.toString()}
+                        {details.saleStart.toString()}
                     </Segment>
                 </Grid.Column>
             </Grid.Row>
