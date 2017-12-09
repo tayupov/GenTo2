@@ -85,7 +85,7 @@ contract AuctionToken is StandardToken {
         if (balances[owner] < amount || amount <= 0) throw;     // checks if it has enough to sell
         balances[msg.sender] += amount;                   // adds the amount to buyer's balance
         balances[owner] -= amount;                         // subtracts amount from seller's balance
-        Transfer(owner, msg.sender, amount);                // execute an event reflecting the change
+        Transfer(owner, msg.sender, amount, balances[owner]);                // execute an event reflecting the change
         return amount;                                     // ends function and returns
     }
 /*

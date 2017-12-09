@@ -21,7 +21,6 @@ const TokenSection = ({ tokenCountMsg, buyToken }) => (
                     Buy tokens now!
                 </Header>
                 <Segment attached padded raised textAlign='right' color='olive'>
-                    {/* Give your investment amount:  */}
                     <TokenBuyForm buyToken={buyToken} />
                 </Segment>
             </Grid.Column>

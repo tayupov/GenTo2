@@ -38,9 +38,9 @@ const View = ({
                 onChange={onChange}
                 size='small'
                 style={styles.input}
+                value={data.tokenName}
             />
           </Form.Field>
-          {errors.tokenName && <InlineError text={errors.tokenName} />}
           {data.tokenName &&
           <Form.Field error={!!errors.tickerSymbol}>
             <label style={styles.label}>What will be your ticker symbol?</label>
@@ -54,7 +54,6 @@ const View = ({
                 style={styles.input}
             />
           </Form.Field>}
-            {errors.tickerSymbol && <InlineError text={errors.tickerSymbol} />}
           {data.tokenName &&
           <Form.Field>
             <label style={styles.label}>How many tokens do you want to emmit?</label>
@@ -69,7 +68,7 @@ const View = ({
               style={styles.input}
             />
           </Form.Field>}
-          {errors.totalSupply && <InlineError text={errors.totalSupply} />}
+
           {data.totalSupply &&
           <Form.Field>
             <label style={styles.label}>Time your ICO!</label>
@@ -92,7 +91,6 @@ const View = ({
               style={styles.input}
             />
           </Form.Field>}
-          {errors.saleEnd && <InlineError text={errors.saleEnd} />}
         </Form>
     </Container>
 )

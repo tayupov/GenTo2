@@ -256,6 +256,8 @@ class IcoContainer extends Component {
 
     buyToken = (amount, etherUnit) => {
 
+        console.log('buytoken')
+
         if(this.checkForError()) {
             return;
         }
@@ -264,14 +266,17 @@ class IcoContainer extends Component {
         const value = web3.toWei(amount, etherUnit);
         console.log('buyToken');
         console.log(amount);
+        console.log(etherUnit);
      
         web3.eth.estimateGas({
             data: AuctionToken.bytecode
         }, (err, gas) => {
-            if (err) {
-                console.error(err);
-                return;
-            }
+            // if (err) {
+            //     console.log('ERRRORRRRORRRRORR')
+            //     console.log(gas);
+            //     console.error(err);
+            //     return;
+            // }
             createAuctionTokenInstance(this.props.match.params.address)
                 .buy(
                     {
@@ -289,12 +294,13 @@ class IcoContainer extends Component {
         }
 
     listenForTokenBuy = (cb) => {
-
+        console.log('Did it even get called?');
+        
         if(this.checkForError()) {
             return;
         }
 
-        console.log('Wurde wenigstens aufrufen!');
+        console.log('Did it even get called?');
 
         const data = this.state.auctionDetails;
         const instance = createAuctionTokenInstance(this.props.match.params.address)
@@ -313,7 +319,7 @@ class IcoContainer extends Component {
                         supplyString
                     });
                 }
-                let amount = result.args._value.toNumber();
+                let amount = result.args.value.toNumber();
                     
                 const transaction = JSON.parse(localStorage.getItem(result.transactionHash));
 

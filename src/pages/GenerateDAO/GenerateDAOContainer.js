@@ -51,6 +51,8 @@ class GenerateDAOContainer  extends Component {
     submitTokenContract = () => {
 
         const { account, network, notify, createDAO } = this.props;
+
+        console.log(this.store);
         
         createDAO(this.store);
         
@@ -111,6 +113,7 @@ class GenerateDAOContainer  extends Component {
         }
         
         return createGentoFactoryInstance(instance => {
+
             web3.eth.estimateGas({
                 data: GenToFactory.bytecode
             }, (err, gas) => {
@@ -142,7 +145,8 @@ class GenerateDAOContainer  extends Component {
     }
 
     handleContractCreatedEvent = (instance) => {
-        const contractCreated = instance.ContractCreated({
+        console.log(instance);  
+        instance.ContractCreated({
             owner: this.props.account
         }, (err, res) => {
             if(!err) {
@@ -152,7 +156,7 @@ class GenerateDAOContainer  extends Component {
                         deployedInstance: address
                     });
                     this.props.notify("ICO created", "success");
-                    contractCreated.stopWatching();
+                    // contractCreated.stopWatching();
                 }
             } else {
                 console.error(err);
