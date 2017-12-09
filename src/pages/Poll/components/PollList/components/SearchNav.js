@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+
 import StepZilla from 'react-stepzilla';
 
 import { Input, Icon, Button, Dropdown } from 'semantic-ui-react';
@@ -33,7 +35,7 @@ const SearchNav = ({
             placeholder='Search...'
         />
         <MultiStepWithModal
-            trigger={<Button color='teal'>Create a Voting</Button>}
+            trigger={<Link to='generatePoll'><Button color='teal'>Create a Voting</Button></Link>}
             steps={steps}
             nextButtonCls="ui positive button"
             backButtonCls="ui positive button"

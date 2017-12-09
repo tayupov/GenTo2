@@ -52,7 +52,7 @@ class SideBar extends Component {
                                 ))}
                             </Menu.Menu>
                             </Menu.Item>
-                            <Menu.Item style={{ paddingLeft: '3em' }}>
+                            <Menu.Item style={{ paddingLeft: '3em' }} as={Link} to='/generate'>
                                 <Button color='teal'>
                                     Create a DAO
                                 </Button>
