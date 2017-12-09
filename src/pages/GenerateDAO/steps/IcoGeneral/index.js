@@ -44,13 +44,15 @@ class IcoGeneral extends Component {
   }
 
   onChange = e => {
+    console.log(e.target.value.slice(0, 3).toUpperCase())
     this.setState({
        data: {
          ...this.state.data,
          [e.target.name]: e.target.value,
-         tickerSymbol: e.target.value.slice(0, 3).toUpperCase()
+         tickerSymbol: this.state.data.tokenName ? this.state.data.tokenName.slice(0, 3).toUpperCase() : ''
       }
     })
+    console.log(this.state.data.tickerSymbol);
   }
 
   validate = data => {
