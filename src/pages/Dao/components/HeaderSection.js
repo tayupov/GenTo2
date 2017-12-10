@@ -4,12 +4,15 @@ import { Link } from 'react-router-dom';
 import { Header, Icon, Container, Button } from 'semantic-ui-react';
 
 const HeaderSection  = () => (<Header >
-        {/* <Container  textAlign="right">
-            <Button  as={Link} to='/poll' color='teal'>
-                Go to votings
-            </Button>
-        </Container> */}
 
+
+        <Button  as={Link} to='/poll' color='teal'>
+            Go to votings
+        </Button>
+        <Button  as={Link} to='/daoSettings/EBike' color='teal' style={{ float: 'right' }}>
+            <Icon name='setting' />
+            Settings
+        </Button>
         <h1 style={{textAlign: 'center' }}>Dao Details</h1>
         <Header.Subheader style={{ marginTop: '1em', fontSize: '18px',textAlign: 'center' }}>
             This page can be used to view a dao's details. 
