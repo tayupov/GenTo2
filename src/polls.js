@@ -358,6 +358,83 @@ const polls =
             },
         ]
     },
+    {
+        daoName: 'EBike',
+        polls: [
+            {
+                header: 'Change decision maker reward for product to 10eth/quarter starting Q2 2018',
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
+                description: 'More information on the voting',
+                addressesFor: 8,
+                addressesAgainst: 1,
+                tokensFor: 250,
+                tokensAgainst: 30,
+                voterAddresses: [],
+                category: 'organisation',
+                state: 'active'
+            },
+            {
+                header: 'Switch to battery Tesla 48V 35Ah 1000W Li-Ion',
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
+                description: 'More information on the voting',
+                addressesFor: 10,
+                addressesAgainst: 8,
+                tokensFor: 300,
+                tokensAgainst: 120,
+                voterAddresses: [],
+                category: 'product',
+                state: 'active'
+            },
+            {
+                header: 'Offer bike in additional color #992020',
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
+                description: 'More information on the voting',
+                addressesFor: 10,
+                addressesAgainst: 8,
+                tokensFor: 300,
+                tokensAgainst: 120,
+                voterAddresses: [],
+                category: 'product',
+                state: 'active'
+            },
+            {
+                header: 'Offer free Strava bike app with every bike for 150eth',
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
+                description: 'More information on the voting',
+                addressesFor: 10,
+                addressesAgainst: 8,
+                tokensFor: 300,
+                tokensAgainst: 120,
+                voterAddresses: [],
+                category: 'partnership',
+                state: 'active'
+            },
+            {
+                header: 'Change company Logo (see attachment)',
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
+                description: 'More information on the voting',
+                addressesFor: 3,
+                addressesAgainst: 1,
+                tokensFor: 97,
+                tokensAgainst: 31,
+                voterAddresses: [],
+                category: 'product',
+                state: 'completed'
+            },
+            {
+                header: 'Pay out 100 eth in dividend in Beginning of Q3',
+                endDate: moment("20171210", "YYYYMMDD").format('LL'),
+                description: 'More information on the voting',
+                addressesFor: 3,
+                addressesAgainst: 1,
+                tokensFor: 97,
+                tokensAgainst: 31,
+                voterAddresses: [],
+                category: 'finance',
+                state: 'completed'
+            },
+        ]
+    },
 ]
 
 export default polls;

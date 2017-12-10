@@ -59,7 +59,7 @@ const View = ({
                     value={data.decidingPercentage}
                 />
             </Form.Field>
-            <Form.Field>
+            {/* <Form.Field>
                 <label style={styles.label}>Choose the voting range</label>
                 <Input
                     type="number"
@@ -85,7 +85,7 @@ const View = ({
                     style={styles.input}
                 />
                 {errors.maxVoting && <InlineError text={errors.maxVoting} />}
-            </Form.Field>
+            </Form.Field> */}
             {errors.daoDescription && <InlineError text={errors.daoDescription} />}
         </Form>
     </Container>
