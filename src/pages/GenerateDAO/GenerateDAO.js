@@ -15,7 +15,7 @@ const GenerateDAO = ({
 }) => (
     <div>
         <HeaderSection text="GENERATE YOUR OWN DAO" />
-        <Button onClick={handleShow} color='teal'>Create a DAO  </Button>
+        <Button onClick={handleShow} color='teal'>Create a DAO</Button>
         <MultiStepWithModal
             steps={steps}
             nextButtonCls="ui positive button"

@@ -14,6 +14,7 @@ const polls =
                 tokensFor: 250,
                 tokensAgainst: 30,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'active'
             },
@@ -26,6 +27,7 @@ const polls =
                 tokensFor: 300,
                 tokensAgainst: 120,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'active'
             },
@@ -38,6 +40,7 @@ const polls =
                 tokensFor: 70,
                 tokensAgainst: 30,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'active'
             },
@@ -50,42 +53,46 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'active'
             },
             {
                 header: 'Create a stock sale to raise 1000 ETH at 0.1 ETH per CVS share',
-                endDate: moment("20171210", "YYYYMMDD").format('LL'),
+                endDate: moment("20171207", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'completed'
             },
             {
                 header: 'Create a stock sale to raise 300 ETH at 0.1 ETH per CVS share',
-                endDate: moment("20171210", "YYYYMMDD").format('LL'),
+                endDate: moment("20171206", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'completed'
             },
             {
                 header: 'Create a stock sale to raise 50 ETH at 0.5 ETH per CVS share',
-                endDate: moment("20171210", "YYYYMMDD").format('LL'),
+                endDate: moment("20171205", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'completed'
             },
@@ -103,6 +110,7 @@ const polls =
                 tokensFor: 250,
                 tokensAgainst: 30,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'active'
             },
@@ -115,6 +123,7 @@ const polls =
                 tokensFor: 300,
                 tokensAgainst: 120,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'active'
             },
@@ -127,6 +136,7 @@ const polls =
                 tokensFor: 70,
                 tokensAgainst: 30,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'active'
             },
@@ -139,6 +149,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'active'
             },
@@ -151,6 +162,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'completed'
             },
@@ -163,6 +175,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'completed'
             },
@@ -175,6 +188,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'completed'
             },
@@ -192,6 +206,7 @@ const polls =
                 tokensFor: 250,
                 tokensAgainst: 30,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'active'
             },
@@ -204,6 +219,7 @@ const polls =
                 tokensFor: 300,
                 tokensAgainst: 120,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'active'
             },
@@ -216,6 +232,7 @@ const polls =
                 tokensFor: 70,
                 tokensAgainst: 30,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'active'
             },
@@ -228,6 +245,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'active'
             },
@@ -240,6 +258,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'completed'
             },
@@ -252,6 +271,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'completed'
             },
@@ -264,6 +284,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'completed'
             },
@@ -281,6 +302,7 @@ const polls =
                 tokensFor: 250,
                 tokensAgainst: 30,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'active'
             },
@@ -293,6 +315,7 @@ const polls =
                 tokensFor: 300,
                 tokensAgainst: 120,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'active'
             },
@@ -305,6 +328,7 @@ const polls =
                 tokensFor: 70,
                 tokensAgainst: 30,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'active'
             },
@@ -317,6 +341,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'active'
             },
@@ -329,6 +354,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'completed'
             },
@@ -341,6 +367,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'completed'
             },
@@ -353,6 +380,7 @@ const polls =
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'completed'
             },
@@ -370,6 +398,7 @@ const polls =
                 tokensFor: 250,
                 tokensAgainst: 30,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'organisation',
                 state: 'active'
             },
@@ -382,6 +411,7 @@ const polls =
                 tokensFor: 300,
                 tokensAgainst: 120,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'product',
                 state: 'active'
             },
@@ -394,6 +424,7 @@ const polls =
                 tokensFor: 300,
                 tokensAgainst: 120,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'product',
                 state: 'active'
             },
@@ -406,30 +437,33 @@ const polls =
                 tokensFor: 300,
                 tokensAgainst: 120,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'partnership',
                 state: 'active'
             },
             {
                 header: 'Change company Logo (see attachment)',
-                endDate: moment("20171210", "YYYYMMDD").format('LL'),
+                endDate: moment("20171205", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'product',
                 state: 'completed'
             },
             {
                 header: 'Pay out 100 eth in dividend in Beginning of Q3',
-                endDate: moment("20171210", "YYYYMMDD").format('LL'),
+                endDate: moment("20171207", "YYYYMMDD").format('LL'),
                 description: 'More information on the voting',
                 addressesFor: 3,
                 addressesAgainst: 1,
                 tokensFor: 97,
                 tokensAgainst: 31,
                 voterAddresses: [],
+                payout: '2000 finney',
                 category: 'finance',
                 state: 'completed'
             },

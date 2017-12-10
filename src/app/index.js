@@ -72,6 +72,7 @@ class App extends Component {
       tokensFor: 0,
       tokensAgainst: 0,
       voterAddresses: [],
+      payout: `${poll.pollPayout} ${poll.pollCurrency}`,
       category: poll.pollCategory,
       state: 'active'
     }
