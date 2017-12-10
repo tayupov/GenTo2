@@ -21,6 +21,7 @@ class DaoContainer extends Component {
     }
 
     componentWillMount() {
+        window.scrollTo(0, 0);
         this.setState({
             daoDetailsParsed: this.props.getCurrDao()
         })

@@ -33,7 +33,7 @@ class IcoPricing extends Component {
       console.log(this.state.data);
       this.props.updateStore(this.state.data);
       this.props.submitTokenContract();
-      //this.props.submitTokenContract().then(data => {console.log(data)}) ;
+      //this.props.submitTokenContract().then(data => {console.log(data)}) 
       return true;
     }
     return false;
