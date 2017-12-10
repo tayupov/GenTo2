@@ -13,7 +13,7 @@ const styles = {
 }
 
 const VotingCard = ({
-    header, onClick, handleOpen, handleReset, voterAddresses, pollState, pollCategory, pollDescription, pollDate, account
+    header, onClick, handleOpen, handleReset, voterAddresses, pollState, pollCategory, pollDescription, pollDate, pollPayout, account
 }) => (
     <Card
       style={styles.card}
@@ -41,19 +41,22 @@ const VotingCard = ({
       </Card.Content>}
       {(pollCategory === 'product') &&
       <Card.Content extra>
-        <Icon name='product' />
+        <Icon name='bicycle' />
         Product
       </Card.Content>}
       {(pollCategory === 'organisation') &&
       <Card.Content extra>
-        <Icon name='money' />
+        <Icon name='bar chart' />
         Organisation
       </Card.Content>}
       {(pollCategory === 'partnership') &&
       <Card.Content extra>
-        <Icon name='money' />
+        <Icon name='suitcase' />
         Partnership
       </Card.Content>}
+      <Card.Content extra>
+        {'Payout: ' + pollPayout}
+      </Card.Content>
       {(pollState === 'active') &&
       <Card.Content extra>
         {(!isInArray(account, voterAddresses)) &&

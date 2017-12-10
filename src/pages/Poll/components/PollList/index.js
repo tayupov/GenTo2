@@ -13,6 +13,7 @@ const PollList = ({
             pollCategory={poll.category}
             pollDescription={poll.description}
             pollDate={poll.endDate}
+            pollPayout={poll.payout}
             onClick={onClick}
             handleOpen={handleOpen}
             handleReset={handleReset}
