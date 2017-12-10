@@ -34,9 +34,14 @@ class App extends Component {
         {
           daoName: 'Zeltox',
           polls: []
+        },
+        {
+          daoName: 'EBike',
+          polls: []
         }
       ],
-      daoDetails: {}
+      daoDetails: {},
+      demoDao: {}
     }
   }
   
@@ -74,12 +79,21 @@ class App extends Component {
     this.state.currPoll.filter(poll => poll.daoName === this.state.currDao)[0].polls.push(currPoll);
   }
 
+  addDemoDao = () => {
+    this.setState({
+      daos: [
+        ...this.state.daos,
+        this.state.demoDao
+      ]
+    })
+  }
+
+
   listDaos = () => {
     web3.eth.getAccounts((err, accounts) => {
-          console.log(accounts[0]);
           if (accounts[0] == "0x882891c8ecac0fc6337f78aaedad07ba9e8fa92c") {
-            console.log(accounts[0])
             this.setState({
+              demoDao: this.state.daos[0],
               daos: daos
             })
           } 
@@ -94,8 +108,8 @@ class App extends Component {
 
   // temporary function for creating DAOs
   createDAO = (daoDetails) => {
-    daoDetails['shTokens'] = 0;
-    daoDetails['totalAddresses'] = 0;
+    daoDetails['shTokens'] = 100;
+    daoDetails['totalAddresses'] = 22;
 
     this.state.daos.push(daoDetails);
 
@@ -171,6 +185,7 @@ class App extends Component {
           getCurrDao={this.getCurrDao}
           setCurrPoll={this.setCurrPoll}
           setIcos={this.setIcos}
+          addDemoDao={this.addDemoDao}
         />
       </div>
     );

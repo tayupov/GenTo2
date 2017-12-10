@@ -13,7 +13,7 @@ import Error from 'pages/Error';
 import DaoSettings from 'pages/DaoSettings';
 
 
-const Routes = ({ account, network, notify, active, handleShow, handleHide, getCurrDao, contextRef, setIcos, createDAO, daos, setCurrPoll, currPoll }) => (
+const Routes = ({ account, network, notify, active, handleShow, handleHide, getCurrDao, contextRef, setIcos, createDAO, daos, setCurrPoll, currPoll, addDemoDao }) => (
     <Switch>
         <Route exact path="/"
             render={(props) => (<About {...props} />)}
@@ -25,6 +25,7 @@ const Routes = ({ account, network, notify, active, handleShow, handleHide, getC
                                     key={props.match.params.address}
                                     network={network}
                                     notify={notify}
+                                    addDemoDao={addDemoDao}
                                 />)}
         />
         <Route path="/dao/:address"

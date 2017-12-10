@@ -19,7 +19,9 @@ class GeneratePollContainer  extends Component {
             pollName: '',
             pollCategory: 'organisational',
             pollDescription: '',
-            pollEnd: new Date()
+            pollEnd: new Date(),
+            pollPayout: 0,
+            pollCurrency: 'finney'
         }
     }
 
@@ -44,13 +46,17 @@ class GeneratePollContainer  extends Component {
         const {
             pollName,
             pollEnd,
-            pollDescription
+            pollDescription,
+            pollPayout,
+            pollCurrency
          } = this.store;
 
         const saleEndDate = new Date(pollEnd);
 
+        this.props.notify("Poll created", "success");
+
         // TODO create poll using contract
-        console.log("Poll "+ pollName + " was created with end date " + saleEndDate);
+        console.log("Poll "+ pollName + " was created with end date " + saleEndDate + " and the payout amount of " + pollPayout);
         console.log("Poll description: "+ pollDescription);
     };
 

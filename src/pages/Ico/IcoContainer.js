@@ -308,9 +308,12 @@ class IcoContainer extends Component {
 
         transfers.watch((error, result) => {
             if(error) {
+                console.log('listenForTokenBuy: Error');
                 console.error(error);
             } else {
                 if (this.state.auctionDetails) {
+                    console.log('listenForTokenBuy: Not an Error'); 
+                    console.log(result);               
                     const remainingSupply = result.args._remainingSupply.toNumber();
                     const supplyPct = ((remainingSupply / data._totalSupply) * 100).toFixed(0);
                     const supplyString = `${remainingSupply} of ${data._totalSupply} left for sale`;
@@ -319,7 +322,7 @@ class IcoContainer extends Component {
                         supplyString
                     });
                 }
-                let amount = result.args.value.toNumber();
+                let amount = result.args._value.toNumber();
                     
                 const transaction = JSON.parse(localStorage.getItem(result.transactionHash));
 
@@ -327,6 +330,7 @@ class IcoContainer extends Component {
                     this.props.notify("Success! " + amount + " Token(s) purchased.", "success")
                     this.setMyTokenCount();
                     localStorage.setItem(result.transactionHash, JSON.stringify(result.transactionHash));
+                    this.props.addDemoDao();
                 }
             }
         })

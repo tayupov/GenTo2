@@ -49,10 +49,10 @@ const VotingCard = ({
         <Icon name='money' />
         Organisation
       </Card.Content>}
-      {(pollCategory === 'marketing') &&
+      {(pollCategory === 'partnership') &&
       <Card.Content extra>
         <Icon name='money' />
-        Marketing
+        Partnership
       </Card.Content>}
       {(pollState === 'active') &&
       <Card.Content extra>

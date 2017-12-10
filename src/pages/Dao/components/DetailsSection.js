@@ -37,6 +37,16 @@ class DetailsSection extends Component {
         return (
             <Grid>
             <Grid.Row>
+            <Grid.Column width={16}>
+                    <Header as='h2' attached>
+                        Primary Goal
+                    </Header>
+                    <Segment attached padded raised textAlign='center' color='olive'>
+                        {details.daoDescription}
+                    </Segment>
+                </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
                 <Grid.Column width={8}>
                     <Header as='h2' attached textAlign='left'>
                         Dao Name
@@ -169,7 +179,7 @@ class DetailsSection extends Component {
                                     <Checkbox label='Organisational' />
                                 </Grid.Column>
                                 <Grid.Column width={8}>
-                                    <Input name="foo" type="text" placeholder="adress" value="" class="prompt" autocomplete="on" />
+                                    <Input name="foo" type="text" placeholder="address" value="" class="prompt" autocomplete="on" />
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
@@ -177,7 +187,7 @@ class DetailsSection extends Component {
                                     <Checkbox label='Product' />
                                 </Grid.Column>
                                 <Grid.Column width={8}>
-                                    <Input name="foo" type="text" placeholder="adress" value="" class="prompt" autocomplete="on" />
+                                    <Input name="foo" type="text" placeholder="address" value="" class="prompt" autocomplete="on" />
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
@@ -185,7 +195,7 @@ class DetailsSection extends Component {
                                     <Checkbox label='Finance' />
                                 </Grid.Column>
                                 <Grid.Column width={8}>
-                                    <Input name="foo" type="text" placeholder="adress" value="" class="prompt" autocomplete="on" />
+                                    <Input name="foo" type="text" placeholder="address" value="" class="prompt" autocomplete="on" />
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
@@ -193,7 +203,7 @@ class DetailsSection extends Component {
                                     <Checkbox label='Marketing' />
                                 </Grid.Column>
                                 <Grid.Column width={8}>
-                                    <Input name="foo" type="text" placeholder="adress" value="" class="prompt" autocomplete="on"
+                                    <Input name="foo" type="text" placeholder="address" value="" class="prompt" autocomplete="on"
                                            defaultValue='eji3r212hio12epq' />
                                 </Grid.Column>
                             </Grid.Row>

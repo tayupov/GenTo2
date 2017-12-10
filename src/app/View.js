@@ -6,7 +6,7 @@ import SideBar from 'components/SideBar';
 import Routes from './Routes';
 
 const View = ({
-    account, network, notify, active, handleShow, handleHide, setCurrDao, icos, getCurrDao, setIcos, contextRef, daos, createDAO, currDao, currPoll, setCurrPoll
+    account, network, notify, active, handleShow, handleHide, setCurrDao, icos, getCurrDao, setIcos, contextRef, daos, createDAO, currDao, currPoll, setCurrPoll, addDemoDao
 }) => (
     <div>
         <TopNav
@@ -33,6 +33,7 @@ const View = ({
                 contextRef={contextRef}
                 daos={daos}
                 setIcos={setIcos}
+                addDemoDao={addDemoDao}
             />
         </Container>
     </div>

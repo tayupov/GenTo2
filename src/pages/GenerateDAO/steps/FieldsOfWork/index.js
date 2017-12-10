@@ -10,10 +10,11 @@ class FieldsOfWork extends Component {
     this.state = {
       data: {
         dmrReward: props.getStore().dmrReward,
+        dmrRewardCurrency: props.getStore().dmrRewardCurrency,
         financePoints: props.getStore().financePoints,
         productPoints: props.getStore().productPoints,
         orgPoints: props.getStore().orgPoints,
-        partnerPoints: props.getStore().partnerPoints,        
+        partnerPoints: props.getStore().partnerPoints       
       },
       errors: {
         dmrReward: '',
@@ -48,6 +49,13 @@ class FieldsOfWork extends Component {
     })
   }
 
+  
+  onChangeSelect = (e, { value }) => {
+    this.setState({
+        pollCurrency: value
+    });
+  }
+
   validate = data => {
     const errors = {};
     
@@ -59,6 +67,7 @@ class FieldsOfWork extends Component {
       <View
         {...this.state}
         onChange={this.onChange}
+        onChangeSelect={this.onChangeSelect}
       />
     );
   }

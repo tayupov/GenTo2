@@ -29,6 +29,7 @@ class GenerateDAOContainer  extends Component {
             daoWebsite: '',
             daoDescription: '',
             dmrReward: 0,
+            dmrRewardCurrency: 'finney',
             financePoints: 0,
             productPoints: 0,
             orgPoints: 0,
@@ -39,7 +40,7 @@ class GenerateDAOContainer  extends Component {
             maxVoting: 50,
             tokenName: '',
             tickerSymbol: '',
-            totalSupply: 0,
+            totalSupply: '',
             selectedCurrency: 'finney',
             minPrice: 0,
             maxPrice: 1,
@@ -132,6 +133,7 @@ class GenerateDAOContainer  extends Component {
                         gas: gas
                     }, (err, result) => {
                         if (err) {
+                            console.log('Error has happened');
                             console.error(err);
                         } else {
                             this.handleContractCreatedEvent(instance);
@@ -146,17 +148,23 @@ class GenerateDAOContainer  extends Component {
 
     handleContractCreatedEvent = (instance) => {
         console.log(instance);  
-        instance.ContractCreated({
+        const contractCreated = instance.ContractCreated({
             owner: this.props.account
         }, (err, res) => {
+            console.log('err');
+            console.log(err);
+            console.log('res');
+            console.log(res);
             if(!err) {
                 const address = res.args.contractAddress
+                console.log('res.args');
+                console.log(res.args);
                 if (address !== this.state.deployedInstance) {
                     this.setState({
                         deployedInstance: address
                     });
                     this.props.notify("ICO created", "success");
-                    // contractCreated.stopWatching();
+                    contractCreated.stopWatching();
                 }
             } else {
                 console.error(err);
