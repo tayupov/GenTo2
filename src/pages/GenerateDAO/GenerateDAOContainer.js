@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
+
 import web3 from 'utils/web3';
 
 import GenToFactory from 'assets/contracts/GenToFactory.json';
 import { createGentoFactoryInstance } from 'utils/contractInstances';
 
-import GenerateICO from './GenerateICO';
+import GenerateDAO from './GenerateDAO';
 
-import Name from './steps/Name';
-import Amount from './steps/Amount';
-import Auction from './steps/Auction';
-import Pricing from './steps/Pricing';
+import General from './steps/General';
+import FieldsOfWork from './steps/FieldsOfWork';
+import Votings from './steps/Votings';
+import IcoGeneral from './steps/IcoGeneral';
+import IcoPricing from './steps/IcoPricing';
 import Created from './steps/Created';
 
-class GenerateICOContainer  extends Component {
+class GenerateDAOContainer  extends Component {
 
     constructor(props) {
         super(props);
@@ -23,10 +25,21 @@ class GenerateICOContainer  extends Component {
         }
 
         this.store = {
+            daoName: '',
+            daoWebsite: '',
+            daoDescription: '',
+            dmrReward: 0,
+            financePoints: 0,
+            productPoints: 0,
+            orgPoints: 0,
+            partnerPoints: 0,
+            minPartic: 10,
+            decidingPercentage: 50,
+            minVoting: 20,
+            maxVoting: 50,
             tokenName: '',
             tickerSymbol: '',
             totalSupply: 0,
-            auctionType: '',
             selectedCurrency: 'finney',
             minPrice: 0,
             maxPrice: 1,
@@ -37,25 +50,31 @@ class GenerateICOContainer  extends Component {
 
     submitTokenContract = () => {
 
-        const { account, network, notify } = this.props;
+        const { account, network, notify, createDAO } = this.props;
+        
+        createDAO(this.store);
+        
         if(!(web3 && account && network)) {
             if (!web3) {
                 console.log("Web3 has closed!");
+                notify("Web3 has closed!", "error");
             } else if (!account) {
                 console.log("You are not logged into your Ethereum account!");
+                notify("You are not logged into your Ethereum account!", "error");                
             } else if (!network) {
                 console.log("The Ethereum network is down!");
+                notify("The Ethereum network is down!", "error");    
             } else {
                 console.log("An unidentified error occurred!");
             }
         return;
+
         }
 
         const {
             tokenName,
             tickerSymbol,
             totalSupply,
-            auctionType,
             selectedCurrency,
             saleStart,
             saleEnd
@@ -71,11 +90,11 @@ class GenerateICOContainer  extends Component {
             return;
         }
 
-        if (auctionType === 'dutch') {
-            const tmp = minPrice;
-            minPrice = maxPrice;
-            maxPrice = tmp;
-        }
+        // if (auctionType === 'dutch') {
+        //     const tmp = minPrice;
+        //     minPrice = maxPrice;
+        //     maxPrice = tmp;
+        // }
 
         const sellPrice = maxPrice;
 
@@ -92,33 +111,34 @@ class GenerateICOContainer  extends Component {
         }
         
         return createGentoFactoryInstance(instance => {
-                web3.eth.estimateGas({
-                    data: GenToFactory.bytecode
-                }, (err, gas) => {
-                    instance.createContract(
-                        web3.toBigNumber(totalSupply).toString(10),
-                        tickerSymbol,
-                        tokenName,
-                        web3.toWei(minPrice, selectedCurrency),
-                        web3.toWei(maxPrice, selectedCurrency),
-                        web3.toWei(sellPrice, selectedCurrency),
-                        web3.toBigNumber(saleStartForm).toString(10),
-                        web3.toBigNumber(saleEndForm).toString(10),
-                        {
-                            from: this.props.account,
-                            data: GenToFactory.bytecode,
-                            gas: gas
-                        }, (err, result) => {
-                            if (err) {
-                                console.error(err);
-                            } else {
-                                this.handleContractCreatedEvent(instance);
-                                this.setState({icoCreated: true});
-                            }
+            web3.eth.estimateGas({
+                data: GenToFactory.bytecode
+            }, (err, gas) => {
+                instance.createContract(
+                    web3.toBigNumber(totalSupply).toString(10),
+                    tickerSymbol,
+                    tokenName,
+                    web3.toWei(minPrice, selectedCurrency),
+                    web3.toWei(maxPrice, selectedCurrency),
+                    web3.toWei(sellPrice, selectedCurrency),
+                    web3.toBigNumber(saleStartForm).toString(10),
+                    web3.toBigNumber(saleEndForm).toString(10),
+                    {
+                        from: this.props.account,
+                        data: GenToFactory.bytecode,
+                        gas: gas
+                    }, (err, result) => {
+                        if (err) {
+                            console.error(err);
+                        } else {
+                            this.handleContractCreatedEvent(instance);
+                            console.log(result);
+                            this.setState({icoCreated: true});
                         }
-                    )
-                })
+                    }
+                )
             })
+        })
     }
 
     handleContractCreatedEvent = (instance) => {
@@ -149,20 +169,23 @@ class GenerateICOContainer  extends Component {
             ...this.store,
             ...update
         }
+        console.log('updateStore()');
+        console.log(this.store);
     }
 
     render() {
 
-      const steps = [
-          {name: 'NAME',component: <Name getStore={this.getStore} updateStore={this.updateStore} />, },
-          {name: 'AMOUNT & TIME', component: <Amount getStore={this.getStore} updateStore={this.updateStore} /> },
-          {name: 'AUCTION', component: <Auction getStore={this.getStore} updateStore={this.updateStore} /> },
-          {name: 'PRICING', component: <Pricing getStore={this.getStore} updateStore={this.updateStore} submitTokenContract={this.submitTokenContract} /> },
-          {name: 'CREATED', component: <Created /> }
-      ]
+    const steps = [
+        {name: 'GENERAL', component: <General getStore={this.getStore} updateStore={this.updateStore} /> },
+        {name: 'FIELDS OF WORK', component: <FieldsOfWork getStore={this.getStore} updateStore={this.updateStore} /> },                
+        {name: 'VOTINGS', component: <Votings getStore={this.getStore} updateStore={this.updateStore} /> },
+        {name: 'ICO GENERAL', component: <IcoGeneral getStore={this.getStore} updateStore={this.updateStore} /> },
+        {name: 'ICO PRICING', component: <IcoPricing getStore={this.getStore} updateStore={this.updateStore} submitTokenContract={this.submitTokenContract} /> },
+        {name: 'CREATED', component: <Created /> }
+    ]  
 
         return(
-            <GenerateICO
+            <GenerateDAO
                 {...this.props}
                 {...this.state}
                 steps={steps}
@@ -171,4 +194,4 @@ class GenerateICOContainer  extends Component {
     }
 }
 
-export default GenerateICOContainer;
+export default GenerateDAOContainer;

@@ -4,10 +4,10 @@ import { Modal } from 'semantic-ui-react';
 
 const withModal = (Component) => (props) => (
     <Modal
-        open={true}
-        size='small'
-        closeOnDimmerClick={false}
-        closeOnEscape={false}
+        open={props.active}
+        size='big'
+        closeIcon
+        onClose={props.handleHide}
     >
         <Modal.Content style={{ textAlign: 'center' }}>
             <Component {...props} />
