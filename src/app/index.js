@@ -36,7 +36,7 @@ class App extends Component {
           polls: []
         },
         {
-          daoName: 'EBike',
+          daoName: 'EBike Enterprises',
           polls: []
         }
       ],

@@ -53,7 +53,7 @@ class GenerateDAOContainer  extends Component {
 
         const { account, network, notify, createDAO } = this.props;
 
-        console.log(this.store);
+        this.store.daoName = 'EBike Enterprises';
         
         createDAO(this.store);
         

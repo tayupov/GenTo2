@@ -387,7 +387,7 @@ const polls =
         ]
     },
     {
-        daoName: 'EBike',
+        daoName: 'EBike Enterprises',
         polls: [
             {
                 header: 'Change decision maker reward for product to 10eth/quarter starting Q2 2018',

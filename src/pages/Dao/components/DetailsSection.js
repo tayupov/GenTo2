@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Grid, Header, Segment, Checkbox, Input, Button } from 'semantic-ui-react';
+import { Grid, Header, Segment, Checkbox, Input, Button, Icon } from 'semantic-ui-react';
 import moment from 'moment';
 
 let auctionInterval;
@@ -116,17 +116,18 @@ class DetailsSection extends Component {
                         <Grid>
                             <Grid.Row>
                                 <Grid.Column width={8}>
-                                    Field of work
+                                    FoW
                                 </Grid.Column>
                                 <Grid.Column width={4}>
-                                    Voting power
+                                    VP
                                 </Grid.Column>
                                 <Grid.Column width={4}>
-                                    Voting points
+                                    VRT
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
                                 <Grid.Column width={8}>
+                                    <Icon name='bar chart' />
                                     Organisational
                                 </Grid.Column>
                                 <Grid.Column width={4}>
@@ -138,7 +139,20 @@ class DetailsSection extends Component {
                             </Grid.Row>
                             <Grid.Row>
                                 <Grid.Column width={8}>
+                                    <Icon name='bicycle' />
                                     Product
+                                </Grid.Column>
+                                <Grid.Column width={4}>
+                                    100/1000
+                                </Grid.Column>
+                                <Grid.Column width={4}>
+                                    120
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Grid.Column width={8}>
+                                    <Icon name='money' />
+                                    Finance
                                 </Grid.Column>
                                 <Grid.Column width={4}>
                                     5/1000
@@ -149,24 +163,14 @@ class DetailsSection extends Component {
                             </Grid.Row>
                             <Grid.Row>
                                 <Grid.Column width={8}>
-                                    Finance
+                                    <Icon name='suitcase' />
+                                    Partnership
                                 </Grid.Column>
                                 <Grid.Column width={4}>
                                     50/1000
                                 </Grid.Column>
                                 <Grid.Column width={4}>
                                     50
-                                </Grid.Column>
-                            </Grid.Row>
-                            <Grid.Row>
-                                <Grid.Column width={8}>
-                                    Partnership
-                                </Grid.Column>
-                                <Grid.Column width={4}>
-                                    0/1000
-                                </Grid.Column>
-                                <Grid.Column width={4}>
-                                    0
                                 </Grid.Column>
                             </Grid.Row>
                         </Grid>

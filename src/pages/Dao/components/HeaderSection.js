@@ -9,7 +9,7 @@ const HeaderSection  = () => (<Header >
         <Button  as={Link} to='/poll' color='teal'>
             Go to votings
         </Button>
-        <Button  as={Link} to='/daoSettings/EBike' color='teal' style={{ float: 'right' }}>
+        <Button  as={Link} to='/daoSettings/EBikeEnterprises' color='teal' style={{ float: 'right' }}>
             <Icon name='setting' />
             Settings
         </Button>
