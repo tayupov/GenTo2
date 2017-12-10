@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Grid, Header, Segment, Checkbox, Input } from 'semantic-ui-react';
+import { Grid, Header, Segment, Checkbox, Input, Button } from 'semantic-ui-react';
 import moment from 'moment';
 
 let auctionInterval;
@@ -19,6 +19,10 @@ class DetailsSection extends Component {
             supplyObj: { }
         }
     }
+
+    onClick = () => (
+        this.props.notify('Power transferred!', 'success')
+    )
 
 
     componentWillMount() {
@@ -76,10 +80,10 @@ class DetailsSection extends Component {
                 </Grid.Column>
                 <Grid.Column width={8}>
                     <Header as='h2' attached textAlign='right'>
-                        Owned By
+                        Web Page
                     </Header>
                     <Segment attached padded raised textAlign='right' color='olive'>
-                        0xfew432dfdw33erLk
+                        {details.daoWebsite}
                     </Segment>
                 </Grid.Column>
             </Grid.Row>
@@ -87,7 +91,7 @@ class DetailsSection extends Component {
             <Grid.Row>
                 <Grid.Column width={8}>
                     <Header as='h2' attached textAlign='left'>
-                        Number of tokens owned
+                        Tokens Owned
                     </Header>
                     <Segment attached padded raised textAlign='left' color='olive'>
                         {details.shTokens}
@@ -106,7 +110,7 @@ class DetailsSection extends Component {
             <Grid.Row>
                 <Grid.Column width={8}>
                     <Header as='h2' attached textAlign='center'>
-                        Voting power
+                        Voting Power
                     </Header>
                     <Segment attached padded color='olive'>
                         <Grid>
@@ -115,10 +119,10 @@ class DetailsSection extends Component {
                                     Field of work
                                 </Grid.Column>
                                 <Grid.Column width={4}>
-                                    voting power
+                                    Voting power
                                 </Grid.Column>
                                 <Grid.Column width={4}>
-                                    voting points
+                                    Voting points
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
@@ -156,7 +160,7 @@ class DetailsSection extends Component {
                             </Grid.Row>
                             <Grid.Row>
                                 <Grid.Column width={8}>
-                                    Marketing
+                                    Partnership
                                 </Grid.Column>
                                 <Grid.Column width={4}>
                                     0/1000
@@ -170,42 +174,44 @@ class DetailsSection extends Component {
                 </Grid.Column>
                 <Grid.Column width={8}>
                     <Header as='h2' attached textAlign='center'>
-                        Transfer Voting power
+                        Transfer Voting Power
                     </Header>
                     <Segment attached padded  color='olive'>
                         <Grid>
                             <Grid.Row>
-                                <Grid.Column width={8}>
+                                <Grid.Column width={7}>
                                     <Checkbox label='Organisational' />
                                 </Grid.Column>
                                 <Grid.Column width={8}>
-                                    <Input name="foo" type="text" placeholder="address" value="" class="prompt" autocomplete="on" />
+                                    <Input name="foo" type="text" placeholder="address" class="prompt" autocomplete="on" style={{ width: '200px' }} />
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
-                                <Grid.Column width={8}>
+                                <Grid.Column width={7}>
                                     <Checkbox label='Product' />
                                 </Grid.Column>
                                 <Grid.Column width={8}>
-                                    <Input name="foo" type="text" placeholder="address" value="" class="prompt" autocomplete="on" />
+                                    <Input name="foo" type="text" placeholder="address" class="prompt" autocomplete="on" style={{ width: '200px' }} />
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
-                                <Grid.Column width={8}>
+                                <Grid.Column width={7}>
                                     <Checkbox label='Finance' />
                                 </Grid.Column>
                                 <Grid.Column width={8}>
-                                    <Input name="foo" type="text" placeholder="address" value="" class="prompt" autocomplete="on" />
+                                    <Input name="foo" type="text" placeholder="address" class="prompt" autocomplete="on" style={{ width: '200px' }} />
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
-                                <Grid.Column width={8}>
-                                    <Checkbox label='Marketing' />
+                                <Grid.Column width={7}>
+                                    <Checkbox label='Partnership' />
                                 </Grid.Column>
                                 <Grid.Column width={8}>
-                                    <Input name="foo" type="text" placeholder="address" value="" class="prompt" autocomplete="on"
-                                           defaultValue='eji3r212hio12epq' />
+                                    <Input name="foo" type="text" placeholder="address" class="prompt" autocomplete="on" style={{ width: '200px' }} />
                                 </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row style={{ marginBottom: '0' }}>
+                                <Button color='teal' style={{ width: '100%' }} onClick={this.onClick}>Transfer Power</Button>
                             </Grid.Row>
                         </Grid>
                     </Segment>
