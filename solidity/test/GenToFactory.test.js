@@ -29,11 +29,11 @@ async function createNewICO(owner, overrideData) {
 }
 
 
-let AuctionToken = artifacts.require("./AuctionToken.sol");
-let GenToFactory = artifacts.require("./GenToFactory.sol");
+const AuctionToken = artifacts.require("./AuctionToken.sol");
+const GenToFactory = artifacts.require("./GenToFactory.sol");
 
-let should = require('should')
-var expect = require('expect')
+const should = require('should')
+const expect = require('expect')
 
 contract('GenToFactory', function(accounts) {
   it("should be possible to start a valid ICO", async function() {
@@ -69,7 +69,7 @@ contract('GenToFactory', function(accounts) {
           should.fail("this transaction should have raised an error")
       }
       catch (e) {
-        expect(e.message).toBe("VM Exception while processing transaction: revert")
+        expect(e.message).toContain("VM Exception while processing transaction: ")
       }
   });
 

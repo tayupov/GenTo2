@@ -35,7 +35,8 @@ contract GenToFactory {
                                                      _buyPriceEnd,
                                                      _sellPrice,
                                                      _saleStart,
-                                                     _saleEnd);
+                                                     _saleEnd, 
+                                                     false);
         address auctionAddress = address(auctionToken);
         userICOs[_owner].push(auctionAddress);
         ContractCreated(_owner, auctionAddress);

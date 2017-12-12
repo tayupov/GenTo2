@@ -24,6 +24,9 @@ contract AuctionToken is StandardToken {
 
     address public owner;
 
+    bool dev;
+    uint cTime;
+
     function AuctionToken(uint256 _totalSupply,
       address _owner,
       string _symbol,
@@ -32,7 +35,8 @@ contract AuctionToken is StandardToken {
       uint256 _buyPriceEnd,
       uint256 _sellPrice,
       uint256 _saleStart,
-      uint256 _saleEnd) {
+      uint256 _saleEnd,
+      bool _dev) {
         require(_saleEnd > _saleStart);
 
         buyPriceStart = _buyPriceStart;
@@ -48,13 +52,28 @@ contract AuctionToken is StandardToken {
         balances[owner] = _totalSupply;
         symbol = _symbol;
         name = _name;
-        creationDate = now;
+
+        dev = _dev;
+        if (_dev) {
+          creationDate = 0;
+        }
+        else {
+          creationDate = now;
+        }
     }
 
     function getBuyPrice() constant returns (uint) {
         uint currentPrice;
         uint passed;
-        passed = now - saleStart;
+
+        /* It only makes sense to compute a buy price during the ico: outside of that interval, this function is not defined */
+        assert(currentTime() >= saleStart);
+        assert(currentTime() < saleEnd);
+
+        passed = currentTime() - saleStart;
+
+        currentPrice = buyPriceStart + (((buyPriceEnd - buyPriceStart) * passed) / saleDuration);
+/*
         if(buyPriceStart < buyPriceEnd) {
             currentPrice = buyPriceStart + (((buyPriceEnd - buyPriceStart) * passed) / saleDuration);
         } else if (buyPriceStart > buyPriceEnd) {
@@ -64,7 +83,7 @@ contract AuctionToken is StandardToken {
         }
         if(currentPrice <= 0){
             currentPrice = 1;
-        }
+        }*/
         return currentPrice;
     }
 
@@ -87,6 +106,18 @@ contract AuctionToken is StandardToken {
         balances[owner] -= amount;                         // subtracts amount from seller's balance
         Transfer(owner, msg.sender, amount);                // execute an event reflecting the change
         return amount;                                     // ends function and returns
+    }
+
+    function currentTime() returns (uint time) {
+      if (dev) {
+        return cTime;
+      }
+      else {
+        return now;
+      }
+    }
+    function setCurrentTime(uint time) {
+      cTime = time;
     }
 /*
     function sell(uint amount) returns (uint256 revenue){
