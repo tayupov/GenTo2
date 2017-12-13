@@ -3,12 +3,12 @@ import StepZilla from 'react-stepzilla';
 
 import { Button } from 'semantic-ui-react';
 
-import withModal from 'hoc/withModal';
+import ModalWrapper from 'components/ModalWrapper';
 import HeaderSection from 'components/Header';
 
 import './GeneratePoll.css';
 
-const MultiStepWithModal = withModal(StepZilla);
+const MultiStepWithModal = ModalWrapper(StepZilla);
 
 const GeneratePoll = ({
     handleShow, handleHide, active, steps

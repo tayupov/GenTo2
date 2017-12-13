@@ -5,13 +5,13 @@ import StepZilla from 'react-stepzilla';
 
 import { Input, Icon, Button, Dropdown } from 'semantic-ui-react';
 
-import Organisational from 'pages/GeneratePoll/steps/Organisational';
-import Created from 'pages/GeneratePoll/steps/Created';
-import General from 'pages/GeneratePoll/steps/General';
+import Organisational from 'routes/GeneratePoll/steps/Organisational';
+import Created from 'routes/GeneratePoll/steps/Created';
+import General from 'routes/GeneratePoll/steps/General';
 
-import withModal from 'hoc/withModal';
+import ModalWrapper from 'components/ModalWrapper';
 
-const MultiStepWithModal = withModal(StepZilla);
+const MultiStepWithModal = ModalWrapper(StepZilla);
 
 const options = [
     { key: 'active', text: 'active', value: 'active' },

@@ -3,7 +3,7 @@ import React from 'react';
 import { Divider, Button, Segment, Progress } from 'semantic-ui-react';
 import { Doughnut } from  'react-chartjs-2';
 
-const PollDetails = ({
+const VoteDetails = ({
     header, polls, currDaoDetails
 }) => {
 
@@ -12,12 +12,12 @@ const PollDetails = ({
 
 	console.log(header);
 
-	const currPoll = polls.filter(obj => obj.header === header)[0];
+	const currVote = polls.filter(obj => obj.header === header)[0];
 	
-	const tokensFor = currPoll.tokensFor;
-	const tokensAgainst = currPoll.tokensAgainst;
-	const addressesFor = currPoll.addressesFor;
-	const addressesAgainst = currPoll.addressesAgainst;
+	const tokensFor = currVote.tokensFor;
+	const tokensAgainst = currVote.tokensAgainst;
+	const addressesFor = currVote.addressesFor;
+	const addressesAgainst = currVote.addressesAgainst;
 
 	const data = {
 		dataTokens : {
@@ -83,4 +83,4 @@ const PollDetails = ({
 	)
 }
 
-export default PollDetails;
+export default VoteDetails;

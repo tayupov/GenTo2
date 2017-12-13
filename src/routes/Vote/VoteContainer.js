@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
-import Poll from './Poll';
+import Vote from './Vote';
 
 import Header from 'components/Header';
 import VotingModal from 'components/VotingModal';
 
-class PollContainer extends Component {
+class VoteContainer extends Component {
 
     constructor(props) {
         super(props);
@@ -17,20 +17,20 @@ class PollContainer extends Component {
             modalState: '',
             modalSubmitted: false,
             currDaoDetails: {},
-            createdPolls: []
+            createdVotes: []
         };
     }
 
     componentDidMount() {
-        console.log('this.props.currPoll');
-        console.log(this.props.currPoll);
-        const createdPolls = this.props.currPoll.filter(poll => poll.daoName === this.props.getCurrDao().daoName)[0].polls;
-        this.listPolls(this.props.getCurrDao().daoName, createdPolls);
+        console.log('this.props.currVote');
+        console.log(this.props.currVote);
+        const createdVotes = this.props.currVote.filter(poll => poll.daoName === this.props.getCurrDao().daoName)[0].polls;
+        this.listVotes(this.props.getCurrDao().daoName, createdVotes);
         this.setState({
             currDaoDetails: this.props.getCurrDao()
         })
 
-        console.log('Polls');
+        console.log('Votes');
         console.log(this.state.polls);
     }
 
@@ -67,7 +67,7 @@ class PollContainer extends Component {
         this.state.polls[currIndex].voterAddresses.push(this.props.account);
     }
 
-    listPolls = (currDaoName, createdPolls) => {
+    listVotes = (currDaoName, createdVotes) => {
     }
 
     render() {
@@ -84,7 +84,7 @@ class PollContainer extends Component {
                     handleClose={this.handleClose}
                     handleOk={this.handleOk}
                 />
-                {(this.state.polls.length > 0) && <Poll
+                {(this.state.polls.length > 0) && <Vote
                     {...this.props}
                     {...this.state}
                     onClick={this.onClick}
@@ -98,4 +98,4 @@ class PollContainer extends Component {
 
 }
 
-export default PollContainer;
+export default VoteContainer;

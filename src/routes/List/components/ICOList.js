@@ -18,7 +18,6 @@ const styles = {
 }
 
 const ICOList = ({ items, isLoading }) => {
-
     return items.map(item => (
         <Item>
             <Item.Content style={styles.titleBox} to={`/ico/${item.address}`} >

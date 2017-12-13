@@ -8,86 +8,71 @@ import GeneratePoll from './GeneratePoll';
 import Ico from './Ico';
 import Dao from './Dao';
 import DaoList from './DaoList';
-import Poll from './Poll';
+import Vote from './Vote';
 import Error from './Error';
 import DaoSettings from './DaoSettings';
 
+export default class Routes extends React.Component {
+    render() {
+        const { account, network, notify } = this.props;
+        return (
+            <Switch>
+                <Route exact path="/"
+                    render={(props) => (<About {...props} />)}
+                />
+                <Route path="/ico/:address"
+                    render={(props) => (<Ico
+                        account={account}
+                        key={props.match.params.address}
+                        network={network}
+                        notify={notify}
+                    />)}
+                />
+                {/* decide for ico or dao */}
+                <Route path="/dao/:address"
+                    render={(props) => (<Dao
+                        account={account}
+                        key={props.match.params.address}
+                        network={network}
+                        notify={notify}
+                    />)}
+                />
+                <Route path="/dao/:address/vote"
+                    render={(props) => (<Vote
+                        account={account}
+                        key={props.match.params.address}
+                        network={network}
+                        notify={notify}
+                    />)}
+                />
+                <Route path="/list"
+                    render={(props) => (<List
+                        account={account}
+                        notify={notify}
+                    />)}
+                />
+                <Route path="/daoList"
+                    render={(props) => (<DaoList
+                        account={account}
+                        notify={notify}
+                    />)}
+                />
+                <Route path="/daoSettings/:address"
+                    render={(props) => (<DaoSettings
+                        account={account}
+                        notify={notify}
+                    />)}
+                />
 
-const Routes = ({ account, network, notify, active, handleShow, handleHide, getCurrDao, contextRef, setIcos, createDAO, daos, setCurrPoll, currPoll, addDemoDao }) => (
-    <Switch>
-        <Route exact path="/"
-            render={(props) => (<About {...props} />)}
-        />
-        <Route path="/ico/:address"
-            render={(props) => (<Ico
-                                    {...props}
-                                    account={account}
-                                    key={props.match.params.address}
-                                    network={network}
-                                    notify={notify}
-                                    addDemoDao={addDemoDao}
-                                />)}
-        />
-        <Route path="/dao/:address"
-            render={(props) => (<Dao
-                                    {...props}
-                                    account={account}
-                                    key={props.match.params.address}
-                                    getCurrDao={getCurrDao}
-                                    network={network}
-                                    notify={notify}
-                                />)}
-        />
-        <Route path="/list"
-            render={(props) => (<List
-                                    {...props}
-                                    account={account}
-                                    notify={notify}
-                                    setIcos={setIcos}
-                                />)}
-        />
-        <Route path="/daoList"
-
-            render={(props) => (<DaoList
-                                    {...props}
-                                    account={account}
-                                    notify={notify}
-                                />)}
-        />
-        <Route path="/daoSettings/:address"
-            render={(props) => (<DaoSettings
-                                    {...props}
-                                    account={account}
-                                    notify={notify}
-                                />)}
-        />
-        
-        <Route path="/generatePoll"
-            render={(props) => (<GeneratePoll
-                                    {...props}
-                                    account={account}
-                                    network={network}
-                                    notify={notify}
-                                    active={active}
-                                    handleShow={handleShow}
-                                    handleHide={handleHide}
-                                    setCurrPoll={setCurrPoll}
-                                />)}
-        />
-        <Route path="/poll"
-            render={(props) => (<Poll
-                                    {...props}
-                                    account={account}
-                                    network={network}
-                                    notify={notify}
-                                    active={active}
-                                    contextRef={contextRef}
-                                    getCurrDao={getCurrDao}
-                                    currPoll={currPoll}
-                                />)}
-        />
-        <Route component={Error} />
-    </Switch>
-)
-
-export default Routes;
+                <Route path="/generatePoll"
+                    render={(props) => (<GeneratePoll
+                        account={account}
+                        network={network}
+                        notify={notify}
+                    />)}
+                />
+                <Route component={Error} />
+            </Switch>
+        )
+    }
+}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container } from 'semantic-ui-react';
-
+import AlertContainer from 'react-alert';
 import SideBar from 'components/SideBar';
 import Routes from 'routes';
 
@@ -16,10 +16,9 @@ export default class App extends Component {
       active: false,
       daos: [],
       icos: [],
-      currDao: '',
+      currDao: null,
       currPoll: [],
-      daoDetails: {},
-      demoDao: {}
+      daoDetails: null
     }
   }
 
@@ -44,9 +43,9 @@ export default class App extends Component {
       }
       if (this.state.account !== accounts[0]) {
         if (this.state.account !== null) {
+          this.setState({ account: accounts[0] })
           this.notify('Account Switched!', 'info');
         }
-        this.setState({ account: accounts[0] })
       }
     });
   }
@@ -68,6 +67,7 @@ export default class App extends Component {
   render() {
     return (
       <div>
+        <AlertContainer ref={a => this.msg = a} />
         <SideBar
           />
         <Container>

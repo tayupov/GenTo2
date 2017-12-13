@@ -2,17 +2,17 @@ import React from 'react';
 
 import { Grid, Sticky } from 'semantic-ui-react';
 
-import PollList from './components/PollList';
-import SearchNav from './components/PollList/components/SearchNav';
-import PollDetails from './components/PollDetails';
+import VoteList from './components/VoteList';
+import SearchNav from './components/VoteList/components/SearchNav';
+import VoteDetails from './components/VoteDetails';
 
-const Poll = ({
+const Vote = ({
     header, onClick, handleOpen, handleReset, polls, contextRef, account, currDaoDetails, onChange
 }) => (
     <Grid columns={2}>
         <Grid.Column width={6}>
             <Sticky context={contextRef} offset={80}>
-                <PollDetails
+                <VoteDetails
                     header={header}
                     polls={polls}
                     currDaoDetails={currDaoDetails}
@@ -21,7 +21,7 @@ const Poll = ({
         </Grid.Column>
         <Grid.Column width={10}>
             <SearchNav onChange={onChange} />
-            <PollList 
+            <VoteList 
                 onClick={onClick}
                 handleOpen={handleOpen}
                 handleReset={handleReset}
@@ -32,4 +32,4 @@ const Poll = ({
     </Grid>
 )
 
-export default Poll;
+export default Vote;
