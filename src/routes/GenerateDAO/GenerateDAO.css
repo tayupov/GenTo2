@@ -5,7 +5,6 @@ ol.progtrckr {
   
   ol.progtrckr li {
     display: inline-block;
-    text-align: center;
     line-height: 4.5rem;
     cursor: pointer;
   }

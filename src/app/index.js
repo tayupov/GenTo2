@@ -5,6 +5,7 @@ import SideBar from 'components/SideBar';
 import Routes from 'routes';
 
 import web3 from 'utils/web3';
+import 'styles/app.css';
 
 export default class App extends Component {
 
@@ -13,18 +14,28 @@ export default class App extends Component {
     this.state = {
       account: null,
       network: null,
+<<<<<<< 480659b5b7540d7739cf2466f2864871bfc90d0c
       active: false,
       daos: [],
       icos: [],
       currDao: null,
       currPoll: [],
       daoDetails: null
+=======
+      organizations: [],
+      currentOrganization: null
+>>>>>>> refactor hocs, poll -> vote, route changes
     }
   }
 
   componentDidMount() {
     this.updateNetwork();
     setInterval(this.updateAccount, 1000);
+
+    //remove!
+    this.setState({
+      organizations: [{name: "foo"}, {name: "bar"}]
+    });
   }
 
   updateNetwork = () => {
@@ -68,15 +79,15 @@ export default class App extends Component {
     return (
       <div>
         <AlertContainer ref={a => this.msg = a} />
-        <SideBar
+        <SideBar organizations={this.state.organizations}
           />
-        <Container>
+        <div className="content">
           <Routes
             account={this.state.account}
             network={this.state.network}
             notify={this.notify}
-            />
-        </Container>
+          />
+        </div>
       </div>
     );
   }
