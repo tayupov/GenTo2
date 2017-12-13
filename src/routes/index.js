@@ -1,16 +1,16 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import About from 'pages/About';
-import List from 'pages/List';
-import GenerateDAO from 'pages/GenerateDAO';
-import GeneratePoll from 'pages/GeneratePoll';
-import Ico from 'pages/Ico';
-import Dao from 'pages/Dao';
-import DaoList from 'pages/DaoList';
-import Poll from 'pages/Poll';
-import Error from 'pages/Error';
-import DaoSettings from 'pages/DaoSettings';
+import About from './About';
+import List from './List';
+import GenerateDAO from './GenerateDAO';
+import GeneratePoll from './GeneratePoll';
+import Ico from './Ico';
+import Dao from './Dao';
+import DaoList from './DaoList';
+import Poll from './Poll';
+import Error from './Error';
+import DaoSettings from './DaoSettings';
 
 
 const Routes = ({ account, network, notify, active, handleShow, handleHide, getCurrDao, contextRef, setIcos, createDAO, daos, setCurrPoll, currPoll, addDemoDao }) => (
@@ -61,18 +61,7 @@ const Routes = ({ account, network, notify, active, handleShow, handleHide, getC
                                     notify={notify}
                                 />)}
         />
-        <Route path="/generate"
-            render={(props) => (<GenerateDAO
-                                    {...props}
-                                    account={account}
-                                    network={network}
-                                    notify={notify}
-                                    active={active}
-                                    handleShow={handleShow}
-                                    handleHide={handleHide}
-                                    createDAO={createDAO}
-                                />)}
-        />
+        
         <Route path="/generatePoll"
             render={(props) => (<GeneratePoll
                                     {...props}

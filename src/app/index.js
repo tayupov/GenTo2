@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
+import { Container } from 'semantic-ui-react';
 
-import View from './View';
+import SideBar from 'components/SideBar';
+import Routes from 'routes';
 
-import daos from 'daos';
-
-import AlertContainer from 'react-alert';
 import web3 from 'utils/web3';
 
-class App extends Component {
+export default class App extends Component {
 
   constructor() {
     super();
@@ -18,147 +17,43 @@ class App extends Component {
       daos: [],
       icos: [],
       currDao: '',
-      currPoll: [ 
-        {
-          daoName: 'Lizax',
-          polls: []
-        },
-        {
-          daoName: 'TorX',
-          polls: []
-        },
-        {
-          daoName: 'Mint',
-          polls: []
-        },
-        {
-          daoName: 'Zeltox',
-          polls: []
-        },
-        {
-          daoName: 'EBike Enterprises',
-          polls: []
-        }
-      ],
+      currPoll: [],
       daoDetails: {},
       demoDao: {}
     }
   }
-  
-  handleShow = () => this.setState({ active: true })
-  handleHide = () => this.setState({ active: false })
 
-  componentWillMount() {
-    this.listDaos();
+  componentDidMount() {
     this.updateNetwork();
     setInterval(this.updateAccount, 1000);
   }
 
-  setCurrDao = (daoName) => {
-    this.setState({
-      currDao: daoName
-    })
-  }
-
-  getCurrDao = () => this.state.daos.filter(dao => dao.daoName === this.state.currDao)[0]
-
-  setCurrPoll = (poll) => {
-    const currPoll = {
-      header: poll.pollName,
-      endDate: new Date(poll.pollEnd),
-      description: poll.pollDescription,
-      addressesFor: 0,
-      addressesAgainst: 0,
-      tokensFor: 0,
-      tokensAgainst: 0,
-      voterAddresses: [],
-      payout: `${poll.pollPayout} ${poll.pollCurrency}`,
-      category: poll.pollCategory,
-      state: 'active'
-    }
-
-    this.state.currPoll.filter(poll => poll.daoName === this.state.currDao)[0].polls.push(currPoll);
-  }
-
-  addDemoDao = () => {
-    this.setState({
-      daos: [
-        ...this.state.daos,
-        this.state.demoDao
-      ]
-    })
-  }
-
-
-  listDaos = () => {
-    web3.eth.getAccounts((err, accounts) => {
-          if (accounts[0] == "0x882891c8ecac0fc6337f78aaedad07ba9e8fa92c") {
-            this.setState({
-              demoDao: this.state.daos[0],
-              daos: daos
-            })
-          } 
-        })
-      }
-
-  setIcos = (icos) => {
-    this.setState({
-      icos: icos
-    })
-  }
-
-  // temporary function for creating DAOs
-  createDAO = (daoDetails) => {
-    daoDetails['shTokens'] = 100;
-    daoDetails['totalAddresses'] = 22;
-
-    this.state.daos.push(daoDetails);
-
-    this.setState({
-      daoDetails: daoDetails
-    })
-  }
-
   updateNetwork = () => {
-    web3.version.getNetwork((err, netId) => {
+    web3.version.getNetwork((err, network) => {
       if (err) {
-        console.log('The network connection could not be established!');
-        console.error(err);
+        this.notify('Network not found', 'error');
       }
-      this.setState({
-        network: netId
-      })
+      this.setState({ network })
     })
   }
 
   updateAccount = () => {
     web3.eth.getAccounts((err, accounts) => {
       if (err) {
-        console.log('The account could not be updated!');
-        console.error(err);
+        this.notify('Account not updated', 'error');
       }
-      if(this.state.account !== accounts[0]){
-        if(this.state.account !== null)
+      if (this.state.account !== accounts[0]) {
+        if (this.state.account !== null) {
           this.notify('Account Switched!', 'info');
-        this.setState({
-          account: accounts[0]
-        })
-        this.listDaos();
+        }
+        this.setState({ account: accounts[0] })
       }
     });
   }
 
-  alertOptions = {
-    offset: 14,
-    position: 'bottom left',
-    theme: 'light',
-    time: 5000,
-    transition: 'fade'
-  }
-
 
   notify = (message, type) => {
-    switch(type) {
+    switch (type) {
       case 'info':
         return this.msg.info(message);
       case 'success':
@@ -170,27 +65,19 @@ class App extends Component {
     }
   }
 
-  handleContextRef = contextRef => this.setState({ contextRef });
-
   render() {
     return (
-      <div ref={this.handleContextRef}>
-        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
-        <View
-          {...this.state}
-          notify={this.notify}
-          handleShow={this.handleShow}
-          handleHide={this.handleHide}
-          createDAO={this.createDAO}
-          setCurrDao={this.setCurrDao}
-          getCurrDao={this.getCurrDao}
-          setCurrPoll={this.setCurrPoll}
-          setIcos={this.setIcos}
-          addDemoDao={this.addDemoDao}
-        />
+      <div>
+        <SideBar
+          />
+        <Container>
+          <Routes
+            account={this.state.account}
+            network={this.state.network}
+            notify={this.notify}
+            />
+        </Container>
       </div>
     );
   }
 }
-
-export default App;

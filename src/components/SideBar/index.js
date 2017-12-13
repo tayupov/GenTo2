@@ -37,19 +37,7 @@ class SideBar extends Component {
                             <Menu.Item>
                                 <h2 style={{ textAlign: 'center', fontWeight: '500' }}>Your DAOs</h2> 
                             <Menu.Menu style={{ marginTop: '2em' }}>
-                                {this.props.daos.map(dao => (
-                                     <Menu.Item
-                                        name={dao.daoName}
-                                        to={`/dao/${dao.daoName}`}
-                                        active={activeItem === dao.daoName}
-                                        as={ Link }
-                                        onClick={this.handleItemClick}
-                                        header
-                                        style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
-                                    >
-                                        {dao.daoName}
-                                    </Menu.Item>
-                                ))}
+                                    
                             </Menu.Menu>
                             </Menu.Item>
                             <Menu.Item style={{ paddingLeft: '3em' }} as={Link} to='/generate'>
@@ -60,19 +48,7 @@ class SideBar extends Component {
                             <Menu.Item>
                                 <h2 style={{ textAlign: 'center', fontWeight: '500' }}>Your ICOs</h2>
                             <Menu.Menu style={{ marginTop: '2em' }}>
-                                {this.props.icos.map(ico => (
-                                     <Menu.Item
-                                        name={ico.name}
-                                        to={`/ico/${ico.address}`}
-                                        active={activeItem === ico.name}
-                                        as={ Link }
-                                        onClick={this.handleItemClick}
-                                        header
-                                        style={{ fontSize: '18px', fontWeight: '100', textAlign: 'center' }}
-                                    >
-                                        {ico.name.substring(0, 3).toUpperCase()}
-                                    </Menu.Item>
-                                ))}
+                
                             </Menu.Menu>
                             </Menu.Item>
                         </Menu>

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import Poll from './Poll';
-import polls from 'polls';
 
 import Header from 'components/Header';
 import VotingModal from 'components/VotingModal';
@@ -47,19 +46,6 @@ class PollContainer extends Component {
     handleClose = () => this.setState({ modalOpen: false, modalSubmitted: false })
 
     onChange = (e, { value }) => {
-        console.log('onChange')
-        console.log(value);
-        const currDaoPolls = polls.filter(poll => poll.daoName === this.props.getCurrDao().daoName)[0].polls;
-        const currDaoActivePolls = currDaoPolls.filter(poll => poll.state === value);
-        const createdActivePolls = this.state.createdPolls.filter(poll => poll.state === value)
-
-        this.setState({
-            polls: [
-                    ...currDaoActivePolls,
-                    ...createdActivePolls
-            ],
-            header: currDaoActivePolls[0].header
-        })
     }
 
     handleReset = () => {
@@ -82,17 +68,6 @@ class PollContainer extends Component {
     }
 
     listPolls = (currDaoName, createdPolls) => {
-        const currDaoPolls = polls.filter(poll => poll.daoName === currDaoName)[0].polls;
-        const currDaoActivePolls = currDaoPolls.filter(poll => poll.state === 'active');
-
-        this.setState({
-            createdPolls: createdPolls,
-            polls: [
-                ...currDaoActivePolls,
-                ...createdPolls
-            ],
-            header: currDaoActivePolls[0].header
-        })
     }
 
     render() {
