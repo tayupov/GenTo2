@@ -10,9 +10,11 @@ async function getTestToken() {
   return testContract
 }
 
-
-
 contract('AuctionToken', function(accounts) {
+
+  const buyerAddress = accounts[0];
+  const ownerAddress = accounts[1];
+
   it("should be possible to mock the time in the test contract", async function() {
     const testContract = await getTestToken()
     //The time of the mock contract is set to 0 in the beginning for convenience reasons
@@ -44,6 +46,23 @@ contract('AuctionToken', function(accounts) {
       await testContract.setCurrentTime.sendTransaction(i)
       let currentPrice = Math.floor(startPrize + (endPrize - startPrize) * (i- startTime) / (endTime - startTime))
       expect(+await testContract.getBuyPrice.call()).toBeCloseTo(currentPrice, 5)
+    }
+  })
+  it("should be possible to buy something during the ICO", async function() {
+    const testContract = await getTestToken()
+    // const initialBalance = web3.eth.getBalance(web3.eth.accounts[1])
+    await testContract.setCurrentTime.sendTransaction(1200000)
+    await testContract.getBuyPrice.call()
+    await testContract.buy.sendTransaction({from: accounts[1], value: web3.toWei(10, 'Gwei')});
+  })
+  it("should not be possible to buy something outside the ICO", async function() {
+    const testContract = await getTestToken()  
+    try {
+      await testContract.buy.sendTransaction({from: accounts[1], value: web3.toWei(10, 'Gwei')})
+      should.fail("this transaction should have raised an error")
+    }
+    catch (e) {
+      expect(e.message).toContain("VM Exception while processing transaction: ")
     }
   })
 });
