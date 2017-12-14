@@ -65,4 +65,27 @@ contract('AuctionToken', function(accounts) {
       expect(e.message).toContain("VM Exception while processing transaction: ")
     }
   })
+  it("should calculate the right bought amount with buy()", async function() {
+    const testContract = await getTestToken()
+    await testContract.setCurrentTime.sendTransaction(1200000)
+    // console.log(web3.eth.getBalance(web3.eth.accounts[1]).toNumber())
+    // await testContract.buy.sendTransaction({from: accounts[1], value: 10000})
+    const boughtAmount = await testContract.buy.call({from: accounts[1], value: 10000})
+    const buyPrice = await testContract.getBuyPrice.call()
+    const expectedAmount = 10000 / buyPrice.toNumber()
+    expect(boughtAmount.toNumber()).toBeCloseTo(expectedAmount, 0);
+  })
+  it("should not be possible to buy something with amount < buyPrice", async function() {
+    const testContract = await getTestToken()
+    await testContract.setCurrentTime.sendTransaction(1200000)
+    console.log(+await testContract.getBuyPrice.call())
+    let buyPrice = await testContract.getBuyPrice.call()
+    const smallerBuyPrice = --buyPrice;
+    try {
+      await testContract.buy.sendTransaction({from: accounts[1], value: smallerBuyPrice})
+      should.fail("this transaction should have raised an error")
+    } catch (e) {
+      expect(e.message).toContain("VM Exception while processing transaction: ")
+    }
+  })
 });

@@ -27,6 +27,8 @@ contract AuctionToken is StandardToken {
     bool dev;
     uint cTime;
 
+    event MyTransfer(address indexed from, address indexed to, uint256 value, uint256 remainingSupply);
+
     function AuctionToken(uint256 _totalSupply,
       address _owner,
       string _symbol,
@@ -87,19 +89,6 @@ contract AuctionToken is StandardToken {
         return currentPrice;
     }
 
-    function bytesToAddress(bytes _address) public returns (address) {
-    uint160 m = 0;
-    uint160 b = 0;
-
-    for (uint8 i = 0; i < 20; i++) {
-      m *= 256;
-      b = uint160(_address[i]);
-      m += (b);
-    }
-
-    return address(m);
-  }
-
     function getDetails() constant returns (address _owner,
                                             string _name,
                                             string _symbol,
@@ -112,12 +101,12 @@ contract AuctionToken is StandardToken {
                                             uint256 _saleEnd){
         return (owner, name, symbol, totalSupply, creationDate, buyPriceStart, buyPriceEnd, sellPrice, saleStart, saleEnd);
     }
-    function buy() payable returns (uint amount){
+    function buy() payable returns (uint amount) {
         amount = msg.value / getBuyPrice();                     // calculates the amount
         if (balances[owner] < amount || amount <= 0) throw;     // checks if it has enough to sell
         balances[msg.sender] += amount;                   // adds the amount to buyer's balance
         balances[owner] -= amount;                         // subtracts amount from seller's balance
-        Transfer(owner, msg.sender, amount);                // execute an event reflecting the change
+        MyTransfer(owner, msg.sender, amount, balances[owner]);                // execute an event reflecting the change
         return amount;                                     // ends function and returns
     }
 
