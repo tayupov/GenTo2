@@ -30,7 +30,6 @@ contract('AuctionToken', function(accounts) {
             await testContract.setCurrentTime.sendTransaction(1300000)
             // create 2 votings with id 0 and 1
             await testContract.newVoting.sendTransaction(accounts[1], 100, {from: accounts[1]})
-            await testContract.newVoting.sendTransaction(accounts[1], 100, {from: accounts[1]})
             await testContract.vote.sendTransaction(1, true, {from: accounts[0]})
             await testContract.vote.sendTransaction(1, false, {from: accounts[1]})
             await testContract.vote.sendTransaction(1, false, {from: accounts[2]})
@@ -39,6 +38,23 @@ contract('AuctionToken', function(accounts) {
             const p = await testContract.getVoting.call(1);
             expect(p[4]).toBe(true)
             expect(p[5]).toBe(false)
+        } catch (e) {
+            expect(e.message).toContain("VM Exception while processing transaction: ")
+        }
+    })
+    it("should display correct number of votings", async function() {
+        const testContract = await VotingToken.deployed()
+        try {
+            //set time back to 0
+            await testContract.setCurrentTime.sendTransaction(1300000)
+            // create 2 votings with id 0 and 1
+            const numberOfInitialVotings = (await testContract.getNumVotings.call()).toNumber()
+            await testContract.newVoting.sendTransaction(accounts[1], 100, {from: accounts[1]})
+            expect(+await testContract.getNumVotings.call()).toBe(1 + numberOfInitialVotings)
+            await testContract.newVoting.sendTransaction(accounts[1], 200, {from: accounts[1]})
+            expect(+await testContract.getNumVotings.call()).toBe(2+ numberOfInitialVotings)
+            await testContract.newVoting.sendTransaction(accounts[1], 300, {from: accounts[1]})
+            expect(+await testContract.getNumVotings.call()).toBe(3+ numberOfInitialVotings)
         } catch (e) {
             expect(e.message).toContain("VM Exception while processing transaction: ")
         }

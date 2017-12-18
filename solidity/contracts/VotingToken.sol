@@ -15,7 +15,7 @@ contract VotingToken {
         address recipient;
         uint amount;
         string description;
-        FieldOfWork fieldofwork;
+        FieldOfWork fieldOfWork;
         uint votingDeadline;
         bool executed;
         bool votingPassed;
@@ -25,13 +25,19 @@ contract VotingToken {
     }
 
     function getVoting(uint votingID) constant returns (address recipient,
-                            uint amount,
-                            string description,
-                            uint votingDeadline,
-                            bool executed,
-                            bool votingPassed){
+    uint amount,
+    string description,
+    uint votingDeadline,
+    bool executed,
+    bool votingPassed){
         Voting voting = votings[votingID];
-        return (voting.recipient, voting.amount, voting.description, voting.votingDeadline, voting.executed, voting.votingPassed);
+        return (voting.recipient, voting.amount, voting.description, voting.votingDeadline, voting.executed, voting
+        .votingPassed);
+    }
+
+    function getNumVotings() constant returns (
+        uint numVotings){
+        return votings.length;
     }
 
     struct Vote {
@@ -134,7 +140,7 @@ contract VotingToken {
 
         for (uint i = 0; i <  voting.votes.length; ++i) {
             Vote storage v = voting.votes[i];
-            uint voteWeight = getInfluenceOfVoter(v.voter, voting.fieldofwork);
+            uint voteWeight = getInfluenceOfVoter(v.voter, voting.fieldOfWork);
             quorum += voteWeight;
             if (v.inSupport) {
                 yea += voteWeight;
