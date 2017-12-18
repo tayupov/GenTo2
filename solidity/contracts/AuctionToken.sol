@@ -1,8 +1,9 @@
 pragma solidity ^0.4.8;
 
 import '../../node_modules/zeppelin-solidity/contracts/token/StandardToken.sol';
+import './VotingToken.sol';
 
-contract AuctionToken is StandardToken {
+contract AuctionToken is StandardToken, VotingToken {
 
     uint256 public buyPriceStart;
     uint256 public buyPriceEnd;
