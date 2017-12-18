@@ -64,6 +64,10 @@ contract AuctionToken is StandardToken, VotingToken {
           creationDate = now;
         }
     }
+    function isShareholder(address userAddress) returns (bool shareholder){
+        // TODO implement me
+        return true;
+    }
 
     function getBuyPrice() constant returns (uint) {
         uint currentPrice;
