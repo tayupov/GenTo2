@@ -3,6 +3,14 @@ const VotingToken = artifacts.require("./AuctionToken.sol");
 const should = require('should');
 const expect = require('expect');
 
+
+async function getTestToken() {
+  const testContract = await AuctionToken.deployed()
+  //set time back to 0
+  await testContract.setCurrentTime.sendTransaction(0)
+  return testContract
+}
+
 contract('AuctionToken', function(accounts) {
     it("schould execute votings with 2/3 confirmed votes", async function() {
         const testContract = await VotingToken.deployed()
@@ -58,5 +66,20 @@ contract('AuctionToken', function(accounts) {
         } catch (e) {
             expect(e.message).toContain("VM Exception while processing transaction: ")
         }
+    })
+
+    it("should pass the voting when the person purchased a share of the company", async function() {
+      const testContract = await VotingToken.deployed()
+      try {
+        await testContract.setCurrentTime.sendTransaction(1400000)
+        const boughtAmount1 = await testContract.buy.call({from: accounts[0], value: 10})
+        const boughtAmount2 = await testContract.buy.call({from: accounts[1], value: 10
+        await delegate(accounts[1], {from: accounts[0]})
+        expect(+await getInfluenceOfVoter({from: accounts[0]}, Finance).toBe(0))
+        expect(+await getInfluenceOfVoter({from: accounts[1]}, Finance).toBe(10))
+
+      } catch(e) {
+          expect(e.message).toContain("VM error while processing transaction: owner has a share")
+      }
     })
 });
