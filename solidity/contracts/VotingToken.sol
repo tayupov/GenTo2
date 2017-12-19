@@ -28,10 +28,13 @@ contract VotingToken {
     string description,
     uint votingDeadline,
     bool finished,
-    bool votingPassed){
+    bool votingPassed,
+    uint passedPercent){
         Voting storage voting = votings[votingID];
+        uint passedPercentRes = 0;
+
         return (voting.recipient, voting.amount, voting.description, voting.votingDeadline, voting.finished, voting
-        .votingPassed);
+        .votingPassed, passedPercentRes);
     }
 
     function getNumVotings() constant returns (
@@ -95,7 +98,7 @@ contract VotingToken {
         return voteID;
     }
 
-    function executeVoting(uint votingNumber)
+    function executeVoting(uint votingNumber) public
     {
         Voting storage voting = votings[votingNumber];
 

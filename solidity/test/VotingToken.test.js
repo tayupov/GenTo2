@@ -18,13 +18,18 @@ contract('AuctionToken', function(accounts) {
             //set time back to 0
             await testContract.setCurrentTime.sendTransaction(1200000)
             // create 2 votings with id 0 and 1
+            await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
+            await testContract.buy.sendTransaction({from: accounts[2], value: 1000})
+            await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
+            // console.log(boughtAmount)
             await testContract.newVoting.sendTransaction(accounts[1], 100, {from: accounts[1]})
-            await testContract.vote.sendTransaction(0, true, {from: accounts[0]})
             await testContract.vote.sendTransaction(0, true, {from: accounts[1]})
-            await testContract.vote.sendTransaction(0, false, {from: accounts[2]})
+            await testContract.vote.sendTransaction(0, true, {from: accounts[2]})
+            await testContract.vote.sendTransaction(0, false, {from: accounts[3]})
             await testContract.setCurrentTime.sendTransaction(1300000)
-            await testContract.executeVoting.sendTransaction(0, {from: accounts[2]})
+            await testContract.executeVoting.sendTransaction(0)
             const p = await testContract.getVoting.call(0);
+            console.log(p)
             expect(p[4]).toBe(true)
             expect(p[5]).toBe(true)
         } catch (e) {
@@ -35,15 +40,20 @@ contract('AuctionToken', function(accounts) {
         const testContract = await VotingToken.deployed()
         try {
             //set time back to 0
-            await testContract.setCurrentTime.sendTransaction(1300000)
+            await testContract.setCurrentTime.sendTransaction(1200000)
             // create 2 votings with id 0 and 1
+            await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
+            await testContract.buy.sendTransaction({from: accounts[2], value: 1000})
+            await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
+            // console.log(boughtAmount)
             await testContract.newVoting.sendTransaction(accounts[1], 100, {from: accounts[1]})
-            await testContract.vote.sendTransaction(1, true, {from: accounts[0]})
-            await testContract.vote.sendTransaction(1, false, {from: accounts[1]})
-            await testContract.vote.sendTransaction(1, false, {from: accounts[2]})
-            await testContract.setCurrentTime.sendTransaction(1400000)
-            await testContract.executeVoting.sendTransaction(1, {from: accounts[2]})
-            const p = await testContract.getVoting.call(1);
+            await testContract.vote.sendTransaction(0, true, {from: accounts[1]})
+            await testContract.vote.sendTransaction(0, false, {from: accounts[2]})
+            await testContract.vote.sendTransaction(0, false, {from: accounts[3]})
+            await testContract.setCurrentTime.sendTransaction(1300000)
+            await testContract.executeVoting.sendTransaction(0)
+            const p = await testContract.getVoting.call(0);
+            console.log(p)
             expect(p[4]).toBe(true)
             expect(p[5]).toBe(false)
         } catch (e) {
