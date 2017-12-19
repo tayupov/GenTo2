@@ -73,13 +73,48 @@ contract('AuctionToken', function(accounts) {
       try {
         await testContract.setCurrentTime.sendTransaction(1400000)
         const boughtAmount1 = await testContract.buy.call({from: accounts[0], value: 10})
-        const boughtAmount2 = await testContract.buy.call({from: accounts[1], value: 10
+        /*const boughtAmount2 = await testContract.buy.call({from: accounts[1], value: 10})*/
         await delegate(accounts[1], {from: accounts[0]})
         expect(+await getInfluenceOfVoter({from: accounts[0]}, Finance).toBe(0))
         expect(+await getInfluenceOfVoter({from: accounts[1]}, Finance).toBe(10))
 
       } catch(e) {
           expect(e.message).toContain("VM error while processing transaction: owner has a share")
+      }
+    })
+
+    it("should fail the voting if the token holder doesn't purchased a share ", async function() {
+      const testContract = await VotingToken.deployed()
+      try {
+        await testContract.setCurrentTime.sendTransaction(1500000)
+        expect(+await getInfluenceOfVoter({from: accounts[0]}, Finance).toBe(0))
+        should.fail("this transaction should have raised an error")
+
+      } catch(e) {
+          expect(e.message).toContain("VM error while processing transaction: owner doesn't have a share")
+      }
+    })
+
+    it("should create a new voting", async function() {
+      const testContract = await VotingToken.deployed()
+      try {
+        await testContract.newVoting().sendTransaction({from: accounts[0]}, 100, {to: accounts[1]})
+        expect(+await getNumVotings.call().toBe(numberOfInitialVotings + 1))
+      } catch(e) {
+          expect(e.message).toContain("VM error while processing transaction: new voting isn't created")
+      }
+    })
+
+    it("should allow voting only for shareholder", async function() {
+      const testContract= await VotingToken.deployed()
+      try {
+        await shareholder = accounts[0]
+        testContract.newVoting.sendTransaction(accounts[1], 100, {from: shareholder})
+        // number of numberOfInitialVotings doesn't chance because he isn't a shareholder
+        expect(+await getNumVotings.call().toBe(numberOfInitialVotings))
+      } catch(e) {
+          expect(e.message).toContain("VM error while processing transaction: shareholder can't vote")
+
       }
     })
 });
