@@ -90,7 +90,7 @@ contract VotingToken {
         voteID = voting.votes.length++;
         voting.votes[voteID] = Vote({inSupport: supportsVoting, voter: msg.sender});
         voting.voted[msg.sender] = true;
-        Voted(votingNumber,  supportsVoting, msg.sender);
+        Voted(votingNumber, supportsVoting, msg.sender);
         return voteID;
     }
 
@@ -113,7 +113,7 @@ contract VotingToken {
         uint approve = 0;
         uint disapprove = 0;
 
-        for (uint i = 0; i <  voting.votes.length; ++i) {
+        for (uint i = 0; i < voting.votes.length; ++i) {
             Vote storage v = voting.votes[i];
             uint voteWeight = getInfluenceOfVoter(v.voter, voting.fieldOfWork);
             if (v.inSupport) {

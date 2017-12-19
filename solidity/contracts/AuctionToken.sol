@@ -1,14 +1,12 @@
 pragma solidity ^0.4.8;
 
 import '../../node_modules/zeppelin-solidity/contracts/token/StandardToken.sol';
-import './VotingToken.sol';
 
-contract AuctionToken is StandardToken, VotingToken {
+contract AuctionToken is StandardToken {
 
     uint256 public buyPriceStart;
     uint256 public buyPriceEnd;
 
-    //What is this for?
     uint256 public sellPrice;
 
     uint256 saleStart = 0;
@@ -109,7 +107,7 @@ contract AuctionToken is StandardToken, VotingToken {
     function buy() payable returns (uint amount) {
         amount = msg.value / getBuyPrice();                     // calculates the amount
         if (balances[owner] < amount || amount <= 0) throw;     // checks if it has enough to sell
-        balances[msg.sender] += amount;                   // adds the amount to buyer's balance
+        balances[msg.sender ] += amount;                   // adds the amount to buyer's balance
         balances[owner] -= amount;                         // subtracts amount from seller's balance
         MyTransfer(owner, msg.sender, amount, balances[owner]);                // execute an event reflecting the change
         return amount;                                     // ends function and returns
