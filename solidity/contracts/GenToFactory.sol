@@ -5,8 +5,6 @@ pragma solidity ^0.4.8;
 import './AuctionToken.sol';
 contract GenToFactory {
 
-    /* Define variable owner of the type address*/
-    address owner;
     /*Mapping to store every ICO to from a specific owner*/
     mapping(address => address[]) userICOs;
 
@@ -14,7 +12,6 @@ contract GenToFactory {
 
     /* this function is executed at initialization and sets the owner of the contract */
     function GenToFactory() {
-        owner = msg.sender;
     }
 
     function createContract(uint256 totalSupply,
@@ -35,7 +32,7 @@ contract GenToFactory {
                                                      _buyPriceEnd,
                                                      _sellPrice,
                                                      _saleStart,
-                                                     _saleEnd, 
+                                                     _saleEnd,
                                                      false);
         address auctionAddress = address(auctionToken);
         userICOs[_owner].push(auctionAddress);
@@ -45,10 +42,5 @@ contract GenToFactory {
 
     function getICOsFromOwner(address _owner) constant public returns(address[]){
         return userICOs[_owner];
-    }
-
-    /* Function to recover the funds on the contract */
-    function kill() {
-        if (msg.sender == owner) selfdestruct(owner);
     }
 }
