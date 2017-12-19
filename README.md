@@ -26,8 +26,24 @@ npm start
 ```
 
 ## Testing contracts
+If you want to just run the test, execute
 ```bash
 #in another terminal:
 testrpc
-npm run test:contracts
+npm run test:truffle
+```
+### Coverage
+**Note:** The coverage tool is in early development, expect hickups and don't trust it too much.
+
+To generate coverage reports, run
+```bash
+npm run test:coverage
+```
+After the tests ran through, you can find the reports in *GenTo2/coverage/index.html*.
+
+You do **not** need to start testrpc, as it runs it's own testrpc.
+
+If you receive a PORT in use error (`Error: listen EADDRINUSE :::8555`), TestRPC might not have been properly shut down in a previous run. The following command kills the previous testrpc version:
+```bash
+fuser -k -n tcp 8555
 ```

@@ -118,11 +118,17 @@ contract AuctionToken is StandardToken, VotingToken {
                                             uint256 _saleEnd){
         return (owner, name, symbol, totalSupply, creationDate, buyPriceStart, buyPriceEnd, sellPrice, saleStart, saleEnd);
     }
-    function buy() returns (uint amount) {
-        amount = msg.value / getBuyPrice();                     // calculates the amount
-        if (balances[owner] < amount || amount <= 0) throw;     // checks if it has enough to sell
-        balances[msg.sender ] += amount;                   // adds the amount to buyer's balance
-        balances[owner] -= amount;                         // subtracts amount from seller's balance
+    function buy() payable returns (uint amount) {
+        // calculates the amount
+        amount = msg.value / getBuyPrice();
+        // checks if it has enough to sell
+        require(balances[owner] > amount);
+        require(amount > 0);
+        //if (balances[owner] < amount || amount <= 0) throw;
+        // adds the amount to buyer's balance
+        balances[msg.sender] += amount;
+        // subtracts amount from seller's balance
+        balances[owner] -= amount;
         if(true){
             delegations[msg.sender][uint(FieldOfWork.Organisational)] = msg.sender;
             delegations[msg.sender][uint(FieldOfWork.Finance)] = msg.sender;
@@ -130,9 +136,10 @@ contract AuctionToken is StandardToken, VotingToken {
             delegations[msg.sender][uint(FieldOfWork.Product)] = msg.sender;
             shareholders.push(msg.sender);
         }
-
-        MyTransfer(owner, msg.sender, amount, balances[owner]);                // execute an event reflecting the change
-        return amount;                                     // ends function and returns
+        // execute an event reflecting the change
+        MyTransfer(owner, msg.sender, amount, balances[owner]);
+        // ends function and returns
+        return amount;
     }
     function delegate(FieldOfWork fieldOfWork, address recipient){
         if(!isShareholder(msg.sender)) throw;
