@@ -105,7 +105,9 @@ contract AuctionToken is StandardToken {
         // calculates the amount
         amount = msg.value / getBuyPrice();
         // checks if it has enough to sell
-        if (balances[owner] < amount || amount <= 0) throw;
+        require(balances[owner] > amount);
+        require(amount > 0);
+        //if (balances[owner] < amount || amount <= 0) throw;
         // adds the amount to buyer's balance
         balances[msg.sender] += amount;
         // subtracts amount from seller's balance
