@@ -102,12 +102,18 @@ contract AuctionToken is StandardToken {
         return (owner, name, symbol, totalSupply, creationDate, buyPriceStart, buyPriceEnd, sellPrice, saleStart, saleEnd);
     }
     function buy() payable returns (uint amount) {
-        amount = msg.value / getBuyPrice();                     // calculates the amount
-        if (balances[owner] < amount || amount <= 0) throw;     // checks if it has enough to sell
-        balances[msg.sender] += amount;                   // adds the amount to buyer's balance
-        balances[owner] -= amount;                         // subtracts amount from seller's balance
-        MyTransfer(owner, msg.sender, amount, balances[owner]);                // execute an event reflecting the change
-        return amount;                                     // ends function and returns
+        // calculates the amount
+        amount = msg.value / getBuyPrice();
+        // checks if it has enough to sell
+        if (balances[owner] < amount || amount <= 0) throw;
+        // adds the amount to buyer's balance
+        balances[msg.sender] += amount;
+        // subtracts amount from seller's balance
+        balances[owner] -= amount;
+        // execute an event reflecting the change
+        MyTransfer(owner, msg.sender, amount, balances[owner]);
+        // ends function and returns
+        return amount;
     }
 
     function currentTime() returns (uint time) {
