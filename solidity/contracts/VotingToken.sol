@@ -29,7 +29,7 @@ contract VotingToken {
     uint votingDeadline,
     bool finished,
     bool votingPassed){
-        Voting voting = votings[votingID];
+        Voting storage voting = votings[votingID];
         return (voting.recipient, voting.amount, voting.description, voting.votingDeadline, voting.finished, voting
         .votingPassed);
     }
@@ -52,6 +52,7 @@ contract VotingToken {
 
     function currentTime() returns (uint time);
     function isShareholder(address userAddress) returns (bool shareholder);
+    function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) returns (uint influence);
 
     function VotingToken() payable {
         debatingPeriodInMinutes = 10; // TODO Move to settings
@@ -93,13 +94,6 @@ contract VotingToken {
         Voted(votingNumber, supportsVoting, msg.sender);
         return voteID;
     }
-
-    function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork)
-    returns (uint influence)
-    {
-        return 1; // TODO Influence from Delegation
-    }
-
 
     function executeVoting(uint votingNumber)
     {

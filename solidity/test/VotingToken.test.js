@@ -108,8 +108,8 @@ contract('AuctionToken', function(accounts) {
     it("should allow voting only for shareholder", async function() {
       const testContract= await VotingToken.deployed()
       try {
-        await shareholder = accounts[0]
-        testContract.newVoting.sendTransaction(accounts[1], 100, {from: shareholder})
+        shareholder = accounts[0]
+        await testContract.newVoting.sendTransaction(accounts[1], 100, {from: shareholder})
         // number of numberOfInitialVotings doesn't chance because he isn't a shareholder
         expect(+await getNumVotings.call().toBe(numberOfInitialVotings))
       } catch(e) {

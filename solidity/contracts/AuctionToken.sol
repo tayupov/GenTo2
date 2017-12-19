@@ -1,8 +1,9 @@
 pragma solidity ^0.4.8;
 
 import '../../node_modules/zeppelin-solidity/contracts/token/StandardToken.sol';
+import './VotingToken.sol';
 
-contract AuctionToken is StandardToken {
+contract AuctionToken is StandardToken, VotingToken {
 
     uint256 public buyPriceStart;
     uint256 public buyPriceEnd;
@@ -22,9 +23,12 @@ contract AuctionToken is StandardToken {
     uint256 totalSupply = 0;
 
     address public owner;
+    address[] public shareholders;
 
     bool dev;
     uint cTime;
+
+    mapping(address => mapping(uint => address)) delegations;
 
     event MyTransfer(address indexed from, address indexed to, uint256 value, uint256 remainingSupply);
 
@@ -63,8 +67,18 @@ contract AuctionToken is StandardToken {
         }
     }
     function isShareholder(address userAddress) returns (bool shareholder){
-        // TODO implement me
-        return true;
+        return balances[userAddress] > 0;
+    }
+
+    function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) returns (uint influence){
+        uint influence1 = 0;
+        for (uint i = 0; i <  shareholders.length; ++i) {
+            if(delegations[shareholders[i]][uint(fieldOfWork)] == voter){
+                influence1 += balances[shareholders[i]];
+            }
+        }
+
+        return influence1;
     }
 
     function getBuyPrice() constant returns (uint) {
@@ -104,13 +118,25 @@ contract AuctionToken is StandardToken {
                                             uint256 _saleEnd){
         return (owner, name, symbol, totalSupply, creationDate, buyPriceStart, buyPriceEnd, sellPrice, saleStart, saleEnd);
     }
-    function buy() payable returns (uint amount) {
+    function buy() returns (uint amount) {
         amount = msg.value / getBuyPrice();                     // calculates the amount
         if (balances[owner] < amount || amount <= 0) throw;     // checks if it has enough to sell
         balances[msg.sender ] += amount;                   // adds the amount to buyer's balance
         balances[owner] -= amount;                         // subtracts amount from seller's balance
+        if(true){
+            delegations[msg.sender][uint(FieldOfWork.Organisational)] = msg.sender;
+            delegations[msg.sender][uint(FieldOfWork.Finance)] = msg.sender;
+            delegations[msg.sender][uint(FieldOfWork.Partnership)] = msg.sender;
+            delegations[msg.sender][uint(FieldOfWork.Product)] = msg.sender;
+            shareholders.push(msg.sender);
+        }
+
         MyTransfer(owner, msg.sender, amount, balances[owner]);                // execute an event reflecting the change
         return amount;                                     // ends function and returns
+    }
+    function delegate(FieldOfWork fieldOfWork, address recipient){
+        if(!isShareholder(msg.sender)) throw;
+        delegations[msg.sender][uint(fieldOfWork)] = recipient;
     }
 
     function currentTime() returns (uint time) {
