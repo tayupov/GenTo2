@@ -20,6 +20,7 @@ contract AuctionToken is StandardToken, VotingToken {
     uint256 public creationDate;
 
     uint8 public constant decimals = 18;
+    uint256 public bal = 0;
     uint256 totalSupply = 0;
 
     address public owner;
@@ -54,7 +55,7 @@ contract AuctionToken is StandardToken, VotingToken {
 
         owner = _owner;
         totalSupply = _totalSupply;
-        balances[owner] = _totalSupply;
+        bal = _totalSupply;
         symbol = _symbol;
         name = _name;
 
@@ -122,13 +123,13 @@ contract AuctionToken is StandardToken, VotingToken {
         // calculates the amount
         amount = msg.value / getBuyPrice();
         // checks if it has enough to sell
-        require(balances[owner] > amount);
+        require(bal > amount);
         require(amount > 0);
         //if (balances[owner] < amount || amount <= 0) throw;
         // adds the amount to buyer's balance
         balances[msg.sender] += amount;
         // subtracts amount from seller's balance
-        balances[owner] -= amount;
+        bal -= amount;
         if(true){
             delegations[msg.sender][uint(FieldOfWork.Organisational)] = msg.sender;
             delegations[msg.sender][uint(FieldOfWork.Finance)] = msg.sender;
@@ -137,10 +138,11 @@ contract AuctionToken is StandardToken, VotingToken {
             shareholders.push(msg.sender);
         }
         // execute an event reflecting the change
-        MyTransfer(owner, msg.sender, amount, balances[owner]);
+        MyTransfer(owner, msg.sender, amount, bal);
         // ends function and returns
         return amount;
     }
+
     function delegate(FieldOfWork fieldOfWork, address recipient){
         if(!isShareholder(msg.sender)) throw;
         delegations[msg.sender][uint(fieldOfWork)] = recipient;

@@ -11,7 +11,7 @@ async function getTestToken() {
   return testContract
 }
 
-contract('AuctionToken', function(accounts) {
+contract('VotingToken', function(accounts) {
     it("schould execute votings with 2/3 confirmed votes", async function() {
         const testContract = await VotingToken.deployed()
         try {
