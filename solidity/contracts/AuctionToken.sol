@@ -20,9 +20,9 @@ contract AuctionToken is StandardToken, VotingToken {
     uint256 public creationDate;
 
     uint8 public constant decimals = 18;
+    uint256 public bal = 0;
     uint256 totalSupply = 0;
 
-    address public owner;
     address[] public shareholders;
 
     bool dev;
@@ -30,10 +30,9 @@ contract AuctionToken is StandardToken, VotingToken {
 
     mapping(address => mapping(uint => address)) delegations;
 
-    event MyTransfer(address indexed from, address indexed to, uint256 value, uint256 remainingSupply);
+    event MyTransfer(address indexed to, uint256 value, uint256 remainingSupply);
 
     function AuctionToken(uint256 _totalSupply,
-      address _owner,
       string _symbol,
       string _name,
       uint256 _buyPriceStart,
@@ -52,9 +51,8 @@ contract AuctionToken is StandardToken, VotingToken {
         saleStart = _saleStart;
         saleDuration = saleEnd - saleStart;
 
-        owner = _owner;
         totalSupply = _totalSupply;
-        balances[owner] = _totalSupply;
+        bal = _totalSupply;
         symbol = _symbol;
         name = _name;
 
@@ -106,8 +104,7 @@ contract AuctionToken is StandardToken, VotingToken {
         return currentPrice;
     }
 
-    function getDetails() constant returns (address _owner,
-                                            string _name,
+    function getDetails() constant returns (string _name,
                                             string _symbol,
                                             uint256 _totalSupply,
                                             uint256 _creationDate,
@@ -116,19 +113,19 @@ contract AuctionToken is StandardToken, VotingToken {
                                             uint256 _sellPrice,
                                             uint256 _saleStart,
                                             uint256 _saleEnd){
-        return (owner, name, symbol, totalSupply, creationDate, buyPriceStart, buyPriceEnd, sellPrice, saleStart, saleEnd);
+        return (name, symbol, totalSupply, creationDate, buyPriceStart, buyPriceEnd, sellPrice, saleStart, saleEnd);
     }
     function buy() payable returns (uint amount) {
         // calculates the amount
         amount = msg.value / getBuyPrice();
         // checks if it has enough to sell
-        require(balances[owner] > amount);
+        require(bal > amount);
         require(amount > 0);
         //if (balances[owner] < amount || amount <= 0) throw;
         // adds the amount to buyer's balance
         balances[msg.sender] += amount;
         // subtracts amount from seller's balance
-        balances[owner] -= amount;
+        bal -= amount;
         if(true){
             delegations[msg.sender][uint(FieldOfWork.Organisational)] = msg.sender;
             delegations[msg.sender][uint(FieldOfWork.Finance)] = msg.sender;
@@ -137,10 +134,11 @@ contract AuctionToken is StandardToken, VotingToken {
             shareholders.push(msg.sender);
         }
         // execute an event reflecting the change
-        MyTransfer(owner, msg.sender, amount, balances[owner]);
+        MyTransfer(msg.sender, amount, bal);
         // ends function and returns
         return amount;
     }
+
     function delegate(FieldOfWork fieldOfWork, address recipient){
         if(!isShareholder(msg.sender)) throw;
         delegations[msg.sender][uint(fieldOfWork)] = recipient;
