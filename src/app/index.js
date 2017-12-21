@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container } from 'semantic-ui-react';
 import AlertContainer from 'react-alert';
-import SideBar from 'components/SideBar';
+import DAOSidebar from 'components/DAOSidebar';
 import Routes from 'routes';
 
 import web3 from 'utils/web3';
@@ -14,17 +14,14 @@ export default class App extends Component {
     this.state = {
       account: null,
       network: null,
-<<<<<<< 480659b5b7540d7739cf2466f2864871bfc90d0c
       active: false,
       daos: [],
       icos: [],
       currDao: null,
       currPoll: [],
-      daoDetails: null
-=======
+      daoDetails: null,
       organizations: [],
       currentOrganization: null
->>>>>>> refactor hocs, poll -> vote, route changes
     }
   }
 
@@ -34,7 +31,7 @@ export default class App extends Component {
 
     //remove!
     this.setState({
-      organizations: [{name: "foo"}, {name: "bar"}]
+      organizations: [{name: "EBikes Enterprise"}, {name: "bar"}]
     });
   }
 
@@ -79,8 +76,7 @@ export default class App extends Component {
     return (
       <div>
         <AlertContainer ref={a => this.msg = a} />
-        <SideBar organizations={this.state.organizations}
-          />
+        <DAOSidebar organizations={this.state.organizations} />
         <div className="content">
           <Routes
             account={this.state.account}
