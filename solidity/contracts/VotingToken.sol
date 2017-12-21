@@ -23,19 +23,20 @@ contract VotingToken {
         mapping (address => bool) voted;
     }
 
-    function getVoting(uint votingID) constant returns (address recipient,
-    uint amount,
-    string description,
-    uint votingDeadline,
-    bool finished,
-    bool votingPassed){
+    function getVoting(uint votingID) public constant returns (address recipient,
+        uint amount,
+        string description,
+        uint votingDeadline,
+        bool finished,
+        bool votingPassed) {
         Voting storage voting = votings[votingID];
+
         return (voting.recipient, voting.amount, voting.description, voting.votingDeadline, voting.finished, voting
         .votingPassed);
     }
 
-    function getNumVotings() constant returns (
-        uint numVotings){
+    function getNumVotings() public constant returns (
+        uint numVotings) {
         return votings.length;
     }
 
@@ -60,12 +61,12 @@ contract VotingToken {
 
     function newVoting(
         address beneficiary,
-        uint weiAmount
-    )
+        uint weiAmount)
     onlyShareholders
     returns (uint votingID)
     {
         votingID = votings.length++;
+        votings.length++;
         Voting storage voting = votings[votingID];
         voting.recipient = beneficiary;
         voting.amount = weiAmount;
@@ -100,8 +101,8 @@ contract VotingToken {
         Voting storage voting = votings[votingNumber];
 
         require(currentTime() > voting.votingDeadline                                             // If it is past the voting deadline
-        && !voting.finished                                                          // and it has not already been finished
-        && voting.votingHash == sha3(voting.recipient, voting.amount)); // and the supplied code matches the voting...
+            && !voting.finished                                                          // and it has not already been finished
+            && voting.votingHash == sha3(voting.recipient, voting.amount)); // and the supplied code matches the voting...
 
 
         uint approve = 0;

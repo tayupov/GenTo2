@@ -56,7 +56,7 @@ contract('AuctionToken', function(accounts) {
   })
 
   it("should not be possible to buy something outside the ICO", async function() {
-    const testContract = await getTestToken()  
+    const testContract = await getTestToken()
     try {
       await testContract.buy.sendTransaction({from: accounts[1], value: web3.toWei(10, 'Gwei')})
       should.fail("this transaction should have raised an error")
