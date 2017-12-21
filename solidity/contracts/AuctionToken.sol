@@ -65,7 +65,7 @@ contract AuctionToken is StandardToken, VotingToken {
         }
     }
     function isShareholder(address userAddress) returns (bool shareholder){
-        return balances[userAddress] > 0;
+        return (balances[userAddress] > 0) ? true : false;
     }
 
     function getBalance() returns(uint balance) {
@@ -74,8 +74,8 @@ contract AuctionToken is StandardToken, VotingToken {
 
     function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) returns (uint influence){
         uint influence1 = 0;
-        for (uint i = 0; i <  shareholders.length; ++i) {
-            if(delegations[shareholders[i]][uint(fieldOfWork)] == voter){
+        for (uint i = 0; i < shareholders.length; ++i) {
+            if (delegations[shareholders[i]][uint(fieldOfWork)] == voter){
                 influence1 += balances[shareholders[i]];
             }
         }
