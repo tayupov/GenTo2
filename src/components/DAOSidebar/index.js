@@ -11,7 +11,7 @@ export default class DAOSidebar extends Component {
         <Menu.Item header as={Link} to="/">
           <Icon name="home" />
         </Menu.Item>
-        <Menu.Item as={Link} to="/">
+        <Menu.Item as={Link} to="/dao/create">
           <Icon name="add square" />
         </Menu.Item>
         {organizations.map((org, index) => {

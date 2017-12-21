@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import About from './About';
 import List from './List';
-import GenerateDAO from './GenerateDAO';
+import DAOCreator from './DAOCreator';
 import GeneratePoll from './GeneratePoll';
 import Ico from './Ico';
 import Dao from './Dao';
@@ -19,58 +19,58 @@ export default class Routes extends React.Component {
             <Switch>
                 <Route exact path="/"
                     render={(props) => (<About {...props} />)}
-                />
-                <Route path="/ico/:address"
-                    render={(props) => (<Ico
-                        account={account}
-                        key={props.match.params.address}
-                        network={network}
-                        notify={notify}
-                    />)}
-                />
-                {/* decide for ico or dao */}
+                    />
+                <Route path="/dao/create"
+                    render={(props) => (
+                        <DAOCreator
+                            account={account}
+                            network={network}
+                            notify={notify}
+                            />
+                    )}
+                    />
                 <Route path="/dao/:address"
                     render={(props) => (<Dao
                         account={account}
                         key={props.match.params.address}
                         network={network}
                         notify={notify}
-                    />)}
-                />
+                        />)}
+                    />
                 <Route path="/dao/:address/vote"
                     render={(props) => (<Vote
                         account={account}
                         key={props.match.params.address}
                         network={network}
                         notify={notify}
-                    />)}
-                />
+                        />)}
+                    />
                 <Route path="/list"
                     render={(props) => (<List
                         account={account}
                         notify={notify}
-                    />)}
-                />
+                        />)}
+                    />
                 <Route path="/daoList"
                     render={(props) => (<DaoList
                         account={account}
                         notify={notify}
-                    />)}
-                />
+                        />)}
+                    />
                 <Route path="/daoSettings/:address"
                     render={(props) => (<DaoSettings
                         account={account}
                         notify={notify}
-                    />)}
-                />
+                        />)}
+                    />
 
                 <Route path="/generatePoll"
                     render={(props) => (<GeneratePoll
                         account={account}
                         network={network}
                         notify={notify}
-                    />)}
-                />
+                        />)}
+                    />
                 <Route component={Error} />
             </Switch>
         )
