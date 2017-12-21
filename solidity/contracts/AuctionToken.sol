@@ -68,6 +68,10 @@ contract AuctionToken is StandardToken, VotingToken {
         return balances[userAddress] > 0;
     }
 
+    function getBalance() returns(uint balance) {
+        return this.balance;
+    }
+
     function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) returns (uint influence){
         uint influence1 = 0;
         for (uint i = 0; i <  shareholders.length; ++i) {
@@ -135,6 +139,7 @@ contract AuctionToken is StandardToken, VotingToken {
         }
         // execute an event reflecting the change
         MyTransfer(msg.sender, amount, bal);
+
         // ends function and returns
         return amount;
     }

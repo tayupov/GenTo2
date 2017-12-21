@@ -1,16 +1,15 @@
 pragma solidity ^0.4.8;
-// import "AuctionToken.sol.sol";
 
 //Contract Factory
 import './AuctionToken.sol';
 contract GenToFactory {
 
-    address[] userICOs;
+    address[] public ICOs;
 
     event ContractCreated(address contractAddress);
 
     function createContract(uint256 totalSupply,
-                            string _symbol,
+                            string _symbol, 
                             string _name,
                             uint256 _buyPriceStart,
                             uint256 _buyPriceEnd,
@@ -28,7 +27,7 @@ contract GenToFactory {
                                                      _saleEnd,
                                                      false);
         address auctionAddress = address(auctionToken);
-        userICOs.push(auctionAddress);
+        ICOs.push(auctionAddress);
         ContractCreated(auctionAddress);
         return auctionAddress;
     }

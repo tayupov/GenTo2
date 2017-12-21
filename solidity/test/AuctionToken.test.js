@@ -93,6 +93,10 @@ contract('AuctionToken', function(accounts) {
     await testContract.setCurrentTime.sendTransaction(1200000)
     const currTokensTemp = await testContract.bal()
     const currTokens = currTokensTemp.toNumber()
+    console.log('currTokens')
+    console.log(currTokens)
+    console.log('currBalance')
+    console.log(+await testContract.getBalance.call())
     const buyPrice = await testContract.getBuyPrice.call()
     let buyValue = currTokens * buyPrice
     const actBuyValue = buyValue += buyPrice
