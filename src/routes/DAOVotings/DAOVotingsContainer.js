@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-import Vote from './Vote';
+import DAOVotings from './DAOVotings';
 
 import Header from 'components/Header';
 
-class VotingsContainer extends Component {
+export default class DAOVotingsContainer extends Component {
 
     constructor(props) {
         super(props);
@@ -52,15 +52,7 @@ class VotingsContainer extends Component {
         return (
             <div>
                 <Header text='LIST OF VOTINGS' />
-                <VotingModal
-                    header = {header}
-                    modalOpen={modalOpen}
-                    modalState={modalState}
-                    modalSubmitted={modalSubmitted}
-                    handleClose={this.handleClose}
-                    handleOk={this.handleOk}
-                />
-                {(this.state.polls.length > 0) && <Vote
+                {(this.state.votings.length > 0) && <DAOVotings
                     {...this.props}
                     {...this.state}
                     onClick={this.onClick}
@@ -73,5 +65,3 @@ class VotingsContainer extends Component {
     }
 
 }
-
-export default VotingsContainer;

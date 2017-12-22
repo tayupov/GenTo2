@@ -8,8 +8,13 @@ export default class DAOSidebar extends Component {
     const organizations = this.props.organizations;
     return (
       <Sidebar width={"thin"} as={Menu} vertical visible={true} inverted icon="labeled">
-        <Menu.Item header as={Link} to="/">
+
+        <Menu.Item as={Link} to="/">
           <Icon name="home" />
+        </Menu.Item>
+
+        <Menu.Item as={Link} to="/dao/list">
+          <Icon name="list" />
         </Menu.Item>
 
         {organizations.map((org, index) => {
