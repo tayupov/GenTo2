@@ -1,7 +1,9 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import About from './About';
+import Home from './Home';
+import NotFound from './NotFound';
+
 import DAO from './DAO';
 import DAOList from './DAOList';
 import DAOCreator from './DAOCreator';
@@ -10,7 +12,7 @@ import DAOSettings from './DAOSettings';
 import DAOVotings from './DAOVotings';
 
 import GeneratePoll from './GeneratePoll';
-import Error from './Error';
+
 
 /*
     Bear in mind that the order of <Route /> components inside a <Switch /> component
@@ -23,7 +25,7 @@ export default class Routes extends React.Component {
         const { account, network, notify } = this.props;
         return (
             <Switch>
-                <Route exact path="/" component={About} />
+                <Route exact path="/" component={Home} />
 
                 <Route path="/dao/list"
                     render={(props) => (
@@ -81,7 +83,7 @@ export default class Routes extends React.Component {
                         notify={notify}
                         />)}
                     />
-                <Route component={Error} />
+                <Route component={NotFound} />
 
             </Switch>
         )

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import StepZilla from 'react-stepzilla';
 
-import { Input, Icon, Button, Dropdown } from 'semantic-ui-react';
+import { Input, Button, Dropdown } from 'semantic-ui-react';
 
 import Organisational from 'routes/GeneratePoll/steps/Organisational';
 import Created from 'routes/GeneratePoll/steps/Created';

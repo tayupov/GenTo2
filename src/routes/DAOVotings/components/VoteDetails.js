@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Divider, Button, Segment, Progress } from 'semantic-ui-react';
+import { Divider, Button, Progress } from 'semantic-ui-react';
 import { Doughnut } from  'react-chartjs-2';
 
 const VoteDetails = ({

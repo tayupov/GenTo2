@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
-import { Sidebar, Menu, Button, Icon } from 'semantic-ui-react';
+import { Sidebar, Menu, Icon } from 'semantic-ui-react';
 
 export default class DAOSidebar extends Component {
 

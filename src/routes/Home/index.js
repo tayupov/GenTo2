@@ -2,7 +2,7 @@ import React from 'react';
 
 import Header from 'components/Header';
 
-const About = () => (
+export default () => (
     <div>
         <Header text='ABOUT GENTO' id='header' />
         <p style={{ fontSize: '20px', textAlign: 'center' }}>
@@ -25,5 +25,3 @@ const About = () => (
         </p>
     </div>
 )
-
-export default About;

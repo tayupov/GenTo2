@@ -47,8 +47,7 @@ class GeneratePollContainer  extends Component {
             pollName,
             pollEnd,
             pollDescription,
-            pollPayout,
-            pollCurrency
+            pollPayout
          } = this.store;
 
         const saleEndDate = new Date(pollEnd);

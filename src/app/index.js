@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import { Container } from 'semantic-ui-react';
+import React from 'react';
 import AlertContainer from 'react-alert';
 import DAOSidebar from 'components/DAOSidebar';
 import Routes from 'routes';
@@ -7,7 +6,7 @@ import Routes from 'routes';
 import web3 from 'utils/web3';
 import 'styles/app.css';
 
-export default class App extends Component {
+export default class App extends React.Component {
 
   constructor() {
     super();
@@ -74,10 +73,11 @@ export default class App extends Component {
         return this.msg.info(message);
       case 'success':
         return this.msg.success(message);
-      case 'error':
-        return this.msg.error(message);
       case 'remove':
         return this.msg.removeAll();
+      case 'error':
+      default:
+        return this.msg.error(message);
     }
   }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Select, Container, Button } from 'semantic-ui-react';
+import { Form, Input, Select, Container } from 'semantic-ui-react';
 import { selectedCurrency, startPrice, endPrice } from 'constants/validators';
 import currencyOptions from 'utils/currencyOptions';
 import validateICOPricing from '../../validators/ICOPricing';
