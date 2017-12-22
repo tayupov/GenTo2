@@ -8,11 +8,6 @@ class DaoListContainer extends Component {
 
   constructor() {
     super();
-
-    this.state = {
-      items: [],
-      isLoading: true
-    }
   }
 
   componentDidMount() {
@@ -73,10 +68,3 @@ class DaoListContainer extends Component {
     );
   }
 }
-
-DaoListContainer.propTypes = {
-  account: PropTypes.string.isRequired,
-  notify: PropTypes.func.isRequired
-}
-
-export default DaoListContainer;

@@ -6,7 +6,7 @@ import VoteList from './components/VoteList';
 import SearchNav from './components/VoteList/components/SearchNav';
 import VoteDetails from './components/VoteDetails';
 
-const Vote = ({
+const Votings = ({
     header, onClick, handleOpen, handleReset, polls, contextRef, account, currDaoDetails, onChange
 }) => (
     <Grid columns={2}>
@@ -32,4 +32,4 @@ const Vote = ({
     </Grid>
 )
 
-export default Vote;
+export default Votings;

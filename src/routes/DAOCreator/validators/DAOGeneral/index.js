@@ -6,4 +6,10 @@ export default function validateDAOGeneral() {
     const descriptionValue = document.getElementById(daoDescription).value;
 
     //TODO: validate
+
+    return {
+        name: nameValue,
+        website: websiteValue,
+        description: descriptionValue
+    }
 }

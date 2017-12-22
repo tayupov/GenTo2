@@ -5,4 +5,8 @@ export default function validateDAOVoting() {
     const decidingPercValue = document.getElementById(decidingPercentage).value;
 
     //TODO: validate
+    return {
+        minPartic: minParticValue,
+        decidingPercentage: decidingPercValue
+    }
 }

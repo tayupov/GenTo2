@@ -6,4 +6,9 @@ export default function validateICOPricing() {
     const endPriceValue = document.getElementById(endPrice).value;
 
     //TODO: validate
+    return {
+        selectedCurrency: selectCurrValue,
+        startPrice: startPriceValue,
+        endPrice: endPriceValue
+    }
 }

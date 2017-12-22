@@ -26,12 +26,6 @@ class DetailsSection extends Component {
 
 
     componentWillMount() {
-        //
-        // this.props.setSupplyInterval((obj) => {
-        //     this.setState({
-        //         supplyObj: obj
-        //     })
-        // });
     }
 
     render() {

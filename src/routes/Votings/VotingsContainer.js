@@ -3,39 +3,21 @@ import React, { Component } from 'react';
 import Vote from './Vote';
 
 import Header from 'components/Header';
-import VotingModal from 'components/VotingModal';
 
-class VoteContainer extends Component {
+class VotingsContainer extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            polls: [],
-            header: 'Issue 99 CVS shares',
-            modalOpen: false,
-            modalState: '',
-            modalSubmitted: false,
-            currDaoDetails: {},
-            createdVotes: []
+            votings: [],
         };
     }
 
     componentDidMount() {
-        console.log('this.props.currVote');
-        console.log(this.props.currVote);
-        const createdVotes = this.props.currVote.filter(poll => poll.daoName === this.props.getCurrDao().daoName)[0].polls;
-        this.listVotes(this.props.getCurrDao().daoName, createdVotes);
-        this.setState({
-            currDaoDetails: this.props.getCurrDao()
-        })
-
-        console.log('Votes');
-        console.log(this.state.polls);
     }
 
     onClick = (e, { header }) => {
-        // console.log(data.children[0].props.children[0].props.children);
         this.setState({
             header
         })
@@ -44,9 +26,6 @@ class VoteContainer extends Component {
     handleOpen = (e) => this.setState({ modalOpen: true, modalState: e.target.id })
     
     handleClose = () => this.setState({ modalOpen: false, modalSubmitted: false })
-
-    onChange = (e, { value }) => {
-    }
 
     handleReset = () => {
         const currIndex = this.state.polls.findIndex(obj => obj.header === this.state.header);
@@ -65,9 +44,6 @@ class VoteContainer extends Component {
         this.state.modalState === 'approve' ? this.state.polls[currIndex].addressesFor++ : this.state.polls[currIndex].addressesAgainst++;
         this.state.modalState === 'approve' ? this.state.polls[currIndex].tokensFor += this.state.currDaoDetails.shTokens : this.state.polls[currIndex].tokensAgainst += this.state.currDaoDetails.shTokens;
         this.state.polls[currIndex].voterAddresses.push(this.props.account);
-    }
-
-    listVotes = (currDaoName, createdVotes) => {
     }
 
     render() {
@@ -98,4 +74,4 @@ class VoteContainer extends Component {
 
 }
 
-export default VoteContainer;
+export default VotingsContainer;

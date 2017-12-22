@@ -8,4 +8,11 @@ export default function validateICOGeneral() {
     const saleEndValue = document.getElementById(saleEnd).value;
 
     //TODO: validate
+    return {
+        tokenName: tokenNameValue,
+        tickerSymbol: tickerSymbolValue,
+        totalSupply: totalSupplyValue,
+        saleStart: saleStartValue,
+        saleEnd: saleEndValue
+    }
 }

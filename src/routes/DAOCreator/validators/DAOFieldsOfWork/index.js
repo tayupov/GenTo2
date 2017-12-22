@@ -8,4 +8,11 @@ export default function validateDAOFieldsOfWork() {
     const partnerPointsValue = document.getElementById(partnerPoints).value;
 
     //TODO: validate
+    return {
+        dmrReward: dmrRewardValue,
+        financePoints: financePointsValue,
+        productPoints: productPointsValue,
+        orgPoints: orgPointsValue,
+        partnerPoints: partnerPointsValue
+    }
 }

@@ -29,9 +29,18 @@ export default class App extends Component {
     this.updateNetwork();
     setInterval(this.updateAccount, 1000);
 
-    //remove!
+    //TODO: remove!
     this.setState({
-      organizations: [{name: "EBikes Enterprise"}, {name: "bar"}]
+      organizations: [
+        {
+          name: 'EBikes Enterprise',
+          address: 'cryptic_hash_lmao'
+        },
+        {
+          name: 'smoke weed everyday',
+          address: 'cryptic_hash_lol'
+        }
+      ]
     });
   }
 

@@ -11,16 +11,18 @@ export default class DAOSidebar extends Component {
         <Menu.Item header as={Link} to="/">
           <Icon name="home" />
         </Menu.Item>
+
+        {organizations.map((org, index) => {
+          return (
+            <Menu.Item key={index} as={Link} to={{ pathname: `/dao/${org.address}`}}>
+              <Menu.Header>{org.name}</Menu.Header>
+            </Menu.Item>
+          )
+        })}
+        
         <Menu.Item as={Link} to="/dao/create">
           <Icon name="add square" />
         </Menu.Item>
-        {organizations.map((org, index) => {
-            return (
-                <Menu.Item key={index} as={Link} to="dao/:address">
-                  <Menu.Header>{org.name}</Menu.Header>
-                </Menu.Item>
-            )
-        })}
       </Sidebar>
     )
   }
