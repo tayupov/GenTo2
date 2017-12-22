@@ -6,6 +6,7 @@ contract VotingToken {
     Voting[] public votings;
     uint public numVotings;
     enum FieldOfWork { Finance, Organisational, Product, Partnership }
+    FieldOfWork public fow;
 
     event Voted(uint votingID, bool position, address voter);
     event VotingTallied(uint votingID, uint result, uint quorum, bool active);
@@ -23,7 +24,21 @@ contract VotingToken {
         mapping (address => bool) voted;
     }
 
-    function getVoting(uint votingID) constant returns (address recipient,
+    function VotingToken() public payable {
+        debatingPeriodInMinutes = 10;  // TODO Move to settings
+        fow = FieldOfWork.Finance;
+    }
+
+    function getFieldOfWork() public constant returns (uint) {
+        return uint(fow);
+    }
+
+    function setFieldOfWork(uint _value) public {
+      //require(uint(FieldOfWork.Partnership) >= _value);
+      fow = FieldOfWork(_value);
+    }
+
+    function getVoting(uint votingID) public constant returns (address recipient,
     uint amount,
     string description,
     uint votingDeadline,
@@ -56,10 +71,6 @@ contract VotingToken {
     function currentTime() returns (uint time);
     function isShareholder(address userAddress) returns (bool shareholder);
     function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) returns (uint influence);
-
-    function VotingToken() payable {
-        debatingPeriodInMinutes = 10; // TODO Move to settings
-    }
 
     function newVoting(
         address beneficiary,
