@@ -145,7 +145,9 @@ contract AuctionToken is StandardToken, VotingToken {
     }
 
     function delegate(FieldOfWork fieldOfWork, address recipient){
-        if(!isShareholder(msg.sender)) throw;
+        // shareholder delegates to recipient ??
+        if (!isShareholder(msg.sender))
+            throw;
         delegations[msg.sender][uint(fieldOfWork)] = recipient;
     }
 

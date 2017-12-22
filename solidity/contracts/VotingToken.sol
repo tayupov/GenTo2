@@ -3,10 +3,14 @@ pragma solidity ^0.4.8;
 contract VotingToken {
 
     uint public debatingPeriodInMinutes;
+
     Voting[] public votings;
+
     uint public numVotings;
+
     enum FieldOfWork { Finance, Organisational, Product, Partnership }
-    FieldOfWork public fow;
+
+    FieldOfWork public fow = FieldOfWork.Finance;
 
     event Voted(uint votingID, bool position, address voter);
     event VotingTallied(uint votingID, uint result, uint quorum, bool active);
@@ -24,18 +28,18 @@ contract VotingToken {
         mapping (address => bool) voted;
     }
 
+    //constructor
     function VotingToken() public payable {
         debatingPeriodInMinutes = 10;  // TODO Move to settings
-        fow = FieldOfWork.Finance;
     }
 
-    function getFieldOfWork() public constant returns (uint) {
-        return uint(fow);
+    function getFieldOfWork() public constant returns (FieldOfWork) {
+        return fow;
     }
 
     function setFieldOfWork(uint _value) public {
-      //require(uint(FieldOfWork.Partnership) >= _value);
-      fow = FieldOfWork(_value);
+        //require(uint(FieldOfWork.Partnership) >= _value);
+        fow = FieldOfWork(_value);
     }
 
     function getVoting(uint votingID) public constant returns (address recipient,
