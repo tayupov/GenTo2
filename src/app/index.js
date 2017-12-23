@@ -36,7 +36,7 @@ export default class App extends React.Component {
           address: 'cryptic_hash_lmao'
         },
         {
-          name: 'smoke weed everyday',
+          name: '420 Blaze it',
           address: 'cryptic_hash_lol'
         }
       ]
@@ -81,18 +81,31 @@ export default class App extends React.Component {
     }
   }
 
+  setCurrentOrganization = (event, element) => {
+    this.setState({
+      currentOrganization: element.org || null
+    })
+  }
+
   render() {
     return (
       <div>
         <AlertContainer ref={a => this.msg = a} />
-        <DAOSidebar organizations={this.state.organizations} />
+
+        <DAOSidebar
+          organizations={this.state.organizations}
+          currentOrganization={this.state.currentOrganization}
+          setCurrentOrganization={this.setCurrentOrganization}
+          />
+
         <div className="content">
           <Routes
             account={this.state.account}
             network={this.state.network}
             notify={this.notify}
-          />
+            />
         </div>
+
       </div>
     );
   }

@@ -9,50 +9,51 @@ import { createGentoFactoryInstance } from 'utils/contractInstances';
 
 export default class DAOCreatorContainer extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: null,
-      website: null,
-      description: null,
-      dmrReward: null,
-      financePoints: null,
-      productPoints: null,
-      orgPoints: null,
-      partnerPoints: null,
-      minPartic: null,
-      decidingPercentage: null,
-      tokenName: null,
-      tickerSymbol: null,
-      totalSupply: null,
-      saleStart: null,
-      saleEnd: null,
-      selectedCurrency: null,
-      startPrice: null,
-      endPrice: null,
-    }
-  }
+	constructor(props) {
+		super(props);
+		this.state = {
+			name: null,
+			website: null,
+			description: null,
+			dmrReward: null,
+			financePoints: null,
+			productPoints: null,
+			orgPoints: null,
+			partnerPoints: null,
+			minPartic: null,
+			decidingPercentage: null,
+			tokenName: null,
+			tickerSymbol: null,
+			totalSupply: null,
+			saleStart: null,
+			saleEnd: null,
+			selectedCurrency: null,
+			startPrice: null,
+			endPrice: null,
+		}
+	}
 
-  componentDidMount() {
-    document.getElementById('next-button')
-      .addEventListener('click', this.updateCreationState)
-  }
+	componentDidMount() {
+		const nextButton = document.getElementById('next-button');
+		nextButton.addEventListener('click', this.updateCreationState)
+	}
 
-  updateCreationState = (event) => {
-    const doing = document.querySelectorAll('.progtrckr-doing span')[0];
-    const step = doing ? steps.find(step => step.name === doing.innerHTML) : null;
-    if (step) {
-      const validator = step.validator;
-      const result = validator();
-      if (result) {
-        this.setState({ ...result })
-      }
-    }
-  }
+	updateCreationState = (event) => {
+		const doing = document.querySelectorAll('.progtrckr-doing span')[0];
+		const step = doing ? steps.find(step => step.name === doing.innerHTML) : null;
+		if (step) {
+			const validator = step.validator;
+			const result = validator();
+				if (result) {
+					this.setState({ ...result })
+				console.log(this.state)
+			}
+		}
+}
 
-  render() {
-    return (
-      <DAOCreator />
-    )
-  }
+render() {
+	return (
+		<DAOCreator />
+	)
+}
 }

@@ -12,6 +12,10 @@ export default class ICOPricing extends Component {
     this.isValidated = validateICOPricing;
   }
 
+  componentDidMount() {
+    
+  }
+
   render() {
     return (
       <Container>

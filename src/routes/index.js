@@ -54,9 +54,21 @@ export default class Routes extends React.Component {
                             notify={notify}
                             />)}
                     />
+                    
                 <Route path="/dao/:address/votings"
                     render={(props) => (
                         <DAOVotings
+                            account={account}
+                            address={props.match.params.address}
+                            network={network}
+                            notify={notify}
+                            />
+                    )}
+                    />
+
+                <Route path="/dao/:address/votings/create"
+                    render={(props) => (
+                        <GeneratePoll
                             account={account}
                             address={props.match.params.address}
                             network={network}
@@ -76,13 +88,6 @@ export default class Routes extends React.Component {
                     )}
                     />
 
-                <Route path="/generatePoll"
-                    render={(props) => (<GeneratePoll
-                        account={account}
-                        network={network}
-                        notify={notify}
-                        />)}
-                    />
                 <Route component={NotFound} />
 
             </Switch>
