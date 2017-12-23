@@ -93,10 +93,6 @@ contract('AuctionToken', function(accounts) {
     await testContract.setCurrentTime.sendTransaction(1200000)
     const currTokensTemp = await testContract.bal()
     const currTokens = currTokensTemp.toNumber()
-    console.log('currTokens')
-    console.log(currTokens)
-    console.log('currBalance')
-    console.log(+await testContract.getBalance.call())
     const buyPrice = await testContract.getBuyPrice.call()
     let buyValue = currTokens * buyPrice
     const actBuyValue = buyValue += buyPrice
@@ -104,8 +100,6 @@ contract('AuctionToken', function(accounts) {
       await testContract.buy.sendTransaction({from: accounts[2], value: actBuyValue})
       should.fail("this transaction should have raised an error")
     } catch (e) {
-      console.log('e.message');
-      console.log(e.message);
       expect(e.message).toContain("VM Exception while processing transaction: ")
     }
   })

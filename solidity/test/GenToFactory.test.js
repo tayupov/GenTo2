@@ -8,9 +8,9 @@ let defaultICOdata = {
   saleStart: new Date().getTime(),
   saleEnd: new Date().getTime()+10000
 }
-async function createNewICO(overrideData) {
+async function createNewICO() {
   let data = {}
-  Object.assign(data, defaultICOdata, overrideData)
+  Object.assign(data, defaultICOdata)
   let genToFactory = await GenToFactory.deployed()
   let contract = await genToFactory.createContract.sendTransaction(
     data.totalSupply,
