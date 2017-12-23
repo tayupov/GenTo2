@@ -321,5 +321,102 @@ contract('VotingToken', function(accounts) {
       }
     })
 
+    it("should allow delegation to other users", async function() {
+        const testContract = await VotingToken.deployed()
+        try {
+            // Set time between ICO start and END
+            await testContract.setCurrentTime.sendTransaction(1200000)
+            // Let three users buy token
+            await testContract.buy.sendTransaction({from: accounts[1], value: 4000})
+            await testContract.buy.sendTransaction({from: accounts[2], value: 3000})
+            await testContract.buy.sendTransaction({from: accounts[3], value: 2000})
+            // Set time to after ICO
+            await testContract.setCurrentTime.sendTransaction(2200000)
+            // Create Voting in Field of work 2
+            await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
+            // User 2 delegates power in Field of Work 2 to User 3
+            await testContract.delegate.sendTransaction(2, accounts[3], {from: accounts[2]})
+            // User 1 and User 3 Vote
+            await testContract.vote.sendTransaction(0, false, {from: accounts[1]})
+            await testContract.vote.sendTransaction(0, true, {from: accounts[3]})
+            // Set time to after the voting period
+            await testContract.setCurrentTime.sendTransaction(2300000)
+            // End Voting
+            await testContract.executeVoting.sendTransaction(0)
+            // Get voting details
+            const p = await testContract.getVoting.call(0);
+            // Voting should pass with 55 %
+            expect(p[6]).toBe(55)
+            console.log(p)
+        } catch(e) {
+            expect(e.message).toContain("VM Exception while processing transaction: ")
+        }
+    })
+
+    it("delegation in one field should not affect the others", async function() {
+        const testContract = await VotingToken.deployed()
+        try {
+            // Set time between ICO start and END
+            await testContract.setCurrentTime.sendTransaction(1200000)
+            // Let three users buy token
+            await testContract.buy.sendTransaction({from: accounts[1], value: 4000})
+            await testContract.buy.sendTransaction({from: accounts[2], value: 3000})
+            await testContract.buy.sendTransaction({from: accounts[3], value: 2000})
+            // Set time to after ICO
+            await testContract.setCurrentTime.sendTransaction(2200000)
+            // Create Voting in Field of work 2
+            await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
+            // User 2 delegates power in all Field of Works except 2 to User 3
+            await testContract.delegate.sendTransaction(0, accounts[3], {from: accounts[2]})
+            await testContract.delegate.sendTransaction(1, accounts[3], {from: accounts[2]})
+            await testContract.delegate.sendTransaction(3, accounts[3], {from: accounts[2]})
+            // User 1 and User 3 Vote
+            await testContract.vote.sendTransaction(0, false, {from: accounts[1]})
+            await testContract.vote.sendTransaction(0, true, {from: accounts[3]})
+            // Set time to after the voting period
+            await testContract.setCurrentTime.sendTransaction(2300000)
+            // End Voting
+            await testContract.executeVoting.sendTransaction(0)
+            // Get voting details
+            const p = await testContract.getVoting.call(0);
+            // Voting should pass with 33 %
+            expect(p[6]).toBe(33)
+            console.log(p)
+        } catch(e) {
+            expect(e.message).toContain("VM Exception while processing transaction: ")
+        }
+    })
+
+    it("delegation after ending a vote should not have an effect on the vote", async function() {
+        const testContract = await VotingToken.deployed()
+        try {
+            // Set time between ICO start and END
+            await testContract.setCurrentTime.sendTransaction(1200000)
+            // Let three users buy token
+            await testContract.buy.sendTransaction({from: accounts[1], value: 4000})
+            await testContract.buy.sendTransaction({from: accounts[2], value: 3000})
+            await testContract.buy.sendTransaction({from: accounts[3], value: 2000})
+            // Set time to after ICO
+            await testContract.setCurrentTime.sendTransaction(2200000)
+            // Create Voting in Field of work 2
+            await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
+            // User 1 and User 3 Vote
+            await testContract.vote.sendTransaction(0, false, {from: accounts[1]})
+            await testContract.vote.sendTransaction(0, true, {from: accounts[3]})
+            // Set time to after the voting period
+            await testContract.setCurrentTime.sendTransaction(2300000)
+            // End Voting
+            await testContract.executeVoting.sendTransaction(0)
+            // User 2 delegates power in Field of Work 2 to User 3
+            await testContract.delegate.sendTransaction(2, accounts[0], {from: accounts[2]})
+            // Get voting details
+            const p = await testContract.getVoting.call(0);
+            // Voting should pass with 33 %
+            expect(p[6]).toBe(33)
+            console.log(p)
+        } catch(e) {
+            expect(e.message).toContain("VM Exception while processing transaction: ")
+        }
+    })
 
 });

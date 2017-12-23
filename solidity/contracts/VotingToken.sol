@@ -23,6 +23,7 @@ contract VotingToken {
         uint votingDeadline;
         bool finished;
         bool votingPassed;
+        uint passedPercent;
         bytes32 votingHash;
         Vote[] votes;
         mapping (address => bool) voted;
@@ -50,10 +51,8 @@ contract VotingToken {
     bool votingPassed,
     uint passedPercent){
         Voting storage voting = votings[votingID];
-        uint passedPercentRes = 0;
-
         return (voting.recipient, voting.amount, voting.description, voting.votingDeadline, voting.finished, voting
-        .votingPassed, passedPercentRes);
+        .votingPassed, voting.passedPercent);
     }
 
     function getNumVotings() public constant returns (
@@ -68,7 +67,7 @@ contract VotingToken {
 
     // Modifier that allows only shareholders to vote and create new votings
     modifier onlyShareholders {
-        isShareholder(msg.sender);
+        if(isShareholder(msg.sender)) throw;
         _;
     }
 
@@ -78,7 +77,8 @@ contract VotingToken {
 
     function newVoting(
         address beneficiary,
-        uint weiAmount)
+        uint weiAmount,
+        FieldOfWork fieldOfWork)
     onlyShareholders
     returns (uint votingID)
     {
@@ -90,6 +90,7 @@ contract VotingToken {
         voting.votingHash = sha3(beneficiary, weiAmount); // TODO add transactionBytecode
         voting.votingDeadline = currentTime() + debatingPeriodInMinutes * 1 minutes;
         voting.finished = false;
+        voting.fieldOfWork = fieldOfWork;
         voting.votingPassed = false;
         numVotings = votingID+1;
 
@@ -144,5 +145,6 @@ contract VotingToken {
             // Voting failed
             voting.votingPassed = false;
         }
+        voting.passedPercent = approve * 100 / (approve+disapprove);
     }
 }
