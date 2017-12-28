@@ -67,7 +67,7 @@ contract VotingToken {
 
     // Modifier that allows only shareholders to vote and create new votings
     modifier onlyShareholders {
-        if(isShareholder(msg.sender)) throw;
+        require(isShareholder(msg.sender));
         _;
     }
 
@@ -79,7 +79,7 @@ contract VotingToken {
         address beneficiary,
         uint weiAmount,
         FieldOfWork fieldOfWork)
-    onlyShareholders
+        onlyShareholders
     returns (uint votingID)
     {
         votingID = votings.length++;
