@@ -1,35 +1,15 @@
 import React from 'react';
 
-import DAOCreator from './DAOCreator';
+import DAOVotingsCreator from './DAOVotingsCreator';
 
-import steps from './steps';
 import web3 from 'utils/web3';
-import GenToFactory from 'assets/contracts/GenToFactory.json';
-import { createGentoFactoryInstance } from 'utils/contractInstances';
+import steps from './steps'
 
-export default class DAOCreatorContainer extends React.Component {
+export default class DAOVotingsCreatorContainer extends React.Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			name: null,
-			website: null,
-			description: null,
-			dmrReward: null,
-			financePoints: null,
-			productPoints: null,
-			orgPoints: null,
-			partnerPoints: null,
-			minPartic: null,
-			decidingPercentage: null,
-			tokenName: null,
-			tickerSymbol: null,
-			totalSupply: null,
-			saleStart: null,
-			saleEnd: null,
-			selectedCurrency: null,
-			startPrice: null,
-			endPrice: null,
 		}
 	}
 
@@ -43,19 +23,20 @@ export default class DAOCreatorContainer extends React.Component {
 		const createButton = document.createElement('button');
 		createButton.addEventListener('click', this.updateCreationState);
 
-    const createButtonText = document.createTextNode('Create');
-    createButton.appendChild(createButtonText);
+		const createButtonText = document.createTextNode('Create');
+		createButton.appendChild(createButtonText);
 		createButton.id = 'create-button';
 		createButton.style.visibility = 'hidden';
 
 		const footerButtons = document.getElementsByClassName('footer-buttons')[0];
-    footerButtons.appendChild(createButton);
+		footerButtons.appendChild(createButton);
 	}
 
 	updateCreationState = (event) => {
 		const step = this.getCurrentStep()
 		const validator = step.validator;
-		const result = validator();
+		// const result = validator();
+		const result = null;
 		if (result) {
 				this.setState({ ...result })
 		}
@@ -70,7 +51,6 @@ export default class DAOCreatorContainer extends React.Component {
 			doing.classList.remove('progtrckr-doing');
 			doing.classList.add('progtrckr-done');
 
-			//TODO: Create DAO from state
 			console.log(this.state)
 		}
 	}
@@ -89,9 +69,10 @@ export default class DAOCreatorContainer extends React.Component {
 		return step || null;
 	}
 
-render() {
-	return (
-		<DAOCreator />
-	)
-}
+	render() {
+
+		return (
+			<DAOVotingsCreator />
+		)
+	}
 }

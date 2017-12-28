@@ -5,9 +5,9 @@ import StepZilla from 'react-stepzilla';
 
 import { Input, Button, Dropdown } from 'semantic-ui-react';
 
-import Organisational from 'routes/GeneratePoll/steps/Organisational';
-import Created from 'routes/GeneratePoll/steps/Created';
-import General from 'routes/GeneratePoll/steps/General';
+import Organisational from 'routes/DAOVotingsCreator/steps/Organisational';
+import Created from 'routes/DAOVotingsCreator/steps/Created';
+import General from 'routes/DAOVotingsCreator/steps/General';
 
 import ModalWrapper from 'components/ModalWrapper';
 

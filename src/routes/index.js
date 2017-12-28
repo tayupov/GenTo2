@@ -10,14 +10,13 @@ import DAOCreator from './DAOCreator';
 import DAOSettings from './DAOSettings';
 
 import DAOVotings from './DAOVotings';
-
-import GeneratePoll from './GeneratePoll';
+import DAOVotingsCreator from './DAOVotingsCreator';
 
 
 /*
     Bear in mind that the order of <Route /> components inside a <Switch /> component
     determines which component will be rendered first. 
-    (e.g. /dao/:address/vote matches before dao/:address)
+    (e.g. /dao/:address/vote matches before dao/:address, order specific routes first)
 */
 
 export default class Routes extends React.Component {
@@ -46,35 +45,36 @@ export default class Routes extends React.Component {
                     )}
                     />
 
-                <Route path="/dao/:address/settings"
+                <Route path="/dao/:address/votings/create"
                     render={(props) => (
-                        <DAOSettings
+                        <DAOVotingsCreator
                             account={account}
-                            address={props.match.params.address}
-                            notify={notify}
-                            />)}
-                    />
-                    
-                <Route path="/dao/:address/votings"
-                    render={(props) => (
-                        <DAOVotings
-                            account={account}
-                            address={props.match.params.address}
                             network={network}
+                            address={props.match.params.address}
                             notify={notify}
                             />
                     )}
                     />
 
-                <Route path="/dao/:address/votings/create"
+                <Route path="/dao/:address/votings"
                     render={(props) => (
-                        <GeneratePoll
+                        <DAOVotings
                             account={account}
-                            address={props.match.params.address}
                             network={network}
+                            address={props.match.params.address}
                             notify={notify}
                             />
                     )}
+                    />
+
+                <Route path="/dao/:address/settings"
+                    render={(props) => (
+                        <DAOSettings
+                            account={account}
+                            network={network}
+                            address={props.match.params.address}
+                            notify={notify}
+                            />)}
                     />
 
                 <Route path="/dao/:address"

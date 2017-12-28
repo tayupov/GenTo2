@@ -8,7 +8,7 @@ export default class DAOSidebar extends Component {
     const { organizations, currentOrganization, setCurrentOrganization } = this.props;
     const currentAddress = currentOrganization ? currentOrganization.address : null;
     return (
-      <Sidebar width={"thin"} as={Menu} vertical visible={true} inverted icon="labeled">
+      <Sidebar width={"thin"} as={Menu} visible={true} vertical inverted icon="labeled">
 
         <Menu.Item as={Link} to="/" onClick={setCurrentOrganization}>
           <Icon name="home" />

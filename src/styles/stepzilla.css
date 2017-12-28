@@ -5,6 +5,7 @@ ol.progtrckr {
   
   ol.progtrckr li {
     display: inline-block;
+    text-align: center;
     line-height: 4.5rem;
     cursor: pointer;
   }
@@ -57,11 +58,12 @@ ol.progtrckr {
   }
   
   ol.progtrckr li.progtrckr-todo:before {
-    content: "\039F";
-    color: silver;
-    background-color: white;
+    content: "\2022";
+    color: white;
+    background-color: #CCCCCC;
     width: 1.2em;
-    line-height: 1.4em;
+    line-height: 1.2em;
+    border-radius: 1.2em;
   }
   
   ol.progtrckr li.progtrckr-todo:hover:before {
