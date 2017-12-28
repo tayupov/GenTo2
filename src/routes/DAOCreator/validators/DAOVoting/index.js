@@ -1,8 +1,8 @@
-import { minPartic, decidingPercentage } from 'constants/validators';
+import { MINPARTIC, DECIDINGPERCENTAGE } from 'constants/validators';
 
 export default function validateDAOVoting() {
-    const minParticValue = document.getElementById(minPartic).value;
-    const decidingPercValue = document.getElementById(decidingPercentage).value;
+    const minParticValue = document.getElementById(MINPARTIC).value;
+    const decidingPercValue = document.getElementById(DECIDINGPERCENTAGE).value;
 
     //TODO: validate
     return {

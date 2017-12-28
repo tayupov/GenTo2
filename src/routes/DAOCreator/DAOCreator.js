@@ -7,7 +7,7 @@ export default class DAOCreator extends React.Component {
 
   render() {
     return (
-      <StepZilla steps={steps} />
+      <StepZilla steps={steps} stepsNavigation={false} />
     )
   }
 }

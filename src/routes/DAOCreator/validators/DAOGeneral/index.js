@@ -1,9 +1,9 @@
-import { daoName, daoWebsite, daoDescription } from 'constants/validators';
+import { DAONAME, DAOWEBSITE, DAODESCRIPTION } from 'constants/validators';
 
 export default function validateDAOGeneral() {
-    const nameValue = document.getElementById(daoName).value;
-    const websiteValue = document.getElementById(daoWebsite).value;
-    const descriptionValue = document.getElementById(daoDescription).value;
+    const nameValue = document.getElementById(DAONAME).value;
+    const websiteValue = document.getElementById(DAOWEBSITE).value;
+    const descriptionValue = document.getElementById(DAODESCRIPTION).value;
 
     //TODO: validate
 

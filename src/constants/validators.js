@@ -1,27 +1,35 @@
-// DAO General
-export const daoName = "daoName"
-export const daoWebsite = "daoWebsite"
-export const daoDescription = "daoDescription"
+// dao general
+export const DAONAME = 'daoname'
+export const DAOWEBSITE = 'daowebsite'
+export const DAODESCRIPTION = 'daodescription'
 
-// DAO Fields of Work
-export const dmrReward = "dmrReward"
-export const financePoints = "financePoints"
-export const productPoints = "productPoints"
-export const orgPoints = "orgPoints"
-export const partnerPoints = "partnerPoints"
+// dao fields of work
+export const DMRREWARD = 'dmrreward'
+export const FINANCEPOINTS = 'financepoints'
+export const PRODUCTPOINTS = 'productpoints'
+export const ORGPOINTS = 'orgpoints'
+export const PARTNERPOINTS = 'partnerpoints'
 
-// Votings
-export const minPartic = "minPartic"
-export const decidingPercentage = "decidingPercentage"
+// dao votings
+export const MINPARTIC = 'minpartic'
+export const DECIDINGPERCENTAGE = 'decidingpercentage'
 
-// ICO General
-export const tokenName = "tokenName"
-export const tickerSymbol = "tickerSymbol"
-export const totalSupply = "totalSupply"
-export const saleStart = "saleStart"
-export const saleEnd = "saleEnd"
+// ico general
+export const TOKENNAME = 'tokenname'
+export const TICKERSYMBOL = 'tickersymbol'
+export const TOTALSUPPLY = 'totalsupply'
+export const SALESTART = 'salestart'
+export const SALEEND = 'saleend'
 
-// ICO Pricing
-export const selectedCurrency = "selectedCurrency"
-export const startPrice = "startPrice"
-export const endPrice = "endPrice"
+// ico pricing
+export const SELECTEDCURRENCY = 'selectedcurrency'
+export const STARTPRICE = 'startprice'
+export const ENDPRICE = 'endprice'
+
+// votings
+export const VOTINGNAME = 'votingName'
+export const VOTINGCATEGORY = 'votingCategory'
+export const VOTINGDESCRIPTION = 'votingDescription'
+
+export const VOTINGPAYOUT = 'votingPayout'
+export const VOTINGEND = 'votingEnd'

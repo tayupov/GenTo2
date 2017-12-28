@@ -13,12 +13,6 @@ export default class App extends React.Component {
     this.state = {
       account: null,
       network: null,
-      active: false,
-      daos: [],
-      icos: [],
-      currDao: null,
-      currPoll: [],
-      daoDetails: null,
       organizations: [],
       currentOrganization: null
     }

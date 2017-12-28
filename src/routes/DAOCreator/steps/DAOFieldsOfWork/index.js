@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Input, Container, Popup, Icon, Dropdown } from 'semantic-ui-react';
-import { dmrReward, financePoints, productPoints, orgPoints, partnerPoints } from 'constants/validators';
+import { DMRREWARD, FINANCEPOINTS, PRODUCTPOINTS, ORGPOINTS, PARTNERPOINTS } from 'constants/validators';
 import validateDAOFieldsOfWork from '../../validators/DAOFieldsOfWork';
 
 import currencyOptions from 'utils/currencyOptions'
@@ -26,8 +26,8 @@ export default class DAOFieldsOfWork extends React.Component {
             </label>
             <Input
               type="number"
-              name={dmrReward}
-              id={dmrReward}
+              name={DMRREWARD}
+              id={DMRREWARD}
               label={<Dropdown defaultValue='finney' options={currencyOptions} />}
               labelPosition='right'
               size='small'
@@ -54,8 +54,8 @@ export default class DAOFieldsOfWork extends React.Component {
                 </label>
                 <Input
                   type="number"
-                  name={financePoints}
-                  id={financePoints}
+                  name={FINANCEPOINTS}
+                  id={FINANCEPOINTS}
                   label={{ basic: true, content: '%' }}
                   labelPosition='right'
                   size='small'
@@ -73,8 +73,8 @@ export default class DAOFieldsOfWork extends React.Component {
                 </label>
                 <Input
                   type="number"
-                  name={productPoints}
-                  id={productPoints}
+                  name={PRODUCTPOINTS}
+                  id={PRODUCTPOINTS}
                   label={{ basic: true, content: '%' }}
                   labelPosition='right'
                   size='small'
@@ -91,8 +91,8 @@ export default class DAOFieldsOfWork extends React.Component {
                 </label>
                 <Input
                   type="number"
-                  name={orgPoints}
-                  id={orgPoints}
+                  name={ORGPOINTS}
+                  id={ORGPOINTS}
                   label={{ basic: true, content: '%' }}
                   labelPosition='right'
                   size='small'
@@ -109,8 +109,8 @@ export default class DAOFieldsOfWork extends React.Component {
                 </label>
                 <Input
                   type="number"
-                  name={partnerPoints}
-                  id={partnerPoints}
+                  name={PARTNERPOINTS}
+                  id={PARTNERPOINTS}
                   label={{ basic: true, content: '%' }}
                   labelPosition='right'
                   size='small'

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Form, Input, TextArea, Select } from 'semantic-ui-react';
+import { VOTINGNAME, VOTINGCATEGORY, VOTINGDESCRIPTION } from 'constants/validators';
 
 export default class General extends React.Component {
 	constructor(props) {
@@ -14,16 +15,16 @@ export default class General extends React.Component {
 						<label>Enter the voting title</label>
 						<Input
 							type="text"
-							name="pollName"
-							id="pollName"
+							name={VOTINGNAME}
+							id={VOTINGNAME}
 							size='small'
 							/>
 					</Form.Field>
 					<Form.Field>
 						<label>Choose the field of work</label>
 						<Select
-							id='pollCategory'
-							name='pollCategory'
+							id={VOTINGCATEGORY}
+							name={VOTINGCATEGORY}
 							compact
 							required
 							/>
@@ -32,8 +33,8 @@ export default class General extends React.Component {
 						<label>Enter the voting description</label>
 						<TextArea
 							type="text"
-							name="pollDescription"
-							id="pollDescription"
+							name={VOTINGDESCRIPTION}
+							id={VOTINGDESCRIPTION}
 							size='small'
 							/>
 					</Form.Field>

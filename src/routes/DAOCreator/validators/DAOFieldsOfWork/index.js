@@ -1,11 +1,11 @@
-import { dmrReward, financePoints, productPoints, orgPoints, partnerPoints } from 'constants/validators';
+import { DMRREWARD, FINANCEPOINTS, PRODUCTPOINTS, ORGPOINTS, PARTNERPOINTS } from 'constants/validators';
 
 export default function validateDAOFieldsOfWork() {
-    const dmrRewardValue = document.getElementById(dmrReward).value;
-    const financePointsValue = document.getElementById(financePoints).value;
-    const productPointsValue = document.getElementById(productPoints).value;
-    const orgPointsValue = document.getElementById(orgPoints).value;
-    const partnerPointsValue = document.getElementById(partnerPoints).value;
+    const dmrRewardValue = document.getElementById(DMRREWARD).value;
+    const financePointsValue = document.getElementById(FINANCEPOINTS).value;
+    const productPointsValue = document.getElementById(PRODUCTPOINTS).value;
+    const orgPointsValue = document.getElementById(ORGPOINTS).value;
+    const partnerPointsValue = document.getElementById(PARTNERPOINTS).value;
 
     //TODO: validate
     return {

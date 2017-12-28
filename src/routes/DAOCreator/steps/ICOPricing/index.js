@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Input, Select, Container } from 'semantic-ui-react';
-import { selectedCurrency, startPrice, endPrice } from 'constants/validators';
+import { SELECTEDCURRENCY, STARTPRICE, ENDPRICE } from 'constants/validators';
 import currencyOptions from 'utils/currencyOptions';
 import validateICOPricing from '../../validators/ICOPricing';
 
@@ -19,8 +19,8 @@ export default class ICOPricing extends Component {
           <Form.Field>
             <label>Choose your Ethereum currency!</label>
             <Select
-              id={selectedCurrency}
-              name={selectedCurrency}
+              id={SELECTEDCURRENCY}
+              name={SELECTEDCURRENCY}
               compact
               options={currencyOptions}
               defaultValue="ether"
@@ -31,18 +31,18 @@ export default class ICOPricing extends Component {
             <label>Choose your START and END price!</label>
             <Input
               type="number"
-              name={startPrice}
+              id={STARTPRICE}
+              name={STARTPRICE}
               label="START"
               labelPosition="left"
-              id={startPrice}
               size="small"
               />
             <Input
               type="number"
-              name={endPrice}
+              id={ENDPRICE}
+              name={ENDPRICE}
               label="END"
               labelPosition="right"
-              id={endPrice}
               size="small"
               />
           </Form.Field>

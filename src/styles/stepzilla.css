@@ -84,7 +84,7 @@ ol.progtrckr {
   }
   
   ol.progtrckr li.progtrckr-done:before {
-    content: "\2713";
+    content: "\2022";
     color: white;
     background-color: #5cb85c;
     width: 1.2em;

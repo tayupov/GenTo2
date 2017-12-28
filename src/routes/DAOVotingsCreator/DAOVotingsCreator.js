@@ -6,7 +6,7 @@ import steps from './steps';
 export default class DAOVotingsCreator extends React.Component {
     render() {
         return (
-            <StepZilla steps={steps} />
+            <StepZilla steps={steps} stepsNavigation={false} />
         )
     }
 }

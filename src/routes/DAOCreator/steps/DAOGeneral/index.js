@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Input, TextArea, Container } from 'semantic-ui-react';
-import { daoName, daoWebsite, daoDescription } from 'constants/validators';
+import { DAONAME, DAOWEBSITE, DAODESCRIPTION } from 'constants/validators';
 import validateDAOGeneral from '../../validators/DAOGeneral';
 
 export default class DAOGeneral extends Component {
@@ -19,8 +19,8 @@ export default class DAOGeneral extends Component {
             <label>Give your DAO a name</label>
             <Input
               type="text"
-              name={daoName}
-              id ={daoName}
+              name={DAONAME}
+              id ={DAONAME}
               size='small'
               />
           </Form.Field>
@@ -29,8 +29,8 @@ export default class DAOGeneral extends Component {
             <label>Enter a URL to your Webpage</label>
             <Input
               type="text"
-              name={daoWebsite}
-              id={daoWebsite}
+              name={DAOWEBSITE}
+              id={DAOWEBSITE}
               size='small'
               />
           </Form.Field>
@@ -39,8 +39,8 @@ export default class DAOGeneral extends Component {
             <label>Describe the primary goal of your DAO</label>
             <TextArea
               type="text-area"
-              name={daoDescription}
-              id={daoDescription}
+              name={DAODESCRIPTION}
+              id={DAODESCRIPTION}
               size='small'
               />
           </Form.Field>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Form, Input } from 'semantic-ui-react';
-import { minPartic, decidingPercentage } from 'constants/validators';
+import { MINPARTIC, DECIDINGPERCENTAGE } from 'constants/validators';
 import validateDAOVoting from '../../validators/DAOVoting';
 
 export default class DAOVoting extends Component {
@@ -19,8 +19,8 @@ export default class DAOVoting extends Component {
             <label>Set the participation minimum</label>
             <Input
               type="number"
-              name={minPartic}
-              id={minPartic}
+              name={MINPARTIC}
+              id={MINPARTIC}
               label={{ basic: true, content: '%' }}
               labelPosition='right'
               size='small'
@@ -30,8 +30,8 @@ export default class DAOVoting extends Component {
             <label>Set the deciding percentage</label>
             <Input
               type="number"
-              name={decidingPercentage}
-              id={decidingPercentage}
+              name={DECIDINGPERCENTAGE}
+              id={DECIDINGPERCENTAGE}
               label={{ basic: true, content: '%' }}
               labelPosition='right'
               size='small'

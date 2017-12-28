@@ -1,9 +1,9 @@
-import { selectedCurrency, startPrice, endPrice } from 'constants/validators';
+import { SELECTEDCURRENCY, STARTPRICE, ENDPRICE } from 'constants/validators';
 
 export default function validateICOPricing() {
-    const selectCurrValue = document.getElementById(selectedCurrency).value;
-    const startPriceValue = document.getElementById(startPrice).value;
-    const endPriceValue = document.getElementById(endPrice).value;
+    const selectCurrValue = document.getElementById(SELECTEDCURRENCY).value;
+    const startPriceValue = document.getElementById(STARTPRICE).value;
+    const endPriceValue = document.getElementById(ENDPRICE).value;
 
     //TODO: validate
     return {

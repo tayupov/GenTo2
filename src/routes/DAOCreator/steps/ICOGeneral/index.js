@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Input, Container } from 'semantic-ui-react';
-import { tokenName, tickerSymbol, totalSupply, saleStart, saleEnd } from 'constants/validators';
+import { TOKENNAME, TICKERSYMBOL, TOTALSUPPLY, SALESTART, SALEEND } from 'constants/validators';
 import validateICOGeneral from '../../validators/ICOGeneral';
 
 export default class ICOGeneral extends Component {
@@ -19,8 +19,8 @@ export default class ICOGeneral extends Component {
             <label>How shall your Token be named?</label>
             <Input
               type="text"
-              name={tokenName}
-              id={tokenName}
+              name={TOKENNAME}
+              id={TOKENNAME}
               size='small'
               />
           </Form.Field>
@@ -28,8 +28,8 @@ export default class ICOGeneral extends Component {
             <label>What will be your ticker symbol?</label>
             <input
               type="text"
-              name={tickerSymbol}
-              id={tickerSymbol}
+              name={TICKERSYMBOL}
+              id={TICKERSYMBOL}
               size='small'
               />
           </Form.Field>
@@ -37,8 +37,8 @@ export default class ICOGeneral extends Component {
             <label>How many tokens do you want to emmit?</label>
             <Input
               type="number"
-              name={totalSupply}
-              id={totalSupply}
+              name={TOTALSUPPLY}
+              id={TOTALSUPPLY}
               min='0'
               size='small'
               />
@@ -48,14 +48,14 @@ export default class ICOGeneral extends Component {
             <label>Time your ICO!</label>
             <Input
               type="date"
-              name={saleStart}
-              id={saleStart}
+              name={SALESTART}
+              id={SALESTART}
               size='small'
               />
             <Input
               type="date"
-              name={saleEnd}
-              id={saleEnd}
+              name={SALEEND}
+              id={SALEEND}
               size='small'
               />
           </Form.Field>

@@ -5,9 +5,8 @@ import StepZilla from 'react-stepzilla';
 
 import { Input, Button, Dropdown } from 'semantic-ui-react';
 
-import Organisational from 'routes/DAOVotingsCreator/steps/Organisational';
-import Created from 'routes/DAOVotingsCreator/steps/Created';
-import General from 'routes/DAOVotingsCreator/steps/General';
+import Organisational from 'routes/DAOVotingsCreator/steps/VotingsOrganisational';
+import General from 'routes/DAOVotingsCreator/steps/VotingsGeneral';
 
 import ModalWrapper from 'components/ModalWrapper';
 
@@ -20,8 +19,7 @@ const options = [
 
 const steps = [
     {name: 'GENERAL',component: <General getStore={this.getStore} updateStore={this.updateStore} />},
-    {name: 'ORGANISATIONAL', component: <Organisational getStore={this.getStore} updateStore={this.updateStore} submitTokenContract={this.submitTokenContract} /> },
-    {name: 'POLL CREATED', component: <Created />}
+    {name: 'ORGANISATIONAL', component: <Organisational getStore={this.getStore} updateStore={this.updateStore} submitTokenContract={this.submitTokenContract} /> }
 ]
 
 const SearchNav = ({

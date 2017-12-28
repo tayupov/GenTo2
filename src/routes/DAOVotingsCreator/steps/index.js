@@ -1,9 +1,12 @@
 import React from 'react';
 
-import General from './General';
-import Organisational from './Organisational';
+import VotingsGeneral from './VotingsGeneral';
+import VotingsOrganisational from './VotingsOrganisational';
+
+import VotingsGeneralValidator from '../validators/VotingsGeneral';
+import VotingsOrganisationalValidator from '../validators/VotingsOrganisational';
 
 export default [
-  { name: 'GENERAL', component: <General />, validator: null },
-  { name: 'ORGANISATIONAL', component: <Organisational />, validator: null },
+  { name: 'GENERAL', component: <VotingsGeneral />, validator: VotingsGeneralValidator },
+  { name: 'ORGANISATIONAL', component: <VotingsOrganisational />, VotingsOrganisationalValidator },
 ]
