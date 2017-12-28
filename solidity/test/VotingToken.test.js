@@ -104,9 +104,6 @@ contract('VotingToken', function(accounts) {
         expect(+await testContract.getVoting(voteId)[1]).toBe(29)
         expect(+await testContract.getVoting(voteId)[0]).toBe(accounts[1])
         expect(+await testContract.getVoting(voteId)[5]).toBe(true)
-      } catch(e) {
-          expect(e.message).toContain("VM Exception while processing transaction: ")
-      }
     })
 
     it("should check whether the inital voting is not passed and not finished", async function() {
