@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Input, TextArea, Container } from 'semantic-ui-react';
-import { DAONAME, DAOWEBSITE, DAODESCRIPTION } from 'constants/validators';
+import { DAONAME, DAOWEBSITE, DAODESCRIPTION, DAOPROPOSAL } from 'constants/validators';
 import validateDAOGeneral from '../../validators/DAOGeneral';
 
 export default class DAOGeneral extends Component {
@@ -44,6 +44,17 @@ export default class DAOGeneral extends Component {
               size='small'
               />
           </Form.Field>
+
+          <Form.Field>
+            <label>File upload</label>
+            <Input
+              type="file"
+              name={DAOPROPOSAL}
+              id={DAOPROPOSAL}
+              size='small'
+              />
+          </Form.Field>
+
         </Form>
       </Container>
     )
