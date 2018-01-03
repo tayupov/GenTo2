@@ -8,9 +8,9 @@ let defaultICOdata = {
   saleStart: new Date().getTime(),
   saleEnd: new Date().getTime()+10000
 }
-async function createNewICO() {
+async function createNewICO(invalidData) {
   let data = {}
-  Object.assign(data, defaultICOdata)
+  Object.assign(data, defaultICOdata, invalidData)
   let genToFactory = await GenToFactory.deployed()
   let contract = await genToFactory.createContract.sendTransaction(
     data.totalSupply,
@@ -21,7 +21,8 @@ async function createNewICO() {
     data.sellPrice,
     data.saleStart,
     data.saleEnd)
-  let icos = await genToFactory.ICOs()
+
+  let icos = await genToFactory.getICOs.call()
 
   let instance = await AuctionToken.at(icos[icos.length-1]) // It will always be the newest ICO as long as we dont run tests in parallel
 
@@ -44,11 +45,11 @@ contract('GenToFactory', function(accounts) {
       expect(details[0]).toEqual(defaultICOdata.name)
       expect(details[1]).toEqual(defaultICOdata.symbol)
       expect(details[2].c[0]).toEqual(defaultICOdata.totalSupply)
-      expect(details[3].c[0]).toEqual(defaultICOdata.buyPriceStart)
-      expect(details[4].c[0]).toEqual(defaultICOdata.buyPriceEnd)
-      expect(details[5].c[0]).toEqual(defaultICOdata.sellPrice)
-      expect(details[6].c[0]).toEqual(defaultICOdata.saleStart)
-      expect(details[7].c[0]).toEqual(defaultICOdata.saleEnd)
+      expect(details[4].c[0]).toEqual(defaultICOdata.buyPriceStart)
+      expect(details[5].c[0]).toEqual(defaultICOdata.buyPriceEnd)
+      expect(details[6].c[0]).toEqual(defaultICOdata.sellPrice)
+      expect(details[7].c[0]).toEqual(defaultICOdata.saleStart)
+      expect(details[8].c[0]).toEqual(defaultICOdata.saleEnd)
     }
     catch (e) {
       console.error(e)

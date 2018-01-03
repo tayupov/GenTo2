@@ -8,6 +8,10 @@ contract GenToFactory {
 
     event ContractCreated(address contractAddress);
 
+    function getICOs() returns (address[] icos) {
+        return ICOs;
+    }
+
     function createContract(uint256 totalSupply,
                             string _symbol, 
                             string _name,
@@ -26,6 +30,7 @@ contract GenToFactory {
                                                      _saleStart,
                                                      _saleEnd,
                                                      false);
+
         address auctionAddress = address(auctionToken);
         ICOs.push(auctionAddress);
         ContractCreated(auctionAddress);
