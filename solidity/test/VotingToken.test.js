@@ -1,5 +1,6 @@
 const VotingToken = artifacts.require("./AuctionToken.sol");
 const AuctionToken = artifacts.require("./AuctionToken.sol");
+const FieldOfWork = artifacts.require("./VotingToken.sol");
 
 
 const should = require('should');
@@ -20,8 +21,11 @@ newVoting.sendTransaction(account, value, {from})
 buy.sendTransaction({from, value})
 vote.sendTransaction(voteId, supportsVoting, {from})
 executeVoting.sendTransaction(voteId, {from})
+newVoting.sendTransaction(account, value, FoW, {from})
+getVoting(votingId)
+delegate(FoW, to, {from})
 
-setFieldOfWork() without call()!
+set() without call()!
 
 */
 
@@ -32,7 +36,7 @@ contract('VotingToken', function(accounts) {
       try {
         expect(+await testContract.getNumVotings.call()).toEqual(0)
       } catch(e) {
-          // expect(e.message).toContain("VM error while processing transaction")
+          expect(e.message).toContain("VM error while processing transaction")
       }
     })
 
@@ -53,57 +57,65 @@ contract('VotingToken', function(accounts) {
     })
 
 
-    it("schould execute votings with 2/3 confirmed votes", async function() {
+    /*it("should execute votings with 2/3 confirmed votes", async function() {
         const testContract = await VotingToken.deployed()
         //set time back to 0
         await testContract.setCurrentTime.sendTransaction(1200000)
-        // create 2 votings with id 0 and 1
-        await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
-        await testContract.buy.sendTransaction({from: accounts[2], value: 1000})
-        await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
-        // console.log(boughtAmount)
-        await testContract.newVoting.sendTransaction(accounts[1], 100,2,  {from: accounts[1]})
-        await testContract.vote.sendTransaction(0, true, {from: accounts[1]})
-        await testContract.vote.sendTransaction(0, true, {from: accounts[2]})
-        await testContract.vote.sendTransaction(0, false, {from: accounts[3]})
-        await testContract.setCurrentTime.sendTransaction(1300000)
-        await testContract.executeVoting.sendTransaction(0)
-        const p = await testContract.getVoting.call(0);
-        //console.log(p)
-        expect(p[4]).toBe(true)
-        expect(p[5]).toBe(true)
-    })
-    it("schould reject votings with 1/3 confirmed votes", async function() {
+        try {
+          await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
+          await testContract.buy.sendTransaction({from: accounts[2], value: 1000})
+          await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
+          // create new Voting with id = 0
+          console.log(+await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]}))
+          await testContract.vote.sendTransaction(0, true, {from: accounts[1]})
+          await testContract.vote.sendTransaction(0, true, {from: accounts[2]})
+          await testContract.vote.sendTransaction(0, false, {from: accounts[3]})
+          await testContract.setCurrentTime.sendTransaction(1300000)
+          await testContract.executeVoting.sendTransaction(0)
+          const p = await testContract.getVoting.call(0);
+          console.log(p)
+          expect(p[4]).toBe(true)
+          expect(p[5]).toBe(true)
+        } catch(e) {
+            expect(e.message).toContain("VM error while processing transaction")
+        }
+
+    })*/
+
+    /*it("should reject votings with 1/3 confirmed votes", async function() {
         const testContract = await VotingToken.deployed()
         //set time back to 0
         await testContract.setCurrentTime.sendTransaction(1200000)
-        // create 2 votings with id 0 and 1
-        await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
-        await testContract.buy.sendTransaction({from: accounts[2], value: 1000})
-        await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
-        // console.log(boughtAmount)
+
+        // await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
+        // await testContract.buy.sendTransaction({from: accounts[2], value: 1000})
+        // await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
+
         await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
+        // voteId should be 0
+        console.log(+await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]}))
         await testContract.vote.sendTransaction(0, true, {from: accounts[1]})
         await testContract.vote.sendTransaction(0, false, {from: accounts[2]})
         await testContract.vote.sendTransaction(0, false, {from: accounts[3]})
-        await testContract.setCurrentTime.sendTransaction(1300000)
+        //await testContract.setCurrentTime.sendTransaction(1300000)
         await testContract.executeVoting.sendTransaction(0)
         const p = await testContract.getVoting.call(0);
         //console.log(p)
         expect(p[4]).toBe(true)
         expect(p[5]).toBe(false)
-    })
+    })*/
 
     it("checks whether the voting gets finished after executing", async function() {
         const testContract = await VotingToken.deployed()
         await testContract.setCurrentTime.sendTransaction(1300000)
-        await testContract.newVoting.sendTransaction(accounts[1], 29, 2, {from: accounts[6]})
-        var voteId =  await testContract.vote.sendTransaction(1, true, {from: accounts[6]})
-        await testContract.executeVoting(voteId)
-        expect(+await testContract.getVoting(voteId)[4]).toBe(true)
-        expect(+await testContract.getVoting(voteId)[1]).toBe(29)
-        expect(+await testContract.getVoting(voteId)[0]).toBe(accounts[1])
-        expect(+await testContract.getVoting(voteId)[5]).toBe(true)
+        try {
+          await testContract.newVoting.sendTransaction(accounts[1], 29, 2, {from: accounts[6]})
+          var voteId =  await testContract.vote.sendTransaction(1, true, {from: accounts[6]})
+          await testContract.executeVoting(voteId)
+          expect(+await testContract.getVoting(voteId)[4]).toBe(true)
+          expect(+await testContract.getVoting(voteId)[1]).toBe(29)
+          expect(+await testContract.getVoting(voteId)[0]).toBe(accounts[1])
+          expect(+await testContract.getVoting(voteId)[5]).toBe(true)
       } catch(e) {
           expect(e.message).toContain("VM Exception while processing transaction: ")
       }
@@ -124,50 +136,66 @@ contract('VotingToken', function(accounts) {
       }
     })
 
-    /*it("should compute the right influence of tokenholder", async function() {
+    it("should compute the right influence of tokenholder", async function() {
       const testVotingContract = await VotingToken.deployed()
-      const testAuctionContract = await AuctionToken.deployed()
+      //const testAuctionContract = await AuctionToken.deployed()
       try {
+        // initial FoW is Finance
         console.log(+await testVotingContract.getFieldOfWork.call())
+
         // set the FieldOfWork to Organisational instead of Finance
         await testVotingContract.setFieldOfWork(1)
         console.log(+await testVotingContract.getFieldOfWork.call())
 
         await testVotingContract.setCurrentTime.sendTransaction(1300000)
-        await testVotingContract.setCurrentTime.sendTransaction(1300000)
+        //await testAuctionContract.setCurrentTime.sendTransaction(1300000)
 
-        var voteId = await testVotingContract.newVoting.sendTransaction(accounts[1], 20, {from: accounts[5]})
-        await testAuctionContract.delegate.call(FieldOfWork(testVotingContract.getFieldOfWork()), accounts[5])
+        var voteId = await testVotingContract.newVoting.sendTransaction(accounts[1], 20, 1, {from: accounts[5]})
+
+        await testVotingContract.delegate.sendTransaction(1, accounts[1], {from: accounts[5]})
+        //await testAuctionContract.delegate.call(FieldOfWork(testVotingContract.getFieldOfWork()), accounts[5])
+
+        expect(+await getInfluenceOfVoter({from: accounts[1]}, Organisational)).toBe(10)
         //var influence = await testAuctionContract.getInfluenceOfVoter.call(accounts[1], Finance)
-        //console.log(influence)
-        //var voting = await testContract.getVoting(voteId)
+
       } catch(e) {
           expect(e.message).toContain("VM Exception while processing transaction: ")
       }
-    })*/
+    })
 
     it("should instantiate a new voting", async function() {
       const testContract = await VotingToken.deployed()
       try {
         await testContract.setCurrentTime.sendTransaction(1300000)
-        var voting = new testContract.newVoting.call(accounts[0], 10, 2)
+        var voting = await testContract.newVoting.call(accounts[0], 10, 2)
         var voteId =  await testContract.vote.sendTransaction(1, true, {from: accounts[6]})
         expect(+await testContract.getVoting(voteId)[1]).toBe(10)
       } catch(e) {
-          // expect(e.message).toContain("VM Exception while processing transaction: ")
+          expect(e.message).toContain("VM Exception while processing transaction: ")
       }
     })
 
-
-
-
-    /*it("should pass the voting when the tokenholder has delegated his vote", async function() {
-      const votingContract = await VotingToken.deployed()
-      const auctionContract = await AuctionToken.deployed()
+    it("should pass the voting when the tokenholder has delegated his vote", async function() {
+      const testContract = await VotingToken.deployed()
       try {
-        await votingContract.setCurrentTime.sendTransaction(1400000)
-        await auctionContract.delegate(votingContract.getFieldOfWork(), accounts[0])
+        await testContract.setCurrentTime.sendTransaction(1400000)
 
+        //await testContract.buy.sendTransaction({from: accounts[7], value: 20})
+
+        // delegate voting power in FoW Finance from user 1 to user 0
+        //console.log(+await testContract.getFieldOfWork())
+        console.log('delegate')
+        console.log(+await testContract.getFieldOfWork())
+        console.log()
+        await testContract.delegate.sendTransaction(testContract.getFieldOfWork(), accounts[3], {from: accounts[1]})
+        // console.log(+await testContract.newVoting.sendTransaction(accounts[1], 200, 0, {from: accounts[2]}))
+        // await testContract.vote.sendTransaction(1, true, {from: accounts[0]})
+        // await testContract.vote.sendTransaction(1, false, {from: accounts[1]})
+        //
+        // const p = await testContract.getVoting.call(1);
+        // console.log(p)
+        // expect(p[4]).toBe(true)
+        // expect(p[5]).toBe(true)
 
         //const boughtAmount1 = await testContract.buy.call({from: accounts[0], value: 10})
 
@@ -177,19 +205,21 @@ contract('VotingToken', function(accounts) {
       } catch(e) {
           expect(e.message).toContain("VM error while processing transaction")
       }
-    })*/
+    })
 
     /*it("should fail the delegation if the token holder isn't a shareholder", async function() {
       const votingContract = await VotingToken.deployed()
       const testContract = await getTestToken()
-      await testContract.setCurrentTime.sendTransaction(1200000)
+      await votingContract.setCurrentTime.sendTransaction(1200000)
       try {
         // account[9] is not a shareholder
-        //console.log(!!+await testContract.isShareholder.call(accounts[9]))
-
-        await testContract.delegate.call(votingContract.getFieldOfWork.call(), accounts[9])
+        console.log(!!+await votingContract.isShareholder.call(accounts[9]))
+        console.log(+await votingContract.getFieldOfWork.call())
+        console.log(+await testContract.getFieldOfWork())
+        await testContract.delegate.call(testContract.getFieldOfWork(), accounts[9])
         should.fail("this transaction should have raised an error")
-      } catch (e) {
+      } catch(e) {
+        //console.log("asdf")
         expect(e.message).toContain("VM Exception while processing transaction: ")
       }
 
@@ -244,7 +274,6 @@ contract('VotingToken', function(accounts) {
         const testContract = await VotingToken.deployed()
         try {
             await testContract.setCurrentTime.sendTransaction(1300000)
-            //create 3 votings with id = 0,1,2
             await testContract.newVoting.sendTransaction(accounts[1], 100, 2,{from: accounts[1]})
             await testContract.vote.sendTransaction(1, true, {from: accounts[0]})
             await testContract.vote.sendTransaction(1, false, {from: accounts[1]})
@@ -295,16 +324,20 @@ contract('VotingToken', function(accounts) {
       }
     })
 
-    it("should allow to vote for a tokenholder", async function() {
+    /*it("should allow to vote for a tokenholder", async function() {
         const testContract = await VotingToken.deployed()
-        await testContract.vote.sendTransaction(0, true, {from: accounts[0]})
-        await testContract.vote.sendTransaction(0, true, {from: accounts[1]})
-        await testContract.vote.sendTransaction(0, false, {from: accounts[2]})
-        expect(votings[votingNumber].votes.length).toBe(3)
-        expect(votings[votingNumber].voted).toBe(true)
-    })
+        var voteId = await testContract.newVoting.sendTransaction(accounts[1], 10, 1, {from: accounts[2]})
+        console.log(voteId)
+        // undefined
+        console.log(testContract.votings[1])
+        await testContract.vote.sendTransaction(voteId, true, {from: accounts[0]})
+        await testContract.vote.sendTransaction(voteId, true, {from: accounts[1]})
+        await testContract.vote.sendTransaction(voteId, false, {from: accounts[2]})
+        expect(testContract.votings[voteId].votes.length).toBe(3)
+        expect(testContract.votings[voteId].voted).toBe(true)
+    })*/
 
-    it("should allow delegation to other users", async function() {
+    /*it("should allow delegation to other users", async function() {
         const testContract = await VotingToken.deployed()
         // Set time between ICO start and END
         await testContract.setCurrentTime.sendTransaction(1200000)
@@ -330,7 +363,7 @@ contract('VotingToken', function(accounts) {
         // Voting should pass with 55 %
         expect(p[6]).toBe(55)
         console.log(p)
-    })
+    })*/
 
     it("delegation in one field should not affect the others", async function() {
         const testContract = await VotingToken.deployed()
@@ -363,7 +396,7 @@ contract('VotingToken', function(accounts) {
 
     })
 
-    it("delegation after ending a vote should not have an effect on the vote", async function() {
+    /*it("delegation after ending a vote should not have an effect on the vote", async function() {
         const testContract = await VotingToken.deployed()
         // Set time between ICO start and END
         await testContract.setCurrentTime.sendTransaction(1200000)
@@ -389,7 +422,8 @@ contract('VotingToken', function(accounts) {
         // Voting should pass with 33 %
         expect(p[6]).toBe(33)
         console.log(p)
-    })
+    })*/
+
     it("users that are not shareholders should not be able to vote", async function() {
         const testContract = await VotingToken.deployed()
 
@@ -411,16 +445,17 @@ contract('VotingToken', function(accounts) {
         await testContract.vote.sendTransaction(0, true, {from: accounts[3]})
         console.log("asdf")
     })
-    it("test isShareholder", async function() {
+
+    it("tests that user become shareholer only if they buy some shares", async function() {
         const testContract = await getTestToken()
 
         // Set time between ICO start and END
         await testContract.setCurrentTime.sendTransaction(1200000)
         // Let three users buy token
-        const isSharehoder1 = await testContract.isShareholder.call(accounts[1]);
-        expect(!!isSharehoder1).toContain(false);
-        await testContract.buy.sendTransaction({from: accounts[1], value: 4000})
-        const isSharehoder2 = await testContract.isShareholder.call(accounts[1]);
-        expect(!!isSharehoder2).toContain(true);
+        const isSharehoder1 = await testContract.isShareholder.call(accounts[7]);
+        expect(!!isSharehoder1).toBe(false);
+        await testContract.buy.sendTransaction({from: accounts[2], value: 4000})
+        const isSharehoder2 = await testContract.isShareholder.call(accounts[2]);
+        expect(!!isSharehoder2).toBe(true);
     })
 });

@@ -49,14 +49,14 @@ contract VotingToken {
     uint votingDeadline,
     bool finished,
     bool votingPassed,
-    uint passedPercent){
+    uint passedPercent) {
         Voting storage voting = votings[votingID];
         return (voting.recipient, voting.amount, voting.description, voting.votingDeadline, voting.finished, voting
         .votingPassed, voting.passedPercent);
     }
 
     function getNumVotings() public constant returns (
-        uint numVotings) {
+        uint numOfVotings) {
         return votings.length;
     }
 
@@ -67,7 +67,7 @@ contract VotingToken {
 
     // Modifier that allows only shareholders to vote and create new votings
     modifier onlyShareholders {
-        if(isShareholder(msg.sender)) throw;
+        if (isShareholder(msg.sender)) throw;
         _;
     }
 
