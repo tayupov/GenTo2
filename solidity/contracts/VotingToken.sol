@@ -14,6 +14,7 @@ contract VotingToken {
 
     event Voted(uint votingID, bool position, address voter);
     event VotingTallied(uint votingID, uint result, uint quorum, bool active);
+    event NewVotingGenerated(uint votingID);
 
     struct Voting {
         address recipient;
@@ -50,6 +51,16 @@ contract VotingToken {
         fow = FieldOfWork(_value);
     }
 
+    function getVote(address user, uint votingID) public returns(bool voteResult){
+        Voting storage voting = votings[votingID];
+        for (uint i = 0; i < voting.votes.length; ++i) {
+            if(voting.votes[i].voter == user){
+                return voting.votes[i].inSupport;
+            }
+        }
+        revert(); // User did not vote
+    }
+
     function getVoting(uint votingID) public constant returns (address recipient,
     uint amount,
     string description,
@@ -65,6 +76,11 @@ contract VotingToken {
     function getNumVotings() public constant returns (
         uint numOfVotings) {
         return votings.length;
+    }
+
+    function getNumVotes(uint votingID) public constant returns (
+        uint numOfVotings) {
+        return votings[votingID].votes.length;
     }
 
     struct Vote {
@@ -101,6 +117,8 @@ contract VotingToken {
         voting.fieldOfWork = fieldOfWork;
         voting.votingPassed = false;
         numVotings = votingID;
+
+        NewVotingGenerated(votingID);
 
         return votingID;
     }
