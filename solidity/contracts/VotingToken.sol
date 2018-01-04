@@ -29,6 +29,9 @@ contract VotingToken {
         mapping (address => bool) voted;
     }
 
+    event NumberLogger(string description, uint number);
+    event AddressLogger(string description, address addr);
+
     //constructor
     function VotingToken() public payable {
         debatingPeriodInMinutes = 10;  // TODO Move to settings
@@ -82,6 +85,7 @@ contract VotingToken {
         onlyShareholders
     returns (uint votingID)
     {
+        AddressLogger("BENEFICIARY", beneficiary);
         votingID = votings.length++;
         votings.length++;
         Voting storage voting = votings[votingID];
@@ -104,6 +108,7 @@ contract VotingToken {
     onlyShareholders
     returns (uint voteID)
     {
+        NumberLogger("VotingNum: ", votingNumber);
         Voting storage voting = votings[votingNumber];
         require(voting.voted[msg.sender] != true);
 
@@ -116,7 +121,9 @@ contract VotingToken {
 
     function executeVoting(uint votingNumber) public
     {
-        Voting storage voting = votings[votingNumber];
+        NumberLogger("voting number: ", votingNumber);
+        Voting storage voting = votings[0];
+
 
         require(currentTime() > voting.votingDeadline                                             // If it is past the voting deadline
             && !voting.finished                                                          // and it has not already been finished

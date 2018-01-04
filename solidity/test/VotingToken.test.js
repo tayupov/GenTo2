@@ -54,7 +54,7 @@ contract('VotingToken', function(accounts) {
 
 
     it("schould execute votings with 2/3 confirmed votes", async function() {
-        const testContract = await VotingToken.deployed()
+        const testContract = await getTestToken()
         //set time back to 0
         await testContract.setCurrentTime.sendTransaction(1200000)
         // create 2 votings with id 0 and 1
@@ -62,17 +62,13 @@ contract('VotingToken', function(accounts) {
         await testContract.buy.sendTransaction({from: accounts[2], value: 1000})
         await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
         // console.log(boughtAmount)
-        await testContract.newVoting.sendTransaction(accounts[0], 300, 2, {from: accounts[0]})
-        await testContract.vote.sendTransaction(0, true, {from: accounts[4]})
-        await testContract.vote.sendTransaction(0, true, {from: accounts[5]})
-        const voteId = await testContract.vote.sendTransaction(0, false, {from: accounts[6]})
+        await testContract.newVoting.sendTransaction(accounts[1], 300, 2, {from: accounts[1]})
+        await testContract.vote.sendTransaction(0, true, {from: accounts[1]})
+        await testContract.vote.sendTransaction(0, true, {from: accounts[2]})
+        await testContract.vote.sendTransaction(0, false, {from: accounts[3]})
         await testContract.setCurrentTime.sendTransaction(1300000)
-        console.log(voteId)
-        await testContract.executeVoting(voteId)
-        console.log('boughtAmount')
+        await testContract.executeVoting(0)
         const p = await testContract.getVoting.call(0);
-        console.log('PPPPPPPPPP')
-        console.log(p)
         expect(p[4]).toBe(true)
         expect(p[5]).toBe(true)
     })
