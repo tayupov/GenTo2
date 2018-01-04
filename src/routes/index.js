@@ -16,7 +16,7 @@ import DAOVotingsCreator from './DAOVotingsCreator';
 /*
     Bear in mind that the order of <Route /> components inside a <Switch /> component
     determines which component will be rendered first. 
-    (e.g. /dao/:address/vote matches before dao/:address, order specific routes first)
+    (e.g. /dao/:address/votings matches before dao/:address, order specific routes first)
 */
 
 export default class Routes extends React.Component {
