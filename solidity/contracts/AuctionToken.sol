@@ -73,13 +73,15 @@ contract AuctionToken is StandardToken, VotingToken {
     }
 
     function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) returns (uint influence){
-        uint influence1 = 5;
+        uint influence1 = 0;
         for (uint i = 0; i < shareholders.length; ++i) {
-            NumberLogger('shareholders.length', shareholders.length);
+            NumberLogger("shareholders.length", shareholders.length);
             if (delegations[shareholders[i]][uint(fieldOfWork)] == voter) {
                 influence1 += balances[shareholders[i]];
             }
         }
+
+        NumberLogger('Influence', influence1);
 
         return influence1;
     }

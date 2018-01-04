@@ -87,8 +87,8 @@ contract VotingToken {
     {
         AddressLogger("BENEFICIARY", beneficiary);
         votingID = votings.length++;
-        votings.length++;
         Voting storage voting = votings[votingID];
+        NumberLogger("VOTING ID", votingID);
         voting.recipient = beneficiary;
         voting.amount = weiAmount;
         voting.votingHash = sha3(beneficiary, weiAmount); // TODO add transactionBytecode
@@ -122,12 +122,15 @@ contract VotingToken {
     function executeVoting(uint votingNumber) public
     {
         NumberLogger("voting number: ", votingNumber);
-        Voting storage voting = votings[0];
+        Voting storage voting = votings[votingNumber];
 
+        require(currentTime() > voting.votingDeadline
+            && !voting.finished);
 
-        require(currentTime() > voting.votingDeadline                                             // If it is past the voting deadline
-            && !voting.finished                                                          // and it has not already been finished
-            && voting.votingHash == sha3(voting.recipient, voting.amount)); // and the supplied code matches the voting...
+    
+        // require(currentTime() > voting.votingDeadline                       // If it is past the voting deadline
+        //     && !voting.finished                                             // and it has not already been finished
+        //     && voting.votingHash == sha3(voting.recipient, voting.amount)); // and the supplied code matches the voting...
 
 
         uint approve = 0;
