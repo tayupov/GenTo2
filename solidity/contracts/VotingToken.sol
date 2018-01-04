@@ -96,7 +96,7 @@ contract VotingToken {
         voting.finished = false;
         voting.fieldOfWork = fieldOfWork;
         voting.votingPassed = false;
-        numVotings = votingID+1;
+        numVotings = votingID;
 
         return votingID;
     }
