@@ -65,7 +65,7 @@ contract AuctionToken is StandardToken, VotingToken {
         }
     }
     function isShareholder(address userAddress) returns (bool shareholder){
-        return (balances[userAddress] > 0) ? true : false;
+        return balances[userAddress] > 0;
     }
 
     function getBalance() returns(uint balance) {
@@ -147,7 +147,7 @@ contract AuctionToken is StandardToken, VotingToken {
     function delegate(FieldOfWork fieldOfWork, address recipient){
         // shareholder delegates to recipient ??
         if (!isShareholder(msg.sender))
-            throw;
+            revert();
         delegations[msg.sender][uint(fieldOfWork)] = recipient;
     }
 

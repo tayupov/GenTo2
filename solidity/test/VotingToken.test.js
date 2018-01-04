@@ -123,17 +123,12 @@ contract('VotingToken', function(accounts) {
 
     it("should check whether the inital voting is not passed and not finished", async function() {
       const testContract = await VotingToken.deployed()
-      try {
-        await testContract.setCurrentTime.sendTransaction(1300000)
-        await testContract.newVoting.sendTransaction(accounts[1], 29, 2, {from: accounts[6]})
-        var voteId =  await testContract.vote.sendTransaction(1, true, {from: accounts[6]})
-        expect(+await testContract.getVoting(voteId)[4]).toBe(false)
-        expect(+await testContract.getVoting(voteId)[5]).toBe(false)
-        //expect(+await testContract.getNumVotings.call()).toBe(1)
-
-      } catch(e) {
-          expect(e.message).toContain("VM Exception while processing transaction: ")
-      }
+      await testContract.setCurrentTime.sendTransaction(1300000)
+      await testContract.newVoting.sendTransaction(accounts[1], 29, 2, {from: accounts[6]})
+      var voteId =  await testContract.vote.sendTransaction(1, true, {from: accounts[6]})
+      expect(+await testContract.getVoting(voteId)[4]).toBe(false)
+      expect(+await testContract.getVoting(voteId)[5]).toBe(false)
+      //expect(+await testContract.getNumVotings.call()).toBe(1)
     })
 
     it("should compute the right influence of tokenholder", async function() {
@@ -229,34 +224,25 @@ contract('VotingToken', function(accounts) {
     it("should create a new voting", async function() {
       const testContract = await VotingToken.deployed()
       await testContract.setCurrentTime.sendTransaction(1600000)
-      try {
-        var numberOfInitialVotings = 0;
-        // return a new voting with id = 14 => number of voting from getNumVoting() = 14
-        console.log(+await testContract.newVoting.call(accounts[0], 100, 2))
-        await testContract.newVoting.call(accounts[0], 100, 2)
-        expect(numberOfInitialVotings + 2).toBe(2)
-      } catch(e) {
-          expect(e.message).toContain("VM error while processing transaction: new voting isn't created")
-      }
+      var numberOfInitialVotings = 0;
+      // return a new voting with id = 14 => number of voting from getNumVoting() = 14
+      console.log(+await testContract.newVoting.call(accounts[0], 100, 2))
+      await testContract.newVoting.call(accounts[0], 100, 2)
+      expect(numberOfInitialVotings + 2).toBe(2)
     })
 
 
     it("should abort voting if you are not a shareholder", async function() {
       const testContract= await VotingToken.deployed()
-      try {
-        await testContract.setCurrentTime.sendTransaction(1600000)
+      await testContract.setCurrentTime.sendTransaction(1600000)
 
-        // send money to account in order to become a shareholder
-        //await testAuctionContract.buy.sendTransaction({from: accounts[1]}, value: web3.toWei(10, 'Gwei')})
-        //console.log(+await testContract.isShareholder.call(accounts[5]))
+      // send money to account in order to become a shareholder
+      //await testAuctionContract.buy.sendTransaction({from: accounts[1]}, value: web3.toWei(10, 'Gwei')})
+      //console.log(+await testContract.isShareholder.call(accounts[5]))
 
-        // check whether the account is a shareholder
-        // !! converts 0 or 1 to false or true
-        expect(!!+await testContract.isShareholder.call(accounts[5])).toBe(false)
-      } catch(e) {
-          expect(e.message).toContain("VM error while processing transaction")
-
-      }
+      // check whether the account is a shareholder
+      // !! converts 0 or 1 to false or true
+      expect(!!+await testContract.isShareholder.call(accounts[5])).toBe(false)
     })
 
     // from AuctionToken
@@ -290,38 +276,28 @@ contract('VotingToken', function(accounts) {
 
     it("should approve the voting with 3/5 confirmed votes", async function() {
       const testContract = await VotingToken.deployed()
-      try {
-        await testContract.setCurrentTime.sendTransaction(1400000)
+      await testContract.setCurrentTime.sendTransaction(1400000)
 
-        await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
-        await testContract.vote.sendTransaction(1, true, {from: accounts[0]})
-        await testContract.vote.sendTransaction(1, true, {from: accounts[1]})
-        await testContract.vote.sendTransaction(1, true, {from: accounts[2]})
-        await testContract.vote.sendTransaction(1, false, {from: accounts[3]})
-        await testContract.vote.sendTransaction(1, false, {from: accounts[4]})
-        await testContract.setCurrentTime.sendTransaction(1500000)
-        const proposal = await testContract.getVoting.call(2);
-        expect(proposal[4]).toBe(true)
-        expect(proposal[5]).toBe(true)
-
-
-      } catch(e) {
-          expect(e.message).toContain("VM Exception while processing transaction: ")
-      }
+      await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
+      await testContract.vote.sendTransaction(1, true, {from: accounts[0]})
+      await testContract.vote.sendTransaction(1, true, {from: accounts[1]})
+      await testContract.vote.sendTransaction(1, true, {from: accounts[2]})
+      await testContract.vote.sendTransaction(1, false, {from: accounts[3]})
+      await testContract.vote.sendTransaction(1, false, {from: accounts[4]})
+      await testContract.setCurrentTime.sendTransaction(1500000)
+      const proposal = await testContract.getVoting.call(2);
+      expect(proposal[4]).toBe(true)
+      expect(proposal[5]).toBe(true)
     })
 
     it("should count the correct number of votings", async function() {
       const testContract = await VotingToken.deployed()
       //console.log(await testContract.getNumVotings.call().toNumber())
-      try {
-        const numberOfInitialVotings = (+await testContract.getNumVotings.call())
-        await testContract.newVoting.sendTransaction(accounts[5], 10, 2, {from: accounts[6]})
-        await testContract.newVoting.sendTransaction(accounts[4], 20, 2, {from: accounts[7]})
-        await testContract.newVoting.sendTransaction(accounts[7], 3, 2, {from: accounts[0]})
-        expect(+await testContract.getNumVotings.call()).toBe(6 + numberOfInitialVotings)
-      } catch(e) {
-          expect(e.message).toContain("VM Exception while processing transaction: ")
-      }
+      const numberOfInitialVotings = (+await testContract.getNumVotings.call())
+      await testContract.newVoting.sendTransaction(accounts[5], 10, 2, {from: accounts[6]})
+      await testContract.newVoting.sendTransaction(accounts[4], 20, 2, {from: accounts[7]})
+      await testContract.newVoting.sendTransaction(accounts[7], 3, 2, {from: accounts[0]})
+      expect(+await testContract.getNumVotings.call()).toBe(6 + numberOfInitialVotings)
     })
 
     /*it("should allow to vote for a tokenholder", async function() {
@@ -393,7 +369,6 @@ contract('VotingToken', function(accounts) {
         const p = await testContract.getVoting.call(0);
         // Voting should pass with 33 %
         expect(p[6]).toBe(33)
-
     })
 
     /*it("delegation after ending a vote should not have an effect on the vote", async function() {

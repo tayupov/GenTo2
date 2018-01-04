@@ -79,7 +79,7 @@ contract VotingToken {
         address beneficiary,
         uint weiAmount,
         FieldOfWork fieldOfWork)
-    onlyShareholders
+        onlyShareholders
     returns (uint votingID)
     {
         votingID = votings.length++;
