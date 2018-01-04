@@ -111,18 +111,30 @@ contract('VotingToken', function(accounts) {
         expect(p[5]).toBe(true)
     })
 
-    /*it("should check whether the inital voting is not passed and not finished", async function() {
-      const testContract = await VotingToken.deployed()
-      await testContract.setCurrentTime.sendTransaction(1300000)
-      await testContract.newVoting.sendTransaction(accounts[1], 29, 2, {from: accounts[6]})
-      var voteId =  await testContract.vote.sendTransaction(1, true, {from: accounts[6]})
-      expect(+await testContract.getVoting(voteId)[5]).toBe(false)
-      expect(+await testContract.getVoting(voteId)[6]).toBe(false)
-      //expect(+await testContract.getNumVotings.call()).toBe(1)
-    })*/
+    it("should check whether the inital voting is not passed and not finished", async function() {
+        const testContract = await getTestToken()
+        await testContract.setCurrentTime.sendTransaction(1300000)
+        await testContract.newVoting.sendTransaction(accounts[1], 29, 2, {from: accounts[2]})
+        await testContract.vote.sendTransaction(6, true, {from: accounts[2]})
+        const p = await testContract.getVoting.call(6);
+        expect(p[4]).toBe(false)
+        expect(p[5]).toBe(false)
+        expect(+await testContract.getNumVotings.call()).toBe(7)
+      })
+      
+      it("should allow to vote for a tokenholder", async function() {
+          const testContract = await VotingToken.deployed()
+          await testContract.newVoting.sendTransaction(accounts[1], 10, 1, {from: accounts[2]})
+          await testContract.vote.sendTransaction(7, true, {from: accounts[1]})
+          await testContract.vote.sendTransaction(7, true, {from: accounts[2]})
+          await testContract.vote.sendTransaction(7, false, {from: accounts[3]})
+          const p = await testContract.getVoting.call(6);
+          expect(testContract.votings[7].votes.length).toBe(3)
+          expect(testContract.votings[7].voted).toBe(true)
+      })
 
     // it("should compute the right influence of tokenholder", async function() {
-    //   const testVotingContract = await VotingToken.deployed()
+    //   const testVotingContract = await getTestToken()
     //   //const testAuctionContract = await AuctionToken.deployed()
 
     //   console.log("compute the right influence of tokenholder")
@@ -273,18 +285,6 @@ contract('VotingToken', function(accounts) {
     //   expect(+await testContract.getNumVotings.call()).toBe(6 + numberOfInitialVotings)
     // })
 
-    // /*it("should allow to vote for a tokenholder", async function() {
-    //     const testContract = await VotingToken.deployed()
-    //     var voteId = await testContract.newVoting.sendTransaction(accounts[1], 10, 1, {from: accounts[2]})
-    //     console.log(voteId)
-    //     // undefined
-    //     console.log(testContract.votings[1])
-    //     await testContract.vote.sendTransaction(voteId, true, {from: accounts[0]})
-    //     await testContract.vote.sendTransaction(voteId, true, {from: accounts[1]})
-    //     await testContract.vote.sendTransaction(voteId, false, {from: accounts[2]})
-    //     expect(testContract.votings[voteId].votes.length).toBe(3)
-    //     expect(testContract.votings[voteId].voted).toBe(true)
-    // })*/
 
     // /*it("should allow delegation to other users", async function() {
     //     const testContract = await VotingToken.deployed()
