@@ -2,6 +2,7 @@
 export const DAONAME = 'daoname'
 export const DAOWEBSITE = 'daowebsite'
 export const DAODESCRIPTION = 'daodescription'
+export const DAOPROPOSAL = 'daoProposal'
 
 // dao fields of work
 export const DMRREWARD = 'dmrreward'

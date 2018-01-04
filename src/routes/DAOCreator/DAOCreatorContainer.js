@@ -1,4 +1,5 @@
 import React from 'react';
+import IPFS from 'ipfs';
 
 import DAOCreator from './DAOCreator';
 
@@ -9,6 +10,8 @@ import { adjustStepZilla } from 'utils/stepzilla';
 import GenToFactory from 'assets/contracts/GenToFactory.json';
 import { createGentoFactoryInstance } from 'utils/contractInstances';
 
+import { Buffer } from 'buffer';
+
 export default class DAOCreatorContainer extends React.Component {
 
 	constructor(props) {
@@ -17,6 +20,8 @@ export default class DAOCreatorContainer extends React.Component {
 			name: null,
 			website: null,
 			description: null,
+			proposalIPFSHash: null,
+			proposalArrayBuffer: null,
 			dmrReward: null,
 			financePoints: null,
 			productPoints: null,
@@ -39,9 +44,36 @@ export default class DAOCreatorContainer extends React.Component {
 		adjustStepZilla(steps, this)
 	}
 
-render() {
-	return (
-		<DAOCreator />
-	)
-}
+	async handleCreate() {
+		const uploadResult = await this.uploadProposalToIPFS();
+		if (uploadResult.hash) {
+			this.setState({
+				proposalIPFSHash: uploadResult.hash
+			})
+		}
+
+		console.log(this.state)
+	}
+
+	uploadProposalToIPFS() {
+		return new Promise((resolve, reject) => {
+
+			const ipfsNode = new IPFS();
+			const content = Buffer.from(this.state.proposalArrayBuffer);
+
+			ipfsNode.on('ready', () => {
+				ipfsNode.files.add({ content }, (err, files) => {
+					if (err) { reject(err) }
+					resolve(files[0])
+				});
+			});
+
+		});
+	}
+
+	render() {
+		return (
+			<DAOCreator />
+		)
+	}
 }

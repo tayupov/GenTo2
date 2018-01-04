@@ -23,42 +23,54 @@ export const adjustStepZilla = (steps, component) => {
   footerButtons.appendChild(createButton);
 }
 
-function updateCreationState(event) {
+/*
+  Use an async function, because file reader works asynchronously
+  and we want the return value of the file reader to be in component state
+*/
+
+async function updateCreationState(event) {
   const steps = this.steps;
   const component = this.component;
   const step = getCurrentStep(steps);
   if (step) {
     const validator = step.validator;
-    const result = validator();
+    const result = await validator();
     if (result) {
       component.setState({ ...result })
     }
   }
 
-  // is second to last step
   if (step === steps[steps.length - 2]) {
-    const createButton = document.getElementById('create-button');
-    createButton.style.visibility = 'visible';
+    handleSecondToLastStep();
   }
 
-  // is last step
   if (step === steps[steps.length - 1]) {
-    const doing = document.querySelectorAll('.progtrckr-doing')[0];
-    doing.classList.remove('progtrckr-doing');
-    doing.classList.add('progtrckr-done');
-
-    console.log(component.state)
+    handleLastStep(component);
   }
 }
 
-/*
-  Hide the create button in case the current step is not the last step,
-  or in case there are no steps in the "doing" state
-*/
+function handleSecondToLastStep() {
+  const createButton = document.getElementById('create-button');
+  createButton.style.visibility = 'visible';
+}
+
+function handleLastStep(component) {
+  // fix fucking stepzilla
+  const doing = document.querySelectorAll('.progtrckr-doing')[0];
+  doing.classList.remove('progtrckr-doing');
+  doing.classList.add('progtrckr-done');
+
+  component.handleCreate()
+}
+
 function handlePrevButton(event) {
   const steps = this.steps;
   const step = getCurrentStep(steps);
 
+  /*
+  Hide the create button in case the current step is not the last step,
+  or in case there are no steps in the "doing" state
+*/
   if (!step || step === steps[steps.length - 1]) {
     const createButton = document.getElementById('create-button');
     createButton.style.visibility = 'hidden';
