@@ -43,6 +43,7 @@ contract('VotingToken', function(accounts) {
         await testContract.setCurrentTime.sendTransaction(1300000)
         // create 2 votings with id 0 and 1
         const numberOfInitialVotings = 0;
+        await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
         await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
         // per transaction it creates two votings not one! => add 2 not 1
         expect(+await testContract.getNumVotings.call()).toBe(2 + numberOfInitialVotings)

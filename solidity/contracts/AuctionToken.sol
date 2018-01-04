@@ -28,7 +28,7 @@ contract AuctionToken is StandardToken, VotingToken {
     bool dev;
     uint cTime;
 
-    mapping(address => mapping(uint => address)) delegations;
+    mapping(address => mapping(uint => address)) public delegations;
 
     event MyTransfer(address indexed to, uint256 value, uint256 remainingSupply);
 
@@ -73,7 +73,7 @@ contract AuctionToken is StandardToken, VotingToken {
     }
 
     function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) returns (uint influence){
-        uint influence1 = 0;
+        uint influence1 = 5;
         for (uint i = 0; i < shareholders.length; ++i) {
             NumberLogger('shareholders.length', shareholders.length);
             if (delegations[shareholders[i]][uint(fieldOfWork)] == voter){
@@ -83,7 +83,7 @@ contract AuctionToken is StandardToken, VotingToken {
 
         return influence1;
     }
-
+    
     function getBuyPrice() constant returns (uint) {
         uint currentPrice;
         uint passed;
@@ -139,6 +139,7 @@ contract AuctionToken is StandardToken, VotingToken {
             shareholders.push(msg.sender);
         }
         // execute an event reflecting the change
+        NumberLogger("Field of Work to uint", uint(FieldOfWork.Organisational));
         MyTransfer(msg.sender, amount, bal);
 
         // ends function and returns
