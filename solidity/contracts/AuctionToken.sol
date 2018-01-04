@@ -85,7 +85,7 @@ contract AuctionToken is StandardToken, VotingToken {
 
         return influence1;
     }
-    
+
     function getBuyPrice() constant returns (uint) {
         uint currentPrice;
         uint passed;
@@ -148,7 +148,7 @@ contract AuctionToken is StandardToken, VotingToken {
         return amount;
     }
 
-    function delegate(FieldOfWork fieldOfWork, address recipient){
+    function delegate(FieldOfWork fieldOfWork, address recipient) public {
         // shareholder delegates to recipient ??
         if (!isShareholder(msg.sender))
             revert();

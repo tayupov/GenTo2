@@ -41,6 +41,10 @@ contract VotingToken {
         return fow;
     }
 
+    /* function getVotings() constant returns (address[]) {
+      return votings;
+    } */
+
     function setFieldOfWork(uint _value) public {
         //require(uint(FieldOfWork.Partnership) >= _value);
         fow = FieldOfWork(_value);
@@ -127,7 +131,7 @@ contract VotingToken {
         require(currentTime() > voting.votingDeadline
             && !voting.finished);
 
-    
+
         // require(currentTime() > voting.votingDeadline                       // If it is past the voting deadline
         //     && !voting.finished                                             // and it has not already been finished
         //     && voting.votingHash == sha3(voting.recipient, voting.amount)); // and the supplied code matches the voting...
