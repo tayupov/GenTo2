@@ -76,7 +76,7 @@ contract AuctionToken is StandardToken, VotingToken {
         uint influence1 = 5;
         for (uint i = 0; i < shareholders.length; ++i) {
             NumberLogger('shareholders.length', shareholders.length);
-            if (delegations[shareholders[i]][uint(fieldOfWork)] == voter){
+            if (delegations[shareholders[i]][uint(fieldOfWork)] == voter) {
                 influence1 += balances[shareholders[i]];
             }
         }
