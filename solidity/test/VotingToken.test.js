@@ -43,6 +43,8 @@ contract('VotingToken', function(accounts) {
         await testContract.setCurrentTime.sendTransaction(1300000)
         // create 2 votings with id 0 and 1
         const numberOfInitialVotings = 0;
+        await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
+
         await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
         // per transaction it creates two votings not one! => add 2 not 1
         expect(+await testContract.getNumVotings.call()).toBe(2 + numberOfInitialVotings)
@@ -128,22 +130,29 @@ contract('VotingToken', function(accounts) {
       const testVotingContract = await VotingToken.deployed()
       //const testAuctionContract = await AuctionToken.deployed()
 
+      console.log("compute the right influence of tokenholder")
       // initial FoW is Finance
       console.log(+await testVotingContract.getFieldOfWork.call())
 
       // set the FieldOfWork to Organisational instead of Finance
       await testVotingContract.setFieldOfWork(1)
-      console.log(+await testVotingContract.getFieldOfWork.call())
+
+      const fieldOfWork = +await testVotingContract.getFieldOfWork.call()
+
+      // prints the updated field of work
+      console.log('fieldOfWork', fieldOfWork)
 
       await testVotingContract.setCurrentTime.sendTransaction(1300000)
       //await testAuctionContract.setCurrentTime.sendTransaction(1300000)
 
-      var voteId = await testVotingContract.newVoting.sendTransaction(accounts[1], 20, 1, {from: accounts[5]})
+      await testVotingContract.buy.sendTransaction({from: accounts[1], value: 1000})
 
-      await testVotingContract.delegate.sendTransaction(1, accounts[1], {from: accounts[5]})
+      const voteId = await testVotingContract.newVoting.call(accounts[1], 20, 1)
+
+      await testVotingContract.delegate.sendTransaction(fieldOfWork, accounts[1], {from: accounts[5]})
       //await testAuctionContract.delegate.call(FieldOfWork(testVotingContract.getFieldOfWork()), accounts[5])
 
-      expect(+await getInfluenceOfVoter({from: accounts[1]}, Organisational)).toBe(10)
+      expect(+await testContract.getInfluenceOfVoter({from: accounts[1]}, Organisational)).toBe(10)
       //var influence = await testAuctionContract.getInfluenceOfVoter.call(accounts[1], Finance)
 
     })
@@ -245,6 +254,11 @@ contract('VotingToken', function(accounts) {
     it("should reject votings with 1/3 confirmed votes", async function() {
         const testContract = await VotingToken.deployed()
         await testContract.setCurrentTime.sendTransaction(1300000)
+
+        await testContract.buy.sendTransaction({from: accounts[0], value: 20})
+        await testContract.buy.sendTransaction({from: accounts[1], value: 20})
+        await testContract.buy.sendTransaction({from: accounts[2], value: 20})
+
         await testContract.newVoting.sendTransaction(accounts[1], 100, 2,{from: accounts[1]})
         await testContract.vote.sendTransaction(1, true, {from: accounts[0]})
         await testContract.vote.sendTransaction(1, false, {from: accounts[1]})

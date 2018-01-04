@@ -70,7 +70,7 @@ contract VotingToken {
 
     // Modifier that allows only shareholders to vote and create new votings
     modifier onlyShareholders {
-        if (isShareholder(msg.sender)) throw;
+        if (!isShareholder(msg.sender)) throw;
         _;
     }
 
