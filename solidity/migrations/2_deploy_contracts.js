@@ -4,6 +4,4 @@ const VotingToken = artifacts.require("./VotingToken.sol");
 
 module.exports = function(deployer, network, accounts) {
   deployer.deploy(tokenFactory);
-  //Deploy a test contract with mocked time
-  deployer.deploy(AuctionToken, 1000000000, "TST", "TestToken", 10, 100, 10, 1000000, 2000000, true);
 };

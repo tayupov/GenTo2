@@ -28,7 +28,7 @@ contract AuctionToken is StandardToken, VotingToken {
     bool dev;
     uint cTime;
 
-    mapping(address => mapping(uint => address)) public delegations;
+    mapping(address => mapping(uint => address)) delegations;
 
     event MyTransfer(address indexed to, uint256 value, uint256 remainingSupply);
 
@@ -75,13 +75,11 @@ contract AuctionToken is StandardToken, VotingToken {
     function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) returns (uint influence){
         uint influence1 = 0;
         for (uint i = 0; i < shareholders.length; ++i) {
-            NumberLogger("shareholders.length", shareholders.length);
-            if (delegations[shareholders[i]][uint(fieldOfWork)] == voter) {
+            NumberLogger('shareholders.length', shareholders.length);
+            if (delegations[shareholders[i]][uint(fieldOfWork)] == voter){
                 influence1 += balances[shareholders[i]];
             }
         }
-
-        NumberLogger('Influence', influence1);
 
         return influence1;
     }
@@ -141,14 +139,13 @@ contract AuctionToken is StandardToken, VotingToken {
             shareholders.push(msg.sender);
         }
         // execute an event reflecting the change
-        NumberLogger("Field of Work to uint", uint(FieldOfWork.Organisational));
         MyTransfer(msg.sender, amount, bal);
 
         // ends function and returns
         return amount;
     }
 
-    function delegate(FieldOfWork fieldOfWork, address recipient) public {
+    function delegate(FieldOfWork fieldOfWork, address recipient){
         // shareholder delegates to recipient ??
         if (!isShareholder(msg.sender))
             revert();
@@ -164,6 +161,8 @@ contract AuctionToken is StandardToken, VotingToken {
       }
     }
     function setCurrentTime(uint time) {
+      require(dev);
+      
       cTime = time;
     }
 /*

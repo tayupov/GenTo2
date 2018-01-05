@@ -14,7 +14,6 @@ contract VotingToken {
 
     event Voted(uint votingID, bool position, address voter);
     event VotingTallied(uint votingID, uint result, uint quorum, bool active);
-    event NewVotingGenerated(uint votingID);
 
     struct Voting {
         address recipient;
@@ -42,23 +41,9 @@ contract VotingToken {
         return fow;
     }
 
-    /* function getVotings() constant returns (address[]) {
-      return votings;
-    } */
-
     function setFieldOfWork(uint _value) public {
         //require(uint(FieldOfWork.Partnership) >= _value);
         fow = FieldOfWork(_value);
-    }
-
-    function getVote(address user, uint votingID) public returns(bool voteResult){
-        Voting storage voting = votings[votingID];
-        for (uint i = 0; i < voting.votes.length; ++i) {
-            if(voting.votes[i].voter == user){
-                return voting.votes[i].inSupport;
-            }
-        }
-        revert(); // User did not vote
     }
 
     function getVoting(uint votingID) public constant returns (address recipient,
@@ -78,11 +63,6 @@ contract VotingToken {
         return votings.length;
     }
 
-    function getNumVotes(uint votingID) public constant returns (
-        uint numOfVotings) {
-        return votings[votingID].votes.length;
-    }
-
     struct Vote {
         bool inSupport;
         address voter;
@@ -90,7 +70,7 @@ contract VotingToken {
 
     // Modifier that allows only shareholders to vote and create new votings
     modifier onlyShareholders {
-        if (!isShareholder(msg.sender)) throw;
+        if (isShareholder(msg.sender)) throw;
         _;
     }
 
@@ -107,8 +87,8 @@ contract VotingToken {
     {
         AddressLogger("BENEFICIARY", beneficiary);
         votingID = votings.length++;
+        votings.length++;
         Voting storage voting = votings[votingID];
-        NumberLogger("VOTING ID", votingID);
         voting.recipient = beneficiary;
         voting.amount = weiAmount;
         voting.votingHash = sha3(beneficiary, weiAmount); // TODO add transactionBytecode
@@ -116,9 +96,7 @@ contract VotingToken {
         voting.finished = false;
         voting.fieldOfWork = fieldOfWork;
         voting.votingPassed = false;
-        numVotings = votingID;
-
-        NewVotingGenerated(votingID);
+        numVotings = votingID+1;
 
         return votingID;
     }
@@ -144,15 +122,12 @@ contract VotingToken {
     function executeVoting(uint votingNumber) public
     {
         NumberLogger("voting number: ", votingNumber);
-        Voting storage voting = votings[votingNumber];
-
-        require(currentTime() > voting.votingDeadline
-            && !voting.finished);
+        Voting storage voting = votings[0];
 
 
-        // require(currentTime() > voting.votingDeadline                       // If it is past the voting deadline
-        //     && !voting.finished                                             // and it has not already been finished
-        //     && voting.votingHash == sha3(voting.recipient, voting.amount)); // and the supplied code matches the voting...
+        require(currentTime() > voting.votingDeadline                                             // If it is past the voting deadline
+            && !voting.finished                                                          // and it has not already been finished
+            && voting.votingHash == sha3(voting.recipient, voting.amount)); // and the supplied code matches the voting...
 
 
         uint approve = 0;
