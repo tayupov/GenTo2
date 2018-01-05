@@ -127,6 +127,7 @@ contract VotingToken {
         // votings[0] or votings[votingNumber] ???
         Voting storage voting = votings[0];
 
+        // this doesn't work someone knows why?
         voting.finished = true;
 
         VotingFinishedLogger("voting finished: ", voting.finished);
@@ -141,7 +142,7 @@ contract VotingToken {
         uint approve = 0;
         uint disapprove = 0;
 
-        for (uint i = 0; i < voting.votes.length; i++) {
+        for (uint i = 0; i < voting.votes.length; ++i) {
             Vote storage v = voting.votes[i];
             uint voteWeight = getInfluenceOfVoter(v.voter, voting.fieldOfWork);
             if (v.inSupport) {
