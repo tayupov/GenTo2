@@ -160,32 +160,33 @@ contract('VotingToken', function(accounts) {
     expect(+await testContract.getNumVotings.call()).toBe(1)
   })
 
-  // it("should compute the right influence of tokenholder", async function() {
-  //   //const testAuctionContract = await AuctionToken.deployed()
-  //   // initial FoW is Finance
-  //   console.log(+await testContract.getFieldOfWork.call())
-  //
-  //   // set the FieldOfWork to Organisational instead of Finance
-  //   await testContract.setFieldOfWork(1)
-  //   console.log(+await testContract.getFieldOfWork.call())
-  //
-  //   await testContract.setCurrentTime.sendTransaction(1300000)
-  //   //await testAuctionContract.setCurrentTime.sendTransaction(1300000)
-  //
-  //   var voteId = await testContract.newVoting.sendTransaction(accounts[1], 20, 1, {
-  //     from: accounts[5]
-  //   })
-  //
-  //   await testContract.delegate.sendTransaction(1, accounts[1], {
-  //     from: accounts[5]
-  //   })
-  //   //await testAuctionContract.delegate.call(FieldOfWork(testVotingContract.getFieldOfWork()), accounts[5])
-  //
-  //   expect(+await getInfluenceOfVoter({
-  //     from: accounts[1]
-  //   }, Organisational)).toBe(10)
-  //   //var influence = await testAuctionContract.getInfluenceOfVoter.call(accounts[1], Finance)
-  // })
+  it("should compute the right influence of tokenholder", async function() {
+    await testContract.setCurrentTime.sendTransaction(1300000)
+
+    console.log('getFieldOfWork: ', +await testContract.getFieldOfWork.call())
+
+    // set the FieldOfWork to Organisational instead of Finance
+    await testContract.setFieldOfWork(1)
+
+    console.log('getFieldOfWork after setting to Organisational: ',
+        +await testContract.getFieldOfWork.call())
+
+    // user 1, 5 and 6 become shareholder
+    await testContract.buy.sendTransaction({from: accounts[1], value: 10000})
+    await testContract.buy.sendTransaction({from: accounts[5], value: 10000})
+    await testContract.buy.sendTransaction({from: accounts[6], value: 10000})
+
+    await testContract.newVoting.sendTransaction(accounts[1], 20, 1, {from: accounts[1]})
+
+    await testContract.delegate.sendTransaction(1, accounts[1], {from: accounts[5]})
+    await testContract.delegate.sendTransaction(1, accounts[1], {from: accounts[6]})
+
+    console.log('get Influence from user 1: ', +await testContract.getInfluenceOfVoter.call(accounts[1], 1))
+    console.log('get Influence from user 5: ', +await testContract.getInfluenceOfVoter.call(accounts[5], 1))
+
+    // only user 5 delegates to user 1 => result of getInfluenceOfVoter = 540
+    expect(+await testContract.getInfluenceOfVoter.call(accounts[1], 1)).toBe(810)
+  })
   //
   // it("should instantiate a new voting", async function() {
   //   await testContract.setCurrentTime.sendTransaction(1300000)
