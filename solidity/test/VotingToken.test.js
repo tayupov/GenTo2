@@ -59,30 +59,25 @@ contract('VotingToken', function(accounts) {
   })
 
 
-  /*it("should execute votings with 2/3 confirmed votes", async function() {
-      const testContract = await VotingToken.deployed()
-      //set time back to 0
+  it("should execute votings with 2/3 confirmed votes", async function() {
       await testContract.setCurrentTime.sendTransaction(1200000)
-      try {
-        await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
-        await testContract.buy.sendTransaction({from: accounts[2], value: 1000})
-        await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
-        // create new Voting with id = 0
-        console.log(+await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]}))
-        await testContract.vote.sendTransaction(0, true, {from: accounts[1]})
-        await testContract.vote.sendTransaction(0, true, {from: accounts[2]})
-        await testContract.vote.sendTransaction(0, false, {from: accounts[3]})
-        await testContract.setCurrentTime.sendTransaction(1300000)
-        await testContract.executeVoting.sendTransaction(0)
-        const p = await testContract.getVoting.call(0);
-        console.log(p)
-        expect(p[4]).toBe(true)
-        expect(p[5]).toBe(true)
-      } catch(e) {
-          expect(e.message).toContain("VM error while processing transaction")
-      }
 
-  })*/
+      // user 1,2,3 become shareholder
+      await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
+      await testContract.buy.sendTransaction({from: accounts[2], value: 1000})
+      await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
+
+      await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
+      await testContract.vote.sendTransaction(0, true, {from: accounts[1]})
+      await testContract.vote.sendTransaction(0, true, {from: accounts[2]})
+      await testContract.vote.sendTransaction(0, false, {from: accounts[3]})
+
+      await testContract.setCurrentTime.sendTransaction(1300000)
+      await testContract.executeVoting.sendTransaction(0)
+      const p = await testContract.getVoting.call(+await testContract.getNumVotings()-1);
+      expect(p[4]).toBe(true)
+      expect(p[5]).toBe(true)
+  })
 
   /*it("should reject votings with 1/3 confirmed votes", async function() {
       const testContract = await VotingToken.deployed()
