@@ -31,6 +31,7 @@ contract VotingToken {
 
     event NumberLogger(string description, uint number);
     event AddressLogger(string description, address addr);
+    event VotingFinishedLogger(string description, bool finished);
 
     //constructor
     function VotingToken() public payable {
@@ -121,18 +122,26 @@ contract VotingToken {
     function executeVoting(uint votingNumber) public
     {
         NumberLogger("voting number: ", votingNumber);
+
+
+        // votings[0] or votings[votingNumber] ???
         Voting storage voting = votings[0];
 
+        voting.finished = true;
 
-        require(currentTime() > voting.votingDeadline                                             // If it is past the voting deadline
-            && !voting.finished                                                          // and it has not already been finished
-            && voting.votingHash == sha3(voting.recipient, voting.amount)); // and the supplied code matches the voting...
+        VotingFinishedLogger("voting finished: ", voting.finished);
+
+
+
+        /* require(currentTime() > voting.votingDeadline                       // If it is past the voting deadline
+            && !voting.finished                                             // and it has not already been finished
+            && voting.votingHash == sha3(voting.recipient, voting.amount)); // and the supplied code matches the voting... */
 
 
         uint approve = 0;
         uint disapprove = 0;
 
-        for (uint i = 0; i < voting.votes.length; ++i) {
+        for (uint i = 0; i < voting.votes.length; i++) {
             Vote storage v = voting.votes[i];
             uint voteWeight = getInfluenceOfVoter(v.voter, voting.fieldOfWork);
             if (v.inSupport) {
@@ -142,9 +151,7 @@ contract VotingToken {
             }
         }
 
-        voting.finished = true;
-
-        if (approve > disapprove) {
+        if (approve >= disapprove) {
             // Voting passed; execute the transaction
             voting.votingPassed = true;
         } else {
