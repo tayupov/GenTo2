@@ -70,7 +70,8 @@ contract VotingToken {
 
     // Modifier that allows only shareholders to vote and create new votings
     modifier onlyShareholders {
-        if (!isShareholder(msg.sender)) throw;
+        //if (!isShareholder(msg.sender)) throw;
+        require(isShareholder(msg.sender));
         _;
     }
 
@@ -81,13 +82,12 @@ contract VotingToken {
     function newVoting(
         address beneficiary,
         uint weiAmount,
-        FieldOfWork fieldOfWork)
+        FieldOfWork fieldOfWork) public
         onlyShareholders
     returns (uint votingID)
     {
         AddressLogger("BENEFICIARY", beneficiary);
         votingID = votings.length++;
-        votings.length++;
         Voting storage voting = votings[votingID];
         voting.recipient = beneficiary;
         voting.amount = weiAmount;
@@ -96,15 +96,14 @@ contract VotingToken {
         voting.finished = false;
         voting.fieldOfWork = fieldOfWork;
         voting.votingPassed = false;
-        numVotings = votingID+1;
-
+        numVotings = votingID;
         return votingID;
     }
 
     function vote(
         uint votingNumber,
         bool supportsVoting
-    )
+    ) public
     onlyShareholders
     returns (uint voteID)
     {
