@@ -107,36 +107,26 @@ contract('VotingToken', function(accounts) {
   })
 
   it("checks whether the voting gets finished after executing", async function() {
-    await testContract.setCurrentTime.sendTransaction(1300000)
+    await testContract.setCurrentTime.sendTransaction(1200000)
     // user 1 become a shareholder
-    await testContract.buy.sendTransaction({from: accounts[1], value: 100000})
+    await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
     //create a new voting
-    await testContract.newVoting.sendTransaction(accounts[1], 29, 2, {from: accounts[1]})
+    await testContract.newVoting.sendTransaction(accounts[1], 103, 2, {from: accounts[1]})
     // its important use FoW 0 = Finance
     await testContract.vote.sendTransaction(+await testContract.getNumVotings() - 1, true, {from: accounts[1]})
 
-    // prints the current amount of votings
-    console.log('voting gets finished after executing', +await testContract.getNumVotings())
-
-    await testContract.executeVoting(+await testContract.getNumVotings()-1)
-    
+    await testContract.setCurrentTime.sendTransaction(1300000)
+    await testContract.executeVoting.sendTransaction(+await testContract.getNumVotings()-1)
     const p = await testContract.getVoting.call(+await testContract.getNumVotings()-1)
-
-    //console.log('voting p: ', p)
-    //executes the voting
-
+    
     // recipient of voting is user 1
     expect(p[0]).toBe(accounts[1])
     // value of voting should be 29
-    expect(Number(p[1])).toBe(29)
+    expect(Number(p[1])).toBe(103)
     // voting is finished
-
-    // executeVoting() doesnt work!!!
-    // expect(p[4]).toBe(false)
-    // // voting passed
-    // expect(p[5]).toBe(true)
-
-
+    expect(p[4]).toBe(true)
+    // voting passed
+    expect(p[5]).toBe(true)
   })
 
   it("should check whether the inital voting is not passed and not finished", async function() {

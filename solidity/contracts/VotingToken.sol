@@ -130,9 +130,8 @@ contract VotingToken {
 
 
         require(currentTime() > voting.votingDeadline                       // If it is past the voting deadline
-            && !voting.finished                                             // and it has not already been finished
-            && voting.votingHash == sha3(voting.recipient, voting.amount)); // and the supplied code matches the voting...
-
+            && !voting.finished);                                             // and it has not already been finished
+            // && voting.votingHash == sha3(voting.recipient, voting.amount)); // and the supplied code matches
 
         uint approve = 0;
         uint disapprove = 0;
@@ -151,7 +150,7 @@ contract VotingToken {
 
         NumberLogger("approve", approve);
         NumberLogger("disapprove", disapprove);
-        
+
         voting.finished = true;
 
         if (approve >= disapprove) {
@@ -161,6 +160,6 @@ contract VotingToken {
             // Voting failed
             voting.votingPassed = false;
         }
-        // voting.passedPercent = approve * 100 / (approve+disapprove); 
+        voting.passedPercent = approve * 100 / (approve+disapprove); 
     }
 }
