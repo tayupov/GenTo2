@@ -152,6 +152,22 @@ contract AuctionToken is StandardToken, VotingToken {
         delegations[msg.sender][uint(fieldOfWork)] = recipient;
     }
 
+    function claimPayout(uint votingNumber) public {
+        Voting storage voting = votings[votingNumber];
+
+        require(voting.finished && voting.votingPassed && voting.recipient == msg.sender);
+
+        balances[msg.sender] += voting.amount;
+    }
+
+    // function claimDividend(uint votingNumber) public onlyShareholders {
+    //     Voting storage voting = votings[votingNumber];
+
+    //     require(voting.finished && voting.votingPassed && !!voting.dividend);
+
+    //     balances[msg.sender] += balances[msg.sender] * voting.dividend;
+    // }
+
     function currentTime() returns (uint time) {
       if (dev) {
         return cTime;
