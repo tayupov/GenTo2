@@ -253,30 +253,31 @@ contract('VotingToken', function(accounts) {
 
   })
 
-  // it("should create a new voting", async function() {
-  //   await testContract.setCurrentTime.sendTransaction(1600000)
-  //   var numberOfInitialVotings = 0;
-  //   // return a new voting with id = 14 => number of voting from getNumVoting() = 14
-  //   console.log("create new voting")
-  //   console.log(+await testContract.newVoting.call(accounts[0], 100, 2))
-  //   //console.log(+await testContract.newVoting.sendTransaction(accounts[0], 100, 2,{from: accounts[1]}))
-  //   await testContract.newVoting.call(accounts[0], 100, 2)
-  //   expect(numberOfInitialVotings + 2).toBe(2)
-  // })
-  //
-  //
-  // it("should abort voting if you are not a shareholder", async function() {
-  //   await testContract.setCurrentTime.sendTransaction(1600000)
-  //
-  //   // send money to account in order to become a shareholder
-  //   //await testAuctionContract.buy.sendTransaction({from: accounts[1]}, value: web3.toWei(10, 'Gwei')})
-  //   //console.log(+await testContract.isShareholder.call(accounts[5]))
-  //
-  //   // check whether the account is a shareholder
-  //   // !! converts 0 or 1 to false or true
-  //   expect(!!+await testContract.isShareholder.call(accounts[5])).toBe(false)
-  // })
-  //
+  it("should create a new voting", async function() {
+    await testContract.setCurrentTime.sendTransaction(1600000)
+    var numberOfInitialVotings = 0;
+
+    await testContract.buy.sendTransaction({from: accounts[0], value: 10000})
+    console.log("create new voting")
+    //console.log('getNumVotings: ', +await testContract.getNumVotings())
+    //console.log(+await testContract.newVoting.call(accounts[0], 100, 0))
+    await testContract.newVoting.sendTransaction(accounts[0], 100, 0, {from: accounts[0]})
+    expect(numberOfInitialVotings + 1).toBe(+await testContract.getNumVotings())
+  })
+
+
+  it("should check that only if the user buys token he becomes a shareholder", async function() {
+    await testContract.setCurrentTime.sendTransaction(1600000)
+
+    // user 1 become a shareholder
+    await testContract.buy.sendTransaction({from: accounts[1], value: web3.toWei(10, 'Gwei')})
+
+    // check whether the account is a shareholder
+    // !! converts 0 or 1 to false or true
+    expect(!!+await testContract.isShareholder.call(accounts[5])).toBe(false)
+    expect(!!+await testContract.isShareholder.call(accounts[1])).toBe(true)
+  })
+
   // // from AuctionToken
   // it("should not be possible to compute a buyPrice when the ICO is not running", async function() {
   //
