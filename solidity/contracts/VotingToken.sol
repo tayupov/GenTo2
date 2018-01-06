@@ -125,12 +125,15 @@ contract VotingToken {
 
 
         // votings[0] or votings[votingNumber] ???
-        Voting storage voting = votings[0];
+        Voting storage voting = votings[votingNumber];
 
         // this doesn't work someone knows why?
         voting.finished = true;
+        voting.votingPassed = true;
 
         VotingFinishedLogger("voting finished: ", voting.finished);
+
+        votings[votingNumber] = voting;
 
 
 
@@ -139,7 +142,7 @@ contract VotingToken {
             && voting.votingHash == sha3(voting.recipient, voting.amount)); // and the supplied code matches the voting... */
 
 
-        uint approve = 0;
+        /* uint approve = 0;
         uint disapprove = 0;
 
         for (uint i = 0; i < voting.votes.length; ++i) {
@@ -159,6 +162,6 @@ contract VotingToken {
             // Voting failed
             voting.votingPassed = false;
         }
-        voting.passedPercent = approve * 100 / (approve+disapprove);
+        voting.passedPercent = approve * 100 / (approve+disapprove); */
     }
 }

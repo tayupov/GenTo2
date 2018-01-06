@@ -187,16 +187,17 @@ contract('VotingToken', function(accounts) {
     // only user 5 delegates to user 1 => result of getInfluenceOfVoter = 540
     expect(+await testContract.getInfluenceOfVoter.call(accounts[1], 1)).toBe(810)
   })
-  //
-  // it("should instantiate a new voting", async function() {
-  //   await testContract.setCurrentTime.sendTransaction(1300000)
-  //   var voting = await testContract.newVoting.call(accounts[0], 10, 2)
-  //   var voteId = await testContract.vote.sendTransaction(1, true, {
-  //     from: accounts[6]
-  //   })
-  //   expect(+await testContract.getVoting(voteId)[1]).toBe(10)
-  // })
-  //
+
+  it("should instantiate a new voting", async function() {
+    await testContract.setCurrentTime.sendTransaction(1300000)
+
+    await testContract.buy.sendTransaction({from: accounts[0], value: 100000})
+    await testContract.newVoting.sendTransaction(accounts[0], 10, 0, {from: accounts[0]})
+    await testContract.vote.sendTransaction(0, true, {from: accounts[0]})
+    const p = await testContract.getVoting.call(+await testContract.getNumVotings()-1)
+    expect(Number(p[1])).toBe(10)
+  })
+
   // it("should pass the voting when the tokenholder has delegated his vote", async function() {
   //   await testContract.setCurrentTime.sendTransaction(1400000)
   //
@@ -205,47 +206,52 @@ contract('VotingToken', function(accounts) {
   //   // delegate voting power in FoW Finance from user 1 to user 0
   //   //console.log(+await testContract.getFieldOfWork())
   //   console.log('delegate')
-  //   console.log(+await testContract.getFieldOfWork())
+  //   console.log('getFieldOfWork', +await testContract.getFieldOfWork())
   //
-  //   // user 3 and user 1 should become a shareholder
-  //   await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
+  //   // user 1 and user 3 should become a shareholder
   //   await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
+  //   await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
   //
-  //   // user 3 delegates his voting power in FoW 1 to user 1
-  //   await testContract.delegate.sendTransaction(1, accounts[1], {from: accounts[3]})
+  //   // user 3 delegates his voting power in FoW 0 to user 1
+  //   await testContract.delegate.sendTransaction(0, accounts[1], {from: accounts[3]})
+  //   // first create a new voting before user can vote
+  //   await testContract.newVoting.sendTransaction(accounts[1], 10, 0, {from: accounts[1]})
+  //   await testContract.vote.sendTransaction(0, false, {from: accounts[3]})
+  //   await testContract.vote.sendTransaction(0, true, {from: accounts[1]})
   //
-  //   await testContract.vote.sendTransaction(1, false, {from: accounts[3]})
-  //   await testContract.vote.sendTransaction(1, true, {from: accounts[1]})
+  //   console.log('numVotings: ', +await testContract.getNumVotings())
+  //   const p = await testContract.getVoting.call(+await testContract.getNumVotings()-1);
+  //   console.log(p)
+  //   await testContract.executeVoting.sendTransaction(0, {from: accounts[0]})
+  //   expect(p[4]).toBe(true)
+  //   expect(p[5]).toBe(true)
   //
-  //   // console.log(+await testContract.getNumVotings())
-  //   // const p = await testContract.getVoting.call(1);
-  //   // expect(p[4]).toBe(true)
-  //   // expect(p[5]).toBe(true)
+  //   // await testContract.buy.sendTransaction({from: accounts[0], value: 10})
+  //   //
+  //   // expect(+await getInfluenceOfVoter({from: accounts[0]}, 0)).toContain(0)
+  //   // expect(+await getInfluenceOfVoter({from: accounts[1]}, 0)).toContain(10)
   //
-  //   //const boughtAmount1 = await testContract.buy.call({from: accounts[0], value: 10})
-  //
-  //   //expect(+await getInfluenceOfVoter({from: accounts[0]}, Finance)).toContain(0)
-  //   //expect(+await getInfluenceOfVoter({from: accounts[1]}, Finance)).toContain(10)
   // })
 
-  /*it("should fail the delegation if the token holder isn't a shareholder", async function() {
-    const votingContract = await VotingToken.deployed()
-    const testContract = await getTestToken()
-    await votingContract.setCurrentTime.sendTransaction(1200000)
+  it("should fail the delegation if the token holder isn't a shareholder", async function() {
+    await testContract.setCurrentTime.sendTransaction(1200000)
+
+    // account[9] is not a shareholder because he didn't buy anything
+    console.log("is user 9 a shareholder: ", !!+await testContract.isShareholder.call(accounts[9]))
+
     try {
-      // account[9] is not a shareholder
-      console.log(!!+await votingContract.isShareholder.call(accounts[9]))
-      console.log(+await votingContract.getFieldOfWork.call())
-      console.log(+await testContract.getFieldOfWork())
-      await testContract.delegate.call(testContract.getFieldOfWork(), accounts[9])
+      // user 9 tries to delegate
+      await testContract.delegate.sendTransaction(0, accounts[9], {from: accounts[9]})
       should.fail("this transaction should have raised an error")
-    } catch(e) {
-      //console.log("asdf")
-      expect(e.message).toContain("VM Exception while processing transaction: ")
+    } catch (e) {
+        //console.log(e.message)
+        expect(e.message).toContain("VM Exception while processing transaction: ")
     }
 
 
-  })*/
+
+
+  })
 
   // it("should create a new voting", async function() {
   //   await testContract.setCurrentTime.sendTransaction(1600000)
