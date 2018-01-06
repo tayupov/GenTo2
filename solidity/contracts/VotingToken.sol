@@ -119,41 +119,40 @@ contract VotingToken {
         return voteID;
     }
 
-    function executeVoting(uint votingNumber) public
+    function executeVoting(uint votingNumber)
     {
-        NumberLogger("voting number: ", votingNumber);
-
 
         // votings[0] or votings[votingNumber] ???
         Voting storage voting = votings[votingNumber];
 
-        // this doesn't work someone knows why?
-        voting.finished = true;
-        voting.votingPassed = true;
-
-        VotingFinishedLogger("voting finished: ", voting.finished);
-
-        votings[votingNumber] = voting;
 
 
 
-        /* require(currentTime() > voting.votingDeadline                       // If it is past the voting deadline
+
+        require(currentTime() > voting.votingDeadline                       // If it is past the voting deadline
             && !voting.finished                                             // and it has not already been finished
-            && voting.votingHash == sha3(voting.recipient, voting.amount)); // and the supplied code matches the voting... */
+            && voting.votingHash == sha3(voting.recipient, voting.amount)); // and the supplied code matches the voting...
 
 
-        /* uint approve = 0;
+        uint approve = 0;
         uint disapprove = 0;
 
         for (uint i = 0; i < voting.votes.length; ++i) {
             Vote storage v = voting.votes[i];
             uint voteWeight = getInfluenceOfVoter(v.voter, voting.fieldOfWork);
+            NumberLogger("voteWeight", voteWeight);
+            VotingFinishedLogger("v.inSupport", v.inSupport);
             if (v.inSupport) {
                 approve += voteWeight;
             } else {
                 disapprove += voteWeight;
             }
         }
+
+        NumberLogger("approve", approve);
+        NumberLogger("disapprove", disapprove);
+        
+        voting.finished = true;
 
         if (approve >= disapprove) {
             // Voting passed; execute the transaction
@@ -162,6 +161,6 @@ contract VotingToken {
             // Voting failed
             voting.votingPassed = false;
         }
-        voting.passedPercent = approve * 100 / (approve+disapprove); */
+        // voting.passedPercent = approve * 100 / (approve+disapprove); 
     }
 }

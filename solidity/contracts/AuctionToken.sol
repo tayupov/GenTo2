@@ -75,7 +75,11 @@ contract AuctionToken is StandardToken, VotingToken {
     function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) returns (uint influence){
         uint influence1 = 0;
         for (uint i = 0; i < shareholders.length; ++i) {
-            NumberLogger('shareholders.length', shareholders.length);
+            // NumberLogger('shareholders.length', shareholders.length);
+            // AddressLogger("delegations[shareholders[i]][uint(fieldOfWork)]", delegations[shareholders[i]][uint(fieldOfWork)]);
+            // AddressLogger("voter", voter);
+            // NumberLogger("balances[shareholders[i]]", balances[shareholders[i]]);
+            // NumberLogger("influence1", influence1);
             if (delegations[shareholders[i]][uint(fieldOfWork)] == voter){
                 influence1 += balances[shareholders[i]];
             }
@@ -152,12 +156,15 @@ contract AuctionToken is StandardToken, VotingToken {
         delegations[msg.sender][uint(fieldOfWork)] = recipient;
     }
 
-    function claimPayout(uint votingNumber) public {
+    function claimPayout(uint votingNumber) public returns (uint amount) {
         Voting storage voting = votings[votingNumber];
 
         require(voting.finished && voting.votingPassed && voting.recipient == msg.sender);
 
         balances[msg.sender] += voting.amount;
+        
+        MyTransfer(msg.sender, voting.amount, bal);
+        return voting.amount;
     }
 
     // function claimDividend(uint votingNumber) public onlyShareholders {
