@@ -278,71 +278,71 @@ contract('VotingToken', function(accounts) {
     expect(!!+await testContract.isShareholder.call(accounts[1])).toBe(true)
   })
 
-  // // from AuctionToken
-  // it("should not be possible to compute a buyPrice when the ICO is not running", async function() {
-  //
-  //   await testContract.setCurrentTime.sendTransaction(1000000 - 1)
-  //   await expect(testContract.getBuyPrice.call()).rejects.toEqual(expect.any(Error)) // see: https://github.com/facebook/jest/issues/3601
-  //   await testContract.setCurrentTime.sendTransaction(2000000)
-  //   await expect(testContract.getBuyPrice.call()).rejects.toEqual(expect.any(Error))
-  // })
-  //
-  //
   // it("schould reject votings with 1/3 confirmed votes", async function() {
   //   await testContract.setCurrentTime.sendTransaction(1300000)
-  //   await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {
-  //     from: accounts[1]
-  //   })
-  //   await testContract.vote.sendTransaction(1, true, {
-  //     from: accounts[0]
-  //   })
-  //   await testContract.vote.sendTransaction(1, false, {
-  //     from: accounts[1]
-  //   })
-  //   await testContract.vote.sendTransaction(1, false, {
-  //     from: accounts[2]
-  //   })
+  //
+  //   await testContract.buy.sendTransaction({from:accounts[0], value: 10000})
+  //   await testContract.buy.sendTransaction({from:accounts[1], value: 10000})
+  //   await testContract.buy.sendTransaction({from:accounts[2], value: 10000})
+  //
+  //   await testContract.newVoting.sendTransaction(accounts[1], 100, 0, {from: accounts[1]})
+  //   await testContract.vote.sendTransaction(0, true, {from: accounts[0]})
+  //   await testContract.vote.sendTransaction(0, false, {from: accounts[1]})
+  //   await testContract.vote.sendTransaction(0, false, {from: accounts[2]})
+  //
   //   await testContract.setCurrentTime.sendTransaction(1400000)
-  //   await testContract.executeVoting.sendTransaction(1, {
-  //     from: accounts[2]
-  //   })
-  //   const p = await testContract.getVoting.call(1);
+  //   await testContract.executeVoting.sendTransaction(0, {from: accounts[1]})
+  //
+  //   // get the proposal
+  //   const p = await testContract.getVoting.call(0);
   //   expect(p[4]).toBe(true)
   //   expect(p[5]).toBe(false)
   // })
 
-  /*it("should approve the voting with 3/5 confirmed votes", async function() {
-    const testContract = await VotingToken.deployed()
-    await testContract.setCurrentTime.sendTransaction(1400000)
-
-    console.log("approve the voting with 3/5 confirmed votes")
-    console.log(+await testContract.newVoting.call(accounts[0], 100, 2))
-    var voteId = await testContract.newVoting.call(accounts[0], 100, 2)
-    await testContract.vote.sendTransaction(voteId, true, {from: accounts[0]})
-    // await testContract.vote.sendTransaction(12, true, {from: accounts[1]})
-    // await testContract.vote.sendTransaction(12, true, {from: accounts[2]})
-    // await testContract.vote.sendTransaction(12, false, {from: accounts[3]})
-    // await testContract.vote.sendTransaction(12, false, {from: accounts[4]})
-    // await testContract.setCurrentTime.sendTransaction(1500000)
-    // const proposal = await testContract.getVoting.call(2);
-    // expect(proposal[4]).toBe(true)
-    // expect(proposal[5]).toBe(true)
-  })*/
-
-  // it("should count the correct number of votings", async function() {
-  //   //console.log(await testContract.getNumVotings.call().toNumber())
-  //   const numberOfInitialVotings = (+await testContract.getNumVotings.call())
-  //   await testContract.newVoting.sendTransaction(accounts[5], 10, 2, {
-  //     from: accounts[6]
-  //   })
-  //   await testContract.newVoting.sendTransaction(accounts[4], 20, 2, {
-  //     from: accounts[7]
-  //   })
-  //   await testContract.newVoting.sendTransaction(accounts[7], 3, 2, {
-  //     from: accounts[0]
-  //   })
-  //   expect(+await testContract.getNumVotings.call()).toBe(6 + numberOfInitialVotings)
+  // it("should approve the voting with 3/5 confirmed votes", async function() {
+  //   await testContract.setCurrentTime.sendTransaction(1400000)
+  //
+  //   console.log("approve the voting with 3/5 confirmed votes")
+  //   // causes an error use => sendTransaction not call
+  //   //console.log(+await testContract.newVoting.call(accounts[0], 100, 0))
+  //
+  //   await testContract.buy.sendTransaction({from: accounts[0], value: 10000})
+  //   await testContract.buy.sendTransaction({from: accounts[1], value: 10000})
+  //   await testContract.buy.sendTransaction({from: accounts[2], value: 10000})
+  //   await testContract.buy.sendTransaction({from: accounts[3], value: 10000})
+  //   await testContract.buy.sendTransaction({from: accounts[4], value: 10000})
+  //
+  //   await testContract.newVoting.sendTransaction(accounts[0], 100, 0, {from: accounts[0]})
+  //   await testContract.vote.sendTransaction(0, true, {from: accounts[0]})
+  //   await testContract.vote.sendTransaction(0, true, {from: accounts[1]})
+  //   await testContract.vote.sendTransaction(0, true, {from: accounts[2]})
+  //   await testContract.vote.sendTransaction(0, false, {from: accounts[3]})
+  //   await testContract.vote.sendTransaction(0, false, {from: accounts[4]})
+  //
+  //   await testContract.setCurrentTime.sendTransaction(1500000)
+  //
+  //   const p = await testContract.getVoting.call(0);
+  //   p.votingPassed = true
+  //   expect(p[4]).toBe(false)
+  //   expect(p[5]).toBe(true)
   // })
+
+  it("should count the correct number of votings", async function() {
+    await testContract.setCurrentTime.sendTransaction(1600000)
+
+    await testContract.buy.sendTransaction({from: accounts[4], value: 10000})
+    await testContract.buy.sendTransaction({from: accounts[5], value: 10000})
+    await testContract.buy.sendTransaction({from: accounts[7], value: 10000})
+
+    // should be 0
+    const numberOfInitialVotings = await testContract.getNumVotings.call()
+
+    await testContract.newVoting.sendTransaction(accounts[5], 10, 0, {from: accounts[5]})
+    await testContract.newVoting.sendTransaction(accounts[4], 20, 0, {from: accounts[4]})
+    await testContract.newVoting.sendTransaction(accounts[7], 3, 0, {from: accounts[7]})
+
+    expect(+await testContract.getNumVotings.call()).toBe(3 + Number(numberOfInitialVotings))
+  })
 
   /*it("should allow to vote for a tokenholder", async function() {
       const testContract = await VotingToken.deployed()
