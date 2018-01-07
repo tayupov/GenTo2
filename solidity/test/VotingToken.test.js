@@ -410,8 +410,7 @@ contract('VotingToken', function(accounts) {
       expect(p[4]).toBe(true)
   })
 
-  /*it("delegation after ending a vote should not have an effect on the vote", async function() {
-      const testContract = await VotingToken.deployed()
+  it("delegation after ending a vote should not have an effect on the vote", async function() {
       // Set time between ICO start and END
       await testContract.setCurrentTime.sendTransaction(1200000)
       // Let three users buy token
@@ -420,45 +419,43 @@ contract('VotingToken', function(accounts) {
       await testContract.buy.sendTransaction({from: accounts[3], value: 2000})
       // Set time to after ICO
       await testContract.setCurrentTime.sendTransaction(2200000)
+      // set FieldOfWork to Product
+      await testContract.setFieldOfWork.call(2)
+      // Create Voting in Field of work 2
+      await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
+      // User 1 and User 3 Vote
+      await testContract.vote.sendTransaction(+await testContract.getNumVotings()-1, false, {from: accounts[1]})
+      await testContract.vote.sendTransaction(+await testContract.getNumVotings()-1, true, {from: accounts[3]})
+      // Set time to after the voting period
+      await testContract.setCurrentTime.sendTransaction(2300000)
+      // End Voting
+      await testContract.executeVoting.sendTransaction(+await testContract.getNumVotings()-1)
+      // User 2 delegates power in Field of Work 2 to User 3
+      await testContract.delegate.sendTransaction(2, accounts[0], {from: accounts[2]})
+      // Get voting details
+      const p = await testContract.getVoting.call(+await testContract.getNumVotings()-1);
+      console.log(p)
+      // Voting should pass with 33 %
+      expect(Number(p[6])).toBe(33)
+
+  })
+
+  it("users that are not shareholders should not be able to vote", async function() {
+      // Set time between ICO start and END
+      await testContract.setCurrentTime.sendTransaction(1200000)
+      // Let three users buy token
+      await testContract.buy.sendTransaction({from: accounts[1], value: 4000})
+      // Set time to after ICO
+      await testContract.setCurrentTime.sendTransaction(2200000)
+      // set FieldOfWork to Product
+      await testContract.setFieldOfWork.call(2)
       // Create Voting in Field of work 2
       await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
       // User 1 and User 3 Vote
       await testContract.vote.sendTransaction(0, false, {from: accounts[1]})
-      await testContract.vote.sendTransaction(0, true, {from: accounts[3]})
-      // Set time to after the voting period
-      await testContract.setCurrentTime.sendTransaction(2300000)
-      // End Voting
-      await testContract.executeVoting.sendTransaction(0)
-      // User 2 delegates power in Field of Work 2 to User 3
-      await testContract.delegate.sendTransaction(2, accounts[0], {from: accounts[2]})
-      // Get voting details
-      const p = await testContract.getVoting.call(0);
-      // Voting should pass with 33 %
-      expect(p[6]).toBe(33)
-      console.log(p)
-  })*/
-  /*
-      it("users that are not shareholders should not be able to vote", async function() {
-          const testContract = await VotingToken.deployed()
-
-          // Set time between ICO start and END
-          await testContract.setCurrentTime.sendTransaction(1200000)
-          // Let three users buy token
-          await testContract.buy.sendTransaction({from: accounts[1], value: 4000})
-          console.log("asdf")
-          // Set time to after ICO
-          await testContract.setCurrentTime.sendTransaction(2200000)
-          console.log("asdf")
-          // Create Voting in Field of work 2
-          await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
-          console.log("asdf")
-          // User 1 and User 3 Vote
-          await testContract.vote.sendTransaction(0, false, {from: accounts[1]})
-          console.log("asdf")
-          await testContract.vote.sendTransaction(0, false, {from: accounts[2]})
-          await testContract.vote.sendTransaction(0, true, {from: accounts[3]})
-          console.log("asdf")
-      })*/
+      await expect(testContract.vote.sendTransaction(0, false, {from: accounts[2]})).rejects.toEqual(expect.any(Error))
+      await expect(testContract.vote.sendTransaction(0, true, {from: accounts[3]})).rejects.toEqual(expect.any(Error))
+  })
 
   // it("tests that user become shareholer only if they buy some shares", async function() {
   //   // Set time between ICO start and END
