@@ -12,8 +12,6 @@ contract VotingToken {
 
     FieldOfWork public fow = FieldOfWork.Finance;
 
-    event Voted(uint votingID, bool position, address voter);
-    event VotingTallied(uint votingID, uint result, uint quorum, bool active);
 
     struct Voting {
         address recipient;
@@ -31,7 +29,9 @@ contract VotingToken {
 
     event NumberLogger(string description, uint number);
     event AddressLogger(string description, address addr);
-    event VotingFinishedLogger(string description, bool finished);
+    event VotingFinishedLogger(uint votingId, uint totalVotes, uint approve, uint disapprove);
+    event NewVotingCreated(uint votingID);
+    event Voted(uint votingID, bool position, address voter);
 
     //constructor
     function VotingToken() public payable {
@@ -98,6 +98,7 @@ contract VotingToken {
         voting.fieldOfWork = fieldOfWork;
         voting.votingPassed = false;
         numVotings = votingID;
+        NewVotingCreated(votingID);
         return votingID;
     }
 
@@ -108,7 +109,6 @@ contract VotingToken {
     onlyShareholders
     returns (uint voteID)
     {
-        NumberLogger("VotingNum: ", votingNumber);
         Voting storage voting = votings[votingNumber];
         require(voting.voted[msg.sender] != true);
 
@@ -119,11 +119,11 @@ contract VotingToken {
         return voteID;
     }
 
-    function executeVoting(uint votingNumber)
+    function executeVoting(uint votingId)
     {
 
         // votings[0] or votings[votingNumber] ???
-        Voting storage voting = votings[votingNumber];
+        Voting storage voting = votings[votingId];
 
 
 
@@ -139,18 +139,12 @@ contract VotingToken {
         for (uint i = 0; i < voting.votes.length; ++i) {
             Vote storage v = voting.votes[i];
             uint voteWeight = getInfluenceOfVoter(v.voter, voting.fieldOfWork);
-            NumberLogger("voteWeight", voteWeight);
-            VotingFinishedLogger("v.inSupport", v.inSupport);
             if (v.inSupport) {
                 approve += voteWeight;
             } else {
                 disapprove += voteWeight;
             }
         }
-
-        NumberLogger("approve", approve);
-        NumberLogger("disapprove", disapprove);
-
         voting.finished = true;
 
         if (approve >= disapprove) {
@@ -160,6 +154,8 @@ contract VotingToken {
             // Voting failed
             voting.votingPassed = false;
         }
-        voting.passedPercent = approve * 100 / (approve+disapprove); 
+        voting.passedPercent = approve * 100 / (approve+disapprove);
+
+        VotingFinishedLogger(votingId, approve+disapprove, approve, disapprove);
     }
 }

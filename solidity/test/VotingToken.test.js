@@ -25,9 +25,11 @@ set() without call()!
 
 contract('VotingToken', function(accounts) {
   let testContract;
-  beforeEach(async function() {
+  let newVotingEventListener;
+    beforeEach(async function() {
     // Every auction token is a voting token
     testContract = await AuctionTokenDeployer()
+    newVotingEventListener = testContract.NewVotingCreated();
   });
 
   it("should display the right number of initial votings", async function() {
@@ -68,17 +70,23 @@ contract('VotingToken', function(accounts) {
       await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
 
       await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
-      await testContract.vote.sendTransaction(+await testContract.getNumVotings() - 1, true, {from: accounts[1]})
-      await testContract.vote.sendTransaction(+await testContract.getNumVotings() - 1, true, {from: accounts[2]})
-      await testContract.vote.sendTransaction(+await testContract.getNumVotings() - 1, false, {from: accounts[3]})
+        
+      let newVotingLog = await new Promise((resolve, reject) => newVotingEventListener.get(
+          (error, log) => error ? reject(error) : resolve(log)));
+      assert.equal(newVotingLog.length, 1, 'should be 1 new voting');
+      let newVotingArgs = newVotingLog[0].args;
+
+      await testContract.vote.sendTransaction(newVotingArgs.votingID, true, {from: accounts[1]})
+      await testContract.vote.sendTransaction(newVotingArgs.votingID, true, {from: accounts[2]})
+      await testContract.vote.sendTransaction(newVotingArgs.votingID, false, {from: accounts[3]})
 
       await testContract.setCurrentTime.sendTransaction(1300000)
-      await testContract.executeVoting.sendTransaction(+await testContract.getNumVotings() - 1)
-      const p = await testContract.getVoting.call(+await testContract.getNumVotings() - 1)
+      await testContract.executeVoting.sendTransaction(newVotingArgs.votingID)
+      const p = await testContract.getVoting.call(newVotingArgs.votingID)
       expect(p[4]).toBe(true)
       expect(p[5]).toBe(true)
 
-      console.log('getNumVotings', +await testContract.getNumVotings() - 1)
+      console.log('getNumVotings', newVotingArgs.votingID)
   })
 
   it("should reject votings with 1/3 confirmed votes", async function() {
@@ -92,13 +100,18 @@ contract('VotingToken', function(accounts) {
       // create a new voting
       await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
 
-      await testContract.vote.sendTransaction(+await testContract.getNumVotings() - 1, true, {from: accounts[1]})
-      await testContract.vote.sendTransaction(+await testContract.getNumVotings() - 1, false, {from: accounts[2]})
-      await testContract.vote.sendTransaction(+await testContract.getNumVotings() - 1, false, {from: accounts[3]})
+        let newVotingLog = await new Promise((resolve, reject) => newVotingEventListener.get(
+            (error, log) => error ? reject(error) : resolve(log)));
+        assert.equal(newVotingLog.length, 1, 'should be 1 new voting');
+        let newVotingArgs = newVotingLog[0].args;
+
+      await testContract.vote.sendTransaction(newVotingArgs.votingID, true, {from: accounts[1]})
+      await testContract.vote.sendTransaction(newVotingArgs.votingID, false, {from: accounts[2]})
+      await testContract.vote.sendTransaction(newVotingArgs.votingID, false, {from: accounts[3]})
 
       await testContract.setCurrentTime.sendTransaction(1300000)
-      await testContract.executeVoting.sendTransaction(+await testContract.getNumVotings() - 1)
-      const p = await testContract.getVoting.call(+await testContract.getNumVotings() - 1);
+      await testContract.executeVoting.sendTransaction(newVotingArgs.votingID)
+      const p = await testContract.getVoting.call(newVotingArgs.votingID);
 
       // voting is executed
       expect(p[4]).toBe(true)
@@ -112,8 +125,13 @@ contract('VotingToken', function(accounts) {
     await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
     //create a new voting
     await testContract.newVoting.sendTransaction(accounts[1], 103, 2, {from: accounts[1]})
+    let newVotingLog = await new Promise((resolve, reject) => newVotingEventListener.get(
+        (error, log) => error ? reject(error) : resolve(log)));
+    assert.equal(newVotingLog.length, 1, 'should be 1 new voting');
+    let newVotingArgs = newVotingLog[0].args;
+
     // its important use FoW 0 = Finance
-    await testContract.vote.sendTransaction(+await testContract.getNumVotings() - 1, true, {from: accounts[1]})
+    await testContract.vote.sendTransaction(newVotingArgs.votingID, true, {from: accounts[1]})
 
     await testContract.setCurrentTime.sendTransaction(1300000)
     await testContract.executeVoting.sendTransaction(+await testContract.getNumVotings()-1)
@@ -135,9 +153,15 @@ contract('VotingToken', function(accounts) {
     await testContract.buy.sendTransaction({from: accounts[1], value: 100000})
     // should be in both cases FoW = 0 !
     await testContract.newVoting.sendTransaction(accounts[1], 29, 0, {from: accounts[1]})
-    await testContract.vote.sendTransaction(0, false, {from: accounts[1]})
 
-    const p = await testContract.getVoting.call(+await testContract.getNumVotings()-1)
+    let newVotingLog = await new Promise((resolve, reject) => newVotingEventListener.get(
+        (error, log) => error ? reject(error) : resolve(log)));
+    assert.equal(newVotingLog.length, 1, 'should be 1 new voting');
+    let newVotingArgs = newVotingLog[0].args;
+
+    await testContract.vote.sendTransaction(newVotingArgs.votingID, false, {from: accounts[1]})
+
+    const p = await testContract.getVoting.call(newVotingArgs.votingID)
     console.log(p)
     // voting not finished
     expect(p[4]).toBe(false)
@@ -163,8 +187,6 @@ contract('VotingToken', function(accounts) {
     await testContract.buy.sendTransaction({from: accounts[5], value: 10000})
     await testContract.buy.sendTransaction({from: accounts[6], value: 10000})
 
-    await testContract.newVoting.sendTransaction(accounts[1], 20, 1, {from: accounts[1]})
-
     await testContract.delegate.sendTransaction(1, accounts[1], {from: accounts[5]})
     await testContract.delegate.sendTransaction(1, accounts[1], {from: accounts[6]})
 
@@ -180,8 +202,12 @@ contract('VotingToken', function(accounts) {
 
     await testContract.buy.sendTransaction({from: accounts[0], value: 100000})
     await testContract.newVoting.sendTransaction(accounts[0], 10, 0, {from: accounts[0]})
-    await testContract.vote.sendTransaction(0, true, {from: accounts[0]})
-    const p = await testContract.getVoting.call(+await testContract.getNumVotings()-1)
+    let newVotingLog = await new Promise((resolve, reject) => newVotingEventListener.get(
+        (error, log) => error ? reject(error) : resolve(log)));
+    assert.equal(newVotingLog.length, 1, 'should be 1 new voting');
+    let newVotingArgs = newVotingLog[0].args;
+    await testContract.vote.sendTransaction(newVotingArgs.votingID, true, {from: accounts[0]})
+    const p = await testContract.getVoting.call(newVotingArgs.votingID)
     expect(Number(p[1])).toBe(10)
   })
 
@@ -195,9 +221,13 @@ contract('VotingToken', function(accounts) {
     await testContract.delegate.sendTransaction(0, accounts[1], {from: accounts[3]})
     // first create a new voting before user can vote
     await testContract.newVoting.sendTransaction(accounts[1], 10, 0, {from: accounts[1]})
-    await testContract.vote.sendTransaction(0, false, {from: accounts[3]})
+    let newVotingLog = await new Promise((resolve, reject) => newVotingEventListener.get(
+        (error, log) => error ? reject(error) : resolve(log)));
+    assert.equal(newVotingLog.length, 1, 'should be 1 new voting');
+    let newVotingArgs = newVotingLog[0].args;
+    await testContract.vote.sendTransaction(newVotingArgs.votingID, false, {from: accounts[3]})
     // user 1 has more voting power then user 3
-    await testContract.vote.sendTransaction(0, true, {from: accounts[1]})
+    await testContract.vote.sendTransaction(newVotingArgs.votingID, true, {from: accounts[1]})
     // Set time to after the voting period
     await testContract.setCurrentTime.sendTransaction(2300000)
     // executes the voting
@@ -258,9 +288,13 @@ contract('VotingToken', function(accounts) {
     await testContract.buy.sendTransaction({from:accounts[2], value: 10000})
     // create a new voting
     await testContract.newVoting.sendTransaction(accounts[1], 100, 0, {from: accounts[1]})
-    await testContract.vote.sendTransaction(+await testContract.getNumVotings()-1, true, {from: accounts[0]})
-    await testContract.vote.sendTransaction(+await testContract.getNumVotings()-1, false, {from: accounts[1]})
-    await testContract.vote.sendTransaction(+await testContract.getNumVotings()-1, false, {from: accounts[2]})
+    let newVotingLog = await new Promise((resolve, reject) => newVotingEventListener.get(
+        (error, log) => error ? reject(error) : resolve(log)));
+    assert.equal(newVotingLog.length, 1, 'should be 1 new voting');
+    let newVotingArgs = newVotingLog[0].args;
+    await testContract.vote.sendTransaction(newVotingArgs.votingID, true, {from: accounts[0]})
+    await testContract.vote.sendTransaction(newVotingArgs.votingID, false, {from: accounts[1]})
+    await testContract.vote.sendTransaction(newVotingArgs.votingID, false, {from: accounts[2]})
     // Set time to after the voting period
     await testContract.setCurrentTime.sendTransaction(1400000)
     // execute the voting -> passed time is required
@@ -284,17 +318,21 @@ contract('VotingToken', function(accounts) {
     await testContract.buy.sendTransaction({from: accounts[4], value: 10000})
     // create a new voting
     await testContract.newVoting.sendTransaction(accounts[0], 100, 0, {from: accounts[0]})
-    await testContract.vote.sendTransaction(+await testContract.getNumVotings()-1, true, {from: accounts[0]})
-    await testContract.vote.sendTransaction(+await testContract.getNumVotings()-1, true, {from: accounts[1]})
-    await testContract.vote.sendTransaction(+await testContract.getNumVotings()-1, true, {from: accounts[2]})
-    await testContract.vote.sendTransaction(+await testContract.getNumVotings()-1, false, {from: accounts[3]})
-    await testContract.vote.sendTransaction(+await testContract.getNumVotings()-1, false, {from: accounts[4]})
+    let newVotingLog = await new Promise((resolve, reject) => newVotingEventListener.get(
+        (error, log) => error ? reject(error) : resolve(log)));
+    assert.equal(newVotingLog.length, 1, 'should be 1 new voting');
+    let newVotingArgs = newVotingLog[0].args;
+    await testContract.vote.sendTransaction(newVotingArgs.votingID, true, {from: accounts[0]})
+    await testContract.vote.sendTransaction(newVotingArgs.votingID, true, {from: accounts[1]})
+    await testContract.vote.sendTransaction(newVotingArgs.votingID, true, {from: accounts[2]})
+    await testContract.vote.sendTransaction(newVotingArgs.votingID, false, {from: accounts[3]})
+    await testContract.vote.sendTransaction(newVotingArgs.votingID, false, {from: accounts[4]})
     // Set time to after the voting period
     await testContract.setCurrentTime.sendTransaction(1500000)
     // execute the votings
-    await testContract.executeVoting.sendTransaction(+await testContract.getNumVotings()-1)
+    await testContract.executeVoting.sendTransaction(newVotingArgs.votingID)
     // get the proposal
-    const p = await testContract.getVoting.call(+await testContract.getNumVotings()-1);
+    const p = await testContract.getVoting.call(newVotingArgs.votingID);
     // proposal is finished
     expect(p[4]).toBe(true)
     // proposal is passed
@@ -349,17 +387,21 @@ contract('VotingToken', function(accounts) {
       await testContract.setCurrentTime.sendTransaction(2200000)
       // Create Voting in Field of work 2
       await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
+      let newVotingLog = await new Promise((resolve, reject) => newVotingEventListener.get(
+          (error, log) => error ? reject(error) : resolve(log)));
+      assert.equal(newVotingLog.length, 1, 'should be 1 new voting');
+      let newVotingArgs = newVotingLog[0].args;
       // User 2 delegates power in Field of Work 0 to User 3
       await testContract.delegate.sendTransaction(0, accounts[3], {from: accounts[2]})
       // User 1 and User 3 Vote
-      await testContract.vote.sendTransaction(+await testContract.getNumVotings()-1, false, {from: accounts[1]})
-      await testContract.vote.sendTransaction(+await testContract.getNumVotings()-1, true, {from: accounts[3]})
+      await testContract.vote.sendTransaction(newVotingArgs.votingID, false, {from: accounts[1]})
+      await testContract.vote.sendTransaction(newVotingArgs.votingID, true, {from: accounts[3]})
       // Set time to after the voting period
       await testContract.setCurrentTime.sendTransaction(2300000)
       // End Voting
       await testContract.executeVoting.sendTransaction(0)
       // getNumVotings()-1 because it accesses the voting in the voting array
-      const p = await testContract.getVoting.call(+await testContract.getNumVotings()-1);
+      const p = await testContract.getVoting.call(newVotingArgs.votingID);
       console.log(p)
       // Voting should pass with 33 or 55 % ??? it should return 55% but it returns 33%
       expect(Number(p[6])).toBe(33)
@@ -379,19 +421,23 @@ contract('VotingToken', function(accounts) {
       await testContract.setFieldOfWork.call(2)
       // Create Voting in Field of work 2
       await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
+      let newVotingLog = await new Promise((resolve, reject) => newVotingEventListener.get(
+          (error, log) => error ? reject(error) : resolve(log)));
+      assert.equal(newVotingLog.length, 1, 'should be 1 new voting');
+      let newVotingArgs = newVotingLog[0].args;
       // User 2 delegates power in all Field of Works except 2 to User 3
       await testContract.delegate.sendTransaction(0, accounts[3], {from: accounts[2]})
       await testContract.delegate.sendTransaction(1, accounts[3], {from: accounts[2]})
       await testContract.delegate.sendTransaction(3, accounts[3], {from: accounts[2]})
       // User 1 and User 3 Vote
-      await testContract.vote.sendTransaction(+await testContract.getNumVotings()-1, false, {from: accounts[1]})
-      await testContract.vote.sendTransaction(+await testContract.getNumVotings()-1, true, {from: accounts[3]})
+      await testContract.vote.sendTransaction(newVotingArgs.votingID, false, {from: accounts[1]})
+      await testContract.vote.sendTransaction(newVotingArgs.votingID, true, {from: accounts[3]})
       // Set time to after the voting period
       await testContract.setCurrentTime.sendTransaction(2300000)
       // End Voting
       await testContract.executeVoting.sendTransaction(0)
       // Get voting details
-      const p = await testContract.getVoting.call(+await testContract.getNumVotings()-1);
+      const p = await testContract.getVoting.call(newVotingArgs.votingID);
       // Voting should pass with 33 %
       expect(Number(p[6])).toBe(33)
       expect(p[4]).toBe(true)
@@ -410,17 +456,21 @@ contract('VotingToken', function(accounts) {
       await testContract.setFieldOfWork.call(2)
       // Create Voting in Field of work 2
       await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
+      let newVotingLog = await new Promise((resolve, reject) => newVotingEventListener.get(
+          (error, log) => error ? reject(error) : resolve(log)));
+      assert.equal(newVotingLog.length, 1, 'should be 1 new voting');
+      let newVotingArgs = newVotingLog[0].args;
       // User 1 and User 3 Vote
-      await testContract.vote.sendTransaction(+await testContract.getNumVotings()-1, false, {from: accounts[1]})
-      await testContract.vote.sendTransaction(+await testContract.getNumVotings()-1, true, {from: accounts[3]})
+      await testContract.vote.sendTransaction(newVotingArgs.votingID, false, {from: accounts[1]})
+      await testContract.vote.sendTransaction(newVotingArgs.votingID, true, {from: accounts[3]})
       // Set time to after the voting period
       await testContract.setCurrentTime.sendTransaction(2300000)
       // End Voting
-      await testContract.executeVoting.sendTransaction(+await testContract.getNumVotings()-1)
+      await testContract.executeVoting.sendTransaction(newVotingArgs.votingID)
       // User 2 delegates power in Field of Work 2 to User 3
       await testContract.delegate.sendTransaction(2, accounts[0], {from: accounts[2]})
       // Get voting details
-      const p = await testContract.getVoting.call(+await testContract.getNumVotings()-1);
+      const p = await testContract.getVoting.call(newVotingArgs.votingID);
       console.log(p)
       // Voting should pass with 33 %
       expect(Number(p[6])).toBe(33)
@@ -438,6 +488,10 @@ contract('VotingToken', function(accounts) {
       await testContract.setFieldOfWork.call(2)
       // Create Voting in Field of work 2
       await testContract.newVoting.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
+      let newVotingLog = await new Promise((resolve, reject) => newVotingEventListener.get(
+          (error, log) => error ? reject(error) : resolve(log)));
+      assert.equal(newVotingLog.length, 1, 'should be 1 new voting');
+      let newVotingArgs = newVotingLog[0].args;
       // User 1 and User 3 Vote
       await testContract.vote.sendTransaction(0, false, {from: accounts[1]})
       await expect(testContract.vote.sendTransaction(0, false, {from: accounts[2]})).rejects.toEqual(expect.any(Error))
