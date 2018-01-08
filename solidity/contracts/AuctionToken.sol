@@ -125,6 +125,7 @@ contract AuctionToken is StandardToken, ProposalToken {
         return (name, symbol, totalSupply, creationDate, buyPriceStart, buyPriceEnd, sellPrice, saleStart, saleEnd);
     }
     function buy() payable returns (uint amount) {
+        bool shareHolder =  isShareholder(msg.sender);
         // calculates the amount
         amount = msg.value / getBuyPrice();
         // checks if it has enough to sell
@@ -135,7 +136,7 @@ contract AuctionToken is StandardToken, ProposalToken {
         balances[msg.sender] += amount;
         // subtracts amount from seller's balance
         bal -= amount;
-        if(true){
+        if(!shareHolder){
             delegations[msg.sender][uint(FieldOfWork.Organisational)] = msg.sender;
             delegations[msg.sender][uint(FieldOfWork.Finance)] = msg.sender;
             delegations[msg.sender][uint(FieldOfWork.Partnership)] = msg.sender;
