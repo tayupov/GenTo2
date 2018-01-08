@@ -33,14 +33,14 @@ contract AuctionToken is StandardToken, ProposalToken {
     event MyTransfer(address indexed to, uint256 value, uint256 remainingSupply);
 
     function AuctionToken(uint256 _totalSupply,
-      string _symbol,
-      string _name,
-      uint256 _buyPriceStart,
-      uint256 _buyPriceEnd,
-      uint256 _sellPrice,
-      uint256 _saleStart,
-      uint256 _saleEnd,
-      bool _dev) {
+    string _symbol,
+    string _name,
+    uint256 _buyPriceStart,
+    uint256 _buyPriceEnd,
+    uint256 _sellPrice,
+    uint256 _saleStart,
+    uint256 _saleEnd,
+    bool _dev) {
         require(_saleEnd > _saleStart);
 
         buyPriceStart = _buyPriceStart;
@@ -58,10 +58,10 @@ contract AuctionToken is StandardToken, ProposalToken {
 
         dev = _dev;
         if (_dev) {
-          creationDate = 0;
+            creationDate = 0;
         }
         else {
-          creationDate = now;
+            creationDate = now;
         }
     }
     function isShareholder(address userAddress) returns (bool shareholder){
@@ -99,29 +99,29 @@ contract AuctionToken is StandardToken, ProposalToken {
         passed = currentTime() - saleStart;
 
         currentPrice = buyPriceStart + (((buyPriceEnd - buyPriceStart) * passed) / saleDuration);
-/*
-        if(buyPriceStart < buyPriceEnd) {
-            currentPrice = buyPriceStart + (((buyPriceEnd - buyPriceStart) * passed) / saleDuration);
-        } else if (buyPriceStart > buyPriceEnd) {
-            currentPrice = buyPriceStart - (((buyPriceStart - buyPriceEnd) * passed) / saleDuration);
-        } else {
-            currentPrice = buyPriceStart;
-        }
-        if(currentPrice <= 0){
-            currentPrice = 1;
-        }*/
+        /*
+                if(buyPriceStart < buyPriceEnd) {
+                    currentPrice = buyPriceStart + (((buyPriceEnd - buyPriceStart) * passed) / saleDuration);
+                } else if (buyPriceStart > buyPriceEnd) {
+                    currentPrice = buyPriceStart - (((buyPriceStart - buyPriceEnd) * passed) / saleDuration);
+                } else {
+                    currentPrice = buyPriceStart;
+                }
+                if(currentPrice <= 0){
+                    currentPrice = 1;
+                }*/
         return currentPrice;
     }
 
     function getDetails() constant returns (string _name,
-                                            string _symbol,
-                                            uint256 _totalSupply,
-                                            uint256 _creationDate,
-                                            uint256 _buyPriceStart,
-                                            uint256 _buyPriceEnd,
-                                            uint256 _sellPrice,
-                                            uint256 _saleStart,
-                                            uint256 _saleEnd){
+    string _symbol,
+    uint256 _totalSupply,
+    uint256 _creationDate,
+    uint256 _buyPriceStart,
+    uint256 _buyPriceEnd,
+    uint256 _sellPrice,
+    uint256 _saleStart,
+    uint256 _saleEnd){
         return (name, symbol, totalSupply, creationDate, buyPriceStart, buyPriceEnd, sellPrice, saleStart, saleEnd);
     }
     function buy() payable returns (uint amount) {
@@ -152,7 +152,7 @@ contract AuctionToken is StandardToken, ProposalToken {
     function delegate(FieldOfWork fieldOfWork, address recipient){
         // shareholder delegates to recipient ??
         if (!isShareholder(msg.sender))
-            revert();
+        revert();
         delegations[msg.sender][uint(fieldOfWork)] = recipient;
     }
 
@@ -162,7 +162,7 @@ contract AuctionToken is StandardToken, ProposalToken {
         require(proposal.finished && proposal.proposalPassed && proposal.recipient == msg.sender);
 
         balances[msg.sender] += proposal.amount;
-        
+
         MyTransfer(msg.sender, proposal.amount, bal);
         return proposal.amount;
     }
@@ -176,29 +176,29 @@ contract AuctionToken is StandardToken, ProposalToken {
     // }
 
     function currentTime() returns (uint time) {
-      if (dev) {
-        return cTime;
-      }
-      else {
-        return now;
-      }
+        if (dev) {
+            return cTime;
+        }
+        else {
+            return now;
+        }
     }
     function setCurrentTime(uint time) {
-      require(dev);
-      
-      cTime = time;
+        require(dev);
+
+        cTime = time;
     }
-/*
-    function sell(uint amount) returns (uint256 revenue){
-        if (balances[msg.sender] < amount ) throw;        // checks if the sender has enough to sell
-        balances[owner] += amount;                         // adds the amount to owner's balance
-        balances[msg.sender] -= amount;                   // subtracts the amount from seller's balance
-        revenue = amount * sellPrice;
-        if (!msg.sender.send(revenue)) {                   // sends ether to the seller: it's truimportant
-            throw;                                         // to do owner last to prevent recursion attacks
-        } else {
-            Transfer(msg.sender, owner, amount);             // executes an event reflecting on the change
-            return revenue;                                 // ends function and returns
-        }
-    }*/
+    /*
+        function sell(uint amount) returns (uint256 revenue){
+            if (balances[msg.sender] < amount ) throw;        // checks if the sender has enough to sell
+            balances[owner] += amount;                         // adds the amount to owner's balance
+            balances[msg.sender] -= amount;                   // subtracts the amount from seller's balance
+            revenue = amount * sellPrice;
+            if (!msg.sender.send(revenue)) {                   // sends ether to the seller: it's truimportant
+                throw;                                         // to do owner last to prevent recursion attacks
+            } else {
+                Transfer(msg.sender, owner, amount);             // executes an event reflecting on the change
+                return revenue;                                 // ends function and returns
+            }
+        }*/
 }
