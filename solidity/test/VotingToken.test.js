@@ -87,8 +87,6 @@ contract('Proposal', function(accounts) {
       const p = await testContract.getProposal.call(newProposalArgs.proposalID)
       expect(p[4]).toBe(true)
       expect(p[5]).toBe(true)
-
-      console.log('getNumProposals', newProposalArgs.proposalID)
   })
 
   it("should reject Proposals with 1/3 confirmed votes", async function() {
@@ -167,7 +165,6 @@ contract('Proposal', function(accounts) {
     await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[1]})
 
     const p = await testContract.getProposal.call(newProposalArgs.proposalID)
-    console.log(p)
     // Proposal not finished
     expect(p[4]).toBe(false)
     // Proposal not passed
@@ -179,13 +176,8 @@ contract('Proposal', function(accounts) {
   it("should compute the right influence of tokenholder", async function() {
     await testContract.setCurrentTime.sendTransaction(1300000)
 
-    console.log('getFieldOfWork: ', +await testContract.getFieldOfWork.call())
-
     // set the FieldOfWork to Organisational instead of Finance
     await testContract.setFieldOfWork(1)
-
-    console.log('getFieldOfWork after setting to Organisational: ',
-        +await testContract.getFieldOfWork.call())
 
     // user 1, 5 and 6 become shareholder
     await testContract.buy.sendTransaction({from: accounts[1], value: 10000})
@@ -194,9 +186,6 @@ contract('Proposal', function(accounts) {
 
     await testContract.delegate.sendTransaction(1, accounts[1], {from: accounts[5]})
     await testContract.delegate.sendTransaction(1, accounts[1], {from: accounts[6]})
-
-    console.log('get Influence from user 1: ', +await testContract.getInfluenceOfVoter.call(accounts[1], 1))
-    console.log('get Influence from user 5: ', +await testContract.getInfluenceOfVoter.call(accounts[5], 1))
 
     // only user 5 delegates to user 1 => result of getInfluenceOfVoter = 540
     expect(+await testContract.getInfluenceOfVoter.call(accounts[1], 1)).toBe(810)
@@ -241,7 +230,6 @@ contract('Proposal', function(accounts) {
     await testContract.executeProposal.sendTransaction(0)
 
     const p = await testContract.getProposal.call(+await testContract.getNumProposals()-1);
-    console.log(p)
 
     expect(p[4]).toBe(true)
     expect(p[5]).toBe(true)
@@ -250,13 +238,11 @@ contract('Proposal', function(accounts) {
   it("should fail the delegation if the token holder isn't a shareholder", async function() {
     await testContract.setCurrentTime.sendTransaction(1200000)
     // account[9] is not a shareholder because he didn't buy anything
-    console.log("is user 9 a shareholder: ", !!+await testContract.isShareholder.call(accounts[9]))
     try {
       // user 9 tries to delegate
       await testContract.delegate.sendTransaction(0, accounts[9], {from: accounts[9]})
       should.fail("this transaction should have raised an error")
     } catch (e) {
-        //console.log(e.message)
         expect(e.message).toContain("VM Exception while processing transaction: ")
     }
   })
@@ -267,9 +253,6 @@ contract('Proposal', function(accounts) {
 
     await testContract.buy.sendTransaction({from: accounts[0], value: 10000})
         await testContract.setCurrentTime.sendTransaction(2600000)
-    console.log("create new Proposal")
-    //console.log('getNumProposals: ', +await testContract.getNumProposals())
-    //console.log(+await testContract.newProposal.call(accounts[0], 100, 0))
     await testContract.newProposal.sendTransaction(accounts[0], 100, 0, {from: accounts[0]})
     expect(numberOfInitialProposals + 1).toBe(+await testContract.getNumProposals())
   })
@@ -382,7 +365,6 @@ contract('Proposal', function(accounts) {
   //   await testContract.vote.sendTransaction(0, false, {from: accounts[2]})
   //
   //   const p = await testContract.getProposal.call(0)
-  //   console.log(p)
   //   // it doesn't work and returns undefined, getter for complex data types not allowed!
   //   expect(+await p.votes.length).toBe(3)
   //   expect(+await p.voted).toBe(true)
@@ -414,7 +396,6 @@ contract('Proposal', function(accounts) {
       await testContract.executeProposal.sendTransaction(0)
       // getNumProposals()-1 because it accesses the Proposal in the Proposal array
       const p = await testContract.getProposal.call(newProposalArgs.proposalID);
-      console.log(p)
       // Proposal should pass with 33 or 55 % ??? it should return 55% but it returns 33%
       expect(Number(p[6])).toBe(33)
       expect(p[4]).toBe(true)
@@ -483,7 +464,6 @@ contract('Proposal', function(accounts) {
       await testContract.delegate.sendTransaction(2, accounts[0], {from: accounts[2]})
       // Get Proposal details
       const p = await testContract.getProposal.call(newProposalArgs.proposalID);
-      console.log(p)
       // Proposal should pass with 33 %
       expect(Number(p[6])).toBe(33)
 

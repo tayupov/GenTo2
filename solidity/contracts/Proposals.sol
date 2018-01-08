@@ -1,6 +1,6 @@
 pragma solidity ^0.4.8;
 
-contract ProposalToken {
+contract Proposals {
 
     uint public debatingPeriodInMinutes;
 

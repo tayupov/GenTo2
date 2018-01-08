@@ -1,18 +1,10 @@
 pragma solidity ^0.4.8;
 
-import '../../node_modules/zeppelin-solidity/contracts/token/StandardToken.sol';
-import './Proposal.sol';
+import './Proposals.sol';
+import './Ico.sol';
 
-contract GentoDao is StandardToken, ProposalToken {
+contract GentoDao is Ico, Proposals {
 
-    uint256 public buyPriceStart;
-    uint256 public buyPriceEnd;
-
-    uint256 public sellPrice;
-
-    uint256 saleStart = 0;
-    uint256 saleEnd = 0;
-    uint256 saleDuration = 0;
 
     string public symbol = "";
     string public name = "";
@@ -20,7 +12,6 @@ contract GentoDao is StandardToken, ProposalToken {
     uint256 public creationDate;
 
     uint8 public constant decimals = 18;
-    uint256 public bal = 0;
     uint256 totalSupply = 0;
 
     address[] public shareholders;
@@ -32,16 +23,8 @@ contract GentoDao is StandardToken, ProposalToken {
 
     event MyTransfer(address indexed to, uint256 value, uint256 remainingSupply);
 
-    modifier icoRunning {
-        //if (!isShareholder(msg.sender)) throw;
-        require(saleStart <= currentTime());
-        require(saleEnd > currentTime());
-        _;
-    }
-
-
-    modifier icoFinished {
-        //if (!isShareholder(msg.sender)) throw;
+    modifier daoActive {
+        // Dao is active once the ico is done
         require(saleEnd <= currentTime());
         _;
     }
@@ -78,14 +61,19 @@ contract GentoDao is StandardToken, ProposalToken {
             creationDate = now;
         }
     }
-    function isShareholder(address userAddress) returns (bool shareholder){
-        return balances[userAddress] > 0;
-    }
+
     function isIcoFinished() returns (bool icoFinished){
         return saleEnd <= currentTime();
     }
 
 
+    function initShareholder(address shareholder){
+        delegations[shareholder][uint(FieldOfWork.Organisational)] = shareholder;
+        delegations[shareholder][uint(FieldOfWork.Finance)] = shareholder;
+        delegations[shareholder][uint(FieldOfWork.Partnership)] = shareholder;
+        delegations[shareholder][uint(FieldOfWork.Product)] = shareholder;
+        shareholders.push(shareholder);
+    }
 
     function getBalance() returns(uint balance) {
         return this.balance;
@@ -107,27 +95,6 @@ contract GentoDao is StandardToken, ProposalToken {
         return influence1;
     }
 
-    function getBuyPrice() icoRunning constant returns (uint) {
-        uint currentPrice;
-        uint passed;
-
-        passed = currentTime() - saleStart;
-
-        currentPrice = buyPriceStart + (((buyPriceEnd - buyPriceStart) * passed) / saleDuration);
-        /*
-                if(buyPriceStart < buyPriceEnd) {
-                    currentPrice = buyPriceStart + (((buyPriceEnd - buyPriceStart) * passed) / saleDuration);
-                } else if (buyPriceStart > buyPriceEnd) {
-                    currentPrice = buyPriceStart - (((buyPriceStart - buyPriceEnd) * passed) / saleDuration);
-                } else {
-                    currentPrice = buyPriceStart;
-                }
-                if(currentPrice <= 0){
-                    currentPrice = 1;
-                }*/
-        return currentPrice;
-    }
-
     function getDetails() constant returns (string _name,
     string _symbol,
     uint256 _totalSupply,
@@ -139,31 +106,7 @@ contract GentoDao is StandardToken, ProposalToken {
     uint256 _saleEnd){
         return (name, symbol, totalSupply, creationDate, buyPriceStart, buyPriceEnd, sellPrice, saleStart, saleEnd);
     }
-    function buy() icoRunning payable returns (uint amount) {
-        bool shareHolder =  isShareholder(msg.sender);
-        // calculates the amount
-        amount = msg.value / getBuyPrice();
-        // checks if it has enough to sell
-        require(bal > amount);
-        require(amount > 0);
-        //if (balances[owner] < amount || amount <= 0) throw;
-        // adds the amount to buyer's balance
-        balances[msg.sender] += amount;
-        // subtracts amount from seller's balance
-        bal -= amount;
-        if(!shareHolder){
-            delegations[msg.sender][uint(FieldOfWork.Organisational)] = msg.sender;
-            delegations[msg.sender][uint(FieldOfWork.Finance)] = msg.sender;
-            delegations[msg.sender][uint(FieldOfWork.Partnership)] = msg.sender;
-            delegations[msg.sender][uint(FieldOfWork.Product)] = msg.sender;
-            shareholders.push(msg.sender);
-        }
-        // execute an event reflecting the change
-        MyTransfer(msg.sender, amount, bal);
 
-        // ends function and returns
-        return amount;
-    }
 
     function delegate(FieldOfWork fieldOfWork, address recipient){
         // shareholder delegates to recipient ??
@@ -172,7 +115,7 @@ contract GentoDao is StandardToken, ProposalToken {
         delegations[msg.sender][uint(fieldOfWork)] = recipient;
     }
 
-    function claimPayout(uint proposalNumber) icoFinished public returns (uint amount) {
+    function claimPayout(uint proposalNumber) daoActive public returns (uint amount) {
         Proposal storage proposal = proposals[proposalNumber];
 
         require(proposal.finished && proposal.proposalPassed && proposal.recipient == msg.sender);
@@ -191,6 +134,10 @@ contract GentoDao is StandardToken, ProposalToken {
     //     balances[msg.sender] += balances[msg.sender] * proposal.dividend;
     // }
 
+    function isShareholder(address userAddress) returns (bool shareholder){
+        return balances[userAddress] > 0;
+    }
+
     function currentTime() returns (uint time) {
         if (dev) {
             return cTime;
@@ -204,17 +151,4 @@ contract GentoDao is StandardToken, ProposalToken {
 
         cTime = time;
     }
-    /*
-        function sell(uint amount) returns (uint256 revenue){
-            if (balances[msg.sender] < amount ) throw;        // checks if the sender has enough to sell
-            balances[owner] += amount;                         // adds the amount to owner's balance
-            balances[msg.sender] -= amount;                   // subtracts the amount from seller's balance
-            revenue = amount * sellPrice;
-            if (!msg.sender.send(revenue)) {                   // sends ether to the seller: it's truimportant
-                throw;                                         // to do owner last to prevent recursion attacks
-            } else {
-                Transfer(msg.sender, owner, amount);             // executes an event reflecting on the change
-                return revenue;                                 // ends function and returns
-            }
-        }*/
 }
