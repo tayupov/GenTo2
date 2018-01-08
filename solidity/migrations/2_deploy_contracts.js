@@ -1,5 +1,5 @@
-const tokenFactory = artifacts.require("./GenToFactory.sol");
-const AuctionToken = artifacts.require("./AuctionToken.sol");
+const tokenFactory = artifacts.require("./GentoDaoFactory.sol");
+const AuctionToken = artifacts.require("./GentoDao.sol");
 const VotingToken = artifacts.require("./VotingToken.sol");
 
 module.exports = function(deployer, network, accounts) {

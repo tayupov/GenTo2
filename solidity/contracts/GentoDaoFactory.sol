@@ -1,8 +1,8 @@
 pragma solidity ^0.4.8;
 
 //Contract Factory
-import './AuctionToken.sol';
-contract GenToFactory {
+import './GentoDao.sol';
+contract GentoDaoFactory {
 
     address[] public ICOs;
 
@@ -21,7 +21,7 @@ contract GenToFactory {
                             uint256 _saleStart,
                             uint256 _saleEnd) returns (address contractAddress){
 
-        AuctionToken auctionToken = new AuctionToken(totalSupply,
+        GentoDao gentoDao = new GentoDao(totalSupply,
                                                      _symbol,
                                                      _name,
                                                      _buyPriceStart,
@@ -31,7 +31,7 @@ contract GenToFactory {
                                                      _saleEnd,
                                                      false);
 
-        address auctionAddress = address(auctionToken);
+        address auctionAddress = address(gentoDao);
         ICOs.push(auctionAddress);
         ContractCreated(auctionAddress);
         return auctionAddress;

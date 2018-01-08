@@ -11,7 +11,7 @@ const defaultData = {
 }
 
 
-module.exports=(AuctionToken) => {
+module.exports=(GentoDao) => {
   return async (customData) => {
     let key;
     if (!customData) customData = {}
@@ -19,6 +19,6 @@ module.exports=(AuctionToken) => {
       throw `key '${key}' is not a valid parameter!`
     }
     const data = Object.assign({}, defaultData, customData)
-    return AuctionToken.new(data.totalSupply, data.symbol, data.name, data.buyPriceStart, data.buyPriceEnd, data.sellPrice, data.saleStart, data.saleEnd, data.dev)
+    return GentoDao.new(data.totalSupply, data.symbol, data.name, data.buyPriceStart, data.buyPriceEnd, data.sellPrice, data.saleStart, data.saleEnd, data.dev)
   }
 }

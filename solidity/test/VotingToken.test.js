@@ -1,8 +1,6 @@
-const ProposalToken = artifacts.require("./AuctionToken.sol");
-const AuctionToken = artifacts.require("./AuctionToken.sol");
-const FieldOfWork = artifacts.require("./ProposalToken.sol");
+const GentoDao = artifacts.require("./GentoDao.sol");
 
-const AuctionTokenDeployer = require("./util/AuctionTokenDeployer.js")(AuctionToken)
+const GentoDaoDeployer = require("./util/GentoDaoDeployer.js")(GentoDao)
 
 
 const should = require('should');
@@ -23,12 +21,12 @@ set() without call()!
 
 */
 
-contract('ProposalToken', function(accounts) {
+contract('Proposal', function(accounts) {
   let testContract;
   let newProposalEventListener;
     beforeEach(async function() {
     // Every auction token is a Proposal token
-    testContract = await AuctionTokenDeployer()
+    testContract = await GentoDaoDeployer()
     newProposalEventListener = testContract.NewProposalCreated();
   });
 

@@ -24,14 +24,14 @@ async function createNewICO(invalidData) {
 
   let icos = await genToFactory.getICOs.call()
 
-  let instance = await AuctionToken.at(icos[icos.length-1]) // It will always be the newest ICO as long as we dont run tests in parallel
+  let instance = await GentoDao.at(icos[icos.length-1]) // It will always be the newest ICO as long as we dont run tests in parallel
 
   return instance;
 }
 
 
-const AuctionToken = artifacts.require("./AuctionToken.sol");
-const GenToFactory = artifacts.require("./GenToFactory.sol");
+const GentoDao = artifacts.require("./GentoDao.sol");
+const GenToFactory = artifacts.require("./GentoDaoFactory.sol");
 
 const should = require('should')
 const expect = require('expect')

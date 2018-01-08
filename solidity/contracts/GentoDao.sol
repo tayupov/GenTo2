@@ -1,9 +1,9 @@
 pragma solidity ^0.4.8;
 
 import '../../node_modules/zeppelin-solidity/contracts/token/StandardToken.sol';
-import './ProposalToken.sol';
+import './Proposal.sol';
 
-contract AuctionToken is StandardToken, ProposalToken {
+contract GentoDao is StandardToken, ProposalToken {
 
     uint256 public buyPriceStart;
     uint256 public buyPriceEnd;
@@ -46,7 +46,7 @@ contract AuctionToken is StandardToken, ProposalToken {
         _;
     }
 
-    function AuctionToken(uint256 _totalSupply,
+    function GentoDao(uint256 _totalSupply,
     string _symbol,
     string _name,
     uint256 _buyPriceStart,

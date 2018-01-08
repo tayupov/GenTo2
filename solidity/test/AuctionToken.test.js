@@ -1,13 +1,13 @@
-const AuctionToken = artifacts.require("./AuctionToken.sol");
-const AuctionTokenDeployer = require("./util/AuctionTokenDeployer.js")(AuctionToken)
+const GentoDao = artifacts.require("./GentoDao.sol");
+const GentoDaoDeployer = require("./util/GentoDaoDeployer.js")(GentoDao)
 
 const should = require('should')
 const expect = require('expect')
 
-contract('AuctionToken', function(accounts) {
+contract('GentoDao', function(accounts) {
   let contract;
   beforeEach(async function() {
-    contract = await AuctionTokenDeployer()
+    contract = await GentoDaoDeployer()
   });
 
   it("should be possible to mock the time in the test contract", async function() {
@@ -23,7 +23,7 @@ contract('AuctionToken', function(accounts) {
 
   it("should not be possible to mock the time in a contract without the dev flag", async function() {
     //deploy a new contract with dev flag set false
-    contract = await AuctionTokenDeployer({dev: false})
+    contract = await GentoDaoDeployer({dev: false})
 
     try {
       await contract.setCurrentTime.sendTransaction(1000)
