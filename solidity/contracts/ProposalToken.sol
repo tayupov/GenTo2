@@ -1,0 +1,161 @@
+pragma solidity ^0.4.8;
+
+contract ProposalToken {
+
+    uint public debatingPeriodInMinutes;
+
+    Proposal[] public proposals;
+
+    uint public numProposals;
+
+    enum FieldOfWork { Finance, Organisational, Product, Partnership }
+
+    FieldOfWork public fow = FieldOfWork.Finance;
+
+
+    struct Proposal {
+        address recipient;
+        uint amount;
+        string description;
+        FieldOfWork fieldOfWork;
+        uint proposalDeadline;
+        bool finished;
+        bool proposalPassed;
+        uint passedPercent;
+        bytes32 proposalHash;
+        Vote[] votes;
+        mapping (address => bool) voted;
+    }
+
+    event NumberLogger(string description, uint number);
+    event AddressLogger(string description, address addr);
+    event ProposalFinishedLogger(uint proposalId, uint totalVotes, uint approve, uint disapprove);
+    event NewProposalCreated(uint proposalID);
+    event Voted(uint proposalID, bool position, address voter);
+
+    //constructor
+    function ProposalToken() public payable {
+        debatingPeriodInMinutes = 10;  // TODO Move to settings
+    }
+
+    function getFieldOfWork() public constant returns (FieldOfWork) {
+        return fow;
+    }
+
+    function setFieldOfWork(uint _value) public {
+        //require(uint(FieldOfWork.Partnership) >= _value);
+        fow = FieldOfWork(_value);
+    }
+
+    function getProposal(uint proposalID) public constant returns (address recipient,
+    uint amount,
+    string description,
+    uint proposalDeadline,
+    bool finished,
+    bool proposalPassed,
+    uint passedPercent) {
+        Proposal storage proposal = proposals[proposalID];
+        return (proposal.recipient, proposal.amount, proposal.description, proposal.proposalDeadline, proposal.finished, proposal
+        .proposalPassed, proposal.passedPercent);
+    }
+
+    function getNumProposals() public constant returns (
+        uint numOfProposals) {
+        return proposals.length;
+    }
+
+    struct Vote {
+        bool inSupport;
+        address voter;
+    }
+
+    // Modifier that allows only shareholders to vote and create new proposals
+    modifier onlyShareholders {
+        //if (!isShareholder(msg.sender)) throw;
+        require(isShareholder(msg.sender));
+        _;
+    }
+
+    function currentTime() returns (uint time);
+    function isShareholder(address userAddress) returns (bool shareholder);
+    function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) returns (uint influence);
+
+    function newProposal(
+        address beneficiary,
+        uint weiAmount,
+        FieldOfWork fieldOfWork) public
+        onlyShareholders
+    returns (uint proposalID)
+    {
+        AddressLogger("BENEFICIARY", beneficiary);
+        proposalID = proposals.length++;
+        Proposal storage proposal = proposals[proposalID];
+        proposal.recipient = beneficiary;
+        proposal.amount = weiAmount;
+        proposal.proposalHash = sha3(beneficiary, weiAmount); // TODO add transactionBytecode
+        proposal.proposalDeadline = currentTime() + debatingPeriodInMinutes * 1 minutes;
+        proposal.finished = false;
+        proposal.fieldOfWork = fieldOfWork;
+        proposal.proposalPassed = false;
+        numProposals = proposalID;
+        NewProposalCreated(proposalID);
+        return proposalID;
+    }
+
+    function vote(
+        uint proposalNumber,
+        bool supportsProposal
+    ) public
+    onlyShareholders
+    returns (uint voteID)
+    {
+        Proposal storage proposal = proposals[proposalNumber];
+        require(proposal.voted[msg.sender] != true);
+
+        voteID = proposal.votes.length++;
+        proposal.votes[voteID] = Vote({inSupport: supportsProposal, voter: msg.sender});
+        proposal.voted[msg.sender] = true;
+        Voted(proposalNumber, supportsProposal, msg.sender);
+        return voteID;
+    }
+
+    function executeProposal(uint proposalId)
+    {
+
+        // proposals[0] or proposals[proposalNumber] ???
+        Proposal storage proposal = proposals[proposalId];
+
+
+
+
+
+        require(currentTime() > proposal.proposalDeadline                       // If it is past the proposal deadline
+            && !proposal.finished);                                             // and it has not already been finished
+            // && proposal.proposalHash == sha3(proposal.recipient, proposal.amount)); // and the supplied code matches
+
+        uint approve = 0;
+        uint disapprove = 0;
+
+        for (uint i = 0; i < proposal.votes.length; ++i) {
+            Vote storage v = proposal.votes[i];
+            uint voteWeight = getInfluenceOfVoter(v.voter, proposal.fieldOfWork);
+            if (v.inSupport) {
+                approve += voteWeight;
+            } else {
+                disapprove += voteWeight;
+            }
+        }
+        proposal.finished = true;
+
+        if (approve >= disapprove) {
+            // Proposal passed; execute the transaction
+            proposal.proposalPassed = true;
+        } else {
+            // Proposal failed
+            proposal.proposalPassed = false;
+        }
+        proposal.passedPercent = approve * 100 / (approve+disapprove);
+
+        ProposalFinishedLogger(proposalId, approve+disapprove, approve, disapprove);
+    }
+}

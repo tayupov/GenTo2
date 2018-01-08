@@ -1,9 +1,9 @@
 pragma solidity ^0.4.8;
 
 import '../../node_modules/zeppelin-solidity/contracts/token/StandardToken.sol';
-import './VotingToken.sol';
+import './ProposalToken.sol';
 
-contract AuctionToken is StandardToken, VotingToken {
+contract AuctionToken is StandardToken, ProposalToken {
 
     uint256 public buyPriceStart;
     uint256 public buyPriceEnd;
@@ -156,23 +156,23 @@ contract AuctionToken is StandardToken, VotingToken {
         delegations[msg.sender][uint(fieldOfWork)] = recipient;
     }
 
-    function claimPayout(uint votingNumber) public returns (uint amount) {
-        Voting storage voting = votings[votingNumber];
+    function claimPayout(uint proposalNumber) public returns (uint amount) {
+        Proposal storage proposal = proposals[proposalNumber];
 
-        require(voting.finished && voting.votingPassed && voting.recipient == msg.sender);
+        require(proposal.finished && proposal.proposalPassed && proposal.recipient == msg.sender);
 
-        balances[msg.sender] += voting.amount;
+        balances[msg.sender] += proposal.amount;
         
-        MyTransfer(msg.sender, voting.amount, bal);
-        return voting.amount;
+        MyTransfer(msg.sender, proposal.amount, bal);
+        return proposal.amount;
     }
 
-    // function claimDividend(uint votingNumber) public onlyShareholders {
-    //     Voting storage voting = votings[votingNumber];
+    // function claimDividend(uint proposalNumber) public onlyShareholders {
+    //     Proposal storage proposal = proposals[proposalNumber];
 
-    //     require(voting.finished && voting.votingPassed && !!voting.dividend);
+    //     require(proposal.finished && proposal.proposalPassed && !!proposal.dividend);
 
-    //     balances[msg.sender] += balances[msg.sender] * voting.dividend;
+    //     balances[msg.sender] += balances[msg.sender] * proposal.dividend;
     // }
 
     function currentTime() returns (uint time) {
@@ -194,7 +194,7 @@ contract AuctionToken is StandardToken, VotingToken {
         balances[owner] += amount;                         // adds the amount to owner's balance
         balances[msg.sender] -= amount;                   // subtracts the amount from seller's balance
         revenue = amount * sellPrice;
-        if (!msg.sender.send(revenue)) {                   // sends ether to the seller: it's important
+        if (!msg.sender.send(revenue)) {                   // sends ether to the seller: it's truimportant
             throw;                                         // to do owner last to prevent recursion attacks
         } else {
             Transfer(msg.sender, owner, amount);             // executes an event reflecting on the change
