@@ -510,6 +510,38 @@ contract('VotingToken', function(accounts) {
     const isSharehoder2 = await testContract.isShareholder.call(accounts[2]);
     expect(!!isSharehoder2).toBe(true);
   })
+  it("schould delegate properly", async function() {
+        await testContract.setCurrentTime.sendTransaction(1200000)
+
+        // user 1,2,3,4 become shareholder evenly
+        await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
+        await testContract.buy.sendTransaction({from: accounts[2], value: 1000})
+        await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
+        await testContract.buy.sendTransaction({from: accounts[4], value: 1000})
+
+        // Field of work 1 influence is distributed evenly
+        expect(+await testContract.getInfluenceOfVoter.call(accounts[1], 1)).toBe(35)
+        expect(+await testContract.getInfluenceOfVoter.call(accounts[2], 1)).toBe(35)
+        expect(+await testContract.getInfluenceOfVoter.call(accounts[3], 1)).toBe(35)
+        expect(+await testContract.getInfluenceOfVoter.call(accounts[4], 1)).toBe(35)
+
+
+        // Delegate influence from field of work from account 1 to 2
+        await testContract.delegate.sendTransaction(1, accounts[2], {from: accounts[1]})
+
+        // Test field of work 1 incluence
+        expect(+await testContract.getInfluenceOfVoter.call(accounts[1], 1)).toBe(0)
+        expect(+await testContract.getInfluenceOfVoter.call(accounts[2], 1)).toBe(70)
+        expect(+await testContract.getInfluenceOfVoter.call(accounts[3], 1)).toBe(35)
+        expect(+await testContract.getInfluenceOfVoter.call(accounts[4], 1)).toBe(35)
+
+        // Test other field of work (To see if it is untouched)
+        expect(+await testContract.getInfluenceOfVoter.call(accounts[1], 2)).toBe(35)
+        expect(+await testContract.getInfluenceOfVoter.call(accounts[2], 2)).toBe(35)
+        expect(+await testContract.getInfluenceOfVoter.call(accounts[3], 2)).toBe(35)
+        expect(+await testContract.getInfluenceOfVoter.call(accounts[4], 2)).toBe(35)
+
+  })
 });
 
 
