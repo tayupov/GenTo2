@@ -8,9 +8,9 @@ let defaultICOdata = {
   saleStart: new Date().getTime(),
   saleEnd: new Date().getTime()+10000
 }
-async function createNewICO(owner, overrideData) {
+async function createNewICO(invalidData) {
   let data = {}
-  Object.assign(data, defaultICOdata, overrideData)
+  Object.assign(data, defaultICOdata, invalidData)
   let genToFactory = await GenToFactory.deployed()
   let contract = await genToFactory.createContract.sendTransaction(
     data.totalSupply,
@@ -21,37 +21,35 @@ async function createNewICO(owner, overrideData) {
     data.sellPrice,
     data.saleStart,
     data.saleEnd)
-  let icos = await genToFactory.getICOsFromOwner.call(owner)
 
-  let instance = await AuctionToken.at(icos[icos.length-1]) // It will always be the newest ICO as long as we dont run tests in parallel
+  let icos = await genToFactory.getICOs.call()
+
+  let instance = await GentoDao.at(icos[icos.length-1]) // It will always be the newest ICO as long as we dont run tests in parallel
 
   return instance;
 }
 
 
-let AuctionToken = artifacts.require("./AuctionToken.sol");
-let GenToFactory = artifacts.require("./GenToFactory.sol");
+const GentoDao = artifacts.require("./GentoDao.sol");
+const GenToFactory = artifacts.require("./GentoDaoFactory.sol");
 
-let should = require('should')
-var expect = require('expect')
+const should = require('should')
+const expect = require('expect')
 
 contract('GenToFactory', function(accounts) {
   it("should be possible to start a valid ICO", async function() {
 
-    let creator = accounts[0] //defined in migrations
-
     try {
-      let instance = await createNewICO(creator) //Create contract with default data
+      let instance = await createNewICO() //Create contract with default data
       let details = await instance.getDetails.call()
-      expect(details[0]).toEqual(creator)
-      expect(details[1]).toEqual(defaultICOdata.name)
-      expect(details[2]).toEqual(defaultICOdata.symbol)
-      expect(details[3].c[0]).toEqual(defaultICOdata.totalSupply)
-      expect(details[5].c[0]).toEqual(defaultICOdata.buyPriceStart)
-      expect(details[6].c[0]).toEqual(defaultICOdata.buyPriceEnd)
-      expect(details[7].c[0]).toEqual(defaultICOdata.sellPrice)
-      expect(details[8].c[0]).toEqual(defaultICOdata.saleStart)
-      expect(details[9].c[0]).toEqual(defaultICOdata.saleEnd)
+      expect(details[0]).toEqual(defaultICOdata.name)
+      expect(details[1]).toEqual(defaultICOdata.symbol)
+      expect(details[2].c[0]).toEqual(defaultICOdata.totalSupply)
+      expect(details[4].c[0]).toEqual(defaultICOdata.buyPriceStart)
+      expect(details[5].c[0]).toEqual(defaultICOdata.buyPriceEnd)
+      expect(details[6].c[0]).toEqual(defaultICOdata.sellPrice)
+      expect(details[7].c[0]).toEqual(defaultICOdata.saleStart)
+      expect(details[8].c[0]).toEqual(defaultICOdata.saleEnd)
     }
     catch (e) {
       console.error(e)
@@ -65,11 +63,11 @@ contract('GenToFactory', function(accounts) {
         saleEnd: new Date().getTime() - 10000
       }
       try {
-          let instance = await createNewICO(accounts[0], invalidData)
+          let instance = await createNewICO(invalidData)
           should.fail("this transaction should have raised an error")
       }
       catch (e) {
-        expect(e.message).toBe("VM Exception while processing transaction: revert")
+        expect(e.message).toContain("VM Exception while processing transaction: ")
       }
   });
 
