@@ -75,7 +75,13 @@ contract ProposalToken {
         require(isShareholder(msg.sender));
         _;
     }
+    // Modifier that allows only shareholders to vote and create new proposals
+    modifier votingAllowed {
+        require(isIcoFinished());
+        _;
+    }
 
+    function isIcoFinished() returns (bool icoFinished);
     function currentTime() returns (uint time);
     function isShareholder(address userAddress) returns (bool shareholder);
     function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) returns (uint influence);
@@ -83,7 +89,7 @@ contract ProposalToken {
     function newProposal(
         address beneficiary,
         uint weiAmount,
-        FieldOfWork fieldOfWork) public
+        FieldOfWork fieldOfWork) votingAllowed public
         onlyShareholders
     returns (uint proposalID)
     {
@@ -105,7 +111,7 @@ contract ProposalToken {
     function vote(
         uint proposalNumber,
         bool supportsProposal
-    ) public
+    ) votingAllowed public
     onlyShareholders
     returns (uint voteID)
     {
@@ -119,15 +125,10 @@ contract ProposalToken {
         return voteID;
     }
 
-    function executeProposal(uint proposalId)
+    function executeProposal(uint proposalId) votingAllowed
     {
-
         // proposals[0] or proposals[proposalNumber] ???
         Proposal storage proposal = proposals[proposalId];
-
-
-
-
 
         require(currentTime() > proposal.proposalDeadline                       // If it is past the proposal deadline
             && !proposal.finished);                                             // and it has not already been finished

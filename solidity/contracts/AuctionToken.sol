@@ -32,6 +32,20 @@ contract AuctionToken is StandardToken, ProposalToken {
 
     event MyTransfer(address indexed to, uint256 value, uint256 remainingSupply);
 
+    modifier icoRunning {
+        //if (!isShareholder(msg.sender)) throw;
+        require(saleStart <= currentTime());
+        require(saleEnd > currentTime());
+        _;
+    }
+
+
+    modifier icoFinished {
+        //if (!isShareholder(msg.sender)) throw;
+        require(saleEnd <= currentTime());
+        _;
+    }
+
     function AuctionToken(uint256 _totalSupply,
     string _symbol,
     string _name,
@@ -67,6 +81,11 @@ contract AuctionToken is StandardToken, ProposalToken {
     function isShareholder(address userAddress) returns (bool shareholder){
         return balances[userAddress] > 0;
     }
+    function isIcoFinished() returns (bool icoFinished){
+        return saleEnd <= currentTime();
+    }
+
+
 
     function getBalance() returns(uint balance) {
         return this.balance;
@@ -88,13 +107,9 @@ contract AuctionToken is StandardToken, ProposalToken {
         return influence1;
     }
 
-    function getBuyPrice() constant returns (uint) {
+    function getBuyPrice() icoRunning constant returns (uint) {
         uint currentPrice;
         uint passed;
-
-        /* It only makes sense to compute a buy price during the ico: outside of that interval, this function is not defined */
-        assert(currentTime() >= saleStart);
-        assert(currentTime() < saleEnd);
 
         passed = currentTime() - saleStart;
 
@@ -124,7 +139,7 @@ contract AuctionToken is StandardToken, ProposalToken {
     uint256 _saleEnd){
         return (name, symbol, totalSupply, creationDate, buyPriceStart, buyPriceEnd, sellPrice, saleStart, saleEnd);
     }
-    function buy() payable returns (uint amount) {
+    function buy() icoRunning payable returns (uint amount) {
         bool shareHolder =  isShareholder(msg.sender);
         // calculates the amount
         amount = msg.value / getBuyPrice();
@@ -157,7 +172,7 @@ contract AuctionToken is StandardToken, ProposalToken {
         delegations[msg.sender][uint(fieldOfWork)] = recipient;
     }
 
-    function claimPayout(uint proposalNumber) public returns (uint amount) {
+    function claimPayout(uint proposalNumber) icoFinished public returns (uint amount) {
         Proposal storage proposal = proposals[proposalNumber];
 
         require(proposal.finished && proposal.proposalPassed && proposal.recipient == msg.sender);

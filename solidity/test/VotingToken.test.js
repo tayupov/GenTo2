@@ -46,6 +46,8 @@ contract('ProposalToken', function(accounts) {
     // user 1 become a shareholder
     await testContract.buy.sendTransaction({from: accounts[1], value: 10000})
 
+    await testContract.setCurrentTime.sendTransaction(2300000)
+
     // create 3 new Proposals
     await testContract.newProposal.sendTransaction(accounts[1], 100, 1, {from: accounts[1]})
 
@@ -69,6 +71,8 @@ contract('ProposalToken', function(accounts) {
       await testContract.buy.sendTransaction({from: accounts[2], value: 1000})
       await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
 
+      await testContract.setCurrentTime.sendTransaction(2200000)
+
       await testContract.newProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
         
       let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
@@ -80,7 +84,7 @@ contract('ProposalToken', function(accounts) {
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[2]})
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[3]})
 
-      await testContract.setCurrentTime.sendTransaction(1300000)
+      await testContract.setCurrentTime.sendTransaction(2300000)
       await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
       const p = await testContract.getProposal.call(newProposalArgs.proposalID)
       expect(p[4]).toBe(true)
@@ -96,6 +100,7 @@ contract('ProposalToken', function(accounts) {
       await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
       await testContract.buy.sendTransaction({from: accounts[2], value: 1000})
       await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
+      await testContract.setCurrentTime.sendTransaction(2200000)
 
       // create a new Proposal
       await testContract.newProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
@@ -109,7 +114,7 @@ contract('ProposalToken', function(accounts) {
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[2]})
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[3]})
 
-      await testContract.setCurrentTime.sendTransaction(1300000)
+      await testContract.setCurrentTime.sendTransaction(2300000)
       await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
       const p = await testContract.getProposal.call(newProposalArgs.proposalID);
 
@@ -123,6 +128,7 @@ contract('ProposalToken', function(accounts) {
     await testContract.setCurrentTime.sendTransaction(1200000)
     // user 1 become a shareholder
     await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
+        await testContract.setCurrentTime.sendTransaction(2200000)
     //create a new Proposal
     await testContract.newProposal.sendTransaction(accounts[1], 103, 2, {from: accounts[1]})
     let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
@@ -133,7 +139,7 @@ contract('ProposalToken', function(accounts) {
     // its important use FoW 0 = Finance
     await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[1]})
 
-    await testContract.setCurrentTime.sendTransaction(1300000)
+    await testContract.setCurrentTime.sendTransaction(2300000)
     await testContract.executeProposal.sendTransaction(+await testContract.getNumProposals()-1)
     const p = await testContract.getProposal.call(+await testContract.getNumProposals()-1)
 
@@ -151,6 +157,7 @@ contract('ProposalToken', function(accounts) {
     await testContract.setCurrentTime.sendTransaction(1300000)
 
     await testContract.buy.sendTransaction({from: accounts[1], value: 100000})
+        await testContract.setCurrentTime.sendTransaction(2300000)
     // should be in both cases FoW = 0 !
     await testContract.newProposal.sendTransaction(accounts[1], 29, 0, {from: accounts[1]})
 
@@ -201,6 +208,7 @@ contract('ProposalToken', function(accounts) {
     await testContract.setCurrentTime.sendTransaction(1300000)
 
     await testContract.buy.sendTransaction({from: accounts[0], value: 100000})
+        await testContract.setCurrentTime.sendTransaction(2300000)
     await testContract.newProposal.sendTransaction(accounts[0], 10, 0, {from: accounts[0]})
     let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
         (error, log) => error ? reject(error) : resolve(log)));
@@ -217,6 +225,7 @@ contract('ProposalToken', function(accounts) {
     // user 1 and user 3 should become a shareholder
     await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
     await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
+        await testContract.setCurrentTime.sendTransaction(2400000)
     // user 3 delegates his Proposal power in FoW 0 (Finance) to user 1
     await testContract.delegate.sendTransaction(0, accounts[1], {from: accounts[3]})
     // first create a new Proposal before user can vote
@@ -229,7 +238,7 @@ contract('ProposalToken', function(accounts) {
     // user 1 has more Proposal power then user 3
     await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[1]})
     // Set time to after the Proposal period
-    await testContract.setCurrentTime.sendTransaction(2300000)
+    await testContract.setCurrentTime.sendTransaction(3300000)
     // executes the Proposal
     await testContract.executeProposal.sendTransaction(0)
 
@@ -259,6 +268,7 @@ contract('ProposalToken', function(accounts) {
     var numberOfInitialProposals = 0;
 
     await testContract.buy.sendTransaction({from: accounts[0], value: 10000})
+        await testContract.setCurrentTime.sendTransaction(2600000)
     console.log("create new Proposal")
     //console.log('getNumProposals: ', +await testContract.getNumProposals())
     //console.log(+await testContract.newProposal.call(accounts[0], 100, 0))
@@ -286,6 +296,7 @@ contract('ProposalToken', function(accounts) {
     await testContract.buy.sendTransaction({from:accounts[0], value: 10000})
     await testContract.buy.sendTransaction({from:accounts[1], value: 10000})
     await testContract.buy.sendTransaction({from:accounts[2], value: 10000})
+    await testContract.setCurrentTime.sendTransaction(2300000)
     // create a new Proposal
     await testContract.newProposal.sendTransaction(accounts[1], 100, 0, {from: accounts[1]})
     let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
@@ -296,7 +307,7 @@ contract('ProposalToken', function(accounts) {
     await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[1]})
     await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[2]})
     // Set time to after the Proposal period
-    await testContract.setCurrentTime.sendTransaction(1400000)
+    await testContract.setCurrentTime.sendTransaction(2400000)
     // execute the Proposal -> passed time is required
     await testContract.executeProposal.sendTransaction(+await testContract.getNumProposals()-1)
     // get the proposal
@@ -316,6 +327,7 @@ contract('ProposalToken', function(accounts) {
     await testContract.buy.sendTransaction({from: accounts[2], value: 10000})
     await testContract.buy.sendTransaction({from: accounts[3], value: 10000})
     await testContract.buy.sendTransaction({from: accounts[4], value: 10000})
+    await testContract.setCurrentTime.sendTransaction(2400000)
     // create a new Proposal
     await testContract.newProposal.sendTransaction(accounts[0], 100, 0, {from: accounts[0]})
     let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
@@ -328,7 +340,7 @@ contract('ProposalToken', function(accounts) {
     await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[3]})
     await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[4]})
     // Set time to after the Proposal period
-    await testContract.setCurrentTime.sendTransaction(1500000)
+    await testContract.setCurrentTime.sendTransaction(2500000)
     // execute the Proposals
     await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
     // get the proposal
@@ -345,6 +357,8 @@ contract('ProposalToken', function(accounts) {
     await testContract.buy.sendTransaction({from: accounts[4], value: 10000})
     await testContract.buy.sendTransaction({from: accounts[5], value: 10000})
     await testContract.buy.sendTransaction({from: accounts[7], value: 10000})
+
+    await testContract.setCurrentTime.sendTransaction(2600000)
 
     // should be 0
     const numberOfInitialProposals = await testContract.getNumProposals.call()
@@ -518,6 +532,8 @@ contract('ProposalToken', function(accounts) {
         await testContract.buy.sendTransaction({from: accounts[2], value: 1000})
         await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
         await testContract.buy.sendTransaction({from: accounts[4], value: 1000})
+
+        await testContract.setCurrentTime.sendTransaction(2200000)
 
         // Field of work 1 influence is distributed evenly
         expect(+await testContract.getInfluenceOfVoter.call(accounts[1], 1)).toBe(35)
