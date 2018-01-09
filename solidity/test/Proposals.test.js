@@ -1,9 +1,7 @@
-const ProposalToken = artifacts.require("./AuctionToken.sol");
-const AuctionToken = artifacts.require("./AuctionToken.sol");
-const FieldOfWork = artifacts.require("./ProposalToken.sol");
+const Proposals = artifacts.require("./Proposals.sol");
+const GentoDao = artifacts.require("./GentoDao.sol");
 
-const AuctionTokenDeployer = require("./util/AuctionTokenDeployer.js")(AuctionToken)
-
+const GentoDaoDeployer = require("./util/GentoDaoDeployer.js")(GentoDao)
 
 const should = require('should');
 const expect = require('expect');
@@ -28,14 +26,14 @@ contract('ProposalToken', function(accounts) {
   let newProposalEventListener;
     beforeEach(async function() {
     // Every auction token is a Proposal token
-    testContract = await AuctionTokenDeployer()
+    testContract = await GentoDaoDeployer()
     newProposalEventListener = testContract.NewProposalCreated();
   });
 
 
   it("should check the voting for different Field of Works", async function() {
+      // set time between ICO START and END
       await testContract.setCurrentTime.sendTransaction(1300000)
-
       // user 0,1,2,3,4,5,6 become shareholders
       await testContract.buy.sendTransaction({from: accounts[0], value: 100})
       await testContract.buy.sendTransaction({from: accounts[1], value: 200})
@@ -43,60 +41,62 @@ contract('ProposalToken', function(accounts) {
       await testContract.buy.sendTransaction({from: accounts[3], value: 400})
       await testContract.buy.sendTransaction({from: accounts[4], value: 500})
       await testContract.buy.sendTransaction({from: accounts[5], value: 600})
-
+      // create a new proposal
       await testContract.newProposal.sendTransaction(accounts[0], 100, 1, {from: accounts[0]})
-
+      // is necessary to get proposal id as return value by triggering the NewProposalCreated event
       let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
           (error, log) => error ? reject(error) : resolve(log)));
+      // check that only 1 proosals gets created
       assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
+      // returns the first proposal log object with proposal id
       let newProposalArgs = newProposalLog[0].args;
-
-      // await testContract.delegate.sendTransaction(0, accounts[3], {from: accounts[2]})
-      // await testContract.delegate.sendTransaction(0, accounts[4], {from: accounts[1]})
-
+      // user 2 delegates in field of work 0 (Finance) to user 3
+      await testContract.delegate.sendTransaction(0, accounts[3], {from: accounts[2]})
+      // user 1 delegates in field of work 0 (Finance) to user 4
+      await testContract.delegate.sendTransaction(0, accounts[4], {from: accounts[1]})
+      // user 1,3,4 vote for the proposal
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[1]})
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[3]})
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[4]})
-
-      // change FieldOfWork to Product
-      // await testContract.setFieldOfWork.call(2)
-      //
-      // await testContract.newVoting.sendTransaction(accounts[1], 100, 1, {from: accounts[1]})
-      //
-      // let newProposalLog2 = await new Promise((resolve, reject) => newProposalEventListener.get(
-      //     (error, log) => error ? reject(error) : resolve(log)));
-      // assert.equal(newProposalLog.length, 2, 'should be the second new Proposal');
-      // let newProposalArgs2 = newProposalLog[1].args;
-      //
-      // await testContract.delegate.sendTransaction(2, accounts[2], {from: accounts[5]})
-      // await testContract.delegate.sendTransaction(2, accounts[2], {from: accounts[4]})
-      //
-      // await testContract.vote.sendTransaction(newProposalArgs2.proposalID, true, {from: accounts[1]})
-      // await testContract.vote.sendTransaction(newProposalArgs2.proposalID, true, {from: accounts[2]})
-      // await testContract.vote.sendTransaction(newProposalArgs2.proposalID, false, {from: accounts[3]})
-      // await testContract.vote.sendTransaction(newProposalArgs2.proposalID, true, {from: accounts[0]})
-      // await testContract.vote.sendTransaction(newProposalArgs2.proposalID, false, {from: accounts[4]})
-      // await testContract.vote.sendTransaction(newProposalArgs2.proposalID, false, {from: accounts[5]})
-      //
-      // expect(+await testContract.getNumProposals()).toBe(2)
-      //
-      console.log(newProposalLog)
-      console.log(newProposalArgs)
-
-      await testContract.setCurrentTime.sendTransaction(1300000)
-      //
+      // change FieldOfWork to 2 (Product)
+      await testContract.setFieldOfWork.call(2)
+      // create a new proposal
+      await testContract.newProposal.sendTransaction(accounts[1], 100, 1, {from: accounts[1]})
+      // similar for the second proposal
+      let newProposalLog2 = await new Promise((resolve, reject) => newProposalEventListener.get(
+          (error, log) => error ? reject(error) : resolve(log)));
+      // check whether the second proposal gets created
+      assert.equal(newProposalLog2.length, 1, 'should be the second new Proposal');
+      // returns the second proposal log object with proposal id
+      let newProposalArgs2 = newProposalLog2[0].args;
+      // user 4,5 delegates in field of work 2 (Product) to user 2
+      await testContract.delegate.sendTransaction(2, accounts[2], {from: accounts[5]})
+      await testContract.delegate.sendTransaction(2, accounts[2], {from: accounts[4]})
+      // user 0-5 vote for the second proposal
+      await testContract.vote.sendTransaction(newProposalArgs2.proposalID, true, {from: accounts[1]})
+      await testContract.vote.sendTransaction(newProposalArgs2.proposalID, true, {from: accounts[2]})
+      await testContract.vote.sendTransaction(newProposalArgs2.proposalID, true, {from: accounts[3]})
+      await testContract.vote.sendTransaction(newProposalArgs2.proposalID, true, {from: accounts[0]})
+      await testContract.vote.sendTransaction(newProposalArgs2.proposalID, true, {from: accounts[4]})
+      await testContract.vote.sendTransaction(newProposalArgs2.proposalID, true, {from: accounts[5]})
+      // number of proposal should be 2
+      expect(+await testContract.getNumProposals()).toBe(2)
+      // set time to after the proposal period
+      await testContract.setCurrentTime.sendTransaction(2300000)
+      // execute the first and second proposal
       await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
-      // await testContract.executeVoting.sendTransaction(newProposalArgs2.proposalID)
-      //
-      // var p1 = await testContract.getProposal.call(newProposalArgs.proposalID)
-      // var p2 = +await testContract.getProposal.call(newProposalArgs2.proposalID)
-
-      // expect(p1[4]).toBe(true)
-      // expect(p1[5]).toBe(false)
-
-      // expect(p2[4]).toBe(true)
-      // expect(p2[5]).toBe(true)
-
+      await testContract.executeProposal.sendTransaction(newProposalArgs2.proposalID)
+      // get the first and second proposal by id
+      var p1 = await testContract.getProposal.call(newProposalArgs.proposalID)
+      var p2 = await testContract.getProposal.call(newProposalArgs2.proposalID)
+      // first proposal is finished
+      expect(p1[4]).toBe(true)
+      // first proposal isn't passed
+      expect(p1[5]).toBe(false)
+      // second proposal is finished
+      expect(p2[4]).toBe(true)
+      // second proposal is passed
+      expect(p2[5]).toBe(true)
   })
 
 
@@ -131,28 +131,34 @@ contract('ProposalToken', function(accounts) {
   //
   //
   it("should execute Proposals with 2/3 confirmed votes", async function() {
+      // set time between ICO START and END
       await testContract.setCurrentTime.sendTransaction(1200000)
-
       // user 1,2,3 become shareholder
       await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
       await testContract.buy.sendTransaction({from: accounts[2], value: 1000})
       await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
-
+      // create a new proposal
       await testContract.newProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
-
+      // is necessary to get proposal id as return value by triggering the NewProposalCreated event
       let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
           (error, log) => error ? reject(error) : resolve(log)));
+      // check that only 1 proposals gets created
       assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
+      // returns the proposal log object with proposal id
       let newProposalArgs = newProposalLog[0].args;
-
+      // vote for the proposal
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[1]})
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[2]})
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[3]})
-
+      // set time to after the proposal period
       await testContract.setCurrentTime.sendTransaction(1300000)
+      // execute the proposal
       await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
+      // get the proposal by proposal id
       const p = await testContract.getProposal.call(newProposalArgs.proposalID)
+      // proposal is finished
       expect(p[4]).toBe(true)
+      // proposal is passed
       expect(p[5]).toBe(true)
   })
 

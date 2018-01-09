@@ -75,7 +75,7 @@ contract Proposals {
         require(isShareholder(msg.sender));
         _;
     }
-    // Modifier that allows only shareholders to vote and create new proposals
+    // Modifier checks whether the ICO isn't finished
     modifier votingAllowed {
         require(isIcoFinished());
         _;
@@ -89,7 +89,7 @@ contract Proposals {
     function newProposal(
         address beneficiary,
         uint weiAmount,
-        FieldOfWork fieldOfWork) votingAllowed public
+        FieldOfWork fieldOfWork) /*votingAllowed*/ public
         onlyShareholders
     returns (uint proposalID)
     {
@@ -111,7 +111,7 @@ contract Proposals {
     function vote(
         uint proposalNumber,
         bool supportsProposal
-    ) votingAllowed public
+    ) /*votingAllowed*/ public
     onlyShareholders
     returns (uint voteID)
     {
@@ -125,7 +125,7 @@ contract Proposals {
         return voteID;
     }
 
-    function executeProposal(uint proposalId) votingAllowed
+    function executeProposal(uint proposalId) /*votingAllowed*/
     {
         // proposals[0] or proposals[proposalNumber] ???
         Proposal storage proposal = proposals[proposalId];
@@ -148,7 +148,7 @@ contract Proposals {
         }
         proposal.finished = true;
 
-        if (approve >= disapprove) {
+        if (approve > disapprove) {
             // Proposal passed; execute the transaction
             proposal.proposalPassed = true;
         } else {
