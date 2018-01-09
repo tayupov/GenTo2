@@ -6,8 +6,8 @@
   "dependencies": {
     "chart.js": "^2.7.1",
     "chartjs": "^0.3.24",
-    "istanbul": "^0.4.5",
     "ipfs": "^0.27.6",
+    "istanbul": "^0.4.5",
     "mobx": "^3.3.1",
     "mobx-react": "^4.3.4",
     "moment": "^2.19.1",
@@ -27,6 +27,7 @@
     "recompose": "^0.26.0",
     "semantic-ui-css": "^2.2.12",
     "semantic-ui-react": "^0.75.1",
+    "truffle-contract": "^3.0.1",
     "web3": "0.19.0"
   },
   "scripts": {

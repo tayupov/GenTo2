@@ -6,6 +6,8 @@ import Routes from 'routes';
 import web3 from 'utils/web3';
 import 'styles/app.css';
 
+import provider from 'provider/index.js'
+
 export default class App extends React.Component {
 
   constructor() {
@@ -19,47 +21,34 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    this.updateNetwork();
-    setInterval(this.updateAccount, 1000);
+
+    provider(this.notify, this)
 
     //TODO: remove!
     this.setState({
       organizations: [
-        {
-          name: 'EBikes Enterprise',
-          address: 'cryptic_hash_lmao'
-        },
-        {
-          name: '420 Blaze it',
-          address: 'cryptic_hash_lol'
-        }
       ]
     });
   }
 
-  updateNetwork = () => {
-    web3.version.getNetwork((err, network) => {
-      if (err) {
-        this.notify('Network not found', 'error');
-      }
-      this.setState({ network })
-    })
-  }
 
+/*
   updateAccount = () => {
     web3.eth.getAccounts((err, accounts) => {
       if (err) {
         this.notify('Account not updated', 'error');
       }
+      console.log("state", this.state)
       if (this.state.account !== accounts[0]) {
-        if (this.state.account !== null) {
+      /*  if (this.state.account !== null) {
           this.setState({ account: accounts[0] })
           this.notify('Account Switched!', 'info');
-        }
+            console.log("Account Switched")
+        //}
       }
     });
   }
-
+*/
 
   notify = (message, type) => {
     switch (type) {

@@ -1,0 +1,409 @@
+{
+  "contract_name": "Proposals",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "proposals",
+      "outputs": [
+        {
+          "name": "recipient",
+          "type": "address"
+        },
+        {
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "fieldOfWork",
+          "type": "uint8"
+        },
+        {
+          "name": "proposalDeadline",
+          "type": "uint256"
+        },
+        {
+          "name": "finished",
+          "type": "bool"
+        },
+        {
+          "name": "proposalPassed",
+          "type": "bool"
+        },
+        {
+          "name": "passedPercent",
+          "type": "uint256"
+        },
+        {
+          "name": "proposalHash",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_value",
+          "type": "uint256"
+        }
+      ],
+      "name": "setFieldOfWork",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getFieldOfWork",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "proposalId",
+          "type": "uint256"
+        }
+      ],
+      "name": "executeProposal",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "numProposals",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "ProposalToken",
+      "outputs": [],
+      "payable": true,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "debatingPeriodInMinutes",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getNumProposals",
+      "outputs": [
+        {
+          "name": "numOfProposals",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "isIcoFinished",
+      "outputs": [
+        {
+          "name": "icoFinished",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "beneficiary",
+          "type": "address"
+        },
+        {
+          "name": "weiAmount",
+          "type": "uint256"
+        },
+        {
+          "name": "fieldOfWork",
+          "type": "uint8"
+        }
+      ],
+      "name": "newProposal",
+      "outputs": [
+        {
+          "name": "proposalID",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "voter",
+          "type": "address"
+        },
+        {
+          "name": "fieldOfWork",
+          "type": "uint8"
+        }
+      ],
+      "name": "getInfluenceOfVoter",
+      "outputs": [
+        {
+          "name": "influence",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "userAddress",
+          "type": "address"
+        }
+      ],
+      "name": "isShareholder",
+      "outputs": [
+        {
+          "name": "shareholder",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "proposalID",
+          "type": "uint256"
+        }
+      ],
+      "name": "getProposal",
+      "outputs": [
+        {
+          "name": "recipient",
+          "type": "address"
+        },
+        {
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "proposalDeadline",
+          "type": "uint256"
+        },
+        {
+          "name": "finished",
+          "type": "bool"
+        },
+        {
+          "name": "proposalPassed",
+          "type": "bool"
+        },
+        {
+          "name": "passedPercent",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "proposalNumber",
+          "type": "uint256"
+        },
+        {
+          "name": "supportsProposal",
+          "type": "bool"
+        }
+      ],
+      "name": "vote",
+      "outputs": [
+        {
+          "name": "voteID",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "currentTime",
+      "outputs": [
+        {
+          "name": "time",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "fow",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "name": "number",
+          "type": "uint256"
+        }
+      ],
+      "name": "NumberLogger",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "name": "AddressLogger",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "proposalId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "totalVotes",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "approve",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "disapprove",
+          "type": "uint256"
+        }
+      ],
+      "name": "ProposalFinishedLogger",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "proposalID",
+          "type": "uint256"
+        }
+      ],
+      "name": "NewProposalCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "proposalID",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "position",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "name": "voter",
+          "type": "address"
+        }
+      ],
+      "name": "Voted",
+      "type": "event"
+    }
+  ],
+  "unlinked_binary": "0x",
+  "networks": {},
+  "schema_version": "0.0.5",
+  "updated_at": 1515496233703
+}

@@ -7,8 +7,8 @@ import steps from './steps';
 import web3 from 'utils/web3';
 import { adjustStepZilla } from 'utils/stepzilla';
 
-import GenToFactory from 'assets/contracts/GenToFactory.json';
-import { createGentoFactoryInstance } from 'utils/contractInstances';
+//import GenToFactory from 'assets/contracts/GenToFactory.json';
+//import { createGentoFactoryInstance } from 'utils/contractInstances';
 
 import { Buffer } from 'buffer';
 
