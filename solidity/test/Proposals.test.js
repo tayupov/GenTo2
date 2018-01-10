@@ -297,47 +297,50 @@ contract('ProposalToken', function(accounts) {
 
 
   })
-  //
-  // it("should pass the Proposal when the tokenholder has delegated his vote", async function() {
-  //   // Set time between ICO start and END
-  //   await testContract.setCurrentTime.sendTransaction(1400000)
-  //   // user 1 and user 3 should become a shareholder
-  //   await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
-  //   await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
-  //   // user 3 delegates his Proposal power in FoW 0 (Finance) to user 1
-  //   await testContract.delegate.sendTransaction(0, accounts[1], {from: accounts[3]})
-  //   // first create a new Proposal before user can vote
-  //   await testContract.newProposal.sendTransaction(accounts[1], 10, 0, {from: accounts[1]})
-  //   let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-  //       (error, log) => error ? reject(error) : resolve(log)));
-  //   assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
-  //   let newProposalArgs = newProposalLog[0].args;
-  //   await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[3]})
-  //   // user 1 has more Proposal power then user 3
-  //   await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[1]})
-  //   // Set time to after the Proposal period
-  //   await testContract.setCurrentTime.sendTransaction(2300000)
-  //   // executes the Proposal
-  //   await testContract.executeProposal.sendTransaction(0)
-  //
-  //   const p = await testContract.getProposal.call(+await testContract.getNumProposals()-1);
-  //
-  //   expect(p[4]).toBe(true)
-  //   expect(p[5]).toBe(true)
-  // })
-  //
-  // it("should fail the delegation if the token holder isn't a shareholder", async function() {
-  //   await testContract.setCurrentTime.sendTransaction(1200000)
-  //   // account[9] is not a shareholder because he didn't buy anything
-  //   try {
-  //     // user 9 tries to delegate
-  //     await testContract.delegate.sendTransaction(0, accounts[9], {from: accounts[9]})
-  //     should.fail("this transaction should have raised an error")
-  //   } catch (e) {
-  //       //console.log(e.message)
-  //       expect(e.message).toContain("VM Exception while processing transaction: ")
-  //   }
-  // })
+
+  it("should pass the proposal when the shareholder has delegated his vote", async function() {
+    // set time between ICO start and END
+    await testContract.setCurrentTime.sendTransaction(1400000)
+    // user 1 and user 3 should become a shareholder
+    await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
+    await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
+    // user 3 delegates his voting power in field of work 0 (Finance) to user 1
+    await testContract.delegate.sendTransaction(0, accounts[1], {from: accounts[3]})
+    // first create a new Proposal before user can vote
+    await testContract.newProposal.sendTransaction(accounts[1], 10, 0, {from: accounts[1]})
+
+    let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
+        (error, log) => error ? reject(error) : resolve(log)));
+    assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
+    let newProposalArgs = newProposalLog[0].args;
+    // user 1,3 vote for the proposal
+    await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[3]})
+    // user 1 has more voting power then user 3
+    await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[1]})
+    // Set time to after the Proposal period
+    await testContract.setCurrentTime.sendTransaction(2300000)
+    // executes the proposal
+    await testContract.executeProposal.sendTransaction(0)
+    // get the proposal by id
+    const p = await testContract.getProposal.call(newProposalArgs.proposalID);
+    // proposal is finished
+    expect(p[4]).toBe(true)
+    // proposal is passed
+    expect(p[5]).toBe(true)
+  })
+
+  it("should fail the delegation if the tokenholder isn't a shareholder", async function() {
+      // set time between ICO start and END
+    await testContract.setCurrentTime.sendTransaction(1200000)
+    try {
+      // user 9 is not a shareholder because he didn't buy anything
+      // user 9 tries to delegate
+      await testContract.delegate.sendTransaction(0, accounts[9], {from: accounts[9]})
+      should.fail("this transaction should have raised an error")
+    } catch (e) {
+        expect(e.message).toContain("VM Exception while processing transaction: ")
+    }
+  })
   //
   // it("should create a new Proposal", async function() {
   //   await testContract.setCurrentTime.sendTransaction(1600000)
