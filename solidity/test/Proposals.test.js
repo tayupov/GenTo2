@@ -243,39 +243,60 @@ contract('ProposalToken', function(accounts) {
     expect(+await testContract.getNumProposals.call()).toBe(1)
   })
 
-  // it("should compute the right influence of tokenholder", async function() {
-  //   await testContract.setCurrentTime.sendTransaction(1300000)
-  //
-  //   // set the FieldOfWork to Organisational instead of Finance
-  //   await testContract.setFieldOfWork(1)
-  //   // user 1, 5 and 6 become shareholder
-  //   await testContract.buy.sendTransaction({from: accounts[1], value: 10000})
-  //   await testContract.buy.sendTransaction({from: accounts[5], value: 10000})
-  //   await testContract.buy.sendTransaction({from: accounts[6], value: 10000})
-  //
-  //   await testContract.delegate.sendTransaction(1, accounts[1], {from: accounts[5]})
-  //   await testContract.delegate.sendTransaction(1, accounts[1], {from: accounts[6]})
-  //
-  //   console.log('get Influence from user 1: ', +await testContract.getInfluenceOfVoter.call(accounts[1], 1))
-  //   console.log('get Influence from user 5: ', +await testContract.getInfluenceOfVoter.call(accounts[5], 1))
-  //
-  //   // only user 5 delegates to user 1 => result of getInfluenceOfVoter = 540
-  //   expect(+await testContract.getInfluenceOfVoter.call(accounts[1], 1)).toBe(810)
-  // })
-  //
-  // it("should instantiate a new Proposal", async function() {
-  //   await testContract.setCurrentTime.sendTransaction(1300000)
-  //
-  //   await testContract.buy.sendTransaction({from: accounts[0], value: 100000})
-  //   await testContract.newProposal.sendTransaction(accounts[0], 10, 0, {from: accounts[0]})
-  //   let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-  //       (error, log) => error ? reject(error) : resolve(log)));
-  //   assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
-  //   let newProposalArgs = newProposalLog[0].args;
-  //   await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[0]})
-  //   const p = await testContract.getProposal.call(newProposalArgs.proposalID)
-  //   expect(Number(p[1])).toBe(10)
-  // })
+  it("should compute the right influence of shareholder", async function() {
+    // set time between ICO START and END
+    await testContract.setCurrentTime.sendTransaction(1300000)
+    // set the FieldOfWork to 1 (Organisational) instead of Finance
+    await testContract.setFieldOfWork.call(1)
+    // user 1, 5 and 6 become shareholder
+    await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
+    await testContract.buy.sendTransaction({from: accounts[5], value: 1000})
+    await testContract.buy.sendTransaction({from: accounts[6], value: 1000})
+    // user 5,6 delegate in field of work 1 to user 1
+    await testContract.delegate.sendTransaction(1, accounts[1], {from: accounts[5]})
+    await testContract.delegate.sendTransaction(1, accounts[1], {from: accounts[6]})
+    // influence of voting power of user 1 should be 81
+    expect(+await testContract.getInfluenceOfVoter.call(accounts[1], 1)).toBe(81)
+    // influence of voting power of user 5 is 0
+    expect(+await testContract.getInfluenceOfVoter.call(accounts[5], 1)).toBe(0)
+  })
+
+  //it("should compute the influence of shareholder in different field of works")
+
+  it("should instantiate a new proposal", async function() {
+    // set time between ICO START and END
+    await testContract.setCurrentTime.sendTransaction(1300000)
+    // user 0 become a shareholder
+    await testContract.buy.sendTransaction({from: accounts[0], value: 100000})
+    // create a new proposal in field of work 0 (Finance)
+    await testContract.newProposal.sendTransaction(accounts[0], 10, 0, {from: accounts[0]})
+
+    let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
+        (error, log) => error ? reject(error) : resolve(log)));
+
+    assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
+    let newProposalArgs = newProposalLog[0].args;
+    // user 0 votes for the new proposal
+    await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[0]})
+    // set time to after the proposal period
+    await testContract.setCurrentTime.sendTransaction(2300000)
+    // execute the proposals
+    await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
+    // get the proposal by proposal id
+    const p = await testContract.getProposal.call(newProposalArgs.proposalID)
+    // the creator of the proposal is user 0
+    expect(p[0]).toBe(accounts[0])
+    // the amount of token in the poposal should be 10
+    expect(Number(p[1])).toBe(10)
+    // the field of work of the proposal should be 0 (Finance)
+    expect(+await testContract.getFieldOfWork.call()).toBe(0)
+    // the proposal is finished
+    expect(p[4]).toBe(true)
+    // the proposal is passed
+    expect(p[5]).toBe(true)
+
+
+  })
   //
   // it("should pass the Proposal when the tokenholder has delegated his vote", async function() {
   //   // Set time between ICO start and END
