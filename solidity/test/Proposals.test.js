@@ -16,9 +16,6 @@ executeProposal.sendTransaction(voteId, {from})
 newProposal.sendTransaction(account, value, FoW, {from})
 getProposal(proposalID)
 delegate(FoW, to, {from})
-
-set() without call()!
-
 */
 
 contract('ProposalToken', function(accounts) {
@@ -42,7 +39,7 @@ contract('ProposalToken', function(accounts) {
       await testContract.buy.sendTransaction({from: accounts[4], value: 500})
       await testContract.buy.sendTransaction({from: accounts[5], value: 600})
       // create a new proposal
-      await testContract.newProposal.sendTransaction(accounts[0], 100, 1, {from: accounts[0]})
+      await testContract.newProposal.sendTransaction(accounts[0], 100, 0, {from: accounts[0]})
       // is necessary to get proposal id as return value by triggering the NewProposalCreated event
       let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
           (error, log) => error ? reject(error) : resolve(log)));
@@ -61,7 +58,7 @@ contract('ProposalToken', function(accounts) {
       // change FieldOfWork to 2 (Product)
       await testContract.setFieldOfWork.call(2)
       // create a new proposal
-      await testContract.newProposal.sendTransaction(accounts[1], 100, 1, {from: accounts[1]})
+      await testContract.newProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
       // similar for the second proposal
       let newProposalLog2 = await new Promise((resolve, reject) => newProposalEventListener.get(
           (error, log) => error ? reject(error) : resolve(log)));
@@ -219,7 +216,7 @@ contract('ProposalToken', function(accounts) {
     expect(p[5]).toBe(true)
   })
 
-  it("should check whether the inital Proposal is not passed and not finished", async function() {
+  it("should check whether the Proposal is not passed and not finished", async function() {
     // set time between ICO START and END
     await testContract.setCurrentTime.sendTransaction(1300000)
     // user 1 become a shareholder
@@ -260,8 +257,6 @@ contract('ProposalToken', function(accounts) {
     // influence of voting power of user 5 is 0
     expect(+await testContract.getInfluenceOfVoter.call(accounts[5], 1)).toBe(0)
   })
-
-  //it("should compute the influence of shareholder in different field of works")
 
   it("should instantiate a new proposal", async function() {
     // set time between ICO START and END
@@ -367,7 +362,7 @@ contract('ProposalToken', function(accounts) {
     expect(!!+await testContract.isShareholder.call(accounts[1])).toBe(true)
   })
 
-  it("schould reject the proposal with 1/3 confirmed votes", async function() {
+  it("should reject the proposal with 1/3 confirmed votes", async function() {
     // set time between ICO start and END
     await testContract.setCurrentTime.sendTransaction(1300000)
     // user 0,1,2 become shareholder
@@ -478,7 +473,7 @@ contract('ProposalToken', function(accounts) {
     expect(+await testContract.getNumProposals.call()).toBe(1)
   })
 
-  it("should allow the delegation to other users", async function() {
+  it("should compute the influence of shareholder in different field of works", async function() {
       // set time between ICO start and END
       await testContract.setCurrentTime.sendTransaction(1200000)
       // user 1,2,3 become shareholder
@@ -500,42 +495,40 @@ contract('ProposalToken', function(accounts) {
       // user 1 and user 3 vote for the proposal
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[1]})
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[3]})
-      // set time to after the Proposal period
-      await testContract.setCurrentTime.sendTransaction(2300000)
-      // execute the proposal
-      await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
-      // get the proposal by id
-      const p = await testContract.getProposal.call(newProposalArgs.proposalID);
-      // proposal should pass with 55 %
-      expect(Number(p[6])).toBe(55)
-      // proposal is finished
-      expect(p[4]).toBe(true)
 
       // set field of work to 0 (Finance)
       await testContract.setFieldOfWork.call(0)
-      // // create another proposal
-      // await testContract.newProposal.sendTransaction(accounts[0], 200, 0, {from: accounts[0]})
-      //
-      // let newProposalLog2 = await new Promise((resolve, reject) => newProposalEventListener.get(
-      //     (error, log) => error ? reject(error) : resolve(log)));
-      // assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
-      // let newProposalArgs2 = newProposalLog[0].args;
+      // create another proposal
+      await testContract.newProposal.sendTransaction(accounts[2], 200, 0, {from: accounts[2]})
 
-      // user 1,2 delegate to user 0 in field of work 0
-      // await testContract.delegate.sendTransaction(0, accounts[0], {from: accounts[1]})
-      // await testContract.delegate.sendTransaction(0, accounts[0], {from: accounts[2]})
-      // // user 1 and user 3 vote for the proposal
-      // await testContract.vote.sendTransaction(newProposalArgs2.proposalID, true, {from: accounts[0]})
-      // await testContract.vote.sendTransaction(newProposalArgs2.proposalID, false, {from: accounts[1]})
-      // await testContract.vote.sendTransaction(newProposalArgs2.proposalID, false, {from: accounts[2]})
-      // // set time to after the Proposal period
-      // await testContract.setCurrentTime.sendTransaction(2300000)
-      // // execute the proposal
-      // await testContract.executeProposal.sendTransaction(newProposalArgs2.proposalID)
-      // // get proposal by id
-      // const p2 = await testContract.getProposal.call(newProposalArgs2.proposalID);
-      // // proposal should be passed with 88 %
-      // exepct(p2[6]).toBe(88)
+      let newProposalLog2 = await new Promise((resolve, reject) => newProposalEventListener.get(
+          (error, log) => error ? reject(error) : resolve(log)));
+      assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
+      let newProposalArgs2 = newProposalLog2[0].args;
+
+      //user 1,2 delegate to user 0 in field of work 0
+      await testContract.delegate.sendTransaction(0, accounts[2], {from: accounts[1]})
+      await testContract.delegate.sendTransaction(0, accounts[2], {from: accounts[3]})
+      // user 1 and user 3 vote for the proposal
+      await testContract.vote.sendTransaction(newProposalArgs2.proposalID, false, {from: accounts[1]})
+      await testContract.vote.sendTransaction(newProposalArgs2.proposalID, true, {from: accounts[2]})
+      await testContract.vote.sendTransaction(newProposalArgs2.proposalID, false, {from: accounts[3]})
+      // set time to after the Proposal period
+      await testContract.setCurrentTime.sendTransaction(2300000)
+      // execute the first proposal
+      await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
+      // execute the second proposal
+      await testContract.executeProposal.sendTransaction(newProposalArgs2.proposalID)
+      //get the first proposal by id
+      const p1 = await testContract.getProposal.call(newProposalArgs.proposalID);
+      // get the second proposal by id
+      const p2 = await testContract.getProposal.call(newProposalArgs2.proposalID);
+      // first proposal should should have 55 token influence
+      expect(Number(p1[6])).toBe(55)
+      // first proposal is finished
+      expect(p1[4]).toBe(true)
+      // second proposal should be passed with token influence
+      expect(Number(p2[6])).toBe(100)
   })
 
   it("delegation in one field should not affect the others", async function() {
@@ -569,7 +562,7 @@ contract('ProposalToken', function(accounts) {
       await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
       // get the proposal by id
       const p = await testContract.getProposal.call(newProposalArgs.proposalID);
-      // proposal should pass with 33 %
+      // proposal should pass with 33 token influence
       expect(Number(p[6])).toBe(33)
       // proposal is finished
       expect(p[4]).toBe(true)
@@ -603,9 +596,8 @@ contract('ProposalToken', function(accounts) {
       await testContract.delegate.sendTransaction(2, accounts[0], {from: accounts[2]})
       // Get proposal details
       const p = await testContract.getProposal.call(newProposalArgs.proposalID);
-      // proposal should pass with 33 %
+      // proposal should pass with 33 token influence
       expect(Number(p[6])).toBe(33)
-
   })
 
   it("users that are not shareholders should not be able to vote", async function() {
@@ -628,57 +620,45 @@ contract('ProposalToken', function(accounts) {
       await expect(testContract.vote.sendTransaction(0, false, {from: accounts[2]})).rejects.toEqual(expect.any(Error))
       await expect(testContract.vote.sendTransaction(0, true, {from: accounts[3]})).rejects.toEqual(expect.any(Error))
   })
-  //
-  // it("tests that user become shareholer only if they buy some shares", async function() {
-  //   await testContract.setCurrentTime.sendTransaction(1200000)
-  //   // user 7 isn't a shareholder because he didn't buy anything
-  //   const isSharehoder1 = await testContract.isShareholder.call(accounts[7]);
-  //   // !! converts 0 to false
-  //   expect(!!isSharehoder1).toBe(false);
-  //   // user 2 becomes a shareholder
-  //   await testContract.buy.sendTransaction({from: accounts[2],value: 4000})
-  //
-  //   const isSharehoder2 = await testContract.isShareholder.call(accounts[2]);
-  //   expect(!!isSharehoder2).toBe(true);
-  // })
-  // it("schould delegate properly", async function() {
-  //       await testContract.setCurrentTime.sendTransaction(1200000)
-  //
-  //       // user 1,2,3,4 become shareholder evenly
-  //       await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
-  //       await testContract.buy.sendTransaction({from: accounts[2], value: 1000})
-  //       await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
-  //       await testContract.buy.sendTransaction({from: accounts[4], value: 1000})
-  //
-  //       // Field of work 1 influence is distributed evenly
-  //       expect(+await testContract.getInfluenceOfVoter.call(accounts[1], 1)).toBe(35)
-  //       expect(+await testContract.getInfluenceOfVoter.call(accounts[2], 1)).toBe(35)
-  //       expect(+await testContract.getInfluenceOfVoter.call(accounts[3], 1)).toBe(35)
-  //       expect(+await testContract.getInfluenceOfVoter.call(accounts[4], 1)).toBe(35)
-  //
-  //
-  //       // Delegate influence from field of work from account 1 to 2
-  //       await testContract.delegate.sendTransaction(1, accounts[2], {from: accounts[1]})
-  //
-  //       // Test field of work 1 incluence
-  //       expect(+await testContract.getInfluenceOfVoter.call(accounts[1], 1)).toBe(0)
-  //       expect(+await testContract.getInfluenceOfVoter.call(accounts[2], 1)).toBe(70)
-  //       expect(+await testContract.getInfluenceOfVoter.call(accounts[3], 1)).toBe(35)
-  //       expect(+await testContract.getInfluenceOfVoter.call(accounts[4], 1)).toBe(35)
-  //
-  //       // Test other field of work (To see if it is untouched)
-  //       expect(+await testContract.getInfluenceOfVoter.call(accounts[1], 2)).toBe(35)
-  //       expect(+await testContract.getInfluenceOfVoter.call(accounts[2], 2)).toBe(35)
-  //       expect(+await testContract.getInfluenceOfVoter.call(accounts[3], 2)).toBe(35)
-  //       expect(+await testContract.getInfluenceOfVoter.call(accounts[4], 2)).toBe(35)
-  //
-  // })
+
+  it("tests that user become shareholer only if they buy some shares", async function() {
+    // set time between ICO START and END
+    await testContract.setCurrentTime.sendTransaction(1200000)
+    // user 7 isn't a shareholder because he didn't buy anything
+    const isSharehoder1 = await testContract.isShareholder.call(accounts[7]);
+    // !! converts 0 to false
+    expect(!!isSharehoder1).toBe(false);
+    // user 2 becomes a shareholder
+    await testContract.buy.sendTransaction({from: accounts[2],value: 4000})
+    // checks that user 2 is a shareholder
+    const isSharehoder2 = await testContract.isShareholder.call(accounts[2]);
+    expect(!!isSharehoder2).toBe(true);
+  })
+
+  it("should delegate properly", async function() {
+    // set time between ICO START and END
+    await testContract.setCurrentTime.sendTransaction(1200000)
+    // user 1,2,3,4 become shareholder evenly
+    await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
+    await testContract.buy.sendTransaction({from: accounts[2], value: 1000})
+    await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
+    await testContract.buy.sendTransaction({from: accounts[4], value: 1000})
+    // field of work 1 influence is distributed evenly
+    expect(+await testContract.getInfluenceOfVoter.call(accounts[1], 1)).toBe(35)
+    expect(+await testContract.getInfluenceOfVoter.call(accounts[2], 1)).toBe(35)
+    expect(+await testContract.getInfluenceOfVoter.call(accounts[3], 1)).toBe(35)
+    expect(+await testContract.getInfluenceOfVoter.call(accounts[4], 1)).toBe(35)
+    // delegate influence from field of work 1 (Organisational) from account 1 to 2
+    await testContract.delegate.sendTransaction(1, accounts[2], {from: accounts[1]})
+    // Test field of work 1 incluence
+    expect(+await testContract.getInfluenceOfVoter.call(accounts[1], 1)).toBe(0)
+    expect(+await testContract.getInfluenceOfVoter.call(accounts[2], 1)).toBe(70)
+    expect(+await testContract.getInfluenceOfVoter.call(accounts[3], 1)).toBe(35)
+    expect(+await testContract.getInfluenceOfVoter.call(accounts[4], 1)).toBe(35)
+    // Test other field of work (To see if it is untouched)
+    expect(+await testContract.getInfluenceOfVoter.call(accounts[1], 2)).toBe(35)
+    expect(+await testContract.getInfluenceOfVoter.call(accounts[2], 2)).toBe(35)
+    expect(+await testContract.getInfluenceOfVoter.call(accounts[3], 2)).toBe(35)
+    expect(+await testContract.getInfluenceOfVoter.call(accounts[4], 2)).toBe(35)
+  })
 });
-
-
-/*
-await testContract.buy.sendTransaction({from: accounts[0], value: 10})
-
-expect(+await getInfluenceOfVoter({from: accounts[0]}, 0)).toContain(0)
-expect(+await getInfluenceOfVoter({from: accounts[1]}, 0)).toContain(10)
-*/
