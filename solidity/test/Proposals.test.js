@@ -330,7 +330,7 @@ contract('ProposalToken', function(accounts) {
   })
 
   it("should fail the delegation if the tokenholder isn't a shareholder", async function() {
-      // set time between ICO start and END
+    // set time between ICO start and END
     await testContract.setCurrentTime.sendTransaction(1200000)
     try {
       // user 9 is not a shareholder because he didn't buy anything
@@ -341,30 +341,31 @@ contract('ProposalToken', function(accounts) {
         expect(e.message).toContain("VM Exception while processing transaction: ")
     }
   })
-  //
-  // it("should create a new Proposal", async function() {
-  //   await testContract.setCurrentTime.sendTransaction(1600000)
-  //   var numberOfInitialProposals = 0;
-  //
-  //   await testContract.buy.sendTransaction({from: accounts[0], value: 10000})
-  //   //console.log('getNumProposals: ', +await testContract.getNumProposals())
-  //   //console.log(+await testContract.newProposal.call(accounts[0], 100, 0))
-  //   await testContract.newProposal.sendTransaction(accounts[0], 100, 0, {from: accounts[0]})
-  //   expect(numberOfInitialProposals + 1).toBe(+await testContract.getNumProposals())
-  // })
-  //
-  //
-  // it("should check that only if the user buys token he becomes a shareholder", async function() {
-  //   await testContract.setCurrentTime.sendTransaction(1600000)
-  //
-  //   // user 1 become a shareholder
-  //   await testContract.buy.sendTransaction({from: accounts[1], value: web3.toWei(10, 'Gwei')})
-  //
-  //   // check whether the account is a shareholder
-  //   // !! converts 0 or 1 to false or true
-  //   expect(!!+await testContract.isShareholder.call(accounts[5])).toBe(false)
-  //   expect(!!+await testContract.isShareholder.call(accounts[1])).toBe(true)
-  // })
+
+  it("should create a new proposal", async function() {
+    // set time between ICO start and END
+    await testContract.setCurrentTime.sendTransaction(1600000)
+    // used for counting the porposals
+    var numberOfInitialProposals = 0;
+    // user 0 becomes a shareholder
+    await testContract.buy.sendTransaction({from: accounts[0], value: 10000})
+    // create a new proposal
+    await testContract.newProposal.sendTransaction(accounts[0], 100, 0, {from: accounts[0]})
+    // number of proposals should be 1
+    expect(numberOfInitialProposals + 1).toBe(+await testContract.getNumProposals())
+  })
+
+
+  it("should check that only if the user buys token he becomes a shareholder", async function() {
+    // set time between ICO start and END
+    await testContract.setCurrentTime.sendTransaction(1600000)
+    // user 1 becomes a shareholder
+    await testContract.buy.sendTransaction({from: accounts[1], value: web3.toWei(10, 'Gwei')})
+    // check whether the account is a shareholder
+    // !! converts 0 or 1 to false or true
+    expect(!!+await testContract.isShareholder.call(accounts[5])).toBe(false)
+    expect(!!+await testContract.isShareholder.call(accounts[1])).toBe(true)
+  })
   //
   // it("schould reject Proposals with 1/3 confirmed votes", async function() {
   //   // Set time between ICO start and END
