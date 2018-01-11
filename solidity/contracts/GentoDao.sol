@@ -24,7 +24,7 @@ contract GentoDao is Ico, Proposals {
     event MyTransfer(address indexed to, uint256 value, uint256 remainingSupply);
 
     modifier daoActive {
-        // Dao is active once the ico is done
+        // DAO is active once the ICO is done
         require(saleEnd <= currentTime());
         _;
     }
@@ -115,10 +115,10 @@ contract GentoDao is Ico, Proposals {
         delegations[msg.sender][uint(fieldOfWork)] = recipient;
     }
 
-    function claimPayout(uint proposalNumber) daoActive public returns (uint amount) {
+    function claimPayout(uint proposalNumber) public daoActive returns (uint amount) {
         Proposal storage proposal = proposals[proposalNumber];
 
-        require(proposal.finished && proposal.proposalPassed && proposal.recipient == msg.sender);
+        require(proposal.finished && proposal.proposalPassed /*&& proposal.recipient == msg.sender*/);
 
         balances[msg.sender] += proposal.amount;
 
