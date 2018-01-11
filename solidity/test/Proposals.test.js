@@ -30,7 +30,7 @@ contract('ProposalToken', function(accounts) {
 
   it("should check the voting for different Field of Works", async function() {
       // set time between ICO START and END
-      await testContract.setCurrentTime.sendTransaction(1300000)
+      await testContract.setCurrentTime.sendTransaction(1200000)
       // user 0,1,2,3,4,5,6 become shareholders
       await testContract.buy.sendTransaction({from: accounts[0], value: 100})
       await testContract.buy.sendTransaction({from: accounts[1], value: 200})
@@ -38,6 +38,8 @@ contract('ProposalToken', function(accounts) {
       await testContract.buy.sendTransaction({from: accounts[3], value: 400})
       await testContract.buy.sendTransaction({from: accounts[4], value: 500})
       await testContract.buy.sendTransaction({from: accounts[5], value: 600})
+      // set time to after ICO
+      await testContract.setCurrentTime.sendTransaction(2200000)
       // create a new proposal
       await testContract.newProposal.sendTransaction(accounts[0], 100, 0, {from: accounts[0]})
       // is necessary to get proposal id as return value by triggering the NewProposalCreated event
@@ -110,6 +112,8 @@ contract('ProposalToken', function(accounts) {
     const numberOfProposals = 0;
     // user 1 become a shareholder
     await testContract.buy.sendTransaction({from: accounts[1], value: 10000})
+    // set time to after ICO
+    await testContract.setCurrentTime.sendTransaction(2200000)
     // create 3 new Proposals
     await testContract.newProposal.sendTransaction(accounts[1], 100, 1, {from: accounts[1]})
     expect(+await testContract.getNumProposals.call()).toBe(1 + numberOfProposals)
@@ -129,6 +133,8 @@ contract('ProposalToken', function(accounts) {
       await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
       await testContract.buy.sendTransaction({from: accounts[2], value: 1000})
       await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
+      // set time to after ICO
+      await testContract.setCurrentTime.sendTransaction(2200000)
       // create a new proposal
       await testContract.newProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
       // is necessary to get proposal id as return value by triggering the NewProposalCreated event
@@ -143,7 +149,7 @@ contract('ProposalToken', function(accounts) {
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[2]})
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[3]})
       // set time to after the proposal period
-      await testContract.setCurrentTime.sendTransaction(1300000)
+      await testContract.setCurrentTime.sendTransaction(6300000)
       // execute the proposal
       await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
       // get the proposal by proposal id
@@ -161,6 +167,8 @@ contract('ProposalToken', function(accounts) {
       await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
       await testContract.buy.sendTransaction({from: accounts[2], value: 1000})
       await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
+      // set time to after ICO
+      await testContract.setCurrentTime.sendTransaction(2200000)
       // create a new proposal
       await testContract.newProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
       // is necessary to get proposal id as return value by triggering the NewProposalCreated event
@@ -175,7 +183,7 @@ contract('ProposalToken', function(accounts) {
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[2]})
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[3]})
       // set time to after the proposal period
-      await testContract.setCurrentTime.sendTransaction(1300000)
+      await testContract.setCurrentTime.sendTransaction(6300000)
       // ececute the proposal
       await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
       // get the proposal by proposal id
@@ -191,6 +199,8 @@ contract('ProposalToken', function(accounts) {
     await testContract.setCurrentTime.sendTransaction(1200000)
     // user 1 become a shareholder
     await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
+    // set time to after ICO
+    await testContract.setCurrentTime.sendTransaction(2200000)
     //create a new Proposal
     await testContract.newProposal.sendTransaction(accounts[1], 103, 2, {from: accounts[1]})
     let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
@@ -201,7 +211,7 @@ contract('ProposalToken', function(accounts) {
     // user 1 votes for the proposal
     await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[1]})
     // set time to after the proposal period
-    await testContract.setCurrentTime.sendTransaction(1300000)
+    await testContract.setCurrentTime.sendTransaction(7300000)
     // ececute the proposal
     await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
     // get the proposal by proposal id
@@ -221,6 +231,8 @@ contract('ProposalToken', function(accounts) {
     await testContract.setCurrentTime.sendTransaction(1300000)
     // user 1 become a shareholder
     await testContract.buy.sendTransaction({from: accounts[1], value: 100000})
+    // set time to after ICO
+    await testContract.setCurrentTime.sendTransaction(2200000)
     // create a new proposal for field of work 0 (Finance)
     await testContract.newProposal.sendTransaction(accounts[1], 29, 0, {from: accounts[1]})
 
@@ -263,6 +275,8 @@ contract('ProposalToken', function(accounts) {
     await testContract.setCurrentTime.sendTransaction(1300000)
     // user 0 become a shareholder
     await testContract.buy.sendTransaction({from: accounts[0], value: 100000})
+    // set time to after ICO
+    await testContract.setCurrentTime.sendTransaction(2200000)
     // create a new proposal in field of work 0 (Finance)
     await testContract.newProposal.sendTransaction(accounts[0], 10, 0, {from: accounts[0]})
 
@@ -301,6 +315,8 @@ contract('ProposalToken', function(accounts) {
     await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
     // user 3 delegates his voting power in field of work 0 (Finance) to user 1
     await testContract.delegate.sendTransaction(0, accounts[1], {from: accounts[3]})
+    // set time to after ICO
+    await testContract.setCurrentTime.sendTransaction(2200000)
     // first create a new Proposal before user can vote
     await testContract.newProposal.sendTransaction(accounts[1], 10, 0, {from: accounts[1]})
 
@@ -312,7 +328,7 @@ contract('ProposalToken', function(accounts) {
     await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[3]})
     // user 1 has more voting power then user 3
     await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[1]})
-    // Set time to after the Proposal period
+    // set time to after the Proposal period
     await testContract.setCurrentTime.sendTransaction(2300000)
     // executes the proposal
     await testContract.executeProposal.sendTransaction(0)
@@ -338,12 +354,14 @@ contract('ProposalToken', function(accounts) {
   })
 
   it("should create a new proposal", async function() {
-    // set time between ICO start and END
+    // set time between ICO START and END
     await testContract.setCurrentTime.sendTransaction(1600000)
     // used for counting the porposals
     var numberOfInitialProposals = 0;
     // user 0 becomes a shareholder
     await testContract.buy.sendTransaction({from: accounts[0], value: 10000})
+    // set time to after ICO
+    await testContract.setCurrentTime.sendTransaction(2200000)
     // create a new proposal
     await testContract.newProposal.sendTransaction(accounts[0], 100, 0, {from: accounts[0]})
     // number of proposals should be 1
@@ -369,6 +387,8 @@ contract('ProposalToken', function(accounts) {
     await testContract.buy.sendTransaction({from:accounts[0], value: 10000})
     await testContract.buy.sendTransaction({from:accounts[1], value: 10000})
     await testContract.buy.sendTransaction({from:accounts[2], value: 10000})
+    // set time to after ICO
+    await testContract.setCurrentTime.sendTransaction(2200000)
     // create a new proposal
     await testContract.newProposal.sendTransaction(accounts[1], 100, 0, {from: accounts[1]})
 
@@ -380,8 +400,8 @@ contract('ProposalToken', function(accounts) {
     await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[0]})
     await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[1]})
     await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[2]})
-    // set time to after the üroposal period
-    await testContract.setCurrentTime.sendTransaction(1400000)
+    // set time to after the proposal period
+    await testContract.setCurrentTime.sendTransaction(3400000)
     // execute the proposal -> it's requiered to pass the time to the end of proposal's period before executing
     await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
     // get the proposal by id
@@ -393,7 +413,7 @@ contract('ProposalToken', function(accounts) {
   })
 
   it("should approve the proposal with 3/5 confirmed votes", async function() {
-    // set time between ICO start and END
+    // set time between ICO START and END
     await testContract.setCurrentTime.sendTransaction(1400000)
     // user 0,1,2,3,4 become shareholder
     await testContract.buy.sendTransaction({from: accounts[0], value: 10000})
@@ -401,6 +421,8 @@ contract('ProposalToken', function(accounts) {
     await testContract.buy.sendTransaction({from: accounts[2], value: 10000})
     await testContract.buy.sendTransaction({from: accounts[3], value: 10000})
     await testContract.buy.sendTransaction({from: accounts[4], value: 10000})
+    // set time to after ICO
+    await testContract.setCurrentTime.sendTransaction(2200000)
     // create a new proposal
     await testContract.newProposal.sendTransaction(accounts[0], 100, 0, {from: accounts[0]})
 
@@ -415,7 +437,7 @@ contract('ProposalToken', function(accounts) {
     await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[3]})
     await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[4]})
     // set time to after the proposal period
-    await testContract.setCurrentTime.sendTransaction(1500000)
+    await testContract.setCurrentTime.sendTransaction(4500000)
     // execute the Proposals
     await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
     // get the proposal
@@ -433,7 +455,8 @@ contract('ProposalToken', function(accounts) {
     await testContract.buy.sendTransaction({from: accounts[4], value: 10000})
     await testContract.buy.sendTransaction({from: accounts[5], value: 10000})
     await testContract.buy.sendTransaction({from: accounts[7], value: 10000})
-
+    // set time to after ICO
+    await testContract.setCurrentTime.sendTransaction(2200000)
     // testing that in every test case a new ICO is used and the number of proposals gets refreshed
     const numberOfInitialProposals = +await testContract.getNumProposals.call()
     expect(numberOfInitialProposals).toBe(0)
@@ -452,6 +475,8 @@ contract('ProposalToken', function(accounts) {
     await testContract.buy.sendTransaction({from: accounts[0], value: 10000})
     await testContract.buy.sendTransaction({from: accounts[1], value: 10000})
     await testContract.buy.sendTransaction({from: accounts[2], value: 10000})
+    // set time to after ICO
+    await testContract.setCurrentTime.sendTransaction(2200000)
     // create a new proposal
     await testContract.newProposal.sendTransaction(accounts[2], 10, 0, {from: accounts[2]})
 
@@ -514,7 +539,7 @@ contract('ProposalToken', function(accounts) {
       await testContract.vote.sendTransaction(newProposalArgs2.proposalID, true, {from: accounts[2]})
       await testContract.vote.sendTransaction(newProposalArgs2.proposalID, false, {from: accounts[3]})
       // set time to after the Proposal period
-      await testContract.setCurrentTime.sendTransaction(2300000)
+      await testContract.setCurrentTime.sendTransaction(6300000)
       // execute the first proposal
       await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
       // execute the second proposal
@@ -556,8 +581,8 @@ contract('ProposalToken', function(accounts) {
       // user 1 and user 3 vote
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[1]})
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[3]})
-      // Set time to after the Proposal period
-      await testContract.setCurrentTime.sendTransaction(2300000)
+      // set time to after the Proposal period
+      await testContract.setCurrentTime.sendTransaction(3300000)
       // execute the proposal
       await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
       // get the proposal by id
@@ -575,7 +600,7 @@ contract('ProposalToken', function(accounts) {
       await testContract.buy.sendTransaction({from: accounts[1], value: 4000})
       await testContract.buy.sendTransaction({from: accounts[2], value: 3000})
       await testContract.buy.sendTransaction({from: accounts[3], value: 2000})
-      // Set time to after ICO
+      // set time to after ICO
       await testContract.setCurrentTime.sendTransaction(2200000)
       // set FieldOfWork to Product
       await testContract.setFieldOfWork.call(2)
@@ -588,8 +613,8 @@ contract('ProposalToken', function(accounts) {
       // User 1 and User 3 Vote
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[1]})
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[3]})
-      // Set time to after the Proposal period
-      await testContract.setCurrentTime.sendTransaction(2300000)
+      // set time to after the Proposal period
+      await testContract.setCurrentTime.sendTransaction(3900000)
       // End Proposal
       await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
       // User 2 delegates power in Field of Work 2 to User 3
@@ -601,11 +626,11 @@ contract('ProposalToken', function(accounts) {
   })
 
   it("users that are not shareholders should not be able to vote", async function() {
-      // Set time between ICO start and END
+      // set time between ICO start and END
       await testContract.setCurrentTime.sendTransaction(1200000)
       // Let three users buy token
       await testContract.buy.sendTransaction({from: accounts[1], value: 4000})
-      // Set time to after ICO
+      // set time to after ICO
       await testContract.setCurrentTime.sendTransaction(2200000)
       // set FieldOfWork to Product
       await testContract.setFieldOfWork.call(2)
