@@ -2,14 +2,11 @@ import React from 'react';
 import IPFS from 'ipfs';
 
 import DAOCreator from './DAOCreator';
-
 import steps from './steps';
 import web3 from 'utils/web3';
+
+import { createOrganization } from 'provider/DAOCreatorProvider';
 import { adjustStepZilla } from 'utils/stepzilla';
-
-//import GenToFactory from 'assets/contracts/GenToFactory.json';
-//import { createGentoFactoryInstance } from 'utils/contractInstances';
-
 import { Buffer } from 'buffer';
 
 export default class DAOCreatorContainer extends React.Component {
@@ -30,7 +27,7 @@ export default class DAOCreatorContainer extends React.Component {
 			minPartic: null,
 			decidingPercentage: null,
 			tokenName: null,
-			tickerSymbol: null,
+			symbol: null,
 			totalSupply: null,
 			saleStart: null,
 			saleEnd: null,
@@ -42,6 +39,16 @@ export default class DAOCreatorContainer extends React.Component {
 
 	componentDidMount() {
 		adjustStepZilla(steps, this)
+		const myInput = {
+			totalSupply: Math.pow(10,18),
+			symbol: "ABC",
+			name: "myName",
+			startPrice: 10,
+			endPrice: 20,
+			saleStart: Date.now(),
+			saleEnd: Date.now()+1000
+		}
+		createOrganization(myInput)
 	}
 
 	async handleCreate() {
@@ -51,8 +58,6 @@ export default class DAOCreatorContainer extends React.Component {
 				proposalIPFSHash: uploadResult.hash
 			})
 		}
-
-		console.log(this.state)
 	}
 
 	uploadProposalToIPFS() {

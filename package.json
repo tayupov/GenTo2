@@ -37,7 +37,7 @@
     "eject": "react-scripts eject",
     "test:truffle": "cd solidity && truffle test",
     "test:coverage": "./node_modules/.bin/solidity-coverage",
-    "build:contracts": "cd solidity && truffle migrate && rimraf ../src/assets/contracts/* && cp -R build/contracts ../src/assets"
+    "build:contracts": "cd solidity && truffle migrate && rimraf ../src/assets/contracts/* && cp -R build/contracts ../src/assets/contracts/"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

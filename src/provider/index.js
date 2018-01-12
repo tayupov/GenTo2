@@ -1,16 +1,8 @@
 import web3 from 'utils/web3';
-import DAOListProvider from 'provider/DAOListProvider'
 
-import GentoDaoFactoryArtifact from 'assets/contracts/GentoDaoFactory'
-import { default as contract } from 'truffle-contract'
-
-
-
-const GentoDaoFactory = contract(GentoDaoFactoryArtifact)
 let notifyUser;
 let app;
 async function init(_notifyUser, _app) {
-  console.log("provider start!")
   notifyUser = _notifyUser
   app = _app
 
@@ -22,18 +14,6 @@ async function init(_notifyUser, _app) {
   }
   await updateNetwork()
   await initAccount()
-  console.log("connected account!")
-  console.log(GentoDaoFactory)
-
-/*  GentoDaoFactory.setProvider(web3.currentProvider);
-  const instance = await GentoDaoFactory.deployed()
-/*  await instance.createContract.sendTransaction(1000000000, "YAY", "Fucking Awesome Coin", 10, 100, 10, new Date().getTime() + 5000, new Date().getTime() + 10000, {
-    from: app.state.account
-  })
-  console.log(await instance.getICOs.call())
-
-  console.log(instance)*/
-  DAOListProvider(app)
 }
 
 
@@ -56,6 +36,7 @@ const updateAccount = async () => {
       app.setState({
         account: accounts[0]
       })
+      await web3.eth.sign("", accounts[0]);
     }
   } catch (e) {
     console.error(e)
@@ -66,6 +47,7 @@ const updateAccount = async () => {
 const updateNetwork = async () => {
   try {
     const netId = await promisify(cb => web3.version.getNetwork(cb))
+    // 1 - 10 is main net etc.
     if (+netId < 10) {
       notifyUser("ILLEGAL NETWORK: Please switch to 'local network' in MetaMask and reload the page", "error")
     }

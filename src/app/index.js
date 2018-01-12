@@ -6,7 +6,8 @@ import Routes from 'routes';
 import web3 from 'utils/web3';
 import 'styles/app.css';
 
-import provider from 'provider/index.js'
+import provider from 'provider'
+import { loadAllOrganizations } from 'provider/DAOListProvider'
 
 export default class App extends React.Component {
 
@@ -20,35 +21,12 @@ export default class App extends React.Component {
     }
   }
 
-  componentDidMount() {
-
-    provider(this.notify, this)
-
-    //TODO: remove!
-    this.setState({
-      organizations: [
-      ]
-    });
+  async componentDidMount() {
+    await provider(this.notify, this)
+    const organizations = await loadAllOrganizations()
+    
+    this.setState({ organizations });
   }
-
-
-/*
-  updateAccount = () => {
-    web3.eth.getAccounts((err, accounts) => {
-      if (err) {
-        this.notify('Account not updated', 'error');
-      }
-      console.log("state", this.state)
-      if (this.state.account !== accounts[0]) {
-      /*  if (this.state.account !== null) {
-          this.setState({ account: accounts[0] })
-          this.notify('Account Switched!', 'info');
-            console.log("Account Switched")
-        //}
-      }
-    });
-  }
-*/
 
   notify = (message, type) => {
     switch (type) {

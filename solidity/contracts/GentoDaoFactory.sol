@@ -13,22 +13,21 @@ contract GentoDaoFactory {
     }
 
     function createContract(uint256 totalSupply,
-                            string _symbol, 
-                            string _name,
-                            uint256 _buyPriceStart,
-                            uint256 _buyPriceEnd,
-                            uint256 _sellPrice,
-                            uint256 _saleStart,
-                            uint256 _saleEnd) returns (address contractAddress){
+                            string symbol, 
+                            string name,
+                            uint256 startPrice,
+                            uint256 endPrice,
+                            uint256 saleStart,
+                            uint256 saleEnd) returns (address contractAddress){
 
         GentoDao gentoDao = new GentoDao(totalSupply,
-                                                     _symbol,
-                                                     _name,
-                                                     _buyPriceStart,
-                                                     _buyPriceEnd,
-                                                     _sellPrice,
-                                                     _saleStart,
-                                                     _saleEnd,
+                                                     symbol,
+                                                     name,
+                                                     startPrice,
+                                                     endPrice,
+                                                     0,
+                                                     saleStart,
+                                                     saleEnd,
                                                      false);
 
         address auctionAddress = address(gentoDao);
