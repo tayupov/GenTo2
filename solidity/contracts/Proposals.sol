@@ -12,6 +12,11 @@ contract Proposals {
 
     FieldOfWork public fow = FieldOfWork.Finance;
 
+    mapping(address => uint256) financepoints;
+    mapping(address => uint256) productpoints;
+    mapping(address => uint256) orgpoints;
+    mapping(address => uint256) partnerpoints;    
+
 
     struct Proposal {
         address recipient;
@@ -145,6 +150,15 @@ contract Proposals {
         for (uint i = 0; i < proposal.votes.length; ++i) {
             Vote storage v = proposal.votes[i];
             uint voteWeight = getInfluenceOfVoter(v.voter, proposal.fieldOfWork);
+            if (proposal.fieldOfWork == FieldOfWork.Finance) {
+                financepoints[v.voter] += 5;
+            } else if (proposal.fieldOfWork == FieldOfWork.Organisational) {
+                orgpoints[v.voter] +=5;
+            } else if (proposal.fieldOfWork == FieldOfWork.Product) {
+                productpoints[v.voter] +=5;
+            } else if (proposal.fieldOfWork == FieldOfWork.Partnership) {
+                partnerpoints[v.voter] +=5;
+            }
             if (v.inSupport) {
                 approve += voteWeight;
             } else {
