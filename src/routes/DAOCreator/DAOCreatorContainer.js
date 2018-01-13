@@ -40,39 +40,55 @@ export default class DAOCreatorContainer extends React.Component {
 	componentDidMount() {
 		adjustStepZilla(steps, this)
 		const myInput = {
-			totalSupply: Math.pow(10,18),
+			totalSupply: Math.pow(10, 18),
 			symbol: "ABC",
 			name: "myName",
 			startPrice: 10,
 			endPrice: 20,
 			saleStart: Date.now(),
-			saleEnd: Date.now()+1000
+			saleEnd: Date.now() + 1000
 		}
-		createOrganization(myInput)
+		console.log(this.props.account)
+		if (this.props.account) {
+			createOrganization(myInput, this.props.account)
+		}
+
 	}
 
 	async handleCreate() {
 		const uploadResult = await this.uploadProposalToIPFS();
-		if (uploadResult.hash) {
+		if (uploadResult.success) {
 			this.setState({
-				proposalIPFSHash: uploadResult.hash
+				proposalIPFSHash: uploadResult.file.hash
 			})
 		}
+		console.log(this.state)
 	}
 
 	uploadProposalToIPFS() {
 		return new Promise((resolve, reject) => {
 
-			const ipfsNode = new IPFS();
-			const content = Buffer.from(this.state.proposalArrayBuffer);
+			if (this.state.proposalArrayBuffer.length > 0) {
+				const ipfsNode = new IPFS();
+				const content = Buffer.from(this.state.proposalArrayBuffer);
 
-			ipfsNode.on('ready', () => {
-				ipfsNode.files.add({ content }, (err, files) => {
-					if (err) { reject(err) }
-					resolve(files[0])
+				ipfsNode.on('ready', () => {
+					ipfsNode.files.add({ content }, (err, files) => {
+						if (err) { reject(err) }
+						resolve({
+							success: true,
+							file: files[0],
+							errors: []
+						})
+					});
 				});
-			});
-
+			} else {
+				resolve({
+					success: false,
+					file: null,
+					errors: ['No proposal file provided']
+				})
+			}
 		});
 	}
 
