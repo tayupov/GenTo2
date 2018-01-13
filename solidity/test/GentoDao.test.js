@@ -147,6 +147,8 @@ contract('GentoDao', function(accounts) {
     assert.equal(newProposalLog.length, 1, 'should be one new Proposal');
     // returns the proposal log object with proposal id
     let newProposalArgs = newProposalLog[0].args;
+    console.log(newProposalLog)
+    console.log(newProposalArgs)
     // user 0,1,2 vote for the proposal
     await contract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[0]})
     await contract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[1]})
@@ -161,7 +163,7 @@ contract('GentoDao', function(accounts) {
     expect(p[4]).toBe(true)
     expect(p[5]).toBe(true)
     // get the proposal payout by id
-    const proposalPayout = await contract.claimPayout.call(newProposalArgs.proposalID)
+    const proposalPayout = await contract.claimPayout.call(newProposalArgs.proposalID, accounts[1])
     // the proposal payout should be the same as the param value while creating the proposal
     // user 1 is the creator of the proposal and he gets the payout
     // truffle returns strings for numbers

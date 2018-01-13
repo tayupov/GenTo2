@@ -115,10 +115,10 @@ contract GentoDao is Ico, Proposals {
         delegations[msg.sender][uint(fieldOfWork)] = recipient;
     }
 
-    function claimPayout(uint proposalNumber) public daoActive returns (uint amount) {
+    function claimPayout(uint proposalNumber, address claimer) public daoActive returns (uint amount) {
         Proposal storage proposal = proposals[proposalNumber];
 
-        require(proposal.finished && proposal.proposalPassed /*&& proposal.recipient == msg.sender*/);
+        require(proposal.finished && proposal.proposalPassed && proposal.recipient == claimer);
 
         balances[msg.sender] += proposal.amount;
 
