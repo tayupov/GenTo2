@@ -12,7 +12,7 @@ export default function validateICOGeneral() {
         tokenName: tokenNameValue,
         symbol: symbolValue,
         totalSupply: totalSupplyValue,
-        saleStart: saleStartValue,
-        saleEnd: saleEndValue
+        saleStart: new Date(saleStartValue).getTime() / 1000 ,
+        saleEnd: new Date(saleEndValue).getTime() / 1000
     }
 }

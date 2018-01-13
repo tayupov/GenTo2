@@ -31,19 +31,21 @@
     "web3": "0.19.0"
   },
   "scripts": {
+    "blockchain": "concurrently \"testrpc\" \"npm run build:contracts\"",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "test:truffle": "cd solidity && truffle test",
     "test:coverage": "./node_modules/.bin/solidity-coverage",
-    "build:contracts": "cd solidity && truffle migrate && rimraf ../src/assets/contracts/* && cp -R build/contracts ../src/assets/contracts/"
+    "build:contracts": "cd solidity && truffle migrate && rimraf ../src/assets/contracts && cp -R build/contracts ../src/assets/contracts/"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-es2017": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "concurrently": "^3.5.1",
     "expect": "^21.2.1",
     "rimraf": "^2.6.2",
     "should": "^13.1.3",

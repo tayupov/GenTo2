@@ -3,7 +3,7 @@ import { Form, Input, Container, Popup, Icon, Dropdown } from 'semantic-ui-react
 import { DMRREWARD, FINANCEPOINTS, PRODUCTPOINTS, ORGPOINTS, PARTNERPOINTS } from 'constants/validators';
 import validateDAOFieldsOfWork from '../../validators/DAOFieldsOfWork';
 
-import currencyOptions from 'utils/currencyOptions'
+import currencyOptions from 'constants/currencyOptions'
 
 export default class DAOFieldsOfWork extends React.Component {
   constructor(props) {

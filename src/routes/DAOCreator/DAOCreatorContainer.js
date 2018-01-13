@@ -7,6 +7,7 @@ import web3 from 'utils/web3';
 
 import { createOrganization } from 'provider/DAOCreatorProvider';
 import { adjustStepZilla } from 'utils/stepzilla';
+import { omitInvalidContractKeys } from 'utils/contracts';
 import { Buffer } from 'buffer';
 
 export default class DAOCreatorContainer extends React.Component {
@@ -14,7 +15,15 @@ export default class DAOCreatorContainer extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			totalSupply: null,
+			symbol: null,
 			name: null,
+			startPrice: null,
+			endPrice: null,
+			saleStart: null,
+			saleEnd: null,
+
+			// TODO: everything below is not part of the contract _yet_
 			website: null,
 			description: null,
 			proposalIPFSHash: null,
@@ -27,31 +36,12 @@ export default class DAOCreatorContainer extends React.Component {
 			minPartic: null,
 			decidingPercentage: null,
 			tokenName: null,
-			symbol: null,
-			totalSupply: null,
-			saleStart: null,
-			saleEnd: null,
-			selectedCurrency: null,
-			startPrice: null,
-			endPrice: null,
+			selectedCurrency: null
 		}
 	}
 
 	componentDidMount() {
 		adjustStepZilla(steps, this)
-		const myInput = {
-			totalSupply: Math.pow(10, 18),
-			symbol: "ABC",
-			name: "myName",
-			startPrice: 10,
-			endPrice: 20,
-			saleStart: Date.now(),
-			saleEnd: Date.now() + 1000
-		}
-		console.log(this.props.account)
-		if (this.props.account) {
-			createOrganization(myInput, this.props.account)
-		}
 
 	}
 
@@ -62,9 +52,15 @@ export default class DAOCreatorContainer extends React.Component {
 				proposalIPFSHash: uploadResult.file.hash
 			})
 		}
-		console.log(this.state)
+		
+		// TODO: get rid of this helper, or maybe even keep it...
+		const from = this.props.account
+		const contractObj = omitInvalidContractKeys(this.state)
+		const contractValues = Object.values(contractObj)
+		createOrganization(contractValues, from)
 	}
 
+	// TODO: Make this a reuseable function and move it somewhere else
 	uploadProposalToIPFS() {
 		return new Promise((resolve, reject) => {
 
