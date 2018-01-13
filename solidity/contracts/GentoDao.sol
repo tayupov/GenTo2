@@ -114,7 +114,7 @@ contract GentoDao is Ico, Proposals {
         revert();
         delegations[msg.sender][uint(fieldOfWork)] = recipient;
     }
-
+    // ensure that the method can be inoked only once
     function claimPayout(uint proposalNumber, address claimer) public daoActive returns (uint amount) {
         Proposal storage proposal = proposals[proposalNumber];
 
@@ -126,13 +126,13 @@ contract GentoDao is Ico, Proposals {
         return proposal.amount;
     }
 
-    // function claimDividend(uint proposalNumber) public onlyShareholders {
-    //     Proposal storage proposal = proposals[proposalNumber];
+    function claimDividend(uint proposalNumber, address claimer) public onlyShareholders {
+        Proposal storage proposal = proposals[proposalNumber];
 
-    //     require(proposal.finished && proposal.proposalPassed && !!proposal.dividend);
-
-    //     balances[msg.sender] += balances[msg.sender] * proposal.dividend;
-    // }
+        require(proposal.finished && proposal.proposalPassed /*&& !!proposal.dividend*/);
+        // msg.sender oder claimer?
+        balances[msg.sender] += balances[claimer] /** proposal.dividend*/;
+    }
 
     function isShareholder(address userAddress) returns (bool shareholder){
         return balances[userAddress] > 0;
