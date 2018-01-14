@@ -161,13 +161,55 @@ contract('GentoDao', function(accounts) {
     expect(p[4]).toBe(true)
     expect(p[5]).toBe(true)
     // get the proposal payout by id
-    const proposalPayout = await contract.claimPayout.call(newProposalArgs.proposalID, accounts[1])
+    await contract.claimPayout.sendTransaction(newProposalArgs.proposalID, {from: accounts[1]})
     // the proposal payout should be the same as the param value while creating the proposal
     // user 1 is the creator of the proposal and he gets the payout
     // truffle returns strings for numbers
-    expect(Number(proposalPayout)).toBe(345)
+    // returns the payout of the proposal
+    expect(Number(p[1])).toBe(345)
 
   })
+
+  it("should ensure that the claimer of the payout can get the payout only once", async function() {
+    // set time between ICO START and END
+    await contract.setCurrentTime.sendTransaction(1200000)
+    // user 5,6 become shareholders
+    await contract.buy.sendTransaction({from: accounts[5], value: 100})
+    await contract.buy.sendTransaction({from: accounts[6], value: 200})
+    // set time to after ICO
+    await contract.setCurrentTime.sendTransaction(2200000)
+    // create a new proposal in field of work 0
+    await contract.newProposal.sendTransaction(accounts[5], 345, 0, {from: accounts[5]})
+
+    let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
+        (error, log) => error ? reject(error) : resolve(log)));
+    // check whether the proposal gets created
+    assert.equal(newProposalLog.length, 1, 'should be one new Proposal');
+    // returns the proposal log object with proposal id
+    let newProposalArgs = newProposalLog[0].args;
+    // user 0,1,2 vote for the proposal
+    await contract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[5]})
+    await contract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[6]})
+    // set time to after the proposal period
+    await contract.setCurrentTime.sendTransaction(2300000)
+    // execute the proposal therefor the proposal gets passed and finished
+    await contract.executeProposal.sendTransaction(newProposalArgs.proposalID)
+    // get the proposal by id
+    var p = await contract.getProposal.call(newProposalArgs.proposalID)
+    // user 1 claims the payout for the first time
+    await contract.claimPayout.sendTransaction(newProposalArgs.proposalID, {from: accounts[5]})
+    // if user 1 claims the payout again it should be rejected
+    try {
+      await contract.claimPayout.sendTransaction(newProposalArgs.proposalID, {from: accounts[1]})
+      await contract.claimPayout.sendTransaction(newProposalArgs.proposalID, {from: accounts[1]})
+      await contract.claimPayout.sendTransaction(newProposalArgs.proposalID, {from: accounts[1]})
+      should.fail("it's not possible to claim the payout more then once")
+    } catch(e) {
+        expect(e.message).toContain("VM Exception while processing transaction: ")
+    }
+  })
+
+
 
   it("should be possible to claim the dividend if the user is a shareholder", async function() {
     // set time between ICO START and END
@@ -203,7 +245,7 @@ contract('GentoDao', function(accounts) {
     expect(p[4]).toBe(true)
     expect(p[5]).toBe(true)
     // user 4 wants to claim the dividend on the proposal
-    await contract.claimDividend.call(newProposalArgs.proposalID, accounts[4])
+    await contract.claimDividend.sendTransaction(newProposalArgs.proposalID, {from: accounts[4]})
   })
 
 });

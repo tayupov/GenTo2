@@ -22,6 +22,7 @@ contract GentoDao is Ico, Proposals {
     mapping(address => mapping(uint => address)) delegations;
 
     event MyTransfer(address indexed to, uint256 value, uint256 remainingSupply);
+    event PayoutResetted(uint256 payout);
 
     modifier daoActive {
         // DAO is active once the ICO is done
@@ -115,23 +116,26 @@ contract GentoDao is Ico, Proposals {
         delegations[msg.sender][uint(fieldOfWork)] = recipient;
     }
     // ensure that the method can be inoked only once
-    function claimPayout(uint proposalNumber, address claimer) public daoActive returns (uint amount) {
+    function claimPayout(uint proposalNumber) public daoActive returns (uint amount) {
         Proposal storage proposal = proposals[proposalNumber];
 
-        require(proposal.finished && proposal.proposalPassed && proposal.recipient == claimer);
+        require(proposal.finished && proposal.proposalPassed && proposal.recipient == msg.sender && proposal.amount != 0);
 
         balances[msg.sender] += proposal.amount;
+
+        proposal.amount = 0;
+        PayoutResetted(proposal.amount);
 
         MyTransfer(msg.sender, proposal.amount, bal);
         return proposal.amount;
     }
 
-    function claimDividend(uint proposalNumber, address claimer) public onlyShareholders {
+    function claimDividend(uint proposalNumber) public onlyShareholders {
         Proposal storage proposal = proposals[proposalNumber];
 
         require(proposal.finished && proposal.proposalPassed /*&& !!proposal.dividend*/);
         // msg.sender oder claimer?
-        balances[msg.sender] += balances[claimer] /** proposal.dividend*/;
+        balances[msg.sender] += balances[msg.sender] /** proposal.dividend*/;
     }
 
     function isShareholder(address userAddress) returns (bool shareholder){
