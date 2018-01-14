@@ -1,8 +1,8 @@
-import { TOKENNAME, TICKERSYMBOL, TOTALSUPPLY, SALESTART, SALEEND } from 'constants/validators';
+import { TOKENNAME, SYMBOL, TOTALSUPPLY, SALESTART, SALEEND } from 'constants/validators';
 
 export default function validateICOGeneral() {
     const tokenNameValue = document.getElementById(TOKENNAME).value;
-    const tickerSymbolValue = document.getElementById(TICKERSYMBOL).value;
+    const symbolValue = document.getElementById(SYMBOL).value;
     const totalSupplyValue = document.getElementById(TOTALSUPPLY).value;
     const saleStartValue = document.getElementById(SALESTART).value;
     const saleEndValue = document.getElementById(SALEEND).value;
@@ -10,9 +10,9 @@ export default function validateICOGeneral() {
     //TODO: validate
     return {
         tokenName: tokenNameValue,
-        tickerSymbol: tickerSymbolValue,
+        symbol: symbolValue,
         totalSupply: totalSupplyValue,
-        saleStart: saleStartValue,
-        saleEnd: saleEndValue
+        saleStart: new Date(saleStartValue).getTime() / 1000 ,
+        saleEnd: new Date(saleEndValue).getTime() / 1000
     }
 }

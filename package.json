@@ -6,8 +6,8 @@
   "dependencies": {
     "chart.js": "^2.7.1",
     "chartjs": "^0.3.24",
-    "istanbul": "^0.4.5",
     "ipfs": "^0.27.6",
+    "istanbul": "^0.4.5",
     "mobx": "^3.3.1",
     "mobx-react": "^4.3.4",
     "moment": "^2.19.1",
@@ -27,22 +27,25 @@
     "recompose": "^0.26.0",
     "semantic-ui-css": "^2.2.12",
     "semantic-ui-react": "^0.75.1",
+    "truffle-contract": "^3.0.1",
     "web3": "0.19.0"
   },
   "scripts": {
+    "blockchain": "concurrently \"testrpc\" \"npm run build:contracts\"",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "test:truffle": "cd solidity && truffle test",
     "test:coverage": "./node_modules/.bin/solidity-coverage",
-    "build:contracts": "cd solidity && truffle migrate && rimraf ../src/assets/contracts/* && cp -R build/contracts ../src/assets"
+    "build:contracts": "cd solidity && truffle migrate && rimraf ../src/assets/contracts && cp -R build/contracts ../src/assets/contracts/"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-es2017": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "concurrently": "^3.5.1",
     "expect": "^21.2.1",
     "rimraf": "^2.6.2",
     "should": "^13.1.3",

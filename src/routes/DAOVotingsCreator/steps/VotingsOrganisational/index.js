@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Form, Input, Container, Popup, Icon, Dropdown } from 'semantic-ui-react';
 import { VOTINGPAYOUT, VOTINGEND } from 'constants/validators';
 
-import currencyOptions from 'utils/currencyOptions';
+import currencyOptions from 'constants/currencyOptions';
 
 export default class Organisational extends React.Component {
 

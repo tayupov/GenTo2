@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Input, Select, Container } from 'semantic-ui-react';
 import { SELECTEDCURRENCY, STARTPRICE, ENDPRICE } from 'constants/validators';
-import currencyOptions from 'utils/currencyOptions';
+import currencyOptions from 'constants/currencyOptions';
 import validateICOPricing from '../../validators/ICOPricing';
 
 export default class ICOPricing extends Component {
