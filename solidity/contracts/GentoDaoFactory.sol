@@ -13,7 +13,7 @@ contract GentoDaoFactory {
     }
 
     function createContract(uint256 totalSupply,
-                            string symbol, 
+                            string symbol,
                             string name,
                             uint256 startPrice,
                             uint256 endPrice,
@@ -28,7 +28,7 @@ contract GentoDaoFactory {
                                                      0,
                                                      saleStart,
                                                      saleEnd,
-                                                     false);
+                                                     true); // This allows time warping!
 
         address auctionAddress = address(gentoDao);
         ICOs.push(auctionAddress);

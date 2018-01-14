@@ -23,9 +23,13 @@ export default class App extends React.Component {
 
   async componentDidMount() {
     await provider(this.notify, this)
-    const organizations = await loadAllOrganizations()
-    
-    this.setState({ organizations });
+  }
+
+  async componentWillUpdate(nextProps, nextState) {
+    if (nextState.account != this.state.account) {
+      const organizations = await loadAllOrganizations(nextState.account)
+      this.setState({ organizations });
+    }
   }
 
   notify = (message, type) => {
