@@ -58,5 +58,4 @@ contract Ico is StandardToken{
         // ends function and returns
         return amount;
     }
-
 }
