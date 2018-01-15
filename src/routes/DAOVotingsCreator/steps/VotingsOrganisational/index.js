@@ -1,32 +1,28 @@
 import React, { Component } from 'react';
-
-import { Form, Input, Container, Popup, Icon, Dropdown } from 'semantic-ui-react';
+import { Form, Input, Container, Popup, Icon, Dropdown, Divider } from 'semantic-ui-react';
 import { VOTINGPAYOUT, VOTINGEND } from 'constants/validators';
 
 import currencyOptions from 'constants/currencyOptions';
 
 export default class Organisational extends React.Component {
-
   constructor(props) {
     super(props);
   }
 
   render() {
-
     return (
-      <Container>
-        <Form id="name-form" action=''>
+      <Container text>
+        <Divider section hidden />
+        <Form>
           <Form.Field>
             <label>
               Set the payout amount
-                <Popup
+              <Popup
                 trigger={<Icon name='help' color='grey' size='small' circular />}
-                content='Payout amount is the amount of Ether you get if your Voting is successful'
-                position='right center'
+                header='The amount of Ether you receive if your voting was approved'
               />
             </label>
             <Input
-              type="number"
               name={VOTINGPAYOUT}
               id={VOTINGPAYOUT}
               label={<Dropdown defaultValue='finney' options={currencyOptions} />}
@@ -44,8 +40,8 @@ export default class Organisational extends React.Component {
             />
           </Form.Field>
         </Form>
+        <Divider section hidden />
       </Container>
     );
   }
-
 }

@@ -5,3 +5,18 @@
     margin-left: 200px;
     margin-right: 30px;
 }
+
+#next-button {
+    float: right;
+    margin-right: 7%;
+}
+
+#prev-button {
+    float: left;
+    margin-left: 7%;
+}
+
+#create-button {
+    float: right;
+    margin-right: 7%;
+}
