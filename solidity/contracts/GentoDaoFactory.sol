@@ -4,36 +4,30 @@ pragma solidity ^0.4.8;
 import './GentoDao.sol';
 contract GentoDaoFactory {
 
-    address[] public ICOs;
+    address[] public DAOs;
 
-    event ContractCreated(address contractAddress);
+    event DAOCreated(address contractAddress);
 
-    function getICOs() returns (address[] icos) {
-        return ICOs;
-    }
-
-    function createContract(uint256 totalSupply,
-                            string _symbol, 
-                            string _name,
-                            uint256 _buyPriceStart,
-                            uint256 _buyPriceEnd,
-                            uint256 _sellPrice,
-                            uint256 _saleStart,
-                            uint256 _saleEnd) returns (address contractAddress){
+    function createDAO(uint256 totalSupply,
+                            string symbol,
+                            string name,
+                            uint256 buyPriceStart,
+                            uint256 buyPriceEnd,
+                            uint256 saleStart,
+                            uint256 saleEnd) returns (address contractAddress){
 
         GentoDao gentoDao = new GentoDao(totalSupply,
-                                                     _symbol,
-                                                     _name,
-                                                     _buyPriceStart,
-                                                     _buyPriceEnd,
-                                                     _sellPrice,
-                                                     _saleStart,
-                                                     _saleEnd,
-                                                     false);
+                                                     symbol,
+                                                     name,
+                                                     buyPriceStart,
+                                                     buyPriceEnd,
+                                                     saleStart,
+                                                     saleEnd,
+                                                     true);
 
         address auctionAddress = address(gentoDao);
-        ICOs.push(auctionAddress);
-        ContractCreated(auctionAddress);
+        DAOs.push(auctionAddress);
+        DAOCreated(auctionAddress);
         return auctionAddress;
     }
 
