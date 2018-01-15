@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, TextArea, Container } from 'semantic-ui-react';
+import { Form, Input, TextArea, Container, Divider } from 'semantic-ui-react';
 import { DAONAME, DAOWEBSITE, DAODESCRIPTION, DAOPROPOSAL } from 'constants/validators';
 import validateDAOGeneral from '../../validators/DAOGeneral';
 
@@ -13,49 +13,30 @@ export default class DAOGeneral extends Component {
 
   render() {
     return (
-      <Container>
-        <Form id="name-form">
+      <Container text>
+        <Divider section hidden />
+        <Form>
           <Form.Field>
             <label>Give your DAO a name</label>
-            <Input
-              type="text"
-              name={DAONAME}
-              id ={DAONAME}
-              size='small'
-              />
+            <Input type="text" name={DAONAME} id ={DAONAME} size='small'/>
           </Form.Field>
-
+          
           <Form.Field>
-            <label>Enter a URL to your Webpage</label>
-            <Input
-              type="text"
-              name={DAOWEBSITE}
-              id={DAOWEBSITE}
-              size='small'
-              />
+            <label>Enter a URL to your webpage</label>
+            <Input type="text" label='http://' name={DAOWEBSITE} id={DAOWEBSITE} size='small'/>
           </Form.Field>
 
           <Form.Field>
             <label>Describe the primary goal of your DAO</label>
-            <TextArea
-              type="text-area"
-              name={DAODESCRIPTION}
-              id={DAODESCRIPTION}
-              size='small'
-              />
+            <TextArea type="text-area" name={DAODESCRIPTION} id={DAODESCRIPTION} size='small'/>
           </Form.Field>
 
           <Form.Field>
             <label>File upload</label>
-            <Input
-              type="file"
-              name={DAOPROPOSAL}
-              id={DAOPROPOSAL}
-              size='small'
-              />
+            <Input type="file" name={DAOPROPOSAL} id={DAOPROPOSAL} size='small' />
           </Form.Field>
-
         </Form>
+        <Divider section hidden />
       </Container>
     )
   }
