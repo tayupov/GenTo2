@@ -17,7 +17,7 @@ export const DECIDINGPERCENTAGE = 'decidingpercentage'
 
 // ico general
 export const TOKENNAME = 'tokenname'
-export const TICKERSYMBOL = 'tickersymbol'
+export const SYMBOL = 'symbol'
 export const TOTALSUPPLY = 'totalsupply'
 export const SALESTART = 'salestart'
 export const SALEEND = 'saleend'

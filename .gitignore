@@ -12,6 +12,7 @@ coverage.json
 
 # development
 /solidity/build
+/src/assets/contracts
 
 # misc
 .DS_Store

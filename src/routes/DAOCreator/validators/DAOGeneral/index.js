@@ -19,10 +19,7 @@ export default async function validateDAOGeneral() {
 
   // prepare IPFS upload
   const proposalFile = document.getElementById(DAOPROPOSAL).files[0];
-  if (!proposalFile) {
-    return false;
-  }
-  const proposalArrayBuffer = await getArrayBufferFromFile(proposalFile);
+  const proposalArrayBuffer = proposalFile ? await getArrayBufferFromFile(proposalFile) : new ArrayBuffer;
 
   //TODO: validate
   return {
