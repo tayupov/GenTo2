@@ -209,8 +209,6 @@ contract('GentoDao', function(accounts) {
     }
   })
 
-
-
   it("should be possible to claim the dividend if the user is a shareholder", async function() {
     // set time between ICO START and END
     await contract.setCurrentTime.sendTransaction(1200000)
@@ -244,8 +242,18 @@ contract('GentoDao', function(accounts) {
     // claim payout is only possible if the proposal is finished and passed
     expect(p[4]).toBe(true)
     expect(p[5]).toBe(true)
+    // create a second new proposal only for claiming the dividend
+    await contract.newProposal.sendTransaction(accounts[4], 0, 2, {from: accounts[4]})
+
+    let newProposalLog2 = await new Promise((resolve, reject) => newProposalEventListener.get(
+        (error, log) => error ? reject(error) : resolve(log)));
+    // check whether the proposal gets created
+    assert.equal(newProposalLog2.length, 1, 'should be one new Proposal');
+    // returns the proposal log object with proposal id
+    let newProposalArgs2 = newProposalLog2[0].args;
+
     // user 4 wants to claim the dividend on the proposal
-    await contract.claimDividend.sendTransaction(newProposalArgs.proposalID, {from: accounts[4]})
+    //await contract.claimDividend.sendTransaction(newProposalArgs2.proposalID, {from: accounts[4]})
   })
 
 });

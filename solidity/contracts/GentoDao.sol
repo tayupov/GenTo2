@@ -121,10 +121,10 @@ contract GentoDao is Ico, Proposals {
 
         require(proposal.finished && proposal.proposalPassed && proposal.recipient == msg.sender && proposal.amount != 0);
 
-        balances[msg.sender] += proposal.amount;
-
         proposal.amount = 0;
         PayoutResetted(proposal.amount);
+
+        balances[msg.sender] += proposal.amount;
 
         MyTransfer(msg.sender, proposal.amount, bal);
         return proposal.amount;
@@ -133,7 +133,7 @@ contract GentoDao is Ico, Proposals {
     function claimDividend(uint proposalNumber) public onlyShareholders {
         Proposal storage proposal = proposals[proposalNumber];
 
-        require(proposal.finished && proposal.proposalPassed /*&& !!proposal.dividend*/);
+        require(proposal.finished && proposal.proposalPassed /*&& proposal.dividend > 0*/);
         // msg.sender oder claimer?
         balances[msg.sender] += balances[msg.sender] /** proposal.dividend*/;
     }
