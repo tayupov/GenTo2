@@ -11,6 +11,8 @@ import DAOSettings from './DAOSettings';
 
 import DAOVotings from './DAOVotings';
 import DAOVotingsCreator from './DAOVotingsCreator';
+import ProposalList from './ProposalList';
+import Proposal from './Proposal';
 
 
 /*
@@ -31,9 +33,9 @@ export default class Routes extends React.Component {
                         <DAOList
                             account={account}
                             notify={notify}
-                            />
+                        />
                     )}
-                    />
+                />
 
                 <Route path="/dao/create"
                     render={(props) => (
@@ -41,31 +43,43 @@ export default class Routes extends React.Component {
                             account={account}
                             network={network}
                             notify={notify}
-                            />
+                        />
                     )}
-                    />
+                />
 
-                <Route path="/dao/:address/votings/create"
+                <Route path="/dao/:address/proposals/create"
                     render={(props) => (
                         <DAOVotingsCreator
                             account={account}
                             network={network}
                             address={props.match.params.address}
                             notify={notify}
-                            />
+                        />
                     )}
-                    />
+                />
 
-                <Route path="/dao/:address/votings"
+                <Route path="/dao/:address/proposals/:proposal"
                     render={(props) => (
-                        <DAOVotings
+                        <Proposal
+                            account={account}
+                            network={network}
+                            address={props.match.params.address}
+                            proposal={props.match.params.proposal}
+                            notify={notify}
+                        />
+                    )}
+                />
+
+                <Route path="/dao/:address/proposals"
+                    render={(props) => (
+                        <ProposalList
                             account={account}
                             network={network}
                             address={props.match.params.address}
                             notify={notify}
-                            />
+                        />
                     )}
-                    />
+                />
 
                 <Route path="/dao/:address/settings"
                     render={(props) => (
@@ -74,8 +88,8 @@ export default class Routes extends React.Component {
                             network={network}
                             address={props.match.params.address}
                             notify={notify}
-                            />)}
-                    />
+                        />)}
+                />
 
                 <Route path="/dao/:address"
                     render={(props) => (
@@ -84,9 +98,9 @@ export default class Routes extends React.Component {
                             address={props.match.params.address}
                             network={network}
                             notify={notify}
-                            />
+                        />
                     )}
-                    />
+                />
 
                 <Route component={NotFound} />
 
