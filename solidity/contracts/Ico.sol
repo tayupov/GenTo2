@@ -6,12 +6,11 @@ contract Ico is StandardToken{
 
     uint256 public buyPriceStart;
     uint256 public buyPriceEnd;
-    uint256 public sellPrice;
     uint256 public bal = 0;
 
-    uint256 saleStart = 0;
-    uint256 saleEnd = 0;
-    uint256 saleDuration = 0;
+    uint256 public saleStart = 0;
+    uint256 public saleEnd = 0;
+    uint256 public saleDuration = 0;
 
     event MyTransfer(address indexed to, uint256 value, uint256 remainingSupply);
 

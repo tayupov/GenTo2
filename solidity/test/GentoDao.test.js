@@ -169,41 +169,4 @@ contract('GentoDao', function(accounts) {
 
   })
 
-  it("should be possible to claim the dividend if the user is a shareholder", async function() {
-    // set time between ICO START and END
-    await contract.setCurrentTime.sendTransaction(1200000)
-    // user 0,1,2 become shareholders
-    await contract.buy.sendTransaction({from: accounts[3], value: 100})
-    await contract.buy.sendTransaction({from: accounts[4], value: 200})
-    await contract.buy.sendTransaction({from: accounts[5], value: 300})
-    // set time to after ICO
-    await contract.setCurrentTime.sendTransaction(2200000)
-    // set field of work to 2 (Product)
-    await contract.setFieldOfWork.call(2)
-    // create a new proposal
-    await contract.newProposal.sendTransaction(accounts[3], 345, 2, {from: accounts[3]})
-
-    let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-        (error, log) => error ? reject(error) : resolve(log)));
-    // check whether the proposal gets created
-    assert.equal(newProposalLog.length, 1, 'should be one new Proposal');
-    // returns the proposal log object with proposal id
-    let newProposalArgs = newProposalLog[0].args;
-    // user 0,1,2 vote for the proposal
-    await contract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[3]})
-    await contract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[4]})
-    await contract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[5]})
-    // set time to after the proposal period
-    await contract.setCurrentTime.sendTransaction(2300000)
-    // execute the proposal therefor the proposal gets passed and finished
-    await contract.executeProposal.sendTransaction(newProposalArgs.proposalID)
-    // get the proposal by id
-    var p = await contract.getProposal.call(newProposalArgs.proposalID)
-    // claim payout is only possible if the proposal is finished and passed
-    expect(p[4]).toBe(true)
-    expect(p[5]).toBe(true)
-    // user 4 wants to claim the dividend on the proposal
-    await contract.claimDividend.call(newProposalArgs.proposalID, accounts[4])
-  })
-
 });

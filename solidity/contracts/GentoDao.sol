@@ -12,12 +12,12 @@ contract GentoDao is Ico, Proposals {
     uint256 public creationDate;
 
     uint8 public constant decimals = 18;
-    uint256 totalSupply = 0;
+    uint256 public totalSupply;
 
     address[] public shareholders;
 
-    bool dev;
-    uint cTime;
+    bool internal dev;
+    uint internal cTime;
 
     mapping(address => mapping(uint => address)) delegations;
 
@@ -34,7 +34,6 @@ contract GentoDao is Ico, Proposals {
     string _name,
     uint256 _buyPriceStart,
     uint256 _buyPriceEnd,
-    uint256 _sellPrice,
     uint256 _saleStart,
     uint256 _saleEnd,
     bool _dev) {
@@ -43,7 +42,6 @@ contract GentoDao is Ico, Proposals {
         buyPriceStart = _buyPriceStart;
         buyPriceEnd = _buyPriceEnd;
 
-        sellPrice = _sellPrice;
         saleEnd = _saleEnd;
         saleStart = _saleStart;
         saleDuration = saleEnd - saleStart;
@@ -101,10 +99,9 @@ contract GentoDao is Ico, Proposals {
     uint256 _creationDate,
     uint256 _buyPriceStart,
     uint256 _buyPriceEnd,
-    uint256 _sellPrice,
     uint256 _saleStart,
     uint256 _saleEnd){
-        return (name, symbol, totalSupply, creationDate, buyPriceStart, buyPriceEnd, sellPrice, saleStart, saleEnd);
+        return (name, symbol, totalSupply, creationDate, buyPriceStart, buyPriceEnd, saleStart, saleEnd);
     }
 
 

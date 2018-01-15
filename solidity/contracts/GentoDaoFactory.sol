@@ -4,35 +4,30 @@ pragma solidity ^0.4.8;
 import './GentoDao.sol';
 contract GentoDaoFactory {
 
-    address[] public ICOs;
+    address[] public DAOs;
 
-    event ContractCreated(address contractAddress);
+    event DAOCreated(address contractAddress);
 
-    function getICOs() returns (address[] icos) {
-        return ICOs;
-    }
-
-    function createContract(uint256 totalSupply,
+    function createDAO(uint256 totalSupply,
                             string symbol,
                             string name,
-                            uint256 startPrice,
-                            uint256 endPrice,
+                            uint256 buyPriceStart,
+                            uint256 buyPriceEnd,
                             uint256 saleStart,
                             uint256 saleEnd) returns (address contractAddress){
 
         GentoDao gentoDao = new GentoDao(totalSupply,
                                                      symbol,
                                                      name,
-                                                     startPrice,
-                                                     endPrice,
-                                                     0,
+                                                     buyPriceStart,
+                                                     buyPriceEnd,
                                                      saleStart,
                                                      saleEnd,
-                                                     true); // This allows time warping!
+                                                     true);
 
         address auctionAddress = address(gentoDao);
-        ICOs.push(auctionAddress);
-        ContractCreated(auctionAddress);
+        DAOs.push(auctionAddress);
+        DAOCreated(auctionAddress);
         return auctionAddress;
     }
 
