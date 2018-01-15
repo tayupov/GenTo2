@@ -14,7 +14,7 @@ npm i
 ```
 2. Start testrpc in another terminal window. Testrpc is your local development blockchain, **you need to start it whenever you run gento locally**.
 ```bash
-testrpc
+testrpc -m "<your words>"
 ```
 3. Build contract bytecode. This has to be done once and afterwards whenever testrpc changed
 ```bash
@@ -22,6 +22,11 @@ npm run build:contracts
 ```
 4. Start the app
 ```bash
+npm start
+```
+If you get this following error: Module not found: Can't resolve 'app' in '.../GenTo2/src', try
+```bash
+export default NODE_PATH=src
 npm start
 ```
 
