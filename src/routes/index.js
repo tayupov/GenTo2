@@ -7,7 +7,6 @@ import NotFound from './NotFound';
 import DAO from './DAO';
 import DAOList from './DAOList';
 import DAOCreator from './DAOCreator';
-import DAOSettings from './DAOSettings';
 
 import ProposalCreator from './ProposalCreator';
 import ProposalList from './ProposalList';
@@ -78,16 +77,6 @@ export default class Routes extends React.Component {
                             notify={notify}
                         />
                     )}
-                />
-
-                <Route path="/dao/:address/settings"
-                    render={(props) => (
-                        <DAOSettings
-                            account={account}
-                            network={network}
-                            address={props.match.params.address}
-                            notify={notify}
-                        />)}
                 />
 
                 <Route path="/dao/:address"

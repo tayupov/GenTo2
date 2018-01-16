@@ -14,6 +14,11 @@ export default class ProposalsCreatorContainer extends React.Component {
 		}
 	}
 
+	async handleCreate() {
+		console.log(this.state);
+		// TODO Michael create Proposal
+	}	
+
 	componentDidMount() {
 		adjustStepZilla(steps, this);
 	}

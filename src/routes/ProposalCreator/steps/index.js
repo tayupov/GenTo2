@@ -8,5 +8,5 @@ import ValidateProposalsOrganisational from '../validators/ProposalsOrganisation
 
 export default [
   { name: 'GENERAL', component: <ProposalsGeneral />, validator: ValidateProposalsGeneral },
-  { name: 'ORGANISATIONAL', component: <ProposalsOrganisational />, ValidateProposalsOrganisational },
+  { name: 'ORGANISATIONAL', component: <ProposalsOrganisational />, validator: ValidateProposalsOrganisational },
 ]
