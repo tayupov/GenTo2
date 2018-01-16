@@ -2,20 +2,16 @@ pragma solidity ^0.4.8;
 
 contract Proposals {
 
-    uint public debatingPeriodInMinutes;
-
     Proposal[] public proposals;
-
+    uint public debatingPeriodInMinutes;
     uint public numProposals;
 
     enum FieldOfWork { Finance, Organisational, Product, Partnership }
 
-    FieldOfWork public fow = FieldOfWork.Finance;
-
     mapping(address => uint256) financepoints;
     mapping(address => uint256) productpoints;
     mapping(address => uint256) orgpoints;
-    mapping(address => uint256) partnerpoints;    
+    mapping(address => uint256) partnerpoints;
 
 
     struct Proposal {
@@ -44,23 +40,22 @@ contract Proposals {
     event NewProposalCreated(uint proposalID);
     event Voted(uint proposalID, bool position, address voter);
 
+    // Modifier that allows only shareholders to vote and create new proposals
+    modifier onlyShareholders {
+        require(isShareholder(msg.sender));
+        _;
+    }
+    // Modifier checks whether the ICO is finished and if so the ICO become a DAO and voting is allowed
+    modifier votingAllowed {
+        require(isIcoFinished());
+        _;
+    }
+
     //constructor
     function ProposalToken() public payable {
         debatingPeriodInMinutes = 10;  // TODO Move to settings
     }
 
-    /* function getDividend() public constant returns (uint dividend) {
-      return this.dividend;
-    } */
-
-    function getFieldOfWork() public constant returns (FieldOfWork) {
-        return fow;
-    }
-
-    function setFieldOfWork(uint _value) public {
-        //require(uint(FieldOfWork.Partnership) >= _value);
-        fow = FieldOfWork(_value);
-    }
 
     function getProposal(uint proposalID) public constant returns (address recipient,
     uint amount,
@@ -79,21 +74,10 @@ contract Proposals {
         return proposals.length;
     }
 
-    // Modifier that allows only shareholders to vote and create new proposals
-    modifier onlyShareholders {
-        require(isShareholder(msg.sender));
-        _;
-    }
-    // Modifier checks whether the ICO is finished and if so the ICO become a DAO and voting is allowed
-    modifier votingAllowed {
-        require(isIcoFinished());
-        _;
-    }
-
-    function isIcoFinished() returns (bool icoFinished);
-    function currentTime() returns (uint time);
-    function isShareholder(address userAddress) returns (bool shareholder);
-    function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) returns (uint influence);
+    function isIcoFinished() public returns (bool icoFinished);
+    function currentTime() public returns (uint time);
+    function isShareholder(address userAddress) public returns (bool shareholder);
+    function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) public returns (uint influence);
 
     function newProposal(
         address beneficiary,
