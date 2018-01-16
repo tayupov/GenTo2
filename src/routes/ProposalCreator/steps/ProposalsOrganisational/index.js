@@ -1,13 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Form, Input, Container, Popup, Icon, Dropdown, Divider } from 'semantic-ui-react';
 import { PROPOSALPAYOUT, PROPOSALEND } from 'constants/validators';
 
 import currencyOptions from 'constants/currencyOptions';
 
 export default class Organisational extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     return (

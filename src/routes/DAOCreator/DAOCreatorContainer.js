@@ -1,10 +1,7 @@
 import React from 'react';
 import IPFS from 'ipfs';
-
 import DAOCreator from './DAOCreator';
 import steps from './steps';
-import web3 from 'utils/web3';
-
 import { createOrganization } from 'provider/DAOCreatorProvider';
 import { adjustStepZilla } from 'utils/stepzilla';
 import { omitInvalidContractKeys } from 'utils/contracts';

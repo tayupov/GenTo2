@@ -1,29 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import { Grid, Header, Segment, Checkbox, Input, Button, Icon } from 'semantic-ui-react';
-import moment from 'moment';
-
-let auctionInterval;
-
-const tokenPriceIncrease = 'The token price will <strong>increase</strong> from <strong>1000</strong> to <strong>10000</strong> finney'
 
 class DetailsSection extends Component {
-
-	constructor(props) {
-		super(props);
-	}
-
 	onClick = () => (
 		this.props.notify('Power transferred!', 'success')
 	)
 
-
-	componentWillMount() {
-	}
-
 	render() {
-
 		return (
 			<Grid>
 				<Grid.Row>

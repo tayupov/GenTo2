@@ -4,9 +4,6 @@ import { PROPOSALNAME, PROPOSALCATEGORY, PROPOSALDESCRIPTION } from 'constants/v
 import fieldsOfWork from 'constants/fieldsOfWork';
 
 export default class General extends React.Component {
-	constructor(props) {
-		super(props);
-	}
 
 	render() {
 		return (
@@ -25,7 +22,6 @@ export default class General extends React.Component {
                 name={PROPOSALCATEGORY}
                 compact
                 required
-                compact
                 options={fieldsOfWork}
                 defaultValue="organisational"
               />

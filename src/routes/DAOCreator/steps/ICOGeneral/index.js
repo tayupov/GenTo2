@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Container, Divider, Cal } from 'semantic-ui-react';
+import { Form, Input, Container, Divider } from 'semantic-ui-react';
 import { TOKENNAME, SYMBOL, TOTALSUPPLY, SALESTART, SALEEND } from 'constants/validators';
 import validateICOGeneral from '../../validators/ICOGeneral';
 
