@@ -12,7 +12,7 @@ const styles = {
     }
 }
 
-const VotingCard = ({
+const ProposalCard = ({
     header, onClick, handleOpen, handleReset, voterAddresses, pollState, pollCategory, pollDescription, pollDate, pollPayout, account
 }) => (
     <Card
@@ -96,4 +96,4 @@ const VotingCard = ({
     </Card>
 )
 
-export default VotingCard;
+export default ProposalCard;

@@ -1,12 +1,12 @@
 import React from 'react';
 
-import VotingCard from 'components/VotingCard';
+import ProposalCard from 'components/ProposalCard';
 
 const PollList = ({
     onClick, handleOpen, handleReset, polls, account
 }) => (
     polls.map(poll => (
-        <VotingCard
+        <ProposalCard
             header={poll.header}
             voterAddresses={poll.voterAddresses}
             pollState={poll.state}

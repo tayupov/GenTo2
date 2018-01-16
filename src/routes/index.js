@@ -9,8 +9,7 @@ import DAOList from './DAOList';
 import DAOCreator from './DAOCreator';
 import DAOSettings from './DAOSettings';
 
-import DAOVotings from './DAOVotings';
-import DAOVotingsCreator from './DAOVotingsCreator';
+import ProposalCreator from './ProposalCreator';
 import ProposalList from './ProposalList';
 import Proposal from './Proposal';
 
@@ -18,7 +17,7 @@ import Proposal from './Proposal';
 /*
     Bear in mind that the order of <Route /> components inside a <Switch /> component
     determines which component will be rendered first. 
-    (e.g. /dao/:address/votings matches before dao/:address, order specific routes first)
+    (e.g. /dao/:address/proposals matches before dao/:address, order specific routes first)
 */
 
 export default class Routes extends React.Component {
@@ -49,7 +48,7 @@ export default class Routes extends React.Component {
 
                 <Route path="/dao/:address/proposals/create"
                     render={(props) => (
-                        <DAOVotingsCreator
+                        <ProposalCreator
                             account={account}
                             network={network}
                             address={props.match.params.address}

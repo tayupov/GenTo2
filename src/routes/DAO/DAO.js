@@ -20,7 +20,6 @@ export default class DAO extends React.Component {
     return (
       <div>
         <Button as={Link} to={{ pathname: `/dao/${address}/proposals` }} content="Proposals" />
-        <Button as={Link} to={{ pathname: `/dao/${address}/settings` }} content="Settings" />
         <DetailsSection />
         <TokenSection />
       </div>
