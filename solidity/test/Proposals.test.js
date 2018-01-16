@@ -6,6 +6,7 @@ const GentoDaoDeployer = require("./util/GentoDaoDeployer.js")(GentoDao)
 const should = require('should');
 const expect = require('expect');
 
+
 /*
 method signatures:
 
@@ -57,8 +58,6 @@ contract('ProposalToken', function(accounts) {
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[1]})
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[3]})
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[4]})
-      // change FieldOfWork to 2 (Product)
-      await testContract.setFieldOfWork.call(2)
       // create a new proposal
       await testContract.newProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
       // similar for the second proposal
@@ -255,8 +254,6 @@ contract('ProposalToken', function(accounts) {
   it("should compute the right influence of shareholder", async function() {
     // set time between ICO START and END
     await testContract.setCurrentTime.sendTransaction(1300000)
-    // set the FieldOfWork to 1 (Organisational) instead of Finance
-    await testContract.setFieldOfWork.call(1)
     // user 1, 5 and 6 become shareholder
     await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
     await testContract.buy.sendTransaction({from: accounts[5], value: 1000})
@@ -297,8 +294,6 @@ contract('ProposalToken', function(accounts) {
     expect(p[0]).toBe(accounts[0])
     // the amount of token in the poposal should be 10
     expect(Number(p[1])).toBe(10)
-    // the field of work of the proposal should be 0 (Finance)
-    expect(+await testContract.getFieldOfWork.call()).toBe(0)
     // the proposal is finished
     expect(p[4]).toBe(true)
     // the proposal is passed
@@ -507,8 +502,6 @@ contract('ProposalToken', function(accounts) {
       await testContract.buy.sendTransaction({from: accounts[3], value: 2000})
       // set time to after ICO
       await testContract.setCurrentTime.sendTransaction(2200000)
-      // set the field of work to 2 (Product)
-      await testContract.setFieldOfWork.call(2)
       // create proposal in field of work 2
       await testContract.newProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
       let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
@@ -521,8 +514,6 @@ contract('ProposalToken', function(accounts) {
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[1]})
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[3]})
 
-      // set field of work to 0 (Finance)
-      await testContract.setFieldOfWork.call(0)
       // create another proposal
       await testContract.newProposal.sendTransaction(accounts[2], 200, 0, {from: accounts[2]})
 
@@ -565,8 +556,6 @@ contract('ProposalToken', function(accounts) {
       await testContract.buy.sendTransaction({from: accounts[3], value: 2000})
       // set time to after ICO
       await testContract.setCurrentTime.sendTransaction(2200000)
-      // set FieldOfWork to Product
-      await testContract.setFieldOfWork.call(2)
       // create proposal in field of work 2
       await testContract.newProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
 
@@ -602,8 +591,6 @@ contract('ProposalToken', function(accounts) {
       await testContract.buy.sendTransaction({from: accounts[3], value: 2000})
       // set time to after ICO
       await testContract.setCurrentTime.sendTransaction(2200000)
-      // set FieldOfWork to Product
-      await testContract.setFieldOfWork.call(2)
       // create proposal in field of work 2
       await testContract.newProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
       let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
@@ -632,8 +619,6 @@ contract('ProposalToken', function(accounts) {
       await testContract.buy.sendTransaction({from: accounts[1], value: 4000})
       // set time to after ICO
       await testContract.setCurrentTime.sendTransaction(2200000)
-      // set FieldOfWork to Product
-      await testContract.setFieldOfWork.call(2)
       // Create Proposal in Field of work 2
       await testContract.newProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
       let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
