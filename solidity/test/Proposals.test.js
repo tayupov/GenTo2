@@ -1,4 +1,3 @@
-const Proposals = artifacts.require("./Proposals.sol");
 const GentoDao = artifacts.require("./GentoDao.sol");
 
 const GentoDaoDeployer = require("./util/GentoDaoDeployer.js")(GentoDao)

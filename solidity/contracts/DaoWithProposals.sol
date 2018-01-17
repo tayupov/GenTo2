@@ -1,18 +1,11 @@
 pragma solidity ^0.4.8;
 
-contract Proposals {
+import './DaoWithIco.sol';
+contract DaoWithProposals is DaoWithIco {
 
     Proposal[] public proposals;
     uint public debatingPeriodInMinutes;
-    uint public numProposals;
-
     enum FieldOfWork { Finance, Organisational, Product, Partnership }
-
-    mapping(address => uint256) financepoints;
-    mapping(address => uint256) productpoints;
-    mapping(address => uint256) orgpoints;
-    mapping(address => uint256) partnerpoints;
-
 
     struct Proposal {
         address recipient;
@@ -34,8 +27,6 @@ contract Proposals {
         address voter;
     }
 
-    event NumberLogger(string description, uint number);
-    event AddressLogger(string description, address addr);
     event ProposalFinishedLogger(uint proposalId, uint totalVotes, uint approve, uint disapprove);
     event NewProposalCreated(uint proposalID);
     event Voted(uint proposalID, bool position, address voter);
@@ -50,12 +41,16 @@ contract Proposals {
         require(isIcoFinished());
         _;
     }
-
-    //constructor
-    function ProposalToken() public payable {
-        debatingPeriodInMinutes = 10;  // TODO Move to settings
+    function DaoWithProposals(uint256 _maxAmountToRaiseInICO,
+    string _symbol,
+    string _name,
+    uint256 _buyPriceStart,
+    uint256 _buyPriceEnd,
+    uint256 _saleStart,
+    uint256 _saleEnd,
+    bool _dev) DaoWithIco(_maxAmountToRaiseInICO, _symbol, _name, _buyPriceStart, _buyPriceEnd, _saleStart, _saleEnd, _dev) public {
+        debatingPeriodInMinutes = 10;  // TODO add to constructor
     }
-
 
     function getProposal(uint proposalID) public constant returns (address recipient,
     uint amount,
@@ -74,10 +69,7 @@ contract Proposals {
         return proposals.length;
     }
 
-    function isIcoFinished() public returns (bool icoFinished);
-    function currentTime() public returns (uint time);
-    function isShareholder(address userAddress) public returns (bool shareholder);
-    function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) public returns (uint influence);
+    function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) public constant returns (uint influence);
 
     function newProposal(
         address beneficiary,
@@ -91,13 +83,12 @@ contract Proposals {
         Proposal storage proposal = proposals[proposalID];
         proposal.recipient = beneficiary;
         proposal.amount = weiAmount;
-        proposal.proposalHash = sha3(beneficiary, weiAmount); // TODO add transactionBytecode
+        proposal.proposalHash = keccak256(beneficiary, weiAmount); // TODO add transactionBytecode
         proposal.proposalDeadline = currentTime() + debatingPeriodInMinutes * 1 minutes;
         proposal.finished = false;
         proposal.fieldOfWork = fieldOfWork;
         proposal.proposalPassed = false;
         proposal.dividend = 0;
-        numProposals = proposalID;
         NewProposalCreated(proposalID);
         return proposalID;
     }
@@ -121,7 +112,6 @@ contract Proposals {
 
     function executeProposal(uint proposalId) public votingAllowed
     {
-        // proposals[0] or proposals[proposalNumber] ???
         Proposal storage proposal = proposals[proposalId];
 
         require(currentTime() > proposal.proposalDeadline                       // If it is past the proposal deadline
@@ -134,15 +124,6 @@ contract Proposals {
         for (uint i = 0; i < proposal.votes.length; ++i) {
             Vote storage v = proposal.votes[i];
             uint voteWeight = getInfluenceOfVoter(v.voter, proposal.fieldOfWork);
-            if (proposal.fieldOfWork == FieldOfWork.Finance) {
-                financepoints[v.voter] += 5;
-            } else if (proposal.fieldOfWork == FieldOfWork.Organisational) {
-                orgpoints[v.voter] +=5;
-            } else if (proposal.fieldOfWork == FieldOfWork.Product) {
-                productpoints[v.voter] +=5;
-            } else if (proposal.fieldOfWork == FieldOfWork.Partnership) {
-                partnerpoints[v.voter] +=5;
-            }
             if (v.inSupport) {
                 approve += voteWeight;
             } else {

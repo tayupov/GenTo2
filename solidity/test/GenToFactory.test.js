@@ -39,7 +39,7 @@ contract('GenToFactory', function(accounts) {
       let instance = await createNewDAO() //Create contract with default data
       expect(await instance.name()).toEqual(defaultICOdata.name)
       expect(await instance.symbol()).toEqual(defaultICOdata.symbol)
-      expect(+await instance.totalSupply()).toEqual(defaultICOdata.totalSupply)
+      expect(+await instance.totalSupply()).toEqual(0) //because nothing was sold yet
       expect(+await instance.buyPriceStart()).toEqual(defaultICOdata.buyPriceStart)
       expect(+await instance.buyPriceEnd()).toEqual(defaultICOdata.buyPriceEnd)
       expect(+await instance.saleStart()).toEqual(defaultICOdata.saleStart)

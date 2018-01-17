@@ -113,7 +113,7 @@ contract('GentoDao', function(accounts) {
   it("should not be possible to buy more tokens than there are in the ICO", async function() {
     await contract.setCurrentTime.sendTransaction(1200000)
     // get the current balance of the ICO
-    const currTokensTemp = await contract.bal()
+    const currTokensTemp = await contract.remainingTokensForICOPurchase()
     const currTokens = currTokensTemp.toNumber()
     // get the buy price
     const buyPrice = await contract.getBuyPrice.call()
