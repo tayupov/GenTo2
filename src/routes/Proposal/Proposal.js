@@ -8,7 +8,6 @@ export default class Proposal extends React.Component {
     }
 
     render() {
-        // const address = this.props.address;
         return (<h1>One Single Proposal</h1>
                 )
     }

@@ -157,7 +157,7 @@ class DetailsSection extends Component {
 										<Checkbox label='Organisational' />
 									</Grid.Column>
 									<Grid.Column width={8}>
-										<Input name="foo" type="text" placeholder="address" class="prompt" autocomplete="on" style={{ width: '200px' }} />
+										<Input name="foo" type="text" placeholder="address" class="prompt" autoComplete="on" style={{ width: '200px' }} />
 									</Grid.Column>
 								</Grid.Row>
 								<Grid.Row>
@@ -165,7 +165,7 @@ class DetailsSection extends Component {
 										<Checkbox label='Product' />
 									</Grid.Column>
 									<Grid.Column width={8}>
-										<Input name="foo" type="text" placeholder="address" class="prompt" autocomplete="on" style={{ width: '200px' }} />
+										<Input name="foo" type="text" placeholder="address" class="prompt" autoComplete="on" style={{ width: '200px' }} />
 									</Grid.Column>
 								</Grid.Row>
 								<Grid.Row>
@@ -173,7 +173,7 @@ class DetailsSection extends Component {
 										<Checkbox label='Finance' />
 									</Grid.Column>
 									<Grid.Column width={8}>
-										<Input name="foo" type="text" placeholder="address" class="prompt" autocomplete="on" style={{ width: '200px' }} />
+										<Input name="foo" type="text" placeholder="address" class="prompt" autoComplete="on" style={{ width: '200px' }} />
 									</Grid.Column>
 								</Grid.Row>
 								<Grid.Row>
@@ -181,7 +181,7 @@ class DetailsSection extends Component {
 										<Checkbox label='Partnership' />
 									</Grid.Column>
 									<Grid.Column width={8}>
-										<Input name="foo" type="text" placeholder="address" class="prompt" autocomplete="on" style={{ width: '200px' }} />
+										<Input name="foo" type="text" placeholder="address" class="prompt" autoComplete="on" style={{ width: '200px' }} />
 									</Grid.Column>
 								</Grid.Row>
 								<Grid.Row style={{ marginBottom: '0' }}>

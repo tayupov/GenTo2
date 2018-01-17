@@ -9,7 +9,7 @@ export default class ProposalList extends React.Component {
             <Card.Group>
                 {proposals.map((proposal, index) => {
                     return (
-                        <Card as={Link} to={{ pathname: `proposals/${proposal.address}` }} key={index}>
+                        <Card as={Link} to={{ pathname: `proposals/${proposal.proposalHash}` }} key={index}>
                             <Card.Content>
                                 <Card.Header>
                                     {proposal.name}
