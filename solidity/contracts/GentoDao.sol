@@ -16,22 +16,25 @@ contract GentoDao is DaoWithDelegation {
     bool _dev) DaoWithDelegation(_maxAmountToRaiseInICO, _symbol, _name, _buyPriceStart, _buyPriceEnd, _saleStart, _saleEnd, _dev) public {
     }
     // ensure that the method can be inoked only once
-    function claimPayout(uint proposalNumber, address claimer) public daoActive returns (uint amount) {
+    function claimPayout(uint proposalNumber) public daoActive returns (uint amount) {
         Proposal storage proposal = proposals[proposalNumber];
 
-        require(proposal.finished && proposal.proposalPassed && proposal.recipient == claimer);
+        require(proposal.finished && proposal.proposalPassed && proposal.recipient == msg.sender
+          && proposal.amount != 0);
 
         balances[msg.sender] += proposal.amount;
+        proposal.amount = 0;
+
 
         return proposal.amount;
     }
-
-    function claimDividend(uint proposalNumber, address claimer) public onlyShareholders {
+    // TODO the same user isn't allowed to claim the dividend again
+    function claimDividend(uint proposalNumber) public onlyShareholders {
         Proposal storage proposal = proposals[proposalNumber];
 
-        require(proposal.finished && proposal.proposalPassed /*&& !!proposal.dividend*/);
-        // msg.sender oder claimer?
-        balances[msg.sender] += balances[claimer] /** proposal.dividend*/;
+        require(proposal.finished && proposal.proposalPassed && proposal.dividend != 0);
+
+        balances[msg.sender] += balances[msg.sender] * proposal.dividend;
     }
 
     function executeProposal(uint proposalId) public votingAllowed
