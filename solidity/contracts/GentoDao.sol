@@ -138,6 +138,14 @@ contract GentoDao is Ico, Proposals {
         balances[msg.sender] += balances[msg.sender] /** proposal.dividend*/;
     }
 
+    function claimEther() public payable {
+        uint amount = balances[msg.sender];
+        if (amount > 0) {
+            balances[msg.sender] = 0;
+            msg.sender.transfer(amount);
+        }
+    }
+
     function isShareholder(address userAddress) returns (bool shareholder){
         return balances[userAddress] > 0;
     }

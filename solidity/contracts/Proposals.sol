@@ -23,6 +23,7 @@ contract Proposals {
         bool proposalPassed;
         uint passedPercent;
         bytes32 proposalHash;
+        uint dividend;
         Vote[] votes;
         mapping (address => bool) voted;
     }
@@ -59,10 +60,11 @@ contract Proposals {
     uint proposalDeadline,
     bool finished,
     bool proposalPassed,
-    uint passedPercent) {
+    uint passedPercent,
+    uint dividend) {
         Proposal storage proposal = proposals[proposalID];
         return (proposal.recipient, proposal.amount, proposal.description, proposal.proposalDeadline, proposal.finished, proposal
-        .proposalPassed, proposal.passedPercent);
+        .proposalPassed, proposal.passedPercent, proposal.dividend);
     }
 
     function getNumProposals() public constant returns (
@@ -86,11 +88,15 @@ contract Proposals {
     function isShareholder(address userAddress) returns (bool shareholder);
     function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) returns (uint influence);
 
+    /* function newProposalDividend(address beneficiary, uint weiAmount, FieldOfWork fieldOfWork, uint dividend)
+        public votingAllowed onlyShareholders returns (uint proposalID) {
+            newProposal(beneficiary, weiAmount, fieldOfWork, dividend)
+    } */
+
     function newProposal(
         address beneficiary,
         uint weiAmount,
-        FieldOfWork fieldOfWork) public votingAllowed
-        onlyShareholders
+        FieldOfWork fieldOfWork) public votingAllowed onlyShareholders
     returns (uint proposalID)
     {
         AddressLogger("BENEFICIARY", beneficiary);
@@ -103,7 +109,7 @@ contract Proposals {
         proposal.finished = false;
         proposal.fieldOfWork = fieldOfWork;
         proposal.proposalPassed = false;
-        //proposal.dividend = 0;
+        proposal.dividend = 0;
         numProposals = proposalID;
         NewProposalCreated(proposalID);
         return proposalID;

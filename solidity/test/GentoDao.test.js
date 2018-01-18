@@ -212,7 +212,7 @@ contract('GentoDao', function(accounts) {
   it("should be possible to claim the dividend if the user is a shareholder", async function() {
     // set time between ICO START and END
     await contract.setCurrentTime.sendTransaction(1200000)
-    // user 0,1,2 become shareholders
+    // user 3,4,5 become shareholders
     await contract.buy.sendTransaction({from: accounts[3], value: 100})
     await contract.buy.sendTransaction({from: accounts[4], value: 200})
     await contract.buy.sendTransaction({from: accounts[5], value: 300})
@@ -254,6 +254,40 @@ contract('GentoDao', function(accounts) {
 
     // user 4 wants to claim the dividend on the proposal
     //await contract.claimDividend.sendTransaction(newProposalArgs2.proposalID, {from: accounts[4]})
+  })
+
+  it("should be able for a user to transfer the money of the contract to his wallet", async function() {
+    // set time between ICO START and END
+    await contract.setCurrentTime.sendTransaction(1200000)
+    // user 0 become shareholders
+    await contract.buy.sendTransaction({from: accounts[3], value: 100})
+    await contract.buy.sendTransaction({from: accounts[4], value: 200})
+    await contract.buy.sendTransaction({from: accounts[5], value: 300})
+    // set time to after ICO
+    await contract.setCurrentTime.sendTransaction(2200000)
+    // create a new proposal
+    await contract.newProposal.sendTransaction(accounts[3], 345, 2, {from: accounts[3]})
+
+    let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
+        (error, log) => error ? reject(error) : resolve(log)));
+    // check whether the proposal gets created
+    assert.equal(newProposalLog.length, 1, 'should be one new Proposal');
+    // returns the proposal log object with proposal id
+    let newProposalArgs = newProposalLog[0].args;
+    // user 0,1,2 vote for the proposal
+    await contract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[3]})
+    await contract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[4]})
+    await contract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[5]})
+    // set time to after the proposal period
+    await contract.setCurrentTime.sendTransaction(2300000)
+    // execute the proposal therefor the proposal gets passed and finished
+    await contract.executeProposal.sendTransaction(newProposalArgs.proposalID)
+    // user 3,4,5 claims the payout from the contracts
+    await contract.claimEther.sendTransaction({from: accounts[3]})
+    await contract.claimEther.sendTransaction({from: accounts[4]})
+    await contract.claimEther.sendTransaction({from: accounts[5]})
+    console.log(+await accounts[3].balance)
+
   })
 
 });
