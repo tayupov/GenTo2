@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ProposalList from './ProposalList';
 
-export default class ProposalListContainer extends Component {
+export default class ProposalListContainer extends React.Component {
 
   constructor() {
     super();
