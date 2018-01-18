@@ -1,12 +1,9 @@
 import React from 'react';
-
-import DAOVotingsCreator from './DAOVotingsCreator';
-
+import ProposalsCreator from './ProposalsCreator';
 import steps from './steps'
-import web3 from 'utils/web3';
 import { adjustStepZilla } from 'utils/stepzilla'
 
-export default class DAOVotingsCreatorContainer extends React.Component {
+export default class ProposalsCreatorContainer extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -14,14 +11,18 @@ export default class DAOVotingsCreatorContainer extends React.Component {
 		}
 	}
 
+	async handleCreate() {
+		console.log(this.state);
+		// TODO Michael create Proposal
+	}	
+
 	componentDidMount() {
 		adjustStepZilla(steps, this);
 	}
 
 	render() {
-
 		return (
-			<DAOVotingsCreator />
+			<ProposalsCreator />
 		)
 	}
 }

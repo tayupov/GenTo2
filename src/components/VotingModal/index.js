@@ -7,7 +7,7 @@ import {
     Icon
 } from 'semantic-ui-react';
 
-const votingModal = ({
+const proposalModal = ({
     modalOpen,
     modalState,
     modalSubmitted,
@@ -44,7 +44,7 @@ const votingModal = ({
             closeOnDimmerClick={false}
             closeOnEscape={false}
         >
-            <Header icon='browser' content="Voting" />
+            <Header icon='browser' content="Proposal" />
             <Modal.Content>
                 {modalState === 'approve' && <h3>You are about to vote FOR the following proposal:</h3>}
                 {modalState === 'decline' && <h3>You are about to vote AGAINST the following proposal:</h3>}
@@ -62,4 +62,4 @@ const votingModal = ({
     )
 }
 
-export default votingModal;
+export default ProposalModal;

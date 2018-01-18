@@ -2,10 +2,7 @@ import React from 'react';
 import AlertContainer from 'react-alert';
 import DAOSidebar from 'components/DAOSidebar';
 import Routes from 'routes';
-
-import web3 from 'utils/web3';
 import 'styles/app.css';
-
 import provider from 'provider'
 import { loadAllOrganizations } from 'provider/DAOListProvider'
 
@@ -26,7 +23,7 @@ export default class App extends React.Component {
   }
 
   async componentWillUpdate(nextProps, nextState) {
-    if (nextState.account != this.state.account) {
+    if (nextState.account !== this.state.account) {
       const organizations = await loadAllOrganizations(nextState.account)
       this.setState({ organizations });
     }

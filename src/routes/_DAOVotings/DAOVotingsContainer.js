@@ -57,7 +57,7 @@ export default class DAOVotingsContainer extends Component {
 					handleOpen={this.handleOpen}
 					handleReset={this.handleReset}
 					onChange={this.onChange}
-					/>}
+				/>}
 			</div>
 		)
 	}

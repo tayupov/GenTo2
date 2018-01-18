@@ -1,29 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import { Grid, Header, Segment, Checkbox, Input, Button, Icon } from 'semantic-ui-react';
-import moment from 'moment';
-
-let auctionInterval;
-
-const tokenPriceIncrease = 'The token price will <strong>increase</strong> from <strong>1000</strong> to <strong>10000</strong> finney'
 
 class DetailsSection extends Component {
-
-	constructor(props) {
-		super(props);
-	}
-
 	onClick = () => (
 		this.props.notify('Power transferred!', 'success')
 	)
 
-
-	componentWillMount() {
-	}
-
 	render() {
-
 		return (
 			<Grid>
 				<Grid.Row>
@@ -173,7 +157,7 @@ class DetailsSection extends Component {
 										<Checkbox label='Organisational' />
 									</Grid.Column>
 									<Grid.Column width={8}>
-										<Input name="foo" type="text" placeholder="address" class="prompt" autocomplete="on" style={{ width: '200px' }} />
+										<Input name="foo" type="text" placeholder="address" class="prompt" autoComplete="on" style={{ width: '200px' }} />
 									</Grid.Column>
 								</Grid.Row>
 								<Grid.Row>
@@ -181,7 +165,7 @@ class DetailsSection extends Component {
 										<Checkbox label='Product' />
 									</Grid.Column>
 									<Grid.Column width={8}>
-										<Input name="foo" type="text" placeholder="address" class="prompt" autocomplete="on" style={{ width: '200px' }} />
+										<Input name="foo" type="text" placeholder="address" class="prompt" autoComplete="on" style={{ width: '200px' }} />
 									</Grid.Column>
 								</Grid.Row>
 								<Grid.Row>
@@ -189,7 +173,7 @@ class DetailsSection extends Component {
 										<Checkbox label='Finance' />
 									</Grid.Column>
 									<Grid.Column width={8}>
-										<Input name="foo" type="text" placeholder="address" class="prompt" autocomplete="on" style={{ width: '200px' }} />
+										<Input name="foo" type="text" placeholder="address" class="prompt" autoComplete="on" style={{ width: '200px' }} />
 									</Grid.Column>
 								</Grid.Row>
 								<Grid.Row>
@@ -197,7 +181,7 @@ class DetailsSection extends Component {
 										<Checkbox label='Partnership' />
 									</Grid.Column>
 									<Grid.Column width={8}>
-										<Input name="foo" type="text" placeholder="address" class="prompt" autocomplete="on" style={{ width: '200px' }} />
+										<Input name="foo" type="text" placeholder="address" class="prompt" autoComplete="on" style={{ width: '200px' }} />
 									</Grid.Column>
 								</Grid.Row>
 								<Grid.Row style={{ marginBottom: '0' }}>

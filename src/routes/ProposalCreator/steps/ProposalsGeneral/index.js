@@ -1,12 +1,9 @@
 import React from 'react';
 import { Container, Form, Input, TextArea, Select, Divider } from 'semantic-ui-react';
-import { VOTINGNAME, VOTINGCATEGORY, VOTINGDESCRIPTION } from 'constants/validators';
+import { PROPOSALNAME, PROPOSALCATEGORY, PROPOSALDESCRIPTION } from 'constants/validators';
 import fieldsOfWork from 'constants/fieldsOfWork';
 
 export default class General extends React.Component {
-	constructor(props) {
-		super(props);
-	}
 
 	render() {
 		return (
@@ -15,28 +12,27 @@ export default class General extends React.Component {
 				<Form>
           <Form.Group widths='equal'>
             <Form.Field>
-              <label>Enter the voting title</label>
-              <Input type="text" name={VOTINGNAME} id={VOTINGNAME} size='small' />
+              <label>Enter the proposal title</label>
+              <Input type="text" name={PROPOSALNAME} id={PROPOSALNAME} size='small' />
             </Form.Field>
             <Form.Field>
               <label>Choose the field of work</label>
               <Select 
-                id={VOTINGCATEGORY}
-                name={VOTINGCATEGORY}
+                id={PROPOSALCATEGORY}
+                name={PROPOSALCATEGORY}
                 compact
                 required
-                compact
                 options={fieldsOfWork}
                 defaultValue="organisational"
               />
             </Form.Field>
           </Form.Group>
           <Form.Field>
-            <label>Enter the voting description</label>
+            <label>Enter the proposal description</label>
             <TextArea
               type="text"
-              name={VOTINGDESCRIPTION}
-              id={VOTINGDESCRIPTION}
+              name={PROPOSALDESCRIPTION}
+              id={PROPOSALDESCRIPTION}
               size='small'
             />
           </Form.Field>

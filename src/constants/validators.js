@@ -27,10 +27,10 @@ export const SELECTEDCURRENCY = 'selectedcurrency'
 export const STARTPRICE = 'startprice'
 export const ENDPRICE = 'endprice'
 
-// votings
-export const VOTINGNAME = 'votingName'
-export const VOTINGCATEGORY = 'votingCategory'
-export const VOTINGDESCRIPTION = 'votingDescription'
+// proposals
+export const PROPOSALNAME = 'proposalName'
+export const PROPOSALCATEGORY = 'proposalCategory'
+export const PROPOSALDESCRIPTION = 'proposalDescription'
 
-export const VOTINGPAYOUT = 'votingPayout'
-export const VOTINGEND = 'votingEnd'
+export const PROPOSALPAYOUT = 'proposalPayout'
+export const PROPOSALEND = 'proposalEnd'
