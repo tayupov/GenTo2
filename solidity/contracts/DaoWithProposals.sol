@@ -58,7 +58,8 @@ contract DaoWithProposals is DaoWithIco {
     uint proposalDeadline,
     bool finished,
     bool proposalPassed,
-    uint passedPercent, uint dividend) {
+    uint passedPercent,
+    uint dividend) {
         Proposal storage proposal = proposals[proposalID];
         return (proposal.recipient, proposal.amount, proposal.description, proposal.proposalDeadline, proposal.finished, proposal
         .proposalPassed, proposal.passedPercent, proposal.dividend);
@@ -70,6 +71,21 @@ contract DaoWithProposals is DaoWithIco {
     }
 
     function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) public constant returns (uint influence);
+
+    function newProposalDividend(
+        address beneficiary,
+        uint weiAmount,
+        FieldOfWork fieldOfWork,
+        uint dividend) public votingAllowed onlyShareholders
+    returns(uint proposalID)
+    {
+
+        uint proposalDividendID = newProposal(beneficiary, weiAmount, fieldOfWork);
+        Proposal storage proposal  = proposals[proposalDividendID];
+        proposal.dividend = dividend;
+        return proposalDividendID;
+
+    }
 
     function newProposal(
         address beneficiary,

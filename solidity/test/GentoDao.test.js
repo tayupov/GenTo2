@@ -146,27 +146,106 @@ contract('GentoDao', function(accounts) {
     // check whether the proposal gets created
     assert.equal(newProposalLog.length, 1, 'should be one new Proposal');
     // returns the proposal log object with proposal id
-    let newProposalArgs = newProposalLog[0].args;
+    let proposalID = newProposalLog[0].args.proposalID;
     // user 0,1,2 vote for the proposal
-    await contract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[0]})
-    await contract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[1]})
-    await contract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[2]})
+    await contract.vote.sendTransaction(proposalID, true, {from: accounts[0]})
+    await contract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
+    await contract.vote.sendTransaction(proposalID, true, {from: accounts[2]})
     // set time to after the proposal period
     await contract.setCurrentTime.sendTransaction(2300000)
     // execute the proposal therefor the proposal gets passed and finished
-    await contract.executeProposal.sendTransaction(newProposalArgs.proposalID)
+    await contract.executeProposal.sendTransaction(proposalID)
     // get the proposal by id
-    var p = await contract.getProposal.call(newProposalArgs.proposalID)
+    var p = await contract.getProposal.call(proposalID)
     // claim payout is only possible if the proposal is finished and passed
     expect(p[4]).toBe(true)
     expect(p[5]).toBe(true)
     // get the proposal payout by id
-    const proposalPayout = await contract.claimPayout.call(newProposalArgs.proposalID, accounts[1])
+    await contract.claimPayout.sendTransaction(proposalID, {from: accounts[1]})
     // the proposal payout should be the same as the param value while creating the proposal
     // user 1 is the creator of the proposal and he gets the payout
     // truffle returns strings for numbers
-    expect(Number(proposalPayout)).toBe(345)
+    expect(Number(p[1])).toBe(345)
+  })
 
+  it("should ensure that the claimer of the payout can get the payout only once", async function() {
+    // set time between ICO START and END
+    await contract.setCurrentTime.sendTransaction(1200000)
+    // user 5,6 become shareholders
+    await contract.buy.sendTransaction({from: accounts[5], value: 100})
+    await contract.buy.sendTransaction({from: accounts[6], value: 200})
+    // set time to after ICO
+    await contract.setCurrentTime.sendTransaction(2200000)
+    // create a new proposal in field of work 0
+    await contract.newProposal.sendTransaction(accounts[5], 345, 0, {from: accounts[5]})
+
+    let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
+        (error, log) => error ? reject(error) : resolve(log)));
+    // check whether the proposal gets created
+    assert.equal(newProposalLog.length, 1, 'should be one new Proposal');
+    // returns the proposal log object with proposal id
+    let proposalID = newProposalLog[0].args.proposalID;
+    // user 0,1,2 vote for the proposal
+    await contract.vote.sendTransaction(proposalID, true, {from: accounts[5]})
+    await contract.vote.sendTransaction(proposalID, true, {from: accounts[6]})
+    // set time to after the proposal period
+    await contract.setCurrentTime.sendTransaction(2300000)
+    // execute the proposal therefor the proposal gets passed and finished
+    await contract.executeProposal.sendTransaction(proposalID)
+    // get the proposal by id
+    var p = await contract.getProposal.call(proposalID)
+    // user 1 claims the payout for the first time
+    await contract.claimPayout.sendTransaction(proposalID, {from: accounts[5]})
+    // if user 1 claims the payout again it should be rejected
+    try {
+      await contract.claimPayout.sendTransaction(proposalID, {from: accounts[1]})
+      await contract.claimPayout.sendTransaction(proposalID, {from: accounts[1]})
+      await contract.claimPayout.sendTransaction(proposalID, {from: accounts[1]})
+      should.fail("it's not possible to claim the payout more then once")
+    } catch(e) {
+        expect(e.message).toContain("VM Exception while processing transaction: ")
+    }
+  })
+
+  it("should be able for different users to claim the dividend for a succesful proposal", async function() {
+    await contract.setCurrentTime.sendTransaction(1200000)
+    await contract.buy.sendTransaction({from: accounts[1], value: 100})
+    await contract.buy.sendTransaction({from: accounts[2], value: 200})
+    // set time to after ICO
+    await contract.setCurrentTime.sendTransaction(2200000)
+    await contract.newProposal.sendTransaction(accounts[1], 500, 0, {from: accounts[1]})
+
+    let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
+        (error, log) => error ? reject(error) : resolve(log)));
+    assert.equal(newProposalLog.length, 1, 'should be one new Proposal');
+    let proposalID = newProposalLog[0].args.proposalID;
+
+    await contract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
+    await contract.vote.sendTransaction(proposalID, true, {from: accounts[2]})
+    // set time to after the proposal period
+    await contract.setCurrentTime.sendTransaction(2300000)
+    await contract.executeProposal.sendTransaction(proposalID)
+    var p = await contract.getProposal.call(proposalID)
+    // proposals is passed and finished
+    expect(p[4]).toBe(true)
+    expect(p[5]).toBe(true)
+    // create dividend proposal
+    await contract.setCurrentTime.sendTransaction(2200000)
+    await contract.newProposalDividend.sendTransaction(accounts[1], 500, 0, 100, {from: accounts[1]})
+
+    let newProposalDividendLog = await new Promise((resolve, reject) => newProposalEventListener.get(
+        (error, log) => error ? reject(error) : resolve(log)));
+    assert.equal(newProposalDividendLog.length, 1, 'should be one new Proposal');
+    let proposalDividendID = newProposalDividendLog[0].args.proposalID;
+
+    await contract.vote.sendTransaction(proposalDividendID, true, {from: accounts[1]})
+    await contract.vote.sendTransaction(proposalDividendID, true, {from: accounts[2]})
+
+    await contract.setCurrentTime.sendTransaction(2300000)
+    await contract.executeProposal.sendTransaction(proposalDividendID)
+
+    await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[1]})
+    await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[2]})
   })
 
 });
