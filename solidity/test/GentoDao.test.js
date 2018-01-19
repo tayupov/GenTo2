@@ -196,15 +196,45 @@ contract('GentoDao', function(accounts) {
     var p = await contract.getProposal.call(proposalID)
     // user 1 claims the payout for the first time
     await contract.claimPayout.sendTransaction(proposalID, {from: accounts[5]})
-    // if user 1 claims the payout again it should be rejected
+    //if user 5 claims the payout again it should be rejected
     try {
-      await contract.claimPayout.sendTransaction(proposalID, {from: accounts[1]})
-      await contract.claimPayout.sendTransaction(proposalID, {from: accounts[1]})
-      await contract.claimPayout.sendTransaction(proposalID, {from: accounts[1]})
+      await contract.claimPayout.sendTransaction(proposalID, {from: accounts[5]})
+      await contract.claimPayout.sendTransaction(proposalID, {from: accounts[5]})
+      await contract.claimPayout.sendTransaction(proposalID, {from: accounts[5]})
       should.fail("it's not possible to claim the payout more then once")
     } catch(e) {
         expect(e.message).toContain("VM Exception while processing transaction: ")
     }
+  })
+
+  it("should ensure that the shareholder can claim the dividend only once", async function() {
+    await contract.setCurrentTime.sendTransaction(1200000)
+    await contract.buy.sendTransaction({from: accounts[1], value: 100})
+    await contract.buy.sendTransaction({from: accounts[2], value: 200})
+    await contract.setCurrentTime.sendTransaction(2200000)
+    await contract.newProposalDividend.sendTransaction(accounts[1], 0, 100, {from: accounts[1]})
+
+    let newProposalDividendLog = await new Promise((resolve, reject) => newProposalEventListener.get(
+        (error, log) => error ? reject(error) : resolve(log)));
+    assert.equal(newProposalDividendLog.length, 1, 'should be one new Proposal');
+    let proposalDividendID = newProposalDividendLog[0].args.proposalID;
+
+    await contract.vote.sendTransaction(proposalDividendID, true, {from: accounts[1]})
+    await contract.vote.sendTransaction(proposalDividendID, true, {from: accounts[2]})
+
+    await contract.setCurrentTime.sendTransaction(2300000)
+    await contract.executeProposal.sendTransaction(proposalDividendID)
+
+    await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[1]})
+    await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[2]})
+    // user 1 tries to claim again but it should fail
+    try {
+      await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[1]})
+    } catch(e) {
+        expect(e.message).toContain("VM Exception while processing transaction: ")
+    }
+
+
   })
 
   it("should be able for different users to claim the dividend for a succesful proposal", async function() {
