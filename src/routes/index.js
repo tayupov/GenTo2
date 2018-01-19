@@ -7,16 +7,16 @@ import NotFound from './NotFound';
 import DAO from './DAO';
 import DAOList from './DAOList';
 import DAOCreator from './DAOCreator';
-import DAOSettings from './DAOSettings';
 
-import DAOVotings from './DAOVotings';
-import DAOVotingsCreator from './DAOVotingsCreator';
+import ProposalCreator from './ProposalCreator';
+import ProposalList from './ProposalList';
+import Proposal from './Proposal';
 
 
 /*
     Bear in mind that the order of <Route /> components inside a <Switch /> component
     determines which component will be rendered first. 
-    (e.g. /dao/:address/votings matches before dao/:address, order specific routes first)
+    (e.g. /dao/:address/proposals matches before dao/:address, order specific routes first)
 */
 
 export default class Routes extends React.Component {
@@ -31,9 +31,9 @@ export default class Routes extends React.Component {
                         <DAOList
                             account={account}
                             notify={notify}
-                            />
+                        />
                     )}
-                    />
+                />
 
                 <Route path="/dao/create"
                     render={(props) => (
@@ -41,41 +41,43 @@ export default class Routes extends React.Component {
                             account={account}
                             network={network}
                             notify={notify}
-                            />
+                        />
                     )}
-                    />
+                />
 
-                <Route path="/dao/:address/votings/create"
+                <Route path="/dao/:address/proposals/create"
                     render={(props) => (
-                        <DAOVotingsCreator
+                        <ProposalCreator
                             account={account}
                             network={network}
                             address={props.match.params.address}
                             notify={notify}
-                            />
+                        />
                     )}
-                    />
+                />
 
-                <Route path="/dao/:address/votings"
+                <Route path="/dao/:address/proposals/:proposal"
                     render={(props) => (
-                        <DAOVotings
+                        <Proposal
+                            account={account}
+                            network={network}
+                            address={props.match.params.address}
+                            proposal={props.match.params.proposal}
+                            notify={notify}
+                        />
+                    )}
+                />
+
+                <Route path="/dao/:address/proposals"
+                    render={(props) => (
+                        <ProposalList
                             account={account}
                             network={network}
                             address={props.match.params.address}
                             notify={notify}
-                            />
+                        />
                     )}
-                    />
-
-                <Route path="/dao/:address/settings"
-                    render={(props) => (
-                        <DAOSettings
-                            account={account}
-                            network={network}
-                            address={props.match.params.address}
-                            notify={notify}
-                            />)}
-                    />
+                />
 
                 <Route path="/dao/:address"
                     render={(props) => (
@@ -84,9 +86,9 @@ export default class Routes extends React.Component {
                             address={props.match.params.address}
                             network={network}
                             notify={notify}
-                            />
+                        />
                     )}
-                    />
+                />
 
                 <Route component={NotFound} />
 

@@ -4,13 +4,12 @@ import { Container } from 'semantic-ui-react';
 
 import steps from './steps';
 
-export default class DAOCreator extends React.Component {
-
+export default class ProposalsCreator extends React.Component {
   render() {
     return (
       <Container>
         <StepZilla steps={steps} stepsNavigation={false} />
       </Container>
-    )
+    );
   }
 }

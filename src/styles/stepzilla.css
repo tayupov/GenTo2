@@ -1,97 +1,118 @@
+
 ol.progtrckr {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  ol.progtrckr li {
-    display: inline-block;
-    text-align: center;
-    line-height: 4.5rem;
-    cursor: pointer;
-  }
-  
-  ol.progtrckr li span {
-    padding: 0 1.5rem;
-  }
-  
-  @media (max-width: 650px) {
-    .progtrckr li span {
-      display: none;
-    }
-  }
-  .progtrckr em {
+  list-style-type: none;
+  text-align: center;
+  padding: 0;
+}
+
+ol.progtrckr li {
+  display: inline-block;
+  text-align: center;
+  line-height: 4.5rem;
+  cursor: pointer;
+}
+
+ol.progtrckr li span {
+  padding: 0 1.5rem;
+}
+
+@media (max-width: 650px) {
+  .progtrckr li span {
     display: none;
-    font-weight: 700;
-    padding-left: 1rem;
   }
-  
-  @media (max-width: 650px) {
-    .progtrckr em {
-      display: inline;
-    }
+}
+.progtrckr em {
+  display: none;
+  font-weight: 700;
+  padding-left: 1rem;
+}
+
+@media (max-width: 650px) {
+  .progtrckr em {
+    display: inline;
   }
-  
-  ol.progtrckr li.progtrckr-todo {
-    color: silver;
-    border-bottom: 4px solid silver;
-  }
-  
-  ol.progtrckr li.progtrckr-doing {
-    color: black;
-    border-bottom: 4px solid #CCCCCC;
-  }
-  
-  ol.progtrckr li.progtrckr-done {
-    color: black;
-    border-bottom: 4px solid #5cb85c;
-  }
-  
-  ol.progtrckr li:after {
-    content: "\00a0\00a0";
-  }
-  
-  ol.progtrckr li:before {
-    position: relative;
-    bottom: -3.7rem;
-    float: left;
-    left: 50%;
-  }
-  
-  ol.progtrckr li.progtrckr-todo:before {
-    content: "\2022";
-    color: white;
-    background-color: #CCCCCC;
-    width: 1.2em;
-    line-height: 1.2em;
-    border-radius: 1.2em;
-  }
-  
-  ol.progtrckr li.progtrckr-todo:hover:before {
-    color: #ff4500;
-  }
-  
-  ol.progtrckr li.progtrckr-doing:before {
-    content: "\2022";
-    color: white;
-    background-color: #CCCCCC;
-    width: 1.2em;
-    line-height: 1.2em;
-    border-radius: 1.2em;
-  }
-  
-  ol.progtrckr li.progtrckr-doing:hover:before {
-    color: #ff4500;
-  }
-  
-  ol.progtrckr li.progtrckr-done:before {
-    content: "\2022";
-    color: white;
-    background-color: #5cb85c;
-    width: 1.2em;
-    line-height: 1.2em;
-    border-radius: 1.2em;
-  }
-  
-  ol.progtrckr li.progtrckr-done:hover:before {
-    color: #333;
-  }
+}
+
+ol.progtrckr li.progtrckr-todo {
+  color: silver;
+  border-bottom: 4px solid silver;
+}
+
+ol.progtrckr li.progtrckr-doing {
+  color: black;
+  border-bottom: 4px solid black;
+}
+
+ol.progtrckr li.progtrckr-done {
+  color: silver;
+  border-bottom: 4px solid #5cb85c;
+}
+
+ol.progtrckr li:after {
+  content: "\00a0\00a0";
+}
+
+ol.progtrckr li:before {
+  position: relative;
+  bottom: -3.7rem;
+  float: left;
+  left: 50%;
+}
+
+ol.progtrckr li.progtrckr-todo:before {
+  content: "\2022";
+  color: silver;
+  background-color: silver;
+  width: 1.2em;
+  line-height: 1.2em;
+  border-radius: 1.2em;
+}
+
+ol.progtrckr li.progtrckr-doing:before {
+  content: "\2022";
+  color: black;
+  background-color: black;
+  width: 1.2em;
+  line-height: 1.2em;
+  border-radius: 1.2em;
+}
+
+ol.progtrckr li.progtrckr-done:before {
+  content: "\2022";
+  color: #5cb85c;
+  background-color: #5cb85c;
+  width: 1.2em;
+  line-height: 1.2em;
+  border-radius: 1.2em;
+}
+
+button {
+  cursor: pointer;
+  display: inline-block;
+  min-height: 1em;
+  outline: none;
+  border: none;
+  vertical-align: baseline;
+  background: #E0E1E2 none;
+  color: rgba(0, 0, 0, 0.6);
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  margin: 0em 0.25em 0em 0em;
+  padding: 0.78571429em 1.5em 0.78571429em;
+  text-transform: none;
+  text-shadow: none;
+  font-weight: bold;
+  line-height: 1em;
+  font-style: normal;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 0.28571429rem;
+  box-shadow: 0px 0px 0px 1px transparent inset, 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-transition: opacity 0.1s ease, background-color 0.1s ease, color 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+  transition: opacity 0.1s ease, background-color 0.1s ease, color 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+  will-change: '';
+  -webkit-tap-highlight-color: transparent;
+}
