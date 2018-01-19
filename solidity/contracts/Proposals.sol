@@ -16,6 +16,7 @@ contract Proposals {
     struct Proposal {
         address recipient;
         uint amount;
+        string name;
         string description;
         FieldOfWork fieldOfWork;
         uint proposalDeadline;
@@ -91,6 +92,8 @@ contract Proposals {
     function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) returns (uint influence);
 
     function newProposal(
+        string name,
+        string description,
         address beneficiary,
         uint weiAmount,
         FieldOfWork fieldOfWork) public votingAllowed
@@ -101,6 +104,8 @@ contract Proposals {
         proposalID = proposals.length++;
         Proposal storage proposal = proposals[proposalID];
         proposal.recipient = beneficiary;
+        proposal.name = name;
+        proposal.description = description;
         proposal.amount = weiAmount;
         proposal.proposalHash = sha3(beneficiary, weiAmount); // TODO add transactionBytecode
         proposal.proposalDeadline = currentTime() + debatingPeriodInMinutes * 1 minutes;
