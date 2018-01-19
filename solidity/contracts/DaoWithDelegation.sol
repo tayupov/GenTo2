@@ -17,11 +17,6 @@ contract DaoWithDelegation is DaoWithProposals {
   function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) public constant returns (uint influence){
       uint influence1 = 0;
       for (uint i = 0; i < shareholders.length; ++i) {
-          // NumberLogger('shareholders.length', shareholders.length);
-          // AddressLogger("delegations[shareholders[i]][uint(fieldOfWork)]", delegations[shareholders[i]][uint(fieldOfWork)]);
-          // AddressLogger("voter", voter);
-          // NumberLogger("balances[shareholders[i]]", balances[shareholders[i]]);
-          // NumberLogger("influence1", influence1);
           if (delegations[shareholders[i]][uint(fieldOfWork)] == voter){
               influence1 += balances[shareholders[i]];
           }

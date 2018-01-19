@@ -231,7 +231,7 @@ contract('GentoDao', function(accounts) {
     expect(p[5]).toBe(true)
     // create dividend proposal
     await contract.setCurrentTime.sendTransaction(2200000)
-    await contract.newProposalDividend.sendTransaction(accounts[1], 500, 0, 100, {from: accounts[1]})
+    await contract.newProposalDividend.sendTransaction(accounts[1], 0, 100, {from: accounts[1]})
 
     let newProposalDividendLog = await new Promise((resolve, reject) => newProposalEventListener.get(
         (error, log) => error ? reject(error) : resolve(log)));
