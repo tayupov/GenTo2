@@ -11,3 +11,13 @@ const validContractKeys = [
 ]
 
 export const omitInvalidContractKeys = (state) => _.pick(state, validContractKeys)
+
+const validProposalKeys = [
+  'name',
+  'description',
+  'beneficiary',
+  'weiAmount',
+  'fieldOfWork'
+]
+
+export const omitInvalidProposalKeys = (state) => _.pick(state, validProposalKeys)

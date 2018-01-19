@@ -10,6 +10,7 @@ contract DaoWithProposals is DaoWithIco {
     struct Proposal {
         address recipient;
         uint amount;
+        string name;
         string description;
         FieldOfWork fieldOfWork;
         uint proposalDeadline;
@@ -104,6 +105,8 @@ contract DaoWithProposals is DaoWithIco {
     }
 
     function newProposal(
+        string name,
+        string description,
         address beneficiary,
         uint weiAmount,
         FieldOfWork fieldOfWork) public votingAllowed onlyShareholders
@@ -113,6 +116,8 @@ contract DaoWithProposals is DaoWithIco {
         proposalID = proposals.length++;
         Proposal storage proposal = proposals[proposalID];
         proposal.recipient = beneficiary;
+        proposal.name = name;
+        proposal.description = description;
         proposal.amount = weiAmount;
         proposal.proposalHash = keccak256(beneficiary, weiAmount); // TODO add transactionBytecode
         proposal.proposalDeadline = currentTime() + debatingPeriodInMinutes * 1 minutes;
