@@ -37,6 +37,31 @@ contract GentoDao is DaoWithDelegation {
         balances[msg.sender] += balances[msg.sender] * proposal.dividend;
     }
 
+    function getVRTinFoW(FieldOfWork fow) public constant returns(uint vrt) {
+      uint vrt1 = 0;
+      for (uint i = 0; i<shareholders.length; i++){
+        if (votingRewardTokens[shareholders[i]][uint(fow)] > 0) {
+          vrt1 += votingRewardTokens[shareholders[i]][uint(fow)];
+        }
+      }
+      return vrt1;
+    }
+
+    function getVRTInFoWOfDM(address dm, FieldOfWork fow) public constant returns(uint vrt) {
+      return votingRewardTokens[dm][uint(fow)];
+    }
+
+    function claimDMR(uint proposalNumber) public onlyShareholders {
+      Proposal storage proposal = proposals[proposalNumber];
+
+      require(proposal.finished && proposal.proposalPassed && proposal.dmr != 0);
+
+      balances[msg.sender] += (proposal.dmr * getVRTInFoWOfDM(msg.sender, proposal.fieldOfWork)) / getVRTinFoW(proposal.fieldOfWork);
+    }
+
+
+
+ 
     function executeProposal(uint proposalId) public votingAllowed
     {
       DaoWithProposals.executeProposal(proposalId);
