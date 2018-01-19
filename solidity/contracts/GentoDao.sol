@@ -61,10 +61,12 @@ contract GentoDao is DaoWithDelegation {
     function claimDMR(uint proposalNumber) public onlyShareholders {
         Proposal storage proposal = proposals[proposalNumber];
 
-        require(proposal.finished && proposal.proposalPassed && proposal.dmr != 0);
+        require(proposal.finished && proposal.proposalPassed && proposal.dmr != 0
+            && proposal.claimed[msg.sender] == false);
 
         balances[msg.sender] += (proposal.dmr * getVRTInFoWOfDM(msg.sender, proposal.fieldOfWork))
             / getVRTinFoW(proposal.fieldOfWork);
+        proposal.claimed[msg.sender] = true;
     }
 
     function executeProposal(uint proposalId) public votingAllowed {
