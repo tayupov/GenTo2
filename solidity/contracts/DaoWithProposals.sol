@@ -21,6 +21,7 @@ contract DaoWithProposals is DaoWithIco {
         uint dmr;
         Vote[] votes;
         mapping (address => bool) voted;
+        mapping (address => bool) claimed;
     }
 
     struct Vote {
@@ -100,11 +101,11 @@ contract DaoWithProposals is DaoWithIco {
         return proposalDividendID;
 
     }
+
     function newProposal(
         address beneficiary,
         uint weiAmount,
-        FieldOfWork fieldOfWork) public votingAllowed
-        onlyShareholders
+        FieldOfWork fieldOfWork) public votingAllowed onlyShareholders
     returns (uint proposalID)
     {
         AddressLogger("BENEFICIARY", beneficiary);
@@ -126,8 +127,7 @@ contract DaoWithProposals is DaoWithIco {
     function vote(
         uint proposalNumber,
         bool supportsProposal
-    ) public votingAllowed
-    onlyShareholders
+    ) public votingAllowed onlyShareholders
     returns (uint voteID)
     {
         Proposal storage proposal = proposals[proposalNumber];
