@@ -4,9 +4,20 @@ const GentoDaoDeployer = require("./util/GentoDaoDeployer.js")(GentoDao)
 const should = require('should')
 const expect = require('expect')
 
+var newProposalEventListener;
+
+async function getProposalID() {
+  let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
+      (error, log) => error ? reject(error) : resolve(log)));
+  // check whether the proposal gets created
+  assert.equal(newProposalLog.length, 1, 'should be one new Proposal');
+  // returns the proposal log object with proposal id
+  return newProposalLog[0].args.proposalID;
+}
+
 contract('GentoDao', function(accounts) {
   let contract;
-  let newProposalEventListener;
+
   beforeEach(async function() {
     contract = await GentoDaoDeployer()
     newProposalEventListener = contract.NewProposalCreated();
@@ -141,12 +152,7 @@ contract('GentoDao', function(accounts) {
     // create a new proposal in field of work 0
     await contract.newProposal.sendTransaction(accounts[1], 345, 0, {from: accounts[1]})
 
-    let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-        (error, log) => error ? reject(error) : resolve(log)));
-    // check whether the proposal gets created
-    assert.equal(newProposalLog.length, 1, 'should be one new Proposal');
-    // returns the proposal log object with proposal id
-    let proposalID = newProposalLog[0].args.proposalID;
+    let proposalID = await getProposalID();
     // user 0,1,2 vote for the proposal
     await contract.vote.sendTransaction(proposalID, true, {from: accounts[0]})
     await contract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
@@ -179,12 +185,7 @@ contract('GentoDao', function(accounts) {
     // create a new proposal in field of work 0
     await contract.newProposal.sendTransaction(accounts[5], 345, 0, {from: accounts[5]})
 
-    let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-        (error, log) => error ? reject(error) : resolve(log)));
-    // check whether the proposal gets created
-    assert.equal(newProposalLog.length, 1, 'should be one new Proposal');
-    // returns the proposal log object with proposal id
-    let proposalID = newProposalLog[0].args.proposalID;
+    let proposalID = await getProposalID();
     // user 0,1,2 vote for the proposal
     await contract.vote.sendTransaction(proposalID, true, {from: accounts[5]})
     await contract.vote.sendTransaction(proposalID, true, {from: accounts[6]})
@@ -214,10 +215,7 @@ contract('GentoDao', function(accounts) {
     await contract.setCurrentTime.sendTransaction(2200000)
     await contract.newProposalDividend.sendTransaction(accounts[1], 0, 100, {from: accounts[1]})
 
-    let newProposalDividendLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-        (error, log) => error ? reject(error) : resolve(log)));
-    assert.equal(newProposalDividendLog.length, 1, 'should be one new Proposal');
-    let proposalDividendID = newProposalDividendLog[0].args.proposalID;
+    let proposalDividendID = await getProposalID();
 
     await contract.vote.sendTransaction(proposalDividendID, true, {from: accounts[1]})
     await contract.vote.sendTransaction(proposalDividendID, true, {from: accounts[2]})
@@ -233,6 +231,29 @@ contract('GentoDao', function(accounts) {
     } catch(e) {
         expect(e.message).toContain("VM Exception while processing transaction: ")
     }
+  })
+
+  it("should ensure that the decision maker reward can be claimed only once", async function() {
+    await contract.setCurrentTime.sendTransaction(1200000)
+    await contract.buy.sendTransaction({from: accounts[1], value: 100})
+    await contract.buy.sendTransaction({from: accounts[2], value: 200})
+
+    await contract.setCurrentTime.sendTransaction(2200000)
+    await contract.newDMRProposal.sendTransaction(accounts[1], 2, 100, {from: accounts[1]})
+    let proposalVRTID = await getProposalID();
+
+    await contract.vote.sendTransaction(proposalVRTID, true, {from: accounts[1]})
+    await contract.vote.sendTransaction(proposalVRTID, true, {from: accounts[2]})
+
+    await contract.setCurrentTime.sendTransaction(2300000)
+    await contract.executeProposal.sendTransaction(proposalVRTID)
+
+    await contract.claimDMR.sendTransaction(proposalVRTID, {from: accounts[1]})
+    try {
+      await contract.claimDMR.sendTransaction(proposalVRTID, {from: accounts[1]})
+    } catch(e) {
+        expect(e.message).toContain("VM Exception while processing transaction: ")
+    }
 
 
   })
@@ -245,10 +266,7 @@ contract('GentoDao', function(accounts) {
     await contract.setCurrentTime.sendTransaction(2200000)
     await contract.newProposal.sendTransaction(accounts[1], 500, 0, {from: accounts[1]})
 
-    let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-        (error, log) => error ? reject(error) : resolve(log)));
-    assert.equal(newProposalLog.length, 1, 'should be one new Proposal');
-    let proposalID = newProposalLog[0].args.proposalID;
+    let proposalID = await getProposalID()
 
     await contract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
     await contract.vote.sendTransaction(proposalID, true, {from: accounts[2]})
@@ -263,10 +281,7 @@ contract('GentoDao', function(accounts) {
     await contract.setCurrentTime.sendTransaction(2200000)
     await contract.newProposalDividend.sendTransaction(accounts[1], 0, 100, {from: accounts[1]})
 
-    let newProposalDividendLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-        (error, log) => error ? reject(error) : resolve(log)));
-    assert.equal(newProposalDividendLog.length, 1, 'should be one new Proposal');
-    let proposalDividendID = newProposalDividendLog[0].args.proposalID;
+    let proposalDividendID = await getProposalID()
 
     await contract.vote.sendTransaction(proposalDividendID, true, {from: accounts[1]})
     await contract.vote.sendTransaction(proposalDividendID, true, {from: accounts[2]})
@@ -288,10 +303,8 @@ contract('GentoDao', function(accounts) {
 
     await contract.setCurrentTime.sendTransaction(2200000)
     await contract.newDMRProposal.sendTransaction(accounts[1], 2, 100, {from: accounts[1]})
-    let newProposalVRTLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-        (error, log) => error ? reject(error) : resolve(log)));
-    assert.equal(newProposalVRTLog.length, 1, 'should be one new Proposal');
-    let proposalVRTID = newProposalVRTLog[0].args.proposalID;
+
+    let proposalVRTID = await getProposalID()
 
     await contract.delegate.sendTransaction(2, accounts[1], {from: accounts[2]})
 
@@ -302,11 +315,29 @@ contract('GentoDao', function(accounts) {
     await contract.executeProposal.sendTransaction(proposalVRTID)
     var p = await contract.getProposal.call(proposalVRTID)
 
-
-
     await contract.claimDMR.sendTransaction(proposalVRTID, {from: accounts[1]})
+    await contract.claimDMR.sendTransaction(proposalVRTID, {from: accounts[2]})
     expect(Number(await contract.getVRTInFoWOfDM.call(accounts[1], 2))).toBe(10)
+    expect(Number(await contract.getVRTInFoWOfDM.call(accounts[2], 2))).toBe(0)
     expect(Number(p[8])).toBe(100)
   })
+
+it("shouldn't be possible for a shareholder to claim DMR if he doesn't get delegated VP", async function() {
+    await contract.setCurrentTime.sendTransaction(1200000)
+    await contract.buy.sendTransaction({from: accounts[1], value: 200})
+    await contract.buy.sendTransaction({from: accounts[2], value: 200})
+
+    await contract.setCurrentTime.sendTransaction(2200000)
+    await contract.newDMRProposal.sendTransaction(accounts[1], 0, 100, {from: accounts[1]})
+    let proposalVRTID = await getProposalID()
+    await contract.delegate.sendTransaction(0, accounts[2], {from: accounts[1]})
+    await contract.vote.sendTransaction(proposalVRTID, true, {from: accounts[1]})
+    await contract.vote.sendTransaction(proposalVRTID, true, {from: accounts[2]})
+    await contract.setCurrentTime.sendTransaction(2300000)
+    await contract.executeProposal.sendTransaction(proposalVRTID)
+    await contract.claimDMR.sendTransaction(proposalVRTID, {from: accounts[1]})
+    expect(Number(await contract.getVRTInFoWOfDM.call(accounts[1], 0))).toBe(0)
+    expect(Number(await contract.getVRTinFoW.call(0))).toBe(14)
+})
 
 });

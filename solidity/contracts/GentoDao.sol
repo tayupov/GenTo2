@@ -7,6 +7,7 @@ contract GentoDao is DaoWithDelegation {
     mapping(address => mapping(uint => uint256)) public votingRewardTokens;
 
     event Claimed(string claimType, uint proposalID, address beneficiary, bool claim);
+    event Balance(uint balance);
 
     function GentoDao(uint256 _maxAmountToRaiseInICO,
     string _symbol,
@@ -31,7 +32,6 @@ contract GentoDao is DaoWithDelegation {
 
         return proposal.amount;
     }
-    // TODO the same user isn't allowed to claim the dividend again
 
     function claimDividend(uint proposalNumber) public onlyShareholders {
         Proposal storage proposal = proposals[proposalNumber];
@@ -67,6 +67,8 @@ contract GentoDao is DaoWithDelegation {
         balances[msg.sender] += (proposal.dmr * getVRTInFoWOfDM(msg.sender, proposal.fieldOfWork))
             / getVRTinFoW(proposal.fieldOfWork);
         proposal.claimed[msg.sender] = true;
+        Balance(balances[msg.sender]);
+        Claimed("decision maker reward", proposalNumber, msg.sender, proposal.claimed[msg.sender]);
     }
 
     function executeProposal(uint proposalId) public votingAllowed {
