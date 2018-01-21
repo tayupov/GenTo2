@@ -20,10 +20,19 @@ delegate(FoW, to, {from})
 set() without call()!
 
 */
+var newProposalEventListener;
+
+async function getProposalID() {
+  let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
+      (error, log) => error ? reject(error) : resolve(log)));
+  // check whether the proposal gets created
+  assert.equal(newProposalLog.length, 1, 'should be one new Proposal');
+  // returns the proposal log object with proposal id
+  return newProposalLog[0].args.proposalID;
+}
 
 contract('Proposal', function(accounts) {
   let testContract;
-  let newProposalEventListener;
     beforeEach(async function() {
     // Every auction token is a Proposal token
     testContract = await GentoDaoDeployer()
@@ -73,10 +82,7 @@ contract('Proposal', function(accounts) {
 
       await testContract.newProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
 
-      let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-          (error, log) => error ? reject(error) : resolve(log)));
-      assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
-      let proposalID = newProposalLog[0].args.proposalID;
+      let proposalID = await getProposalID();
 
       await testContract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
       await testContract.vote.sendTransaction(proposalID, true, {from: accounts[2]})
@@ -100,11 +106,7 @@ contract('Proposal', function(accounts) {
 
       // create a new Proposal
       await testContract.newProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
-
-        let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-            (error, log) => error ? reject(error) : resolve(log)));
-        assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
-        let proposalID = newProposalLog[0].args.proposalID;
+      let proposalID = await getProposalID();
 
       await testContract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
       await testContract.vote.sendTransaction(proposalID, false, {from: accounts[2]})
@@ -127,10 +129,7 @@ contract('Proposal', function(accounts) {
         await testContract.setCurrentTime.sendTransaction(2200000)
     //create a new Proposal
     await testContract.newProposal.sendTransaction(accounts[1], 103, 2, {from: accounts[1]})
-    let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-        (error, log) => error ? reject(error) : resolve(log)));
-    assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
-    let proposalID = newProposalLog[0].args.proposalID;
+    let proposalID = await getProposalID();
 
     // its important use FoW 0 = Finance
     await testContract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
@@ -156,11 +155,7 @@ contract('Proposal', function(accounts) {
     await testContract.setCurrentTime.sendTransaction(2300000)
     // should be in both cases FoW = 0 !
     await testContract.newProposal.sendTransaction(accounts[1], 29, 0, {from: accounts[1]})
-
-    let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-        (error, log) => error ? reject(error) : resolve(log)));
-    assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
-    let proposalID = newProposalLog[0].args.proposalID;
+    let proposalID = await getProposalID();
 
     await testContract.vote.sendTransaction(proposalID, false, {from: accounts[1]})
 
@@ -192,12 +187,9 @@ contract('Proposal', function(accounts) {
     await testContract.setCurrentTime.sendTransaction(1300000)
 
     await testContract.buy.sendTransaction({from: accounts[0], value: 100000})
-        await testContract.setCurrentTime.sendTransaction(2300000)
+    await testContract.setCurrentTime.sendTransaction(2300000)
     await testContract.newProposal.sendTransaction(accounts[0], 10, 0, {from: accounts[0]})
-    let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-        (error, log) => error ? reject(error) : resolve(log)));
-    assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
-    let proposalID = newProposalLog[0].args.proposalID;
+    let proposalID = await getProposalID();
     await testContract.vote.sendTransaction(proposalID, true, {from: accounts[0]})
     const p = await testContract.getProposal.call(proposalID)
     expect(Number(p[1])).toBe(10)
@@ -210,21 +202,18 @@ contract('Proposal', function(accounts) {
     await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
     await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
     await testContract.setCurrentTime.sendTransaction(2400000)
+    // first create a new Proposal before user can vote
+    await testContract.newProposal.sendTransaction(accounts[1], 20, 0, {from: accounts[1]})
+    let proposalID = await getProposalID();
     // user 3 delegates his Proposal power in FoW 0 (Finance) to user 1
     await testContract.delegate.sendTransaction(0, accounts[1], {from: accounts[3]})
-    // first create a new Proposal before user can vote
-    await testContract.newProposal.sendTransaction(accounts[1], 10, 0, {from: accounts[1]})
-    let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-        (error, log) => error ? reject(error) : resolve(log)));
-    assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
-    let proposalID = newProposalLog[0].args.proposalID;
     await testContract.vote.sendTransaction(proposalID, false, {from: accounts[3]})
     // user 1 has more Proposal power then user 3
     await testContract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
     // Set time to after the Proposal period
     await testContract.setCurrentTime.sendTransaction(3300000)
     // executes the Proposal
-    await testContract.executeProposal.sendTransaction(0)
+    await testContract.executeProposal.sendTransaction(proposalID)
 
     const p = await testContract.getProposal.call(+await testContract.getNumProposals()-1);
 
@@ -277,10 +266,7 @@ contract('Proposal', function(accounts) {
     await testContract.setCurrentTime.sendTransaction(2300000)
     // create a new Proposal
     await testContract.newProposal.sendTransaction(accounts[1], 100, 0, {from: accounts[1]})
-    let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-        (error, log) => error ? reject(error) : resolve(log)));
-    assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
-    let proposalID = newProposalLog[0].args.proposalID;
+    let proposalID = await getProposalID();
     await testContract.vote.sendTransaction(proposalID, true, {from: accounts[0]})
     await testContract.vote.sendTransaction(proposalID, false, {from: accounts[1]})
     await testContract.vote.sendTransaction(proposalID, false, {from: accounts[2]})
@@ -308,10 +294,7 @@ contract('Proposal', function(accounts) {
     await testContract.setCurrentTime.sendTransaction(2400000)
     // create a new Proposal
     await testContract.newProposal.sendTransaction(accounts[0], 100, 0, {from: accounts[0]})
-    let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-        (error, log) => error ? reject(error) : resolve(log)));
-    assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
-    let proposalID = newProposalLog[0].args.proposalID;
+    let proposalID = await getProposalID();
     await testContract.vote.sendTransaction(proposalID, true, {from: accounts[0]})
     await testContract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
     await testContract.vote.sendTransaction(proposalID, true, {from: accounts[2]})
@@ -348,24 +331,28 @@ contract('Proposal', function(accounts) {
     expect(+await testContract.getNumProposals.call()).toBe(3 + Number(numberOfInitialProposals))
   })
 
-  // it("should allow to vote for a tokenholder", async function() {
-  //   await testContract.setCurrentTime.sendTransaction(1600000)
-  //
-  //   await testContract.buy.sendTransaction({from: accounts[0], value: 10000})
-  //   await testContract.buy.sendTransaction({from: accounts[1], value: 10000})
-  //   await testContract.buy.sendTransaction({from: accounts[2], value: 10000})
-  //
-  //   await testContract.newProposal.sendTransaction(accounts[2], 10, 0, {from: accounts[2]})
-  //
-  //   await testContract.vote.sendTransaction(0, true, {from: accounts[0]})
-  //   await testContract.vote.sendTransaction(0, true, {from: accounts[1]})
-  //   await testContract.vote.sendTransaction(0, false, {from: accounts[2]})
-  //
-  //   const p = await testContract.getProposal.call(0)
-  //   // it doesn't work and returns undefined, getter for complex data types not allowed!
-  //   expect(+await p.votes.length).toBe(3)
-  //   expect(+await p.voted).toBe(true)
-  // })
+  it("should allow to vote for a tokenholder", async function() {
+    await testContract.setCurrentTime.sendTransaction(1200000)
+
+    await testContract.buy.sendTransaction({from: accounts[0], value: 10000})
+    await testContract.buy.sendTransaction({from: accounts[1], value: 10000})
+    await testContract.buy.sendTransaction({from: accounts[2], value: 10000})
+    await testContract.setCurrentTime.sendTransaction(2200000)
+
+    await testContract.newProposal.sendTransaction(accounts[2], 10, 0, {from: accounts[2]})
+    let proposalID = await getProposalID()
+
+    await testContract.vote.sendTransaction(proposalID, true, {from: accounts[0]})
+    await testContract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
+    await testContract.vote.sendTransaction(proposalID, false, {from: accounts[2]})
+    await testContract.setCurrentTime.sendTransaction(2300000)
+
+    await testContract.executeProposal.sendTransaction(0)
+    const p = await testContract.getProposal.call(proposalID)
+
+    expect(p[4]).toBe(true)
+    expect(p[5]).toBe(true)
+  })
 
   it("should allow delegation to other users", async function() {
       // Set time between ICO start and END
@@ -378,10 +365,7 @@ contract('Proposal', function(accounts) {
       await testContract.setCurrentTime.sendTransaction(2200000)
       // Create Proposal in Field of work 2
       await testContract.newProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
-      let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-          (error, log) => error ? reject(error) : resolve(log)));
-      assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
-      let proposalID = newProposalLog[0].args.proposalID;
+      let proposalID = await getProposalID();
       // User 2 delegates power in Field of Work 0 to User 3
       await testContract.delegate.sendTransaction(0, accounts[3], {from: accounts[2]})
       // User 1 and User 3 Vote
@@ -409,10 +393,7 @@ contract('Proposal', function(accounts) {
       await testContract.setCurrentTime.sendTransaction(2200000)
       // Create Proposal in Field of work 2
       await testContract.newProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
-      let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-          (error, log) => error ? reject(error) : resolve(log)));
-      assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
-      let proposalID = newProposalLog[0].args.proposalID;
+      let proposalID = await getProposalID();
       // User 2 delegates power in all Field of Works except 2 to User 3
       await testContract.delegate.sendTransaction(0, accounts[3], {from: accounts[2]})
       await testContract.delegate.sendTransaction(1, accounts[3], {from: accounts[2]})
@@ -442,10 +423,7 @@ contract('Proposal', function(accounts) {
       await testContract.setCurrentTime.sendTransaction(2200000)
       // Create Proposal in Field of work 2
       await testContract.newProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
-      let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-          (error, log) => error ? reject(error) : resolve(log)));
-      assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
-      let proposalID = newProposalLog[0].args.proposalID;
+      let proposalID = await getProposalID();
       // User 1 and User 3 Vote
       await testContract.vote.sendTransaction(proposalID, false, {from: accounts[1]})
       await testContract.vote.sendTransaction(proposalID, true, {from: accounts[3]})
@@ -471,10 +449,7 @@ contract('Proposal', function(accounts) {
       await testContract.setCurrentTime.sendTransaction(2200000)
       // Create Proposal in Field of work 2
       await testContract.newProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
-      let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-          (error, log) => error ? reject(error) : resolve(log)));
-      assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
-      let proposalID = newProposalLog[0].args.proposalID;
+      let proposalID = await getProposalID();
       // User 1 and User 3 Vote
       await testContract.vote.sendTransaction(0, false, {from: accounts[1]})
       await expect(testContract.vote.sendTransaction(0, false, {from: accounts[2]})).rejects.toEqual(expect.any(Error))

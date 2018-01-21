@@ -330,13 +330,15 @@ it("shouldn't be possible for a shareholder to claim DMR if he doesn't get deleg
     await contract.setCurrentTime.sendTransaction(2200000)
     await contract.newDMRProposal.sendTransaction(accounts[1], 0, 100, {from: accounts[1]})
     let proposalVRTID = await getProposalID()
-    await contract.delegate.sendTransaction(0, accounts[2], {from: accounts[1]})
+    await contract.delegate.sendTransaction(0, accounts[1], {from: accounts[2]})
     await contract.vote.sendTransaction(proposalVRTID, true, {from: accounts[1]})
-    await contract.vote.sendTransaction(proposalVRTID, true, {from: accounts[2]})
     await contract.setCurrentTime.sendTransaction(2300000)
     await contract.executeProposal.sendTransaction(proposalVRTID)
     await contract.claimDMR.sendTransaction(proposalVRTID, {from: accounts[1]})
-    expect(Number(await contract.getVRTInFoWOfDM.call(accounts[1], 0))).toBe(0)
+
+    expect(Number(await contract.getVRTInFoWOfDM.call(accounts[1], 0))).toBe(14)
+    // user 2 doesn't get a DMR because he doesn't vote on the proposal and didn't get VP from delegation
+    expect(Number(await contract.getVRTInFoWOfDM.call(accounts[2], 0))).toBe(0)
     expect(Number(await contract.getVRTinFoW.call(0))).toBe(14)
 })
 
