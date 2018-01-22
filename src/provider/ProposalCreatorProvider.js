@@ -8,6 +8,18 @@ export async function createProposal(input, from, daoAddress) {
   GentoDAO.setProvider(web3.currentProvider);
 
   var dao = await GentoDAO.at(daoAddress);
+  if (await willThrow(dao, input, from)) {
+    console.log("can not create a proposal, either the ico is still running or the user is not a shareholder. UX People, tell the user!")
+  } else {
+    return dao.newProposal.sendTransaction(...input, {from})
+  }
+}
 
-  return dao.newProposal.sendTransaction(... input , { from })
+async function willThrow(dao, input, from) {
+  try {
+    await dao.newProposal.estimateGas(...input, {from})
+    return false
+  } catch (e) {
+    return true
+  }
 }
