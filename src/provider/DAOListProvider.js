@@ -31,7 +31,8 @@ export async function loadAllOrganizations(owner) {
 
     const gentoDAOFactory = await GentoDAOFactoryContract.deployed()
 
-    const gentoDAOAddresses = await gentoDAOFactory.DAOs.call()
+    const gentoDAOAddresses = await gentoDAOFactory.getDAOs.call()
+    console.log(gentoDAOAddresses);
     const organizations = await Promise.all(gentoDAOAddresses.map(address => loadOrganization(address)))
     const organizationsWithOwnership = await filterByBalance(organizations, owner)
   //  const organizationsWithOwnership = await Promise.all()
