@@ -25,13 +25,13 @@ const filterByBalance = async (organizations, owner) => {
 
 export async function loadAllOrganizations(owner) {
     if (!owner) return []
-    
+
     const GentoDAOFactoryContract = contract(GentoDAOFactoryArtifact)
     GentoDAOFactoryContract.setProvider(web3.currentProvider);
 
     const gentoDAOFactory = await GentoDAOFactoryContract.deployed()
 
-    const gentoDAOAddresses = await gentoDAOFactory.getICOs.call()
+    const gentoDAOAddresses = await gentoDAOFactory.DAOs.call()
     const organizations = await Promise.all(gentoDAOAddresses.map(address => loadOrganization(address)))
     const organizationsWithOwnership = await filterByBalance(organizations, owner)
   //  const organizationsWithOwnership = await Promise.all()

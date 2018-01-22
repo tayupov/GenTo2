@@ -7,5 +7,5 @@ export async function createOrganization(input, from) {
   GentoDAOFactoryContract.setProvider(web3.currentProvider);
 
   const gentoDAOFactory = await GentoDAOFactoryContract.deployed()
-  return gentoDAOFactory.createContract.sendTransaction(...input, { from })
+  return gentoDAOFactory.createDAO.sendTransaction(...input, { from })
 }

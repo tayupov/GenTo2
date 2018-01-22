@@ -20,6 +20,10 @@
           "type": "uint256"
         },
         {
+          "name": "name",
+          "type": "string"
+        },
+        {
           "name": "description",
           "type": "string"
         },
@@ -46,6 +50,10 @@
         {
           "name": "proposalHash",
           "type": "bytes32"
+        },
+        {
+          "name": "dividend",
+          "type": "uint256"
         }
       ],
       "payable": false,
@@ -253,6 +261,10 @@
         {
           "name": "passedPercent",
           "type": "uint256"
+        },
+        {
+          "name": "dividend",
+          "type": "uint256"
         }
       ],
       "payable": false,
@@ -405,5 +417,5 @@
   "unlinked_binary": "0x",
   "networks": {},
   "schema_version": "0.0.5",
-  "updated_at": 1516009818170
+  "updated_at": 1516547223742
 }
