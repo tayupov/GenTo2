@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 const tokenFactory = artifacts.require("./GentoDaoFactory.sol");
 const DAO = artifacts.require("./GentoDao.sol");
-=======
-const DAOFactory = artifacts.require("./GentoDaoFactory.sol");
->>>>>>> refactored contracts
 
 module.exports = async function(deployer, network, accounts) {
   await deployer.deploy(tokenFactory);
