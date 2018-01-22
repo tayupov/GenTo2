@@ -1,3 +1,3 @@
-import DAOList from "./DAOListContainer";
+import DAOList from "./DAOList";
 
 export default DAOList;

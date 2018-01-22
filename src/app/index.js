@@ -1,10 +1,13 @@
 import React from 'react';
 import AlertContainer from 'react-alert';
-import DAOSidebar from 'components/DAOSidebar';
+
 import Routes from 'routes';
+import DAOSidebar from 'components/DAOSidebar';
+
+import providers from 'providers'
+import { loadAllOrganizations, loadAllOrganizationsByOwner } from 'providers/DAOListProvider'
+
 import 'styles/app.css';
-import provider from 'provider'
-import { loadAllOrganizations } from 'provider/DAOListProvider'
 
 export default class App extends React.Component {
 
@@ -13,19 +16,23 @@ export default class App extends React.Component {
     this.state = {
       account: null,
       network: null,
-      organizations: [],
+      userOrganizations: [],
+      gentoOrganizations: [],
       currentOrganization: null
     }
   }
 
   async componentDidMount() {
-    await provider(this.notify, this)
+    await providers(this.notify, this)
+    
+    const gentoOrganizations = await loadAllOrganizations()
+    this.setState({ gentoOrganizations })
   }
 
   async componentWillUpdate(nextProps, nextState) {
     if (nextState.account !== this.state.account) {
-      const organizations = await loadAllOrganizations(nextState.account)
-      this.setState({ organizations });
+      const userOrganizations = await loadAllOrganizationsByOwner(nextState.account)
+      this.setState({ userOrganizations });
     }
   }
 
@@ -50,21 +57,25 @@ export default class App extends React.Component {
   }
 
   render() {
+    const isLoggedIn = this.state.account !== null
     return (
       <div>
         <AlertContainer ref={a => this.msg = a} />
 
         <DAOSidebar
-          organizations={this.state.organizations}
+          isLoggedIn={isLoggedIn}
+          userOrganizations={this.state.userOrganizations}
           currentOrganization={this.state.currentOrganization}
           setCurrentOrganization={this.setCurrentOrganization}
           />
 
         <div className="content">
           <Routes
+            isLoggedIn={isLoggedIn}
+            notify={this.notify}
             account={this.state.account}
             network={this.state.network}
-            notify={this.notify}
+            gentoOrganizations={this.state.gentoOrganizations}
             />
         </div>
 

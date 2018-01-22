@@ -5,7 +5,7 @@ import { Sidebar, Menu, Icon } from 'semantic-ui-react';
 export default class DAOSidebar extends Component {
 
   render() {
-    const { organizations, currentOrganization, setCurrentOrganization } = this.props;
+    const { isLoggedIn, userOrganizations, currentOrganization, setCurrentOrganization } = this.props;
     const currentAddress = currentOrganization ? currentOrganization.address : null;
     return (
       <Sidebar width={"thin"} as={Menu} visible={true} vertical inverted icon="labeled">
@@ -14,28 +14,27 @@ export default class DAOSidebar extends Component {
           <Icon name="home" />
         </Menu.Item>
 
-        <Menu.Item as={Link} to="/dao/list" onClick={setCurrentOrganization}>
-          <Icon name="list" />
-        </Menu.Item>
-
-        {organizations.map((org, index) => {
+        {userOrganizations.map((org, index) => {
           return (
             <Menu.Item
               org={org}
-              key={index} 
+              key={index}
               as={Link}
               to={{ pathname: `/dao/${org.address}` }}
               onClick={setCurrentOrganization}
               active={currentAddress === org.address}
-              >
+            >
               <Menu.Header>{org.name}</Menu.Header>
             </Menu.Item>
           )
         })}
 
-        <Menu.Item as={Link} to="/dao/create" onClick={setCurrentOrganization}>
-          <Icon name="add square" />
-        </Menu.Item>
+        {isLoggedIn &&
+          <Menu.Item as={Link} to="/dao/create" onClick={setCurrentOrganization}>
+            <Icon name="add square" />
+          </Menu.Item>
+        }
+        
       </Sidebar>
     )
   }

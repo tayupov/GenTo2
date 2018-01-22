@@ -370,7 +370,6 @@ module.exports = {
           // https://github.com/facebookincubator/create-react-app/issues/2612
           return;
         }
-        console.log(message);
       },
       minify: true,
       // Don't precache sourcemaps (they're large) and build asset manifest:

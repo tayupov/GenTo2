@@ -21,15 +21,17 @@ import Proposal from './Proposal';
 
 export default class Routes extends React.Component {
     render() {
-        const { account, network, notify } = this.props;
+        const { isLoggedIn, account, network, notify, gentoOrganizations } = this.props;
+        
         return (
             <Switch>
-                <Route exact path="/" component={Home} />
-
-                <Route path="/dao/list"
+                
+                <Route exact path="/"
                     render={(props) => (
                         <DAOList
                             account={account}
+                            isLoggedIn={isLoggedIn}
+                            gentoOrganizations={gentoOrganizations}
                             notify={notify}
                         />
                     )}

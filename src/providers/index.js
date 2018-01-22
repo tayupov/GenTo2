@@ -36,11 +36,6 @@ const updateAccount = async () => {
       app.setState({
         account: accounts[0]
       })
-      //web3.eth.defaultAccount = accounts[0]
-      // console.log(`trying to sign: ${accounts[0]}`)
-      // web3.eth.sign(accounts[0], "test", (err, c) => {
-      //   console.log("yay")
-      // });
     }
   } catch (e) {
     console.error(e)
