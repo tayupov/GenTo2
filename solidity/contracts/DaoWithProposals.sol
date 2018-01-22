@@ -1,17 +1,11 @@
 pragma solidity ^0.4.8;
 
-contract Proposals {
-
-    uint public debatingPeriodInMinutes;
+import './DaoWithIco.sol';
+contract DaoWithProposals is DaoWithIco {
 
     Proposal[] public proposals;
-
-    uint public numProposals;
-
+    uint public debatingPeriodInMinutes;
     enum FieldOfWork { Finance, Organisational, Product, Partnership }
-
-    FieldOfWork public fow = FieldOfWork.Finance;
-
 
     struct Proposal {
         address recipient;
@@ -24,8 +18,10 @@ contract Proposals {
         uint passedPercent;
         bytes32 proposalHash;
         uint dividend;
+        uint dmr;
         Vote[] votes;
         mapping (address => bool) voted;
+        mapping (address => bool) claimed;
     }
 
     struct Vote {
@@ -33,46 +29,9 @@ contract Proposals {
         address voter;
     }
 
-    event NumberLogger(string description, uint number);
-    event AddressLogger(string description, address addr);
     event ProposalFinishedLogger(uint proposalId, uint totalVotes, uint approve, uint disapprove);
     event NewProposalCreated(uint proposalID);
     event Voted(uint proposalID, bool position, address voter);
-
-    //constructor
-    function ProposalToken() public payable {
-        debatingPeriodInMinutes = 10;  // TODO Move to settings
-    }
-
-    /* function getDividend() public constant returns (uint dividend) {
-      return this.dividend;
-    } */
-
-    function getFieldOfWork() public constant returns (FieldOfWork) {
-        return fow;
-    }
-
-    function setFieldOfWork(uint _value) public {
-        //require(uint(FieldOfWork.Partnership) >= _value);
-        fow = FieldOfWork(_value);
-    }
-
-    function getProposal(uint proposalID) public constant returns (address recipient,
-    uint amount,
-    string description,
-    uint proposalDeadline,
-    bool finished,
-    bool proposalPassed,
-    uint passedPercent, uint dividend) {
-        Proposal storage proposal = proposals[proposalID];
-        return (proposal.recipient, proposal.amount, proposal.description, proposal.proposalDeadline, proposal.finished, proposal
-        .proposalPassed, proposal.passedPercent, proposal.dividend);
-    }
-
-    function getNumProposals() public constant returns (
-        uint numOfProposals) {
-        return proposals.length;
-    }
 
     // Modifier that allows only shareholders to vote and create new proposals
     modifier onlyShareholders {
@@ -84,17 +43,70 @@ contract Proposals {
         require(isIcoFinished());
         _;
     }
+    function DaoWithProposals(uint256 _maxAmountToRaiseInICO,
+    string _symbol,
+    string _name,
+    uint256 _buyPriceStart,
+    uint256 _buyPriceEnd,
+    uint256 _saleStart,
+    uint256 _saleEnd,
+    bool _dev) DaoWithIco(_maxAmountToRaiseInICO, _symbol, _name, _buyPriceStart, _buyPriceEnd, _saleStart, _saleEnd, _dev) public {
+        debatingPeriodInMinutes = 10;  // TODO add to constructor
+    }
 
-    function isIcoFinished() returns (bool icoFinished);
-    function currentTime() returns (uint time);
-    function isShareholder(address userAddress) returns (bool shareholder);
-    function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) returns (uint influence);
+    function getProposal(uint proposalID) public constant returns (address recipient,
+    uint amount,
+    string description,
+    uint proposalDeadline,
+    bool finished,
+    bool proposalPassed,
+    uint passedPercent,
+    uint dividend,
+    uint dmr) {
+        Proposal storage proposal = proposals[proposalID];
+        return (proposal.recipient, proposal.amount, proposal.description, proposal.proposalDeadline, proposal.finished,
+            proposal.proposalPassed, proposal.passedPercent, proposal.dividend, proposal.dmr);
+    }
+
+    function getNumProposals() public constant returns (
+        uint numOfProposals) {
+        return proposals.length;
+    }
+
+    function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) public constant returns (uint influence);
+
+    function newProposalDividend(
+        address beneficiary,
+        FieldOfWork fieldOfWork,
+        uint dividend) public votingAllowed onlyShareholders
+    returns(uint proposalID)
+    {
+
+        uint proposalDividendID = newProposal(beneficiary, 0, fieldOfWork);
+        Proposal storage proposal  = proposals[proposalDividendID];
+        proposal.dividend = dividend;
+        return proposalDividendID;
+
+    }
+
+    function newDMRProposal(
+        address beneficiary,
+        FieldOfWork fieldOfWork,
+        uint dmr) public votingAllowed onlyShareholders
+    returns(uint proposalID)
+    {
+
+        uint proposalDividendID = newProposal(beneficiary, 0, fieldOfWork);
+        Proposal storage proposal  = proposals[proposalDividendID];
+        proposal.dmr = dmr;
+        return proposalDividendID;
+
+    }
 
     function newProposal(
         address beneficiary,
         uint weiAmount,
-        FieldOfWork fieldOfWork) public votingAllowed
-        onlyShareholders
+        FieldOfWork fieldOfWork) public votingAllowed onlyShareholders
     returns (uint proposalID)
     {
         AddressLogger("BENEFICIARY", beneficiary);
@@ -102,13 +114,13 @@ contract Proposals {
         Proposal storage proposal = proposals[proposalID];
         proposal.recipient = beneficiary;
         proposal.amount = weiAmount;
-        proposal.proposalHash = sha3(beneficiary, weiAmount); // TODO add transactionBytecode
+        proposal.proposalHash = keccak256(beneficiary, weiAmount); // TODO add transactionBytecode
         proposal.proposalDeadline = currentTime() + debatingPeriodInMinutes * 1 minutes;
         proposal.finished = false;
         proposal.fieldOfWork = fieldOfWork;
         proposal.proposalPassed = false;
         proposal.dividend = 0;
-        numProposals = proposalID;
+        proposal.dmr = 0;
         NewProposalCreated(proposalID);
         return proposalID;
     }
@@ -116,8 +128,7 @@ contract Proposals {
     function vote(
         uint proposalNumber,
         bool supportsProposal
-    ) public votingAllowed
-    onlyShareholders
+    ) public votingAllowed onlyShareholders
     returns (uint voteID)
     {
         Proposal storage proposal = proposals[proposalNumber];
@@ -132,7 +143,6 @@ contract Proposals {
 
     function executeProposal(uint proposalId) public votingAllowed
     {
-        // proposals[0] or proposals[proposalNumber] ???
         Proposal storage proposal = proposals[proposalId];
 
         require(currentTime() > proposal.proposalDeadline                       // If it is past the proposal deadline
