@@ -44,16 +44,13 @@ export default class DAOCreatorContainer extends React.Component {
 	}
 
 	async handleCreate() {
+		const descriptionHash = await uploadString(this.state.description)
 
-		// TODO: get rid of this helper, or maybe even keep it...
 		const from = this.props.account
 		const contractObj = omitInvalidContractKeys(this.state)
-		console.log(this.state)
-
-		const descriptionHash = await uploadString(this.state.description)
 		const contractValues = Object.values(contractObj)
 		contractValues.splice(3, 0, descriptionHash)
-		console.log(contractValues)
+		
 		createOrganization(contractValues, from)
 	}
 
