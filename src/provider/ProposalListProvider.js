@@ -5,10 +5,17 @@ import { default as contract } from 'truffle-contract'
 import { loadOrganization } from './DAOProvider'
 import web3 from 'utils/web3';
 
-const mapProposal = async (organization) => {
+const mapProposal =  (proposalArray) => {
   return {
-    name: await organization.name(),
-    address: await organization.address
+      recipient:proposalArray[0],
+      amount:proposalArray[1],
+      name:proposalArray[2],
+      description:proposalArray[3],
+      proposalDeadline:proposalArray[4],
+      finished:proposalArray[5],
+      proposalPassed:proposalArray[6],
+      passedPercent: proposalArray[7],
+      dividend:proposalArray[8]
   }
 }
 
@@ -22,11 +29,9 @@ export async function loadAllProposals(address) {
     var proposals = [];
 
     for(let i=0; i< proposalCount;i++){
-        proposals.push({
-            name:"test",
-            description:"test",
-            proposalHash:"test"
-        });
+        var proposalArray = await GentoDAO.at(address).getProposal(i);
+        var proposal = mapProposal(proposalArray);
+        proposals.push(proposal);
     }
     return proposals;
 }

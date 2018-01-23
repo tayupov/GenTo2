@@ -57,6 +57,7 @@ contract DaoWithProposals is DaoWithIco {
 
     function getProposal(uint proposalID) public constant returns (address recipient,
     uint amount,
+    string name,
     string description,
     uint proposalDeadline,
     bool finished,
@@ -65,8 +66,8 @@ contract DaoWithProposals is DaoWithIco {
     uint dividend,
     uint dmr) {
         Proposal storage proposal = proposals[proposalID];
-        return (proposal.recipient, proposal.amount, proposal.description, proposal.proposalDeadline, proposal.finished,
-            proposal.proposalPassed, proposal.passedPercent, proposal.dividend, proposal.dmr);
+        return (proposal.recipient, proposal.amount, proposal.name, proposal.description, proposal.proposalDeadline,
+        proposal.finished, proposal.proposalPassed, proposal.passedPercent, proposal.dividend, proposal.dmr);
     }
 
     function getNumProposals() public constant returns (

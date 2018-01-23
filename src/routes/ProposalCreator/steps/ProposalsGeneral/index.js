@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Form, Input, TextArea, Select, Divider } from 'semantic-ui-react';
-import { PROPOSALNAME, PROPOSALCATEGORY, PROPOSALDESCRIPTION } from 'constants/validators';
+import { PROPOSALNAME, PROPOSALCATEGORY, PROPOSALDESCRIPTION, PROPOSALBENEFICIARY } from 'constants/validators';
 import fieldsOfWork from 'constants/fieldsOfWork';
 
 export default class General extends React.Component {
@@ -14,6 +14,10 @@ export default class General extends React.Component {
             <Form.Field>
               <label>Enter the proposal title</label>
               <Input type="text" name={PROPOSALNAME} id={PROPOSALNAME} size='small' />
+            </Form.Field>
+            <Form.Field>
+              <label>Choose the beneficiary</label>
+              <Input type="text" name={PROPOSALBENEFICIARY} id={PROPOSALBENEFICIARY} size='small' />
             </Form.Field>
             <Form.Field>
               <label>Choose the field of work</label>
