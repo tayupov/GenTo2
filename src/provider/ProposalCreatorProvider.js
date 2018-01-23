@@ -7,6 +7,7 @@ export async function createProposal(input, from, daoAddress) {
   const GentoDAO = contract(GentoDAOArtifact);
   GentoDAO.setProvider(web3.currentProvider);
 
+  console.log(input);
   var dao = await GentoDAO.at(daoAddress);
   if (await willThrow(dao, input, from)) {
     console.log("can not create a proposal, either the ico is still running or the user is not a shareholder. UX People, tell the user!")

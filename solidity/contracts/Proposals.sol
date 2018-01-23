@@ -60,14 +60,15 @@ contract Proposals {
 
     function getProposal(uint proposalID) public constant returns (address recipient,
     uint amount,
+    string name,
     string description,
     uint proposalDeadline,
     bool finished,
     bool proposalPassed,
     uint passedPercent, uint dividend) {
         Proposal storage proposal = proposals[proposalID];
-        return (proposal.recipient, proposal.amount, proposal.description, proposal.proposalDeadline, proposal.finished, proposal
-        .proposalPassed, proposal.passedPercent, proposal.dividend);
+        return (proposal.recipient, proposal.amount, proposal.name, proposal.description, proposal.proposalDeadline,
+        proposal.finished, proposal.proposalPassed, proposal.passedPercent, proposal.dividend);
     }
 
     function getNumProposals() public constant returns (
