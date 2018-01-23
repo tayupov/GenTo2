@@ -18,7 +18,8 @@ contract GentoDao is DaoWithDelegation {
     uint256 _saleEnd,
     bool _dev) DaoWithDelegation(_maxAmountToRaiseInICO, _symbol, _name, _buyPriceStart, _buyPriceEnd, _saleStart, _saleEnd, _dev) public {
     }
-    
+
+    //payout should be ether
     function claimPayout(uint proposalNumber) public daoActive returns (uint amount) {
         Proposal storage proposal = proposals[proposalNumber];
 

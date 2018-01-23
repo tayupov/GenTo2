@@ -195,32 +195,6 @@ contract('Proposal', function(accounts) {
     expect(Number(p[1])).toBe(10)
   })
 
-  it("should pass the Proposal when the tokenholder has delegated his vote", async function() {
-    // Set time between ICO start and END
-    await testContract.setCurrentTime.sendTransaction(1400000)
-    // user 1 and user 3 should become a shareholder
-    await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
-    await testContract.buy.sendTransaction({from: accounts[3], value: 1000})
-    await testContract.setCurrentTime.sendTransaction(2400000)
-    // first create a new Proposal before user can vote
-    await testContract.newProposal.sendTransaction(accounts[1], 20, 0, {from: accounts[1]})
-    let proposalID = await getProposalID();
-    // user 3 delegates his Proposal power in FoW 0 (Finance) to user 1
-    await testContract.delegate.sendTransaction(0, accounts[1], {from: accounts[3]})
-    await testContract.vote.sendTransaction(proposalID, false, {from: accounts[3]})
-    // user 1 has more Proposal power then user 3
-    await testContract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
-    // Set time to after the Proposal period
-    await testContract.setCurrentTime.sendTransaction(3300000)
-    // executes the Proposal
-    await testContract.executeProposal.sendTransaction(proposalID)
-
-    const p = await testContract.getProposal.call(+await testContract.getNumProposals()-1);
-
-    expect(p[4]).toBe(true)
-    expect(p[5]).toBe(true)
-  })
-
   it("should fail the delegation if the token holder isn't a shareholder", async function() {
     await testContract.setCurrentTime.sendTransaction(1200000)
     // account[9] is not a shareholder because he didn't buy anything
@@ -241,19 +215,6 @@ contract('Proposal', function(accounts) {
         await testContract.setCurrentTime.sendTransaction(2600000)
     await testContract.newProposal.sendTransaction(accounts[0], 100, 0, {from: accounts[0]})
     expect(numberOfInitialProposals + 1).toBe(+await testContract.getNumProposals())
-  })
-
-
-  it("should check that only if the user buys token he becomes a shareholder", async function() {
-    await testContract.setCurrentTime.sendTransaction(1600000)
-
-    // user 1 become a shareholder
-    await testContract.buy.sendTransaction({from: accounts[1], value: web3.toWei(10, 'Gwei')})
-
-    // check whether the account is a shareholder
-    // !! converts 0 or 1 to false or true
-    expect(!!+await testContract.isShareholder.call(accounts[5])).toBe(false)
-    expect(!!+await testContract.isShareholder.call(accounts[1])).toBe(true)
   })
 
   it("schould reject Proposals with 1/3 confirmed votes", async function() {
@@ -352,6 +313,18 @@ contract('Proposal', function(accounts) {
 
     expect(p[4]).toBe(true)
     expect(p[5]).toBe(true)
+  })
+
+  it("should check that only if the user buys token he becomes a shareholder", async function() {
+    await contract.setCurrentTime.sendTransaction(1600000)
+
+    // user 1 become a shareholder
+    await contract.buy.sendTransaction({from: accounts[1], value: web3.toWei(10, 'Gwei')})
+
+    // check whether the account is a shareholder
+    // !! converts 0 or 1 to false or true
+    expect(!!+await contract.isShareholder.call(accounts[5])).toBe(false)
+    expect(!!+await contract.isShareholder.call(accounts[1])).toBe(true)
   })
 
   it("should allow delegation to other users", async function() {
@@ -456,18 +429,6 @@ contract('Proposal', function(accounts) {
       await expect(testContract.vote.sendTransaction(0, true, {from: accounts[3]})).rejects.toEqual(expect.any(Error))
   })
 
-  it("tests that user become shareholer only if they buy some shares", async function() {
-    await testContract.setCurrentTime.sendTransaction(1200000)
-    // user 7 isn't a shareholder because he didn't buy anything
-    const isSharehoder1 = await testContract.isShareholder.call(accounts[7]);
-    // !! converts 0 to false
-    expect(!!isSharehoder1).toBe(false);
-    // user 2 becomes a shareholder
-    await testContract.buy.sendTransaction({from: accounts[2],value: 4000})
-
-    const isSharehoder2 = await testContract.isShareholder.call(accounts[2]);
-    expect(!!isSharehoder2).toBe(true);
-  })
   it("schould delegate properly", async function() {
         await testContract.setCurrentTime.sendTransaction(1200000)
 

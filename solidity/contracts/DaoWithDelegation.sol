@@ -13,7 +13,9 @@ contract DaoWithDelegation is DaoWithProposals {
         uint256 _buyPriceEnd,
         uint256 _saleStart,
         uint256 _saleEnd,
-        bool _dev) DaoWithProposals(_maxAmountToRaiseInICO, _symbol, _name, _buyPriceStart, _buyPriceEnd, _saleStart, _saleEnd, _dev) public {
+        bool _dev) public
+        DaoWithProposals(_maxAmountToRaiseInICO, _symbol,
+            _name, _buyPriceStart, _buyPriceEnd, _saleStart, _saleEnd, _dev) {
     }
 
     function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) public constant returns (uint influence) {

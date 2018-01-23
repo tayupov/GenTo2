@@ -22,9 +22,10 @@ contract DaoWithIco is StandardTokenWithShareholderList{
     }
 
     modifier daoActive {
-      require(saleEnd <= currentTime());
-      _;
+        require(saleEnd <= currentTime());
+        _;
     }
+
     function DaoWithIco(uint256 _maxAmountToRaiseInICO,
     string _symbol,
     string _name,
@@ -46,7 +47,7 @@ contract DaoWithIco is StandardTokenWithShareholderList{
         totalSupply = 0;
     }
 
-    function getBuyPrice() icoRunning public constant returns (uint) {
+    function getBuyPrice() public icoRunning constant returns (uint) {
         uint currentPrice;
         uint passed;
 
@@ -55,7 +56,7 @@ contract DaoWithIco is StandardTokenWithShareholderList{
         return currentPrice;
     }
 
-    function buy() icoRunning payable returns (uint amount) {
+    function buy() public icoRunning payable returns (uint amount) {
         // calculates the amount
         amount = msg.value / getBuyPrice();
         // checks if it has enough to sell
@@ -72,7 +73,7 @@ contract DaoWithIco is StandardTokenWithShareholderList{
         return amount;
     }
 
-    function isIcoFinished() public constant returns (bool icoFinished){
+    function isIcoFinished() public constant returns (bool icoFinished) {
         return saleEnd <= currentTime();
     }
 }

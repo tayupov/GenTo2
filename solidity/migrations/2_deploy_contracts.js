@@ -10,7 +10,6 @@ module.exports = async function(deployer, network, accounts) {
   await GentoFactory.createDAO.sendTransaction(web3.toWei(100, "ether"), "PP", "Project Paul", 1, 10, 0, 100)
 
   const [theo, roman, paul] = await Promise.all((await GentoFactory.getDAOs.call()).map(address => DAO.at(address)))
-  console.log(theo);
 
   await theo.buy.sendTransaction({from: accounts[0], value: web3.toWei(0.001, "ether")})
   await theo.buy.sendTransaction({from: accounts[1], value: web3.toWei(0.002, "ether")})
