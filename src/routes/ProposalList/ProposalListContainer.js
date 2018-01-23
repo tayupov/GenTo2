@@ -11,14 +11,10 @@ export default class ProposalListContainer extends React.Component {
     }
   }
 
-  async componentWillUpdate(nextProps, nextState) {
-    if (!this.state.loaded) {
-      const proposals = await loadAllProposals(this.props.address)
-      console.log("aaa")
-      console.log(proposals)
-      this.setState({proposals});
-      this.state.loaded = true;
-    }
+  async componentDidMount() {
+    const proposals = await loadAllProposals(this.props.address)
+    this.setState({proposals});
+    this.state.loaded = true;
   }
   render() {
     return (
