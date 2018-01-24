@@ -5,6 +5,7 @@ import './DaoWithDelegation.sol';
 contract GentoDao is DaoWithDelegation {
 
     mapping(address => mapping(uint => uint256)) public votingRewardTokens;
+    mapping(address => uint256) dividends;
 
     event Claimed(string claimType, uint proposalID, address beneficiary, bool claim);
     event Balance(uint balance);
@@ -18,6 +19,11 @@ contract GentoDao is DaoWithDelegation {
     uint256 _saleEnd,
     bool _dev) DaoWithDelegation(_maxAmountToRaiseInICO, _symbol, _name, _buyPriceStart, _buyPriceEnd, _saleStart, _saleEnd, _dev) public {
     }
+
+    function getTokenPrice() constant returns (uint tokenPrice) {
+        tokenPrice = this.balance / totalSupply;
+        return tokenPrice;
+    }
     
     function claimPayout(uint proposalNumber) public daoActive returns (uint amount) {
         Proposal storage proposal = proposals[proposalNumber];
@@ -25,7 +31,7 @@ contract GentoDao is DaoWithDelegation {
         require(proposal.finished && proposal.proposalPassed && proposal.recipient == msg.sender
             && proposal.claimed[msg.sender] == false && proposal.amount > 0);
 
-        balances[msg.sender] += proposal.amount;
+        transfer(msg.sender, proposal.amount);
         proposal.claimed[msg.sender] = true;
         Claimed("payout", proposalNumber, msg.sender, proposal.claimed[msg.sender]);
 
@@ -38,6 +44,8 @@ contract GentoDao is DaoWithDelegation {
         require(proposal.finished && proposal.proposalPassed
             && proposal.claimed[msg.sender] == false && proposal.dividend > 0);
 
+        tokenPrice = getTokenPrice();
+        
         balances[msg.sender] += balances[msg.sender] * proposal.dividend;
         proposal.claimed[msg.sender] = true;
         Claimed("dividend", proposalNumber, msg.sender, proposal.claimed[msg.sender]);
@@ -74,6 +82,14 @@ contract GentoDao is DaoWithDelegation {
 
         DaoWithProposals.executeProposal(proposalId);
         Proposal storage proposal = proposals[proposalId];
+        if (proposal.dividend > 0) {
+            tokenPrice = getTokenPrice();
+            for (uint i = 0; i < shareholders.length; ++i) {
+                shareholderDividend = (balances[shareholders[i]] * tokenPrice) * proposal.dividend;
+                dividends[shareholders[i]] += shareholderDividend;
+            }
+        }
+
         for (uint i = 0; i < proposal.votes.length; ++i) {
             Vote storage v = proposal.votes[i];
             uint voteWeight = getInfluenceOfVoter(v.voter, proposal.fieldOfWork);
