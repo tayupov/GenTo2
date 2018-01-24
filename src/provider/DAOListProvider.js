@@ -13,9 +13,15 @@ const mapOrganization = async (organization) => {
     saleStart: await organization.saleStart(),
     saleEnd: await organization.saleEnd(),
     isICOFinished: await organization.isIcoFinished(),
-    numberOfProposals: await organization.getNumProposals()
+    numberOfProposals: await organization.getNumProposals(),
+    numberOfShareholders: await organization.getShareholderCount(),
+    totalSupply: await organization.totalSupply(),
+    remainingTokensForICOPurchase: await organization.remainingTokensForICOPurchase()
+ // buyPrice: await organization.getBuyPrice() 
+ // does not work for all organizations, we need some error handling here or leave it out
   }
 }
+
 const filterByBalance = async (organizations, owner) => {
   const organizationsWithOwnership = []
   for (let i=0; i<organizations.length; i++) {
@@ -42,8 +48,8 @@ export async function loadAllOrganizations() {
 }
 
 export async function loadAllOrganizationsOfOwner(owner) {
-    if (!owner) return []
-    const organizations = await prepareOrganizations()
-    const organizationsWithOwnership = await filterByBalance(organizations, owner)
-    return Promise.all(organizationsWithOwnership.map(mapOrganization))
+  if (!owner) return []
+  const organizations = await prepareOrganizations()
+  const organizationsWithOwnership = await filterByBalance(organizations, owner)
+  return Promise.all(organizationsWithOwnership.map(mapOrganization))
 }
