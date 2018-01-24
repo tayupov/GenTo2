@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from 'components/Header';
 import { Container, Divider } from 'semantic-ui-react';
 
 export default () => (

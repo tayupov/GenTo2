@@ -26,12 +26,12 @@ function renderTabPane(gentoOrganizations) {
       {gentoOrganizations.map((org, index) => {
         return (
           <Card as={Link} to={{ pathname: `/dao/${org.address}` }} key={index}>
-              <Card.Content>
-                <Card.Header> {org.name} </Card.Header>
-                <Card.Meta> {org.symbol} </Card.Meta>
-              </Card.Content>
-              <Card.Content description = {"Number Of Proposals: " + org.numberOfProposals.c} />
-              <Card.Content description = {"Sale from " + org.saleStart + " to " + org.saleEnd} />
+            <Card.Content>
+              <Card.Header> {org.name} </Card.Header>
+              <Card.Meta> {org.symbol} </Card.Meta>
+            </Card.Content>
+            <Card.Content description = {"Number Of Proposals: " + org.numberOfProposals.c} />
+            <Card.Content description = {"Sale from " + org.saleStart + " to " + org.saleEnd} />
           </Card>
         )
       })}
