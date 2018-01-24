@@ -80,6 +80,14 @@ contract('DaoWithICO', function(accounts) {
     }
   })
 
+  // buy() during ico
+  it("should be possible to buy something during the ICO", async function() {
+    await contract.setCurrentTime.sendTransaction(1200000)
+    await contract.getBuyPrice.call()
+    // user 1 become a shareholder because he buyes token
+    await contract.buy.sendTransaction({from: accounts[1], value: web3.toWei(10, 'Gwei')});
+  })
+
   // getBuyPrice() estimates buy price
   it("should calculate the right bought amount with buy()", async function() {
     await contract.setCurrentTime.sendTransaction(1200000)
@@ -88,14 +96,6 @@ contract('DaoWithICO', function(accounts) {
     const buyPrice = await contract.getBuyPrice.call()
     const expectedAmount = 10000 / buyPrice.toNumber()
     expect(boughtAmount.toNumber()).toBeCloseTo(expectedAmount, 0)
-  })
-
-  // buy() during ico
-  it("should be possible to buy something during the ICO", async function() {
-    await contract.setCurrentTime.sendTransaction(1200000)
-    await contract.getBuyPrice.call()
-    // user 1 become a shareholder because he buyes token
-    await contract.buy.sendTransaction({from: accounts[1], value: web3.toWei(10, 'Gwei')});
   })
 
   // getBuyPrice()
@@ -108,6 +108,7 @@ contract('DaoWithICO', function(accounts) {
 
   })
 
+  // getBuyPrice()
   it("should return a linearly increasing price during the ICO with getBuyPrice()", async function() {
     // forward the time into future
     await contract.setCurrentTime.sendTransaction(1000000)
