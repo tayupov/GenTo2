@@ -41,13 +41,10 @@ contract GentoDao is DaoWithDelegation {
     function claimDividend(uint proposalNumber) public onlyShareholders {
         Proposal storage proposal = proposals[proposalNumber];
 
-        require(proposal.finished && proposal.proposalPassed
-            && proposal.claimed[msg.sender] == false && proposal.dividend > 0);
-
-        tokenPrice = getTokenPrice();
+        require(proposal.finished && proposal.proposalPassed && proposal.dividend > 0 && dividends[msg.sender] > 0);
+        transfer(msg.sender, dividends[msg.sender]);
+        dividends[msg.sender] = 0;
         
-        balances[msg.sender] += balances[msg.sender] * proposal.dividend;
-        proposal.claimed[msg.sender] = true;
         Claimed("dividend", proposalNumber, msg.sender, proposal.claimed[msg.sender]);
     }
 
@@ -61,11 +58,11 @@ contract GentoDao is DaoWithDelegation {
         return vrt1;
     }
 
-    function getVRTInFoWOfDM(address dm, FieldOfWork fow) public constant returns(uint vrt) {
+    function getVotingRewardTokenInFoWOfDecisionMaker(address dm, FieldOfWork fow) public constant returns(uint vrt) {
         return votingRewardTokens[dm][uint(fow)];
     }
 
-    function claimDMR(uint proposalNumber) public onlyShareholders {
+    function claimDecisionMakerReward(uint proposalNumber) public onlyShareholders {
         Proposal storage proposal = proposals[proposalNumber];
 
         require(proposal.finished && proposal.proposalPassed && proposal.dmr != 0
