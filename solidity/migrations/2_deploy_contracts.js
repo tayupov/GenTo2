@@ -4,9 +4,9 @@ const DAO = artifacts.require("./GentoDao.sol");
 module.exports = async function(deployer, network, accounts) {
   await deployer.deploy(tokenFactory);
   const GentoFactory = await tokenFactory.deployed()
-  await GentoFactory.createDAO.sendTransaction(web3.toWei(100, "ether"), "YAY", "Theo Software Solutions", 1, 10, 0, 100)
-  await GentoFactory.createDAO.sendTransaction(web3.toWei(100, "ether"), "RBR", "Rolls by the Roman", 1, 10, 0, 100)
-  await GentoFactory.createDAO.sendTransaction(web3.toWei(100, "ether"), "PP", "Project Paul", 1, 10, 0, 100)
+  await GentoFactory.createDAO.sendTransaction(web3.toWei(100, "ether"), "YAY", "Theo Software Solutions", 1, 10, 0, 100, 40, 20, 30, 10)
+  await GentoFactory.createDAO.sendTransaction(web3.toWei(100, "ether"), "RBR", "Rolls by the Roman", 1, 10, 0, 100, 40, 20, 30, 10)
+  await GentoFactory.createDAO.sendTransaction(web3.toWei(100, "ether"), "PP", "Project Paul", 1, 10, 0, 100, 40, 20, 30, 10)
 
   const [theo, roman, paul] = await Promise.all((await GentoFactory.getDAOs.call()).map(address => DAO.at(address)))
 

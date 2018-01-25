@@ -21,6 +21,6 @@ module.exports=(GentoDao) => {
       throw `key '${key}' is not a valid parameter!`
     }
     const data = Object.assign({}, defaultData, customData)
-    return GentoDao.new(data.totalSupply, data.symbol, data.name, data.buyPriceStart, data.buyPriceEnd, data.saleStart, data.saleEnd, data.dev)
+    return GentoDao.new(data.totalSupply, data.symbol, data.name, data.buyPriceStart, data.buyPriceEnd, data.saleStart, data.saleEnd, data.finance, data.product, data.organisational, data.partner, data.dev)
   }
 }
