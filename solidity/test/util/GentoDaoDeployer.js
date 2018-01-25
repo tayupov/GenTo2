@@ -6,7 +6,10 @@ const defaultData = {
   buyPriceEnd: 100,
   saleStart: 1000000,
   saleEnd: 2000000,
-  dev: true
+  finance: 40,
+  product: 20,
+  organisational: 30,
+  partner: 10
 }
 
 

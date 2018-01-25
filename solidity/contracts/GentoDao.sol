@@ -6,14 +6,14 @@ contract GentoDao is DaoWithDelegation {
 
     mapping(address => mapping(uint => uint256)) public votingRewardTokens;
     mapping(address => uint256) dividends;
-    mapping(address => uint256) decicionmakerRewards;
+    mapping(address => uint256) decisionmakerRewards;
 
     uint8 finance;
     uint8 product;
     uint8 organisational;
     uint8 partner;
 
-    event Claimed(string claimType, address beneficiary);
+    event Claimed(string claimType, address beneficiary, uint amount);
     event Balance(uint balance);
 
     function GentoDao(uint256 _maxAmountToRaiseInICO,
@@ -26,7 +26,7 @@ contract GentoDao is DaoWithDelegation {
     uint8 _finance,
     uint8 _product,
     uint8 _organisational,
-    uint8 _partner
+    uint8 _partner,
     bool _dev) DaoWithDelegation(_maxAmountToRaiseInICO, _symbol, _name, _buyPriceStart, _buyPriceEnd, _saleStart, _saleEnd, _dev) public {
         finance = _finance;
         product = _product;
@@ -35,7 +35,7 @@ contract GentoDao is DaoWithDelegation {
     }
 
     function getTokenPrice() constant returns (uint tokenPrice) {
-        uint256 tokenPrice = this.balance / totalSupply;
+        tokenPrice = this.balance / totalSupply;
         return tokenPrice;
     }
 
@@ -47,7 +47,7 @@ contract GentoDao is DaoWithDelegation {
 
         require(msg.sender.send(proposal.amount));
         proposal.claimed[msg.sender] = true;
-        Claimed("payout", msg.sender);
+        Claimed("payout", msg.sender, proposal.amount);
 
         return proposal.amount;
     }
@@ -57,19 +57,19 @@ contract GentoDao is DaoWithDelegation {
         dividends[msg.sender] = 0;
         require(msg.sender.send(dividends[msg.sender]));
         
-        Claimed("dividend", msg.sender);
+        Claimed("dividend", msg.sender, dividends[msg.sender]);
     }
 
 
     function claimDecisionMakerReward() public onlyShareholders {
         require(decisionmakerRewards[msg.sender] > 0);
         decisionmakerRewards[msg.sender] = 0;
-        require(msg.sender.send(decicionmakerRewards[msg.sender]));
+        require(msg.sender.send(decisionmakerRewards[msg.sender]));
 
-        Claimed("decision maker reward", msg.sender);
+        Claimed("decision maker reward", msg.sender, decisionmakerRewards[msg.sender]);
     }
 
-    function getVRTokeninFoW(FieldOfWork fow) public constant returns(uint vrt) {
+    function getVRTokenInFoW(FieldOfWork fow) public constant returns(uint vrt) {
         uint vrt1 = 0;
         for (uint i = 0; i < shareholders.length; i++) {
             if (votingRewardTokens[shareholders[i]][uint(fow)] > 0) {
@@ -79,7 +79,7 @@ contract GentoDao is DaoWithDelegation {
         return vrt1;
     }
 
-    function getVRTokenOfDecisionMaker(address dm, FieldOfWork fow) public constant returns(uint vrt) {
+    function getVRTokenInFoWOfDecisionMaker(address dm, FieldOfWork fow) public constant returns(uint vrt) {
         return votingRewardTokens[dm][uint(fow)];
     }
 
@@ -88,9 +88,9 @@ contract GentoDao is DaoWithDelegation {
         DaoWithProposals.executeProposal(proposalId);
         Proposal storage proposal = proposals[proposalId];
         if (proposal.proposalPassed && proposal.dividend > 0) {
-            tokenPrice = getTokenPrice();
+            uint tokenPrice = getTokenPrice();
             for (uint i = 0; i < shareholders.length; ++i) {
-                shareholderDividend = (balances[shareholders[i]] * tokenPrice) * proposal.dividend;
+                uint shareholderDividend = (balances[shareholders[i]] * tokenPrice) * proposal.dividend;
                 dividends[shareholders[i]] += shareholderDividend;
             }
         }
@@ -102,24 +102,24 @@ contract GentoDao is DaoWithDelegation {
             uint partnerDmr = (proposal.dmr * partner) / 100;
 
 
-            for (uint i = 0; i < shareholders.length; ++i) {
-                uint financeReward = (financeDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[i], FieldOfWork.finance) / getVRTinFoW(FieldOfWork.finance)) * 100)) / 100;
-                uint productReward = (productDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[i], FieldOfWork.product) / getVRTinFoW(FieldOfWork.product)) * 100)) / 100;
-                uint organisationalReward = (organisationalDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[i], FieldOfWork.organisational) / getVRTinFoW(FieldOfWork.organisational)) * 100)) / 100;
-                uint partnerReward = (partnerDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[i], FieldOfWork.partner) / getVRTinFoW(FieldOfWork.partner)) * 100)) / 100;
+            for (uint j = 0; j < shareholders.length; ++j) {
+                uint financeReward = (financeDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[j], FieldOfWork.Finance) / getVRTokenInFoW(FieldOfWork.Finance)) * 100)) / 100;
+                uint organisationalReward = (organisationalDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[j], FieldOfWork.Organisational) / getVRTokenInFoW(FieldOfWork.Organisational)) * 100)) / 100;
+                uint productReward = (productDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[j], FieldOfWork.Product) / getVRTokenInFoW(FieldOfWork.Product)) * 100)) / 100;
+                uint partnerReward = (partnerDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[j], FieldOfWork.Partnership) / getVRTokenInFoW(FieldOfWork.Partnership)) * 100)) / 100;
                 uint dmr = financeReward + productReward + organisationalReward + partnerReward;
 
-                decisionmakerRewards[shareholders[i]] += dmr;
+                decisionmakerRewards[shareholders[j]] += dmr;
 
-                votingRewardTokens[shareholders[i]][FieldOfWork.finance] = 0;
-                votingRewardTokens[shareholders[i]][FieldOfWork.product] = 0;
-                votingRewardTokens[shareholders[i]][FieldOfWork.organisational] = 0;
-                votingRewardTokens[shareholders[i]][FieldOfWork.partner] = 0;
+                votingRewardTokens[shareholders[j]][uint(FieldOfWork.Finance)] = 0;
+                votingRewardTokens[shareholders[j]][uint(FieldOfWork.Product)] = 0;
+                votingRewardTokens[shareholders[j]][uint(FieldOfWork.Organisational)] = 0;
+                votingRewardTokens[shareholders[j]][uint(FieldOfWork.Partnership)] = 0;
             }
         }
 
-        for (uint i = 0; i < proposal.votes.length; ++i) {
-            Vote storage v = proposal.votes[i];
+        for (uint k = 0; k < proposal.votes.length; ++k) {
+            Vote storage v = proposal.votes[k];
             uint voteWeight = getInfluenceOfVoter(v.voter, proposal.fieldOfWork);
             votingRewardTokens[v.voter][uint(proposal.fieldOfWork)] += voteWeight;
         }
