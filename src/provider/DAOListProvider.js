@@ -45,9 +45,16 @@ export async function loadAllOrganizations() {
   return Promise.all(organizations.map(mapOrganization))
 }
 
+<<<<<<< 37436535dd234a8f9f81c8cb57bd7dbbf3d72daf
 export async function loadAllOrganizationsOfOwner(owner) {
   if (!owner) return []
   const organizations = await prepareOrganizations()
   const organizationsWithOwnership = await filterByBalance(organizations, owner)
   return Promise.all(organizationsWithOwnership.map(mapOrganization))
+=======
+    const gentoDAOAddresses = await gentoDAOFactory.getDAOs.call()
+    const organizations = await Promise.all(gentoDAOAddresses.map(address => loadOrganization(address)))
+    const organizationsWithOwnership = await filterByBalance(organizations, owner)
+    return Promise.all(organizationsWithOwnership.map(mapOrganization));
+>>>>>>> I cant get git to work
 }
