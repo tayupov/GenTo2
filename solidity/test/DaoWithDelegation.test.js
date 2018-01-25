@@ -6,7 +6,7 @@ const should = require('should');
 const expect = require('expect');
 
 
-let newProposalEventListener;
+var newProposalEventListener;
 
 async function getProposalID() {
   let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(

@@ -25,13 +25,6 @@ var newProposalEventListener;
 async function getProposalID() {
   let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
       (error, log) => error ? reject(error) : resolve(log)));
-  console.log(newProposalLog)
-
-  /*var millisecondsToWait = 500;
-  setTimeout(function() {
-    // Whatever you want to do after the wait
-  }, millisecondsToWait);*/
-
   // check whether the proposal gets created
   assert.equal(newProposalLog.length, 1, 'should be one new Proposal');
   // returns the proposal log object with proposal id
@@ -313,39 +306,33 @@ contract('DaoWithProposals', function(accounts) {
     expect(numberOfInitialProposals + 1).toBe(+await contract.getNumProposals())
   })
 
-  // create newDividendProposal
-  // it("should be possible to create and to vote on a new dividend proposal", async function() {
-  //   await contract.setCurrentTime.sendTransaction(1200000)
-  //   await contract.buy.sendTransaction({from: accounts[0], value: 100000})
-  //   await contract.buy.sendTransaction({from: accounts[1], value: 100000})
-  //
-  //   await contract.setCurrentTime.sendTransaction(2200000)
-  //   await contract.newProposalDividend.sendTransaction(accounts[0], 0, 100, {from: accounts[0]})
-  //
-  //
-  //   /*let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-  //       (error, log) => error ? reject(error) : resolve(log)));
-  //   assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
-  //   let proposalID = newProposalLog[0].args.proposalID;*/
-  //
-  //   let proposalID = await getProposalID(newProposalEventListener)
-  //   await contract.vote.sendTransaction(proposalID, true, {from: accounts[0]})
-  //   await contract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
-  //
-  //   await contract.setCurrentTime.sendTransaction(2300000)
-  //   await contract.executeProposal.sendTransaction(proposalID)
-  //   const p = await contract.getProposal.call(proposalID)
-  //
-  //   expect(p[0]).toBe(accounts[0])
-  //   expect(Number(p[1])).toBe(0)
-  //   expect(p[2]).toBe('')
-  //   expect(Number(p[3])).toBe(2200600)
-  //   expect(p[4]).toBe(true)
-  //   expect(p[5]).toBe(true)
-  //   // expect(p[6]).toBe(55)
-  //   // expect(p[7]).toBe(100)
-  //   // expect(p[8]).toBe(0)
-  // })
+  // newDividendProposal()
+  it("should be possible to create and to vote on a new dividend proposal", async function() {
+    await contract.setCurrentTime.sendTransaction(1200000)
+    await contract.buy.sendTransaction({from: accounts[0], value: 100000})
+    await contract.buy.sendTransaction({from: accounts[1], value: 100000})
+
+    await contract.setCurrentTime.sendTransaction(2200000)
+    await contract.newProposalDividend.sendTransaction(accounts[0], 0, 100, {from: accounts[0]})
+
+    let proposalID = await getProposalID()
+    await contract.vote.sendTransaction(proposalID, true, {from: accounts[0]})
+    await contract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
+
+    await contract.setCurrentTime.sendTransaction(2300000)
+    await contract.executeProposal.sendTransaction(proposalID)
+    const p = await contract.getProposal.call(proposalID)
+
+    expect(p[0]).toBe(accounts[0])
+    expect(Number(p[1])).toBe(0)
+    expect(p[2]).toBe('')
+    expect(Number(p[3])).toBe(2200600)
+    expect(p[4]).toBe(true)
+    expect(p[5]).toBe(true)
+    expect(Number(p[6])).toBe(100)
+    expect(Number(p[7])).toBe(100)
+    expect(Number(p[8])).toBe(0)
+  })
 
   // createDMRPropsal
   it("should be possible to create and to vote on a new decision maker reward proposal", async function() {
@@ -355,24 +342,23 @@ contract('DaoWithProposals', function(accounts) {
 
     await contract.setCurrentTime.sendTransaction(2200000)
     await contract.newDMRProposal.sendTransaction(accounts[0], 1, 100, {from: accounts[0]})
-    await contract.setCurrentTime.sendTransaction(1000000)
     let proposalID = await getProposalID();
-    // await contract.vote.sendTransaction(proposalID, true, {from: accounts[0]})
-    // await contract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
-    //
-    // await contract.setCurrentTime.sendTransaction(2300000)
-    // await contract.executeProposal.sendTransaction(proposalID)
-    // const p = await contract.getProposal.call(proposalID)
+    await contract.vote.sendTransaction(proposalID, true, {from: accounts[0]})
+    await contract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
 
-    // expect(p[0]).toBe(accounts[0])
-    // expect(Number(p[1])).toBe(0)
-    // expect(p[2]).toBe('')
-    // expect(p[3]).toBe(0)
-    // expect(p[4]).toBe(true)
-    // expect(p[5]).toBe(true)
-    // expect(p[6]).toBe(55)
-    // expect(p[7]).toBe(100)
-    // expect(p[8]).toBe(0)
+    await contract.setCurrentTime.sendTransaction(2300000)
+    await contract.executeProposal.sendTransaction(proposalID)
+    const p = await contract.getProposal.call(proposalID)
+
+    expect(p[0]).toBe(accounts[0])
+    expect(Number(p[1])).toBe(0)
+    expect(p[2]).toBe('')
+    expect(Number(p[3])).toBe(2200600)
+    expect(p[4]).toBe(true)
+    expect(p[5]).toBe(true)
+    expect(Number(p[6])).toBe(100)
+    expect(Number(p[7])).toBe(0)
+    expect(Number(p[8])).toBe(100)
   })
 
 });
