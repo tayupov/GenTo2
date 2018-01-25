@@ -13,7 +13,7 @@ contract GentoDao is DaoWithDelegation {
     uint8 organisational;
     uint8 partner;
 
-    event Claimed(string claimType, uint proposalID, address beneficiary, bool claim);
+    event Claimed(string claimType, address beneficiary);
     event Balance(uint balance);
 
     function GentoDao(uint256 _maxAmountToRaiseInICO,
@@ -45,28 +45,28 @@ contract GentoDao is DaoWithDelegation {
         require(proposal.finished && proposal.proposalPassed && proposal.recipient == msg.sender
             && proposal.claimed[msg.sender] == false && proposal.amount > 0);
 
-        transfer(msg.sender, proposal.amount);
+        require(msg.sender.send(proposal.amount));
         proposal.claimed[msg.sender] = true;
-        Claimed("payout", proposalNumber, msg.sender, proposal.claimed[msg.sender]);
+        Claimed("payout", msg.sender);
 
         return proposal.amount;
     }
 
     function claimDividend() public onlyShareholders {
         require(dividends[msg.sender] > 0);
-        transfer(msg.sender, dividends[msg.sender]);
         dividends[msg.sender] = 0;
+        require(msg.sender.send(dividends[msg.sender]));
         
-        Claimed("dividend", proposalNumber, msg.sender, proposal.claimed[msg.sender]);
+        Claimed("dividend", msg.sender);
     }
 
 
     function claimDecisionMakerReward() public onlyShareholders {
         require(decisionmakerRewards[msg.sender] > 0);
-        transfer(msg.sender, decisionmakerRewards[msg.sender])
         decisionmakerRewards[msg.sender] = 0;
+        require(msg.sender.send(decicionmakerRewards[msg.sender]));
 
-        Claimed("decision maker reward", proposalNumber, msg.sender, proposal.claimed[msg.sender]);
+        Claimed("decision maker reward", msg.sender);
     }
 
     function getVRTokeninFoW(FieldOfWork fow) public constant returns(uint vrt) {
