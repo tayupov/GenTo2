@@ -11,7 +11,6 @@ export default class DAO extends React.Component {
 
   async componentDidMount() {
     const DAO = await loadOrganization(this.props.address)
-    console.log(DAO)
     this.setState({ DAO })
   }
 

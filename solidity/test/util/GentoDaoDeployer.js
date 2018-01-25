@@ -9,7 +9,8 @@ const defaultData = {
   finance: 40,
   product: 20,
   organisational: 30,
-  partner: 10
+  partner: 10,
+  dev: true
 }
 
 
@@ -20,7 +21,7 @@ module.exports=(GentoDao) => {
     if (key = Object.keys(customData).find(key => !(key in defaultData))) {
       throw `key '${key}' is not a valid parameter!`
     }
-    const data = Object.assign({}, defaultData, customData)
+    const data = Object.assign({}, defaultData, customData);
     return GentoDao.new(data.totalSupply, data.symbol, data.name, data.buyPriceStart, data.buyPriceEnd, data.saleStart, data.saleEnd, data.finance, data.product, data.organisational, data.partner, data.dev)
   }
 }
