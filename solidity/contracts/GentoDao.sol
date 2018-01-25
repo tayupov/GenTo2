@@ -95,28 +95,28 @@ contract GentoDao is DaoWithDelegation {
             }
         }
 
-        if (proposal.proposalPassed && proposal.dmr > 0) {
-            uint financeDmr = (proposal.dmr * finance) / 100;
-            uint productDmr = (proposal.dmr * product) / 100;
-            uint organisationalDmr = (proposal.dmr * organisational) / 100;
-            uint partnerDmr = (proposal.dmr * partner) / 100;
+        // if (proposal.proposalPassed && proposal.dmr > 0) {
+        //     uint financeDmr = (proposal.dmr * finance) / 100;
+        //     uint productDmr = (proposal.dmr * product) / 100;
+        //     uint organisationalDmr = (proposal.dmr * organisational) / 100;
+        //     uint partnerDmr = (proposal.dmr * partner) / 100;
 
 
-            for (uint j = 0; j < shareholders.length; ++j) {
-                uint financeReward = (financeDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[j], FieldOfWork.Finance) / getVRTokenInFoW(FieldOfWork.Finance)) * 100)) / 100;
-                uint organisationalReward = (organisationalDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[j], FieldOfWork.Organisational) / getVRTokenInFoW(FieldOfWork.Organisational)) * 100)) / 100;
-                uint productReward = (productDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[j], FieldOfWork.Product) / getVRTokenInFoW(FieldOfWork.Product)) * 100)) / 100;
-                uint partnerReward = (partnerDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[j], FieldOfWork.Partnership) / getVRTokenInFoW(FieldOfWork.Partnership)) * 100)) / 100;
-                uint dmr = financeReward + productReward + organisationalReward + partnerReward;
+        //     for (uint j = 0; j < shareholders.length; ++j) {
+        //         uint financeReward = (financeDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[j], FieldOfWork.Finance) / getVRTokenInFoW(FieldOfWork.Finance)) * 100)) / 100;
+        //         uint organisationalReward = (organisationalDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[j], FieldOfWork.Organisational) / getVRTokenInFoW(FieldOfWork.Organisational)) * 100)) / 100;
+        //         uint productReward = (productDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[j], FieldOfWork.Product) / getVRTokenInFoW(FieldOfWork.Product)) * 100)) / 100;
+        //         uint partnerReward = (partnerDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[j], FieldOfWork.Partnership) / getVRTokenInFoW(FieldOfWork.Partnership)) * 100)) / 100;
+        //         uint dmr = financeReward + productReward + organisationalReward + partnerReward;
 
-                decisionmakerRewards[shareholders[j]] += dmr;
+        //         decisionmakerRewards[shareholders[j]] += dmr;
 
-                votingRewardTokens[shareholders[j]][uint(FieldOfWork.Finance)] = 0;
-                votingRewardTokens[shareholders[j]][uint(FieldOfWork.Product)] = 0;
-                votingRewardTokens[shareholders[j]][uint(FieldOfWork.Organisational)] = 0;
-                votingRewardTokens[shareholders[j]][uint(FieldOfWork.Partnership)] = 0;
-            }
-        }
+        //         votingRewardTokens[shareholders[j]][uint(FieldOfWork.Finance)] = 0;
+        //         votingRewardTokens[shareholders[j]][uint(FieldOfWork.Product)] = 0;
+        //         votingRewardTokens[shareholders[j]][uint(FieldOfWork.Organisational)] = 0;
+        //         votingRewardTokens[shareholders[j]][uint(FieldOfWork.Partnership)] = 0;
+        //     }
+        // }
 
         for (uint k = 0; k < proposal.votes.length; ++k) {
             Vote storage v = proposal.votes[k];
