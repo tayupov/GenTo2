@@ -1,14 +1,6 @@
 import IPFS from 'ipfs';
 
-export default getIPFS
-
 let ipfs
-async function getIPFS() {
-  if (!ipfs) {
-    ipfs = await initIPFS()
-  }
-  return ipfs
-}
 
 function initIPFS() {
   const ipfsNode = new IPFS();
@@ -17,4 +9,11 @@ function initIPFS() {
       res(ipfsNode)
     })
   })
+}
+
+export default async function getIPFS() {
+  if (!ipfs) {
+    ipfs = await initIPFS()
+  }
+  return ipfs
 }

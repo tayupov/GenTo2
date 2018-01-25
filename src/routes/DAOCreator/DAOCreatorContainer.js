@@ -45,7 +45,6 @@ export default class DAOCreatorContainer extends React.Component {
 
 	async handleCreate() {
 		const descriptionHash = await uploadString(this.state.description)
-
 		const from = this.props.account
 		const contractObj = omitInvalidContractKeys(this.state)
 		const contractValues = Object.values(contractObj)
