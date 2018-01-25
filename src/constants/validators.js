@@ -28,9 +28,10 @@ export const STARTPRICE = 'startprice'
 export const ENDPRICE = 'endprice'
 
 // proposals
-export const PROPOSALNAME = 'proposalName'
+export const PROPOSALNAME = 'name'
 export const PROPOSALCATEGORY = 'proposalCategory'
-export const PROPOSALDESCRIPTION = 'proposalDescription'
+export const PROPOSALDESCRIPTION = 'description'
 
-export const PROPOSALPAYOUT = 'proposalPayout'
+export const PROPOSALPAYOUT = 'weiAmount'
 export const PROPOSALEND = 'proposalEnd'
+export const PROPOSALBENEFICIARY = 'beneficiary'

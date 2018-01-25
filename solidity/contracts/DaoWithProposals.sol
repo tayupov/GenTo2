@@ -10,6 +10,7 @@ contract DaoWithProposals is DaoWithIco {
     struct Proposal {
         address recipient;
         uint amount;
+        string name;
         string description;
         FieldOfWork fieldOfWork;
         uint proposalDeadline;
@@ -56,6 +57,7 @@ contract DaoWithProposals is DaoWithIco {
 
     function getProposal(uint proposalID) public constant returns (address recipient,
     uint amount,
+    string name,
     string description,
     uint proposalDeadline,
     bool finished,
@@ -64,8 +66,8 @@ contract DaoWithProposals is DaoWithIco {
     uint dividend,
     uint dmr) {
         Proposal storage proposal = proposals[proposalID];
-        return (proposal.recipient, proposal.amount, proposal.description, proposal.proposalDeadline, proposal.finished,
-            proposal.proposalPassed, proposal.passedPercent, proposal.dividend, proposal.dmr);
+        return (proposal.recipient, proposal.amount, proposal.name, proposal.description, proposal.proposalDeadline,
+        proposal.finished, proposal.proposalPassed, proposal.passedPercent, proposal.dividend, proposal.dmr);
     }
 
     function getNumProposals() public constant returns (
@@ -82,7 +84,7 @@ contract DaoWithProposals is DaoWithIco {
     returns(uint proposalID)
     {
 
-        uint proposalDividendID = newProposal(beneficiary, 0, fieldOfWork);
+        uint proposalDividendID = newProposal("none", "none", beneficiary, 0, fieldOfWork);
         Proposal storage proposal  = proposals[proposalDividendID];
         proposal.dividend = dividend;
         return proposalDividendID;
@@ -96,7 +98,7 @@ contract DaoWithProposals is DaoWithIco {
     returns(uint proposalID)
     {
 
-        uint proposalDividendID = newProposal(beneficiary, 0, fieldOfWork);
+        uint proposalDividendID = newProposal("none", "none", beneficiary, 0, fieldOfWork);
         Proposal storage proposal  = proposals[proposalDividendID];
         proposal.dmr = dmr;
         return proposalDividendID;
@@ -104,6 +106,8 @@ contract DaoWithProposals is DaoWithIco {
     }
 
     function newProposal(
+        string name,
+        string description,
         address beneficiary,
         uint weiAmount,
         FieldOfWork fieldOfWork) public votingAllowed onlyShareholders
@@ -113,6 +117,8 @@ contract DaoWithProposals is DaoWithIco {
         proposalID = proposals.length++;
         Proposal storage proposal = proposals[proposalID];
         proposal.recipient = beneficiary;
+        proposal.name = name;
+        proposal.description = description;
         proposal.amount = weiAmount;
         proposal.proposalHash = keccak256(beneficiary, weiAmount); // TODO add transactionBytecode
         proposal.proposalDeadline = currentTime() + debatingPeriodInMinutes * 1 minutes;
