@@ -79,12 +79,15 @@ contract DaoWithProposals is DaoWithIco {
 
     function newProposalDividend(
         address beneficiary,
-        FieldOfWork fieldOfWork,
         uint dividend) public votingAllowed onlyShareholders
     returns(uint proposalID)
     {
+<<<<<<< HEAD
 
         uint proposalDividendID = newProposal("none", "none", beneficiary, 0, fieldOfWork);
+=======
+        uint proposalDividendID = newProposal(beneficiary, 0, FieldOfWork.Finance);
+>>>>>>> DMR Payout (WIP)
         Proposal storage proposal  = proposals[proposalDividendID];
         proposal.dividend = dividend;
         return proposalDividendID;
@@ -93,12 +96,15 @@ contract DaoWithProposals is DaoWithIco {
 
     function newDMRProposal(
         address beneficiary,
-        FieldOfWork fieldOfWork,
         uint dmr) public votingAllowed onlyShareholders
     returns(uint proposalID)
     {
 
+<<<<<<< HEAD
         uint proposalDividendID = newProposal("none", "none", beneficiary, 0, fieldOfWork);
+=======
+        uint proposalDividendID = newProposal(beneficiary, 0, FieldOfWork.Finance);
+>>>>>>> DMR Payout (WIP)
         Proposal storage proposal  = proposals[proposalDividendID];
         proposal.dmr = dmr;
         return proposalDividendID;
