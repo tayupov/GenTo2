@@ -67,4 +67,8 @@ contract StandardTokenWithShareholderList is DevContract, StandardToken{
     onBalanceChange(dst, oldBalanceDest, balances[dst]);
     return result;
   }
+
+  function getShareholderCount() public constant returns(uint count) {
+    return shareholders.length;
+  }
 }

@@ -7,10 +7,21 @@ import web3 from 'utils/web3';
 
 const mapOrganization = async (organization) => {
   return {
+    address: await organization.address,
     name: await organization.name(),
-    address: await organization.address
+    symbol: await organization.symbol(),
+    saleStart: await organization.saleStart(),
+    saleEnd: await organization.saleEnd(),
+    isICOFinished: await organization.isIcoFinished(),
+    numberOfProposals: await organization.getNumProposals(),
+    numberOfShareholders: await organization.getShareholderCount(),
+    totalSupply: await organization.totalSupply(),
+    remainingTokensForICOPurchase: await organization.remainingTokensForICOPurchase()
+ // buyPrice: await organization.getBuyPrice() 
+ // does not work for all organizations, we need some error handling here or leave it out
   }
 }
+
 const filterByBalance = async (organizations, owner) => {
   const organizationsWithOwnership = []
   for (let i=0; i<organizations.length; i++) {
@@ -22,19 +33,23 @@ const filterByBalance = async (organizations, owner) => {
   return organizationsWithOwnership
 }
 
+async function prepareOrganizations() {
+  const GentoDAOFactoryContract = contract(GentoDAOFactoryArtifact)
+  GentoDAOFactoryContract.setProvider(web3.currentProvider)
+  const gentoDAOFactory = await GentoDAOFactoryContract.deployed()
+  const gentoDAOAddresses = await gentoDAOFactory.getDAOs.call()
+  const organizations = await Promise.all(gentoDAOAddresses.map(address => loadOrganization(address)))
+  return organizations
+}
 
-export async function loadAllOrganizations(owner) {
-    if (!owner) return []
+export async function loadAllOrganizations() {
+  const organizations = await prepareOrganizations()
+  return Promise.all(organizations.map(mapOrganization))
+}
 
-    const GentoDAOFactoryContract = contract(GentoDAOFactoryArtifact)
-    GentoDAOFactoryContract.setProvider(web3.currentProvider);
-
-    const gentoDAOFactory = await GentoDAOFactoryContract.deployed()
-
-    const gentoDAOAddresses = await gentoDAOFactory.getDAOs.call()
-    console.log(gentoDAOAddresses);
-    const organizations = await Promise.all(gentoDAOAddresses.map(address => loadOrganization(address)))
-    const organizationsWithOwnership = await filterByBalance(organizations, owner)
-  //  const organizationsWithOwnership = await Promise.all()
-    return Promise.all(organizationsWithOwnership.map(mapOrganization));
+export async function loadAllOrganizationsOfOwner(owner) {
+  if (!owner) return []
+  const organizations = await prepareOrganizations()
+  const organizationsWithOwnership = await filterByBalance(organizations, owner)
+  return Promise.all(organizationsWithOwnership.map(mapOrganization))
 }

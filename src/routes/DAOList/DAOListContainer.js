@@ -1,49 +1,30 @@
 import React, { Component } from 'react';
-
+import moment from 'moment';
 import DAOList from './DAOList';
+import { loadAllOrganizations } from 'provider/DAOListProvider';
 
 export default class DAOListContainer extends Component {
 
   constructor() {
+    moment().format();
     super();
-    this.state = {
-      gentoOrganizations: [
-        {
-          name: 'organization1',
-          description: 'Give me your money',
-          address: 'dolla-dolla-bill-yall'
-        },
-        {
-          name: 'organization2',
-          description: 'Legit company!!1',
-          address: 'legit-link'
-        },
-        {
-          name: 'organization3',
-          description: 'Give me your money',
-          address: 'dolla-dolla-bill-yall'
-        },
-        {
-          name: 'organization4',
-          description: 'Legit company!!1',
-          address: 'legit-link'
-        },
-        {
-          name: 'organization5',
-          description: 'Give me your money',
-          address: 'dolla-dolla-bill-yall'
-        }
-      ]
-    }
+    this.state = { gentoDAOs: [], gentoICOs: [] }
   }
 
-  componentDidMount() {
-    //TODO: load gentoOrganizations
+  async componentDidMount() {
+    let gentoOrganizations = await loadAllOrganizations();
+    gentoOrganizations.forEach(org => {
+      org.saleStart = moment.unix(org.saleStart.c).format("DD.MM.YYYY");
+      org.saleEnd = moment.unix(org.saleEnd.c).format("DD.MM.YYYY");
+    })
+    const gentoDAOs = gentoOrganizations.filter(org => org.isICOFinished);
+    const gentoICOs = gentoOrganizations.filter(org => !org.isICOFinished);
+    this.setState({ gentoDAOs, gentoICOs })
   }
 
   render() {
     return (
-      <DAOList gentoOrganizations={this.state.gentoOrganizations} />
+      <DAOList gentoDAOs={this.state.gentoDAOs} gentoICOs={this.state.gentoICOs} />
     );
   }
 }

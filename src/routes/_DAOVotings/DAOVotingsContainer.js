@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 
 import DAOVotings from './DAOVotings';
 
-import Header from 'components/Header';
-
 export default class DAOVotingsContainer extends Component {
 
 	constructor(props) {
@@ -49,7 +47,7 @@ export default class DAOVotingsContainer extends Component {
 	render() {
 		return (
 			<div>
-				<Header text='LIST OF VOTINGS' />
+				<h1>LIST OF VOTINGS</h1>
 				{(this.state.votings.length > 0) && <DAOVotings
 					{...this.props}
 					{...this.state}
