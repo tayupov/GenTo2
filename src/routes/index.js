@@ -56,13 +56,13 @@ export default class Routes extends React.Component {
                     )}
                 />
 
-                <Route path="/dao/:address/proposals/:proposal"
+                <Route path="/dao/:address/proposals/:proposalNumber"
                     render={(props) => (
                         <Proposal
                             account={account}
                             network={network}
                             address={props.match.params.address}
-                            proposal={props.match.params.proposal}
+                            proposalNumber={props.match.params.proposalNumber}
                             notify={notify}
                         />
                     )}
