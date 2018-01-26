@@ -11,7 +11,7 @@ export default class ProposalList extends React.Component {
           return (
             <Card
               as={Link}
-              to={{ pathname: `proposals/${proposal.proposalHash}` }}
+              to={{ pathname: `proposals/${proposal.proposalNumber}` }}
               key={index}
             >
               <Card.Content>
