@@ -208,19 +208,39 @@ contract('GentoDao', function(accounts) {
     await contract.setCurrentTime.sendTransaction(1200000)
     // user 5,6 become shareholders
     await contract.buy.sendTransaction({from: accounts[5], value: 100})
-    await contract.buy.sendTransaction({from: accounts[6], value: 200})
+    await contract.buy.sendTransaction({from: accounts[6], value: 100})
+    await contract.buy.sendTransaction({from: accounts[7], value: 100})
     // set time to after ICO
     await contract.setCurrentTime.sendTransaction(2200000)
-    await contract.newDMRProposal.sendTransaction(accounts[5], 5000, {from: accounts[5]})
-    let proposalID = await getProposalID();
+    await contract.newProposal.sendTransaction(accounts[5], 345, 2, {from: accounts[5]})
+
+    let proposalID1 = await getProposalID();
     // user 0,1,2 vote for the proposal
-    await contract.vote.sendTransaction(proposalID, true, {from: accounts[5]})
-    await contract.vote.sendTransaction(proposalID, true, {from: accounts[6]})
+    await contract.vote.sendTransaction(proposalID1, true, {from: accounts[5]})
+    await contract.vote.sendTransaction(proposalID1, true, {from: accounts[6]})
+    await contract.vote.sendTransaction(proposalID1, false, {from: accounts[7]})
     // set time to after the proposal period
     await contract.setCurrentTime.sendTransaction(2300000)
+    // execute the proposal therefor the proposal gets passed and finished
+    await contract.executeProposal.sendTransaction(proposalID1)
+    await contract.newDMRProposal.sendTransaction(accounts[5], 10000, {from: accounts[5]})
+    let proposalID2 = await getProposalID();
+    // user 0,1,2 vote for the proposal
+    await contract.vote.sendTransaction(proposalID2, true, {from: accounts[5]})
+    await contract.vote.sendTransaction(proposalID2, true, {from: accounts[6]})
+    await contract.vote.sendTransaction(proposalID2, false, {from: accounts[7]})
+    // set time to after the proposal period
+    await contract.setCurrentTime.sendTransaction(2500000)
     // execute the proposal therefor the  proposal gets passed and finished
-    await contract.executeProposal.sendTransaction(proposalID)
+    console.log(+await contract.getVRTokenInFoW(2));
+    console.log(+await contract.getVRTokenInFoWOfDecisionMaker(accounts[5], 2))
+    console.log(+await contract.getVRTokenInFoWOfDecisionMaker(accounts[6], 2))
+    console.log(+await contract.getVRTokenInFoWOfDecisionMaker(accounts[7], 2))
+    await contract.executeProposal.sendTransaction(proposalID2)
     console.log(+await contract.decisionmakerRewards.call(accounts[5]))
+    console.log(+await contract.decisionmakerRewards.call(accounts[6]))
+    console.log(+await contract.decisionmakerRewards.call(accounts[7]))
+    
     expect(+await contract.decisionmakerRewards.call(accounts[5])).toBeGreaterThan(0);
     // user 5 claims the payout for the first time
     await contract.claimDecisionMakerReward.sendTransaction({from: accounts[5]})
