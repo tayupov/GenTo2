@@ -22,35 +22,8 @@ contract('GentoDao', function(accounts) {
     contract = await GentoDaoDeployer()
     newProposalEventListener = contract.NewProposalCreated();
   });
-  //truffle returns strings for numbers
-  it("should be possible to mock the time in the test contract", async function() {
-    // the time of the mock contract is set to 0 in the beginning for convenience reasons
-    expect(+await contract.currentTime.call()).toBe(0)
-    // forward the time to 1 s in future
-    await contract.setCurrentTime.sendTransaction(1000)
-    expect(+await contract.currentTime.call()).toBe(1000)
 
-    // it should also be possible to go back in time!
-    await contract.setCurrentTime.sendTransaction(0)
-    expect(+await contract.currentTime.call()).toBe(0)
-  })
-
-  it("should not be possible to mock the time in a contract without the dev flag", async function() {
-    // deploy a new contract with dev flag set false
-    contract = await GentoDaoDeployer({dev: false})
-
-    try {
-      // forward the time to 1 s in future
-      await contract.setCurrentTime.sendTransaction(1000)
-      should.fail("this transaction should have raised an error")
-    } catch (e) {
-      expect(e.message).toContain("VM Exception while processing transaction: ")
-    }
-
-    // currentTime should be more or less the current system time (now in a smart contract returns the block time)
-    expect(+await contract.currentTime.call()).toBeCloseTo(new Date().getTime()/1000, -1)
-  })
-
+  // claimPayout()
   it("should be possible to claim the payout after the proposal period is over", async function() {
     // set time between ICO START and END
     await contract.setCurrentTime.sendTransaction(1200000)
@@ -85,6 +58,7 @@ contract('GentoDao', function(accounts) {
     expect(Number(p[1])).toBe(345)
   })
 
+  // claimPayout()
   it("should ensure that the claimer of the payout can get the payout only once", async function() {
     // set time between ICO START and END
     await contract.setCurrentTime.sendTransaction(1200000)
@@ -95,7 +69,6 @@ contract('GentoDao', function(accounts) {
     await contract.setCurrentTime.sendTransaction(2200000)
     // create a new proposal in field of work 0
     await contract.newProposal.sendTransaction(accounts[5], 345, 0, {from: accounts[5]})
-
     let proposalID = await getProposalID();
     // user 0,1,2 vote for the proposal
     await contract.vote.sendTransaction(proposalID, true, {from: accounts[5]})
@@ -119,6 +92,7 @@ contract('GentoDao', function(accounts) {
     }
   })
 
+  // claimDividend()
   it("should ensure that the shareholder can claim the dividend only once", async function() {
     await contract.setCurrentTime.sendTransaction(1200000)
     await contract.buy.sendTransaction({from: accounts[1], value: 100})
@@ -144,6 +118,7 @@ contract('GentoDao', function(accounts) {
     }
   })
 
+  // claimDMR()
   it("should ensure that the decision maker reward can be claimed only once", async function() {
     await contract.setCurrentTime.sendTransaction(1200000)
     await contract.buy.sendTransaction({from: accounts[1], value: 100})
@@ -169,6 +144,7 @@ contract('GentoDao', function(accounts) {
 
   })
 
+  // claimDividend()
   it("should be able for different users to claim the dividend for a succesful proposal", async function() {
     await contract.setCurrentTime.sendTransaction(1200000)
     await contract.buy.sendTransaction({from: accounts[1], value: 100})
@@ -188,6 +164,7 @@ contract('GentoDao', function(accounts) {
     // proposals is passed and finished
     expect(p1[4]).toBe(true)
     expect(p1[5]).toBe(true)
+    expect(Number(p1[7])).toBe(0)
     // create dividend proposal
     await contract.setCurrentTime.sendTransaction(2200000)
     await contract.newProposalDividend.sendTransaction(accounts[1], 0, 100, {from: accounts[1]})
@@ -207,6 +184,7 @@ contract('GentoDao', function(accounts) {
     expect(Number(p2[7])).toBe(100)
   })
 
+  // claimDMR()
   it("should allow for a decision maker to claim the voting reward token", async function() {
     await contract.setCurrentTime.sendTransaction(1200000)
     await contract.buy.sendTransaction({from: accounts[1], value: 100})
@@ -230,9 +208,11 @@ contract('GentoDao', function(accounts) {
     await contract.claimDMR.sendTransaction(proposalVRTID, {from: accounts[2]})
     expect(Number(await contract.getVRTInFoWOfDM.call(accounts[1], 2))).toBe(10)
     expect(Number(await contract.getVRTInFoWOfDM.call(accounts[2], 2))).toBe(0)
+    expect(Number(await contract.getVRTinFoW.call(2))).toBe(10)
     expect(Number(p[8])).toBe(100)
   })
 
+// getVRTinFoW() + getVRTInFoWOfDM()
 it("shouldn't be possible for a shareholder to claim DMR if he doesn't get delegated VP", async function() {
     await contract.setCurrentTime.sendTransaction(1200000)
     await contract.buy.sendTransaction({from: accounts[1], value: 200})
@@ -252,5 +232,32 @@ it("shouldn't be possible for a shareholder to claim DMR if he doesn't get deleg
     expect(Number(await contract.getVRTInFoWOfDM.call(accounts[2], 0))).toBe(0)
     expect(Number(await contract.getVRTinFoW.call(0))).toBe(14)
 })
+
+// executeProposal()
+it("should ensure that the voting reward tokens get updated by executing the proposal", async function() {
+  await contract.setCurrentTime.sendTransaction(1200000)
+  await contract.buy.sendTransaction({from: accounts[1], value: 200})
+  await contract.buy.sendTransaction({from: accounts[2], value: 200})
+  await contract.buy.sendTransaction({from: accounts[3], value: 200})
+
+  await contract.setCurrentTime.sendTransaction(2200000)
+  await contract.newProposalDividend.sendTransaction(accounts[1], 0, 100, {from: accounts[1]})
+  let proposalDivID = await getProposalID()
+  await contract.delegate.sendTransaction(0, accounts[1], {from: accounts[2]})
+  await contract.delegate.sendTransaction(0, accounts[2], {from: accounts[3]})
+
+  await contract.vote.sendTransaction(proposalDivID, true, {from: accounts[1]})
+  await contract.vote.sendTransaction(proposalDivID, false, {from: accounts[2]})
+  await contract.vote.sendTransaction(proposalDivID, true, {from: accounts[3]})
+
+  await contract.setCurrentTime.sendTransaction(2300000)
+  await contract.executeProposal.sendTransaction(proposalDivID)
+
+  expect(+await contract.votingRewardTokens.call([accounts[1]][0])).toBe(0)
+  // expect(contract.votingRewardTokens[accounts[2]]).toBe(10)
+  // expect(contract.votingRewardTokens[accounts[3]]).toBe(20)
+})
+
+
 
 });

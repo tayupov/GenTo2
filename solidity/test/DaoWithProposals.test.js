@@ -306,7 +306,7 @@ contract('DaoWithProposals', function(accounts) {
     expect(numberOfInitialProposals + 1).toBe(+await contract.getNumProposals())
   })
 
-  // newDividendProposal()
+  // newProposalDividend()
   it("should be possible to create and to vote on a new dividend proposal", async function() {
     await contract.setCurrentTime.sendTransaction(1200000)
     await contract.buy.sendTransaction({from: accounts[0], value: 100000})
@@ -334,7 +334,7 @@ contract('DaoWithProposals', function(accounts) {
     expect(Number(p[8])).toBe(0)
   })
 
-  // createDMRPropsal
+  // newDMRPropsal()
   it("should be possible to create and to vote on a new decision maker reward proposal", async function() {
     await contract.setCurrentTime.sendTransaction(1200000)
     await contract.buy.sendTransaction({from: accounts[0], value: 100000})
@@ -361,4 +361,47 @@ contract('DaoWithProposals', function(accounts) {
     expect(Number(p[8])).toBe(100)
   })
 
+  /**
+
+  MODIFIER
+
+  */
+
+  // votingAllowed
+  it("should be not allowed to vote on the new proposal if the dao isn't created", async function() {
+    // set the time between ico start and end
+    await contract.setCurrentTime.sendTransaction(1200000)
+    await contract.buy.sendTransaction({from: accounts[0], value: 100000})
+    await contract.buy.sendTransaction({from: accounts[1], value: 100000})
+
+    await contract.setCurrentTime.sendTransaction(2200000)
+    await contract.newDMRProposal.sendTransaction(accounts[0], 1, 100, {from: accounts[0]})
+    let proposalID = await getProposalID();
+    // reset the time between ico start and end
+    await contract.setCurrentTime.sendTransaction(1200000)
+    try {
+      await contract.vote.sendTransaction(proposalID, true, {from: accounts[0]})
+      await contract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
+    } catch(e) {
+        expect(e.message).toContain("VM Exception while processing transaction")
+    }
+  })
+
+  it("should be possible to create a new DMR proposal only if the user are shareholder", async function() {
+    await contract.setCurrentTime.sendTransaction(2200000)
+    try {
+      await contract.newDMRProposal.sendTransaction(accounts[0], 1, 100, {from: accounts[0]})
+    } catch(e) {
+        expect(e.message).toContain("VM Exception while processing transaction")
+    }
+  })
+
+  it("should be possible to create a new proposal only if the user are shareholder", async function() {
+    await contract.setCurrentTime.sendTransaction(2200000)
+    try {
+      await contract.newProposal.sendTransaction(accounts[0], 100, 1, {from: accounts[0]})
+    } catch(e) {
+        expect(e.message).toContain("VM Exception while processing transaction")
+    }
+  })
 });
