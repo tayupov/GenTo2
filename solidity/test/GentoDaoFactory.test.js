@@ -8,7 +8,7 @@ let defaultICOdata = {
   saleEnd: new Date().getTime()+10000
 }
 
-async function createNewDAO() {
+async function createNewDAO(invalidData) {
   let data = {}
   Object.assign(data, defaultICOdata)
   let genToFactory = await GenToFactory.deployed()
@@ -40,13 +40,13 @@ contract('GentoDaoFactory', function(accounts) {
 
     try {
       let instance = await createNewDAO() //Create contract with default data
-      // expect(await instance.name()).toEqual(defaultICOdata.name)
-      // expect(await instance.symbol()).toEqual(defaultICOdata.symbol)
-      // expect(+await instance.totalSupply()).toEqual(0) //because nothing was sold yet
-      // expect(+await instance.buyPriceStart()).toEqual(defaultICOdata.buyPriceStart)
-      // expect(+await instance.buyPriceEnd()).toEqual(defaultICOdata.buyPriceEnd)
-      // expect(+await instance.saleStart()).toEqual(defaultICOdata.saleStart)
-      // expect(+await instance.saleEnd()).toEqual(defaultICOdata.saleEnd)
+      expect(await instance.name()).toEqual(defaultICOdata.name)
+      expect(await instance.symbol()).toEqual(defaultICOdata.symbol)
+      expect(+await instance.totalSupply()).toEqual(0) //because nothing was sold yet
+      expect(+await instance.buyPriceStart()).toEqual(defaultICOdata.buyPriceStart)
+      expect(+await instance.buyPriceEnd()).toEqual(defaultICOdata.buyPriceEnd)
+      expect(+await instance.saleStart()).toEqual(defaultICOdata.saleStart)
+      expect(+await instance.saleEnd()).toEqual(defaultICOdata.saleEnd)
     }
     catch (e) {
       console.error(e)
@@ -64,7 +64,7 @@ contract('GentoDaoFactory', function(accounts) {
           should.fail("this transaction should have raised an error")
       }
       catch(e) {
-        expect(e.message).toContain("VM Exception while processing transaction: ")
+        expect(e.message).toContain("this transaction should have raised an error")
       }
   });
 });
