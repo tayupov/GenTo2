@@ -77,34 +77,26 @@ contract DaoWithProposals is DaoWithIco {
 
     function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) public constant returns (uint influence);
 
-    function newProposalDividend(
+    function newDividendProposal(
         address beneficiary,
         uint dividend) public votingAllowed onlyShareholders
     returns(uint proposalID)
     {
-<<<<<<< HEAD
 
-        uint proposalDividendID = newProposal("none", "none", beneficiary, 0, fieldOfWork);
-=======
-        uint proposalDividendID = newProposal(beneficiary, 0, FieldOfWork.Finance);
->>>>>>> DMR Payout (WIP)
+        uint proposalDividendID = newProposal("Dividend", "Dividend", beneficiary, 0, FieldOfWork.Finance);
         Proposal storage proposal  = proposals[proposalDividendID];
         proposal.dividend = dividend;
         return proposalDividendID;
 
     }
 
-    function newDMRProposal(
+    function newDMRewardProposal(
         address beneficiary,
         uint dmr) public votingAllowed onlyShareholders
     returns(uint proposalID)
     {
 
-<<<<<<< HEAD
-        uint proposalDividendID = newProposal("none", "none", beneficiary, 0, fieldOfWork);
-=======
-        uint proposalDividendID = newProposal(beneficiary, 0, FieldOfWork.Finance);
->>>>>>> DMR Payout (WIP)
+        uint proposalDividendID = newProposal("DMR", "DMR", beneficiary, 0, FieldOfWork.Finance);
         Proposal storage proposal  = proposals[proposalDividendID];
         proposal.dmr = dmr;
         return proposalDividendID;
@@ -167,6 +159,7 @@ contract DaoWithProposals is DaoWithIco {
         for (uint i = 0; i < proposal.votes.length; ++i) {
             Vote storage v = proposal.votes[i];
             uint voteWeight = getInfluenceOfVoter(v.voter, proposal.fieldOfWork);
+            votingRewardTokens[v.voter][uint(proposal.fieldOfWork)] += voteWeight;
             if (v.inSupport) {
                 approve += voteWeight;
             } else {

@@ -78,7 +78,7 @@ contract GentoDao is DaoWithDelegation {
                 vrt1 += votingRewardTokens[shareholders[i]][uint(fow)];
             }
         }
-        // check for 0 so it doesn't throw
+        // check for 0 and setting to any number so it doesn't throw
         if (vrt1 == 0) {
             vrt1 = 1;
         }
@@ -89,13 +89,11 @@ contract GentoDao is DaoWithDelegation {
         return votingRewardTokens[dm][uint(fow)];
     }
 
-    function distributeDMReward(uint proposalId) {
-        Proposal storage proposal = proposals[proposalId];
-        uint financeDmr = (proposal.dmr * finance) / 100;
-        uint productDmr = (proposal.dmr * product) / 100;
-        uint organisationalDmr = (proposal.dmr * organisational) / 100;
-        uint partnerDmr = (proposal.dmr * partner) / 100;
-        NumberLogger("partnerDmr", partnerDmr);
+    function distributeDMReward(uint dmr) {
+        uint financeDmr = (dmr * finance) / 100;
+        uint productDmr = (dmr * product) / 100;
+        uint organisationalDmr = (dmr * organisational) / 100;
+        uint partnerDmr = (dmr * partner) / 100;
 
 
         for (uint j = 0; j < shareholders.length; ++j) {
@@ -103,6 +101,7 @@ contract GentoDao is DaoWithDelegation {
             uint organisationalReward = (organisationalDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[j], FieldOfWork.Organisational) * 10 ** 2) / getVRTokenInFoW(FieldOfWork.Organisational))) / 100;
             uint productReward = (productDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[j], FieldOfWork.Product) * 10 ** 2) / getVRTokenInFoW(FieldOfWork.Product))) / 100;
             uint partnerReward = (partnerDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[j], FieldOfWork.Partnership) * 10 ** 2) / getVRTokenInFoW(FieldOfWork.Partnership))) / 100;
+            
             uint dmr = financeReward + productReward + organisationalReward + partnerReward;
 
             decisionmakerRewards[shareholders[j]] = dmr;
@@ -116,25 +115,25 @@ contract GentoDao is DaoWithDelegation {
         }
     }
 
+    function distributeDividend(uint dividend) {
+        uint tokenPrice = getTokenPrice();
+        for (uint i = 0; i < shareholders.length; ++i) {
+            uint shareholderDividend = ((balances[shareholders[i]] * tokenPrice) * dividend) / 100;
+            dividends[shareholders[i]] += shareholderDividend;
+        }
+    }
+
     function executeProposal(uint proposalId) public votingAllowed {
         DaoWithProposals.executeProposal(proposalId);
         Proposal storage proposal = proposals[proposalId];
-        if (proposal.proposalPassed && proposal.dividend > 0) {
-            uint tokenPrice = getTokenPrice();
-            for (uint i = 0; i < shareholders.length; ++i) {
-                uint shareholderDividend = ((balances[shareholders[i]] * tokenPrice) * proposal.dividend) / 100;
-                dividends[shareholders[i]] += shareholderDividend;
+        
+        if (proposal.proposalPassed) {
+            if (proposal.dividend > 0) {
+                distributeDividend(proposal.dividend);
             }
-        }
-
-        if (proposal.proposalPassed && proposal.dmr > 0) {
-            distributeDMReward(proposalId);
-        }
-
-        for (uint k = 0; k < proposal.votes.length; ++k) {
-            Vote storage v = proposal.votes[k];
-            uint voteWeight = getInfluenceOfVoter(v.voter, proposal.fieldOfWork);
-            votingRewardTokens[v.voter][uint(proposal.fieldOfWork)] += voteWeight;
+            if (proposal.dmr > 0) {
+                distributeDMReward(proposal.dmr);
+            }
         }
     }
 }
