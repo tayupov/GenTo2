@@ -183,7 +183,7 @@ contract('GentoDao', function(accounts) {
     // set time to after ICO
     await contract.setCurrentTime.sendTransaction(2200000)
     // create a new proposal in field of work 0
-    await contract.newProposalDividend.sendTransaction(accounts[5], 20, {from: accounts[5]})
+    await contract.newDividendProposal.sendTransaction(accounts[5], 20, {from: accounts[5]})
     let proposalID = await getProposalID();
     // user 0,1,2 vote for the proposal
     await contract.vote.sendTransaction(proposalID, true, {from: accounts[5]})
@@ -223,7 +223,7 @@ contract('GentoDao', function(accounts) {
     await contract.setCurrentTime.sendTransaction(2300000)
     // execute the proposal therefor the proposal gets passed and finished
     await contract.executeProposal.sendTransaction(proposalID1)
-    await contract.newDMRProposal.sendTransaction(accounts[5], 10000, {from: accounts[5]})
+    await contract.newDMRewardProposal.sendTransaction(accounts[5], 10000, {from: accounts[5]})
     let proposalID2 = await getProposalID();
     // user 0,1,2 vote for the proposal
     await contract.vote.sendTransaction(proposalID2, true, {from: accounts[5]})
