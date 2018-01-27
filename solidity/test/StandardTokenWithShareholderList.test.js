@@ -19,11 +19,10 @@ async function getProposalID() {
 }
 
 async function getShareholders() {
-  let shareholdersLog = await new Promise((resolve, reject) => newProposalEventListener.get(
+  let shareholdersLog = await new Promise((resolve, reject) => newShareholdersEventListener.get(
       (error, log) => error ? reject(error) : resolve(log)));
-  // check whether the proposal gets created
-  assert.equal(shareholdersLog, 1, 'should be one new shareholder array');
-  // returns the proposal log object with proposal id
+  assert.equal(shareholdersLog.length, 1, 'should be one new shareholder array');
+  //console.log('shareholdersLog: ', shareholdersLog)
   return shareholdersLog[0].args.shareholders;
 }
 
@@ -69,19 +68,37 @@ contract('StandardTokenWithShareholderList', function(accounts) {
     // await contract.buy.sendTransaction({from: accounts[1], value: 100})
     // await contract.buy.sendTransaction({from: accounts[2], value: 100})
     // await contract.transferFrom(accounts[0], accounts[1], 10, {from: accounts[2]})
-    let token = await StandardToken.new(accounts[0], 10);
+    // let token = await StandardToken.new(accounts[0], 10);
 
   })
 
   // setBlance()
   it("should be possible to set a new balance for a shareholder", async function() {
-    await contract.setBalance.call(accounts[0], 10)
-    console.log('shareholder: ', +await contract.shareholders)
-    let shareholders = getShareholders()
+    await contract.setCurrentTime.sendTransaction(1200000)
+    await contract.buy.sendTransaction({from: accounts[0], value: 500})
+    await contract.setBalance.call(accounts[0], 100)
+    let shareholders = await getShareholders()
+    expect(shareholders).toContain(accounts[0])
   })
 
   it("should should remove the user from shareholder list if the new balance is 0", async function() {
+    await contract.setCurrentTime.sendTransaction(1200000)
+    await contract.buy.sendTransaction({from: accounts[0], value: 50})
+    await contract.setBalance.call(accounts[0], 0)
+    // absichtlich false um events zu prüfen
+    expect(!!+await contract.isShareholder.call(accounts[0])).toBe(false)
+    // let shareholders = await getShareholders()
+    // expect(shareholders).not.toContain(accounts[0])
 
+  })
+
+  // onBalanceChange()
+  it("should add the user to the shareholder list if his balance is greater then 0", async function() {
+    await contract.setCurrentTime.sendTransaction(1200000)
+    await contract.buy.sendTransaction({from: accounts[0], value: 500})
+    await contract.onBalanceChange.call(accounts[0], 0, 100)
+    let shareholders = await getShareholders()
+    expect(shareholders).toContain(accounts[0])
   })
 
 });

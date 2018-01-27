@@ -9,7 +9,8 @@ contract StandardTokenWithShareholderList is DevContract, StandardToken{
     string public name = "";
     address[] public shareholders;
 
-    event NewShareholderList(accounts[] shareholders);
+    event NewShareholderList(address[] shareholders);
+    event BalanceUpdated(uint oldBalance, uint newBalance);
 
     function StandardTokenWithShareholderList(string _symbol,
     string _name,
@@ -53,8 +54,10 @@ contract StandardTokenWithShareholderList is DevContract, StandardToken{
     }
 
     function setBalance(address user, uint256 newBalance) /*internal*/ public {
+        BalanceUpdated(0, 0);
         uint oldBalance = balances[user];
         balances[user] = newBalance;
+        BalanceUpdated(oldBalance, newBalance);
         onBalanceChange(user, oldBalance, newBalance);
     }
 
@@ -67,5 +70,6 @@ contract StandardTokenWithShareholderList is DevContract, StandardToken{
             }
         }
         NewShareholderList(shareholders);
+
     }
 }
