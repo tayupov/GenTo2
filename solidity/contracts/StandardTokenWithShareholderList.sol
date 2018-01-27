@@ -10,7 +10,7 @@ contract StandardTokenWithShareholderList is DevContract, StandardToken{
     address[] public shareholders;
 
     event NewShareholderList(address[] shareholders);
-    event BalanceUpdated(uint oldBalance, uint newBalance);
+    event BalanceUpdated(uint oldBalance, uint newBalance, uint balance);
 
     function StandardTokenWithShareholderList(string _symbol,
     string _name,
@@ -50,15 +50,18 @@ contract StandardTokenWithShareholderList is DevContract, StandardToken{
             }
         }
         //If we did not find the shareholder to be removed we have a programming error
-        revert();
+        /* revert(); */
     }
 
     function setBalance(address user, uint256 newBalance) /*internal*/ public {
-        BalanceUpdated(0, 0);
         uint oldBalance = balances[user];
         balances[user] = newBalance;
-        BalanceUpdated(oldBalance, newBalance);
+        BalanceUpdated(oldBalance, newBalance, balances[user]);
         onBalanceChange(user, oldBalance, newBalance);
+    }
+
+    function getBalance(address user) public returns (uint) {
+        return balances[user];
     }
 
     function onBalanceChange(address user, uint256 oldBalance, uint256 newBalance) /*private*/ public {
