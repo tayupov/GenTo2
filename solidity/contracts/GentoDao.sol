@@ -54,20 +54,24 @@ contract GentoDao is DaoWithDelegation {
         return proposal.amount;
     }
 
-    function claimDividend() public onlyShareholders {
-        require(dividends[msg.sender] > 0);
+    function claimDividend(uint proposalNumber) public onlyShareholders {
+        Proposal storage proposal = proposals[proposalNumber];
+        require(dividends[msg.sender] > 0 && proposal.claimed[msg.sender] == false);
+
         dividends[msg.sender] = 0;
         require(msg.sender.send(dividends[msg.sender]));
 
+        proposal.claimed[msg.sender] = true;
         Claimed("dividend", msg.sender, dividends[msg.sender]);
     }
 
     // wie bekommt jeder user DMR?
-    function claimDecisionMakerReward() public onlyShareholders {
-        /* require(decisionmakerRewards[msg.sender] > 0); */
+    function claimDecisionMakerReward(uint proposalNumber) public onlyShareholders {
+        Proposal storage proposal = proposals[proposalNumber];
+        require(decisionmakerRewards[msg.sender] > 0);
         decisionmakerRewards[msg.sender] = 0;
-        /* require(msg.sender.send(decisionmakerRewards[msg.sender])); */
-
+        require(msg.sender.send(decisionmakerRewards[msg.sender]));
+        proposal.claimed[msg.sender] = true;
         Claimed("decision maker reward", msg.sender, decisionmakerRewards[msg.sender]);
     }
 
@@ -132,7 +136,7 @@ contract GentoDao is DaoWithDelegation {
             uint voteWeight = getInfluenceOfVoter(v.voter, proposal.fieldOfWork);
             votingRewardTokens[v.voter][uint(proposal.fieldOfWork)] += voteWeight;
         }
-
+        // finished?
         if (proposal.proposalPassed) {
             if (proposal.dividend > 0) {
                 distributeDividend(proposal.dividend);

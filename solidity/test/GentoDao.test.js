@@ -23,6 +23,12 @@ contract('GentoDao', function(accounts) {
     newProposalEventListener = contract.NewProposalCreated();
   });
 
+  /**
+
+  METHODS
+
+  */
+
   // claimPayout()
   it("should be possible to claim the payout after the proposal period is over", async function() {
     // set time between ICO START and END
@@ -91,56 +97,55 @@ contract('GentoDao', function(accounts) {
   })
 
   // claimDividend()
-  // it("should ensure that the shareholder can claim the dividend only once", async function() {
-  //   await contract.setCurrentTime.sendTransaction(1200000)
-  //   await contract.buy.sendTransaction({from: accounts[1], value: 100})
-  //   await contract.buy.sendTransaction({from: accounts[2], value: 200})
-  //   await contract.setCurrentTime.sendTransaction(2200000)
-  //   await contract.newProposalDividend.sendTransaction(accounts[1], 0, 100, {from: accounts[1]})
-  //
-  //   let proposalDividendID = await getProposalID();
-  //
-  //   await contract.vote.sendTransaction(proposalDividendID, true, {from: accounts[1]})
-  //   await contract.vote.sendTransaction(proposalDividendID, true, {from: accounts[2]})
-  //
-  //   await contract.setCurrentTime.sendTransaction(2300000)
-  //   await contract.executeProposal.sendTransaction(proposalDividendID)
-  //
-  //   await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[1]})
-  //   await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[2]})
-  //   // user 1 tries to claim again but it should fail
-  //   try {
-  //     await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[1]})
-  //   } catch(e) {
-  //       expect(e.message).toContain("VM Exception while processing transaction: ")
-  //   }
-  // })
+  it("should ensure that the shareholder can claim the dividend only once", async function() {
+    await contract.setCurrentTime.sendTransaction(1200000)
+    await contract.buy.sendTransaction({from: accounts[1], value: 100})
+    await contract.buy.sendTransaction({from: accounts[2], value: 200})
+    await contract.setCurrentTime.sendTransaction(2200000)
+    await contract.newDividendProposal.sendTransaction(accounts[1], 100, 0, {from: accounts[1]})
+    let proposalDividendID = await getProposalID();
+
+    await contract.vote.sendTransaction(proposalDividendID, true, {from: accounts[1]})
+    await contract.vote.sendTransaction(proposalDividendID, true, {from: accounts[2]})
+
+    await contract.setCurrentTime.sendTransaction(2300000)
+    await contract.executeProposal.sendTransaction(proposalDividendID)
+
+    await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[1]})
+    await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[2]})
+    // user 1 tries to claim again but it should fail
+    try {
+      await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[1]})
+    } catch(e) {
+        expect(e.message).toContain("VM Exception while processing transaction: ")
+    }
+  })
 
   // claimDMR()
-  // it("should ensure that the decision maker reward can be claimed only once", async function() {
-  //   await contract.setCurrentTime.sendTransaction(1200000)
-  //   await contract.buy.sendTransaction({from: accounts[1], value: 100})
-  //   await contract.buy.sendTransaction({from: accounts[2], value: 200})
-  //
-  //   await contract.setCurrentTime.sendTransaction(2200000)
-  //   await contract.newDMRProposal.sendTransaction(accounts[1], 2, 100, {from: accounts[1]})
-  //   let proposalVRTID = await getProposalID();
-  //
-  //   await contract.vote.sendTransaction(proposalVRTID, true, {from: accounts[1]})
-  //   await contract.vote.sendTransaction(proposalVRTID, true, {from: accounts[2]})
-  //
-  //   await contract.setCurrentTime.sendTransaction(2300000)
-  //   await contract.executeProposal.sendTransaction(proposalVRTID)
-  //
-  //   await contract.claimDMR.sendTransaction(proposalVRTID, {from: accounts[1]})
-  //   try {
-  //     await contract.claimDMR.sendTransaction(proposalVRTID, {from: accounts[1]})
-  //   } catch(e) {
-  //       expect(e.message).toContain("VM Exception while processing transaction: ")
-  //   }
-  //
-  //
-  // })
+  it("should ensure that the decision maker reward can be claimed only once", async function() {
+    await contract.setCurrentTime.sendTransaction(1200000)
+    await contract.buy.sendTransaction({from: accounts[1], value: 100})
+    await contract.buy.sendTransaction({from: accounts[2], value: 200})
+
+    await contract.setCurrentTime.sendTransaction(2200000)
+    await contract.newDMRewardProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
+    let proposalDMRID = await getProposalID();
+
+    await contract.vote.sendTransaction(proposalDMRID, true, {from: accounts[1]})
+    await contract.vote.sendTransaction(proposalDMRID, true, {from: accounts[2]})
+
+    await contract.setCurrentTime.sendTransaction(2300000)
+    await contract.executeProposal.sendTransaction(proposalDMRID)
+
+    await contract.claimDecisionMakerReward.sendTransaction(proposalDMRID, {from: accounts[1]})
+    try {
+      await contract.claimDecisionMakerReward.sendTransaction(proposalDMRID, {from: accounts[1]})
+    } catch(e) {
+        expect(e.message).toContain("VM Exception while processing transaction: ")
+    }
+
+
+  })
 
   // claimDividend()
   it("should be able for different users to claim the dividend for a succesful proposal", async function() {
@@ -190,68 +195,128 @@ contract('GentoDao', function(accounts) {
     await contract.newDMRewardProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
     let proposalVRTID = await getProposalID()
 
-    // await contract.delegate.sendTransaction(2, accounts[1], {from: accounts[2]})
     await contract.vote.sendTransaction(proposalVRTID, true, {from: accounts[1]})
-    await contract.vote.sendTransaction(proposalVRTID, false, {from: accounts[2]})
+    await contract.vote.sendTransaction(proposalVRTID, true, {from: accounts[2]})
 
     await contract.setCurrentTime.sendTransaction(2300000)
     await contract.executeProposal.sendTransaction(proposalVRTID)
     var p = await contract.getProposal.call(proposalVRTID)
+    expect(p[5]).toBe(true)
+    expect(p[6]).toBe(true)
+    // if shareholder claim the DMR it's required that the decision maker reward of the shareholder is greater than 0
+    expect(+await contract.decisionmakerRewards.call(accounts[1])).toBeGreaterThan(0)
+    expect(+await contract.decisionmakerRewards.call(accounts[2])).toBeGreaterThan(0)
 
-    await contract.distributeDMReward.call(50)
-    await contract.claimDecisionMakerReward.sendTransaction({from: accounts[1]})
-    await contract.claimDecisionMakerReward.sendTransaction({from: accounts[2]})
-    // expect(Number(await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[1], 2))).toBe(10)
-    // expect(Number(await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[2], 2))).toBe(0)
-    // expect(Number(await contract.getVRTokenInFoW.call(2))).toBe(10)
-    // expect(Number(p[8])).toBe(100)
+    await contract.claimDecisionMakerReward.sendTransaction(proposalVRTID, {from: accounts[1]})
+    await contract.claimDecisionMakerReward.sendTransaction(proposalVRTID, {from: accounts[2]})
+    expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[1], 2)).toBe(0)
+    expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[2], 2)).toBe(0)
+    // should be 1 because the sum of VRT after executing is 0 and then it's set to 1
+    expect(+await contract.getVRTokenInFoW.call(2)).toBe(1)
+    // get the amount of DMR during the proposal creation
+    expect(+p[9]).toBe(100)
   })
 
+// getVRTokenInFoWOfDecisionMaker() + getVRTokenInFoW()
+it("compute the right amount of voting reward token if the proposal isn't passed", async function() {
+  await contract.setCurrentTime.sendTransaction(1200000)
+  await contract.buy.sendTransaction({from: accounts[1], value: 100})
+  await contract.buy.sendTransaction({from: accounts[2], value: 200})
+
+  await contract.setCurrentTime.sendTransaction(2200000)
+  await contract.newDMRewardProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
+  let proposalVRTID = await getProposalID()
+
+  await contract.vote.sendTransaction(proposalVRTID, true, {from: accounts[1]})
+  await contract.vote.sendTransaction(proposalVRTID, false, {from: accounts[2]})
+
+  await contract.setCurrentTime.sendTransaction(2300000)
+  await contract.executeProposal.sendTransaction(proposalVRTID)
+  var p = await contract.getProposal.call(proposalVRTID)
+  // proposal isn't passed thats why decision maker rewards of the shareholder isn't updated
+  expect(+await contract.decisionmakerRewards.call(accounts[1])).toBe(0)
+  expect(+await contract.decisionmakerRewards.call(accounts[2])).toBe(0)
+  // not invoking claimDecisionMakerReward() doesn't reset the votingRewardTokens to 0 for testing
+  expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[1], 2)).toBe(3)
+  expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[2], 2)).toBe(7)
+  // should be the sum of VRT of both shareholder in FoW 2
+  expect(+await contract.getVRTokenInFoW.call(2)).toBe(10)
+  // get the amount of DMR during the proposal creation
+  expect(+p[9]).toBe(100)
+})
+
 // getVRTinFoW() + getVRTInFoWOfDM()
-// it("shouldn't be possible for a shareholder to claim DMR if he doesn't get delegated VP", async function() {
-//     await contract.setCurrentTime.sendTransaction(1200000)
-//     await contract.buy.sendTransaction({from: accounts[1], value: 200})
-//     await contract.buy.sendTransaction({from: accounts[2], value: 200})
-//
-//     await contract.setCurrentTime.sendTransaction(2200000)
-//     await contract.newDMRProposal.sendTransaction(accounts[1], 0, 100, {from: accounts[1]})
-//     let proposalVRTID = await getProposalID()
-//     await contract.delegate.sendTransaction(0, accounts[1], {from: accounts[2]})
-//     await contract.vote.sendTransaction(proposalVRTID, true, {from: accounts[1]})
-//     await contract.setCurrentTime.sendTransaction(2300000)
-//     await contract.executeProposal.sendTransaction(proposalVRTID)
-//     await contract.claimDMR.sendTransaction(proposalVRTID, {from: accounts[1]})
-//
-//     expect(Number(await contract.getVRTInFoWOfDM.call(accounts[1], 0))).toBe(14)
-//     // user 2 doesn't get a DMR because he doesn't vote on the proposal and didn't get VP from delegation
-//     expect(Number(await contract.getVRTInFoWOfDM.call(accounts[2], 0))).toBe(0)
-//     expect(Number(await contract.getVRTinFoW.call(0))).toBe(14)
-// })
+it("shouldn't be possible for a shareholder to claim DMR if he doesn't get delegated VP", async function() {
+    await contract.setCurrentTime.sendTransaction(1200000)
+    await contract.buy.sendTransaction({from: accounts[1], value: 200})
+    await contract.buy.sendTransaction({from: accounts[2], value: 200})
+
+    await contract.setCurrentTime.sendTransaction(2200000)
+    await contract.newDMRewardProposal.sendTransaction(accounts[1], 100, 0, {from: accounts[1]})
+    let proposalVRTID = await getProposalID()
+    await contract.delegate.sendTransaction(0, accounts[1], {from: accounts[2]})
+    await contract.vote.sendTransaction(proposalVRTID, true, {from: accounts[1]})
+    await contract.setCurrentTime.sendTransaction(2300000)
+    await contract.executeProposal.sendTransaction(proposalVRTID)
+    // after executing dmr proposal the vrt get resetted to 0
+    expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[1], 0)).toBe(0)
+    // user 2 doesn't get a DMR because he doesn't vote on the proposal and didn't get VP from delegation
+    expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[2], 0)).toBe(0)
+    expect(+await contract.decisionmakerRewards.call(accounts[1])).toBe(40)
+    expect(+await contract.decisionmakerRewards.call(accounts[2])).toBe(0)
+    // after claiming the dmr from user it gets resetted 0 too
+    await contract.claimDecisionMakerReward.sendTransaction(proposalVRTID, {from: accounts[1]})
+    expect(+await contract.decisionmakerRewards.call(accounts[1])).toBe(0)
+})
 
 // executeProposal()
-// it("should ensure that the voting reward tokens get updated by executing the proposal", async function() {
-//   await contract.setCurrentTime.sendTransaction(1200000)
-//   await contract.buy.sendTransaction({from: accounts[1], value: 200})
-//   await contract.buy.sendTransaction({from: accounts[2], value: 200})
-//   await contract.buy.sendTransaction({from: accounts[3], value: 200})
-//
-//   await contract.setCurrentTime.sendTransaction(2200000)
-//   await contract.newProposalDividend.sendTransaction(accounts[1], 0, 100, {from: accounts[1]})
-//   let proposalDivID = await getProposalID()
-//   await contract.delegate.sendTransaction(0, accounts[1], {from: accounts[2]})
-//   await contract.delegate.sendTransaction(0, accounts[2], {from: accounts[3]})
-//
-//   await contract.vote.sendTransaction(proposalDivID, true, {from: accounts[1]})
-//   await contract.vote.sendTransaction(proposalDivID, false, {from: accounts[2]})
-//   await contract.vote.sendTransaction(proposalDivID, true, {from: accounts[3]})
-//
-//   await contract.setCurrentTime.sendTransaction(2300000)
-//   await contract.executeProposal.sendTransaction(proposalDivID)
-//
-//   expect(+await contract.votingRewardTokens.call([accounts[1]][0])).toBe(0)
-//   // expect(contract.votingRewardTokens[accounts[2]]).toBe(10)
-//   // expect(contract.votingRewardTokens[accounts[3]]).toBe(20)
-// })
+it("should ensure that the voting reward tokens gets resetted by executing the proposal", async function() {
+  await contract.setCurrentTime.sendTransaction(1200000)
+  await contract.buy.sendTransaction({from: accounts[1], value: 200})
+  await contract.buy.sendTransaction({from: accounts[2], value: 200})
+  await contract.buy.sendTransaction({from: accounts[3], value: 200})
+
+  await contract.setCurrentTime.sendTransaction(2200000)
+  await contract.newDividendProposal.sendTransaction(accounts[1], 100, 0, {from: accounts[1]})
+  let proposalDivID = await getProposalID()
+  await contract.delegate.sendTransaction(0, accounts[1], {from: accounts[2]})
+  await contract.delegate.sendTransaction(0, accounts[2], {from: accounts[3]})
+
+  await contract.vote.sendTransaction(proposalDivID, true, {from: accounts[1]})
+  await contract.vote.sendTransaction(proposalDivID, false, {from: accounts[2]})
+  await contract.vote.sendTransaction(proposalDivID, true, {from: accounts[3]})
+
+  await contract.setCurrentTime.sendTransaction(2300000)
+  await contract.executeProposal.sendTransaction(proposalDivID)
+
+  expect(+await contract.getVRTokenInFoW.call(0)).toBe(21)
+  expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[1], 0)).toBe(14)
+  expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[2], 0)).toBe(7)
+  expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[3], 0)).toBe(0)
+
+  expect(+await contract.dividends.call(accounts[1])).toBe(196)
+  expect(+await contract.dividends.call(accounts[2])).toBe(196)
+  expect(+await contract.dividends.call(accounts[3])).toBe(196)
+
+})
+
+// decisionmakerRewards
+it("should ensure if a dividend proposal is created the decision maker reward is still 0", async function() {
+  await contract.setCurrentTime.sendTransaction(1200000)
+  await contract.buy.sendTransaction({from: accounts[1], value: 200})
+  await contract.buy.sendTransaction({from: accounts[2], value: 200})
+  await contract.setCurrentTime.sendTransaction(2200000)
+  await contract.newDividendProposal.sendTransaction(accounts[1], 100, 0, {from: accounts[1]})
+  let proposalDivID = await getProposalID()
+  await contract.vote.sendTransaction(proposalDivID, true, {from: accounts[1]})
+  await contract.vote.sendTransaction(proposalDivID, false, {from: accounts[2]})
+  await contract.setCurrentTime.sendTransaction(2300000)
+  await contract.executeProposal.sendTransaction(proposalDivID)
+
+  expect(+await contract.decisionmakerRewards.call(accounts[1])).toBe(0)
+  expect(+await contract.decisionmakerRewards.call(accounts[2])).toBe(0)
+  expect(+await contract.decisionmakerRewards.call(accounts[3])).toBe(0)
+})
 
 
 
