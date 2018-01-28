@@ -29,6 +29,11 @@ contract('GentoDao', function(accounts) {
 
   */
 
+  // getTokenPrice()
+  // it("should return the token price of a proposal", async function() {
+  //   console.log('getTokenPrice()', +await contract.getTokenPrice.call())
+  // })
+
   // claimPayout()
   it("should be possible to claim the payout after the proposal period is over", async function() {
     // set time between ICO START and END
@@ -97,6 +102,44 @@ contract('GentoDao', function(accounts) {
   })
 
   // claimDividend()
+  it("should be able for different users to claim the dividend for a succesful proposal", async function() {
+    await contract.setCurrentTime.sendTransaction(1200000)
+    await contract.buy.sendTransaction({from: accounts[1], value: 100})
+    await contract.buy.sendTransaction({from: accounts[2], value: 200})
+    // set time to after ICO
+    await contract.setCurrentTime.sendTransaction(2200000)
+    await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 500, 0, {from: accounts[1]})
+    let proposalID = await getProposalID()
+
+    await contract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
+    await contract.vote.sendTransaction(proposalID, true, {from: accounts[2]})
+    // set time to after the proposal period
+    await contract.setCurrentTime.sendTransaction(2300000)
+    await contract.executeProposal.sendTransaction(proposalID)
+    var p1 = await contract.getProposal.call(proposalID)
+    // proposals is passed and finished
+    expect(p1[5]).toBe(true)
+    expect(p1[6]).toBe(true)
+    expect(+p1[8]).toBe(0)
+    // create dividend proposal
+    await contract.setCurrentTime.sendTransaction(2200000)
+    await contract.newDividendProposal.sendTransaction(accounts[1], 100, 0, {from: accounts[1]})
+    let proposalDividendID = await getProposalID()
+
+    await contract.vote.sendTransaction(proposalDividendID, true, {from: accounts[1]})
+    await contract.vote.sendTransaction(proposalDividendID, true, {from: accounts[2]})
+
+    await contract.setCurrentTime.sendTransaction(2300000)
+    await contract.executeProposal.sendTransaction(proposalDividendID)
+    var p2 = await contract.getProposal.call(proposalDividendID)
+
+    await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[1]})
+    await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[2]})
+
+    expect(+p2[8]).toBe(100)
+  })
+
+  // claimDividend()
   it("should ensure that the shareholder can claim the dividend only once", async function() {
     await contract.setCurrentTime.sendTransaction(1200000)
     await contract.buy.sendTransaction({from: accounts[1], value: 100})
@@ -145,44 +188,6 @@ contract('GentoDao', function(accounts) {
     }
 
 
-  })
-
-  // claimDividend()
-  it("should be able for different users to claim the dividend for a succesful proposal", async function() {
-    await contract.setCurrentTime.sendTransaction(1200000)
-    await contract.buy.sendTransaction({from: accounts[1], value: 100})
-    await contract.buy.sendTransaction({from: accounts[2], value: 200})
-    // set time to after ICO
-    await contract.setCurrentTime.sendTransaction(2200000)
-    await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 500, 0, {from: accounts[1]})
-    let proposalID = await getProposalID()
-
-    await contract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
-    await contract.vote.sendTransaction(proposalID, true, {from: accounts[2]})
-    // set time to after the proposal period
-    await contract.setCurrentTime.sendTransaction(2300000)
-    await contract.executeProposal.sendTransaction(proposalID)
-    var p1 = await contract.getProposal.call(proposalID)
-    // proposals is passed and finished
-    expect(p1[5]).toBe(true)
-    expect(p1[6]).toBe(true)
-    expect(Number(p1[8])).toBe(0)
-    // create dividend proposal
-    await contract.setCurrentTime.sendTransaction(2200000)
-    await contract.newDividendProposal.sendTransaction(accounts[1], 100, 0, {from: accounts[1]})
-    let proposalDividendID = await getProposalID()
-
-    await contract.vote.sendTransaction(proposalDividendID, true, {from: accounts[1]})
-    await contract.vote.sendTransaction(proposalDividendID, true, {from: accounts[2]})
-
-    await contract.setCurrentTime.sendTransaction(2300000)
-    await contract.executeProposal.sendTransaction(proposalDividendID)
-    var p2 = await contract.getProposal.call(proposalDividendID)
-
-    await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[1]})
-    await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[2]})
-
-    expect(Number(p2[8])).toBe(100)
   })
 
   // claimDMR()
@@ -288,7 +293,7 @@ it("should ensure that the voting reward tokens gets resetted by executing the p
 
   await contract.setCurrentTime.sendTransaction(2300000)
   await contract.executeProposal.sendTransaction(proposalDivID)
-
+  // if it's a dividend proposal the VRT don't get resetted to 0
   expect(+await contract.getVRTokenInFoW.call(0)).toBe(21)
   expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[1], 0)).toBe(14)
   expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[2], 0)).toBe(7)
@@ -299,6 +304,12 @@ it("should ensure that the voting reward tokens gets resetted by executing the p
   expect(+await contract.dividends.call(accounts[3])).toBe(196)
 
 })
+
+/**
+
+PROPERTIES
+
+*/
 
 // decisionmakerRewards
 it("should ensure if a dividend proposal is created the decision maker reward is still 0", async function() {
@@ -317,7 +328,5 @@ it("should ensure if a dividend proposal is created the decision maker reward is
   expect(+await contract.decisionmakerRewards.call(accounts[2])).toBe(0)
   expect(+await contract.decisionmakerRewards.call(accounts[3])).toBe(0)
 })
-
-
 
 });
