@@ -2,6 +2,7 @@ pragma solidity ^0.4.8;
 
 import './DaoWithProposals.sol';
 
+
 contract DaoWithDelegation is DaoWithProposals {
 
     mapping(address => mapping(uint => address)) public delegations;
