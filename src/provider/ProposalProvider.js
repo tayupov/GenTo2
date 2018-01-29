@@ -2,7 +2,6 @@ import GentoDAOArtifact from 'assets/contracts/GentoDao'
 
 import { default as contract } from 'truffle-contract'
 
-import { loadOrganization } from './DAOProvider'
 import web3 from 'utils/web3';
 
 const mapProposal =  (proposalNumber, proposalArray) => {
@@ -35,15 +34,10 @@ export async function loadProposal(daoAddress, proposalNumber) {
 }
 
 export async function loadVote(daoAddress, proposalNumber, address) {
-    console.log("1")
     const GentoDAO = contract(GentoDAOArtifact);
-    console.log("1")
     GentoDAO.setProvider(web3.currentProvider);
-    console.log(proposalNumber)
-    console.log(address)
     var voteArray = await GentoDAO.at(daoAddress).getVote(proposalNumber, address);
 
-    console.log(voteArray)
     return mapVote(voteArray);
 }
 
