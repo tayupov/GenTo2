@@ -25,6 +25,7 @@ export default class Proposal extends React.Component {
             <h2>finished: {proposal.finished}</h2>
             <h2>proposalPassed: {proposal.proposalPassed}</h2>
             <h2>passedPercent: {proposal.passedPercent}</h2>
+            <h2>fieldOfWork: {proposal.fieldOfWork}</h2>
             <h2>dividend: {proposal.dividend}</h2>
             <h2>this user voted: {String(vote.voted)}</h2>
             <h2>support from this user: {String(vote.support)}</h2>
