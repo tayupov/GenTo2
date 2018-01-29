@@ -14,7 +14,7 @@ export default class Proposal extends React.Component {
 
     render() {
         const { proposal, vote } = this.props;
-        const { approve, disapprove}= this.props;
+        const { approveCallback, disapproveCallback,executeCallback}= this.props;
         return (
         <div>
             <h1>{proposal.name}</h1>
@@ -28,8 +28,9 @@ export default class Proposal extends React.Component {
             <h2>dividend: {proposal.dividend}</h2>
             <h2>this user voted: {String(vote.voted)}</h2>
             <h2>support from this user: {String(vote.support)}</h2>
-            <Button  onClick={approve} content="Approve" />
-            <Button  onClick={disapprove} content="Disapprove" />
+            <Button  onClick={approveCallback} content="Approve" />
+            <Button  onClick={disapproveCallback} content="Disapprove" />
+            <Button  onClick={executeCallback} content="Execute" />
         </div>)
     }
 }
