@@ -3,6 +3,7 @@ import IPFS from 'ipfs';
 import DAOCreator from './DAOCreator';
 import steps from './steps';
 import { createOrganization } from 'provider/DAOCreatorProvider';
+import uploadString from 'provider/IPFSUploadProvider'
 import { adjustStepZilla } from 'utils/stepzilla';
 import { omitInvalidContractKeys } from 'utils/contracts';
 import { Buffer } from 'buffer';
@@ -43,46 +44,13 @@ export default class DAOCreatorContainer extends React.Component {
 	}
 
 	async handleCreate() {
-		const uploadResult = await this.uploadProposalToIPFS();
-		if (uploadResult.success) {
-			this.setState({
-				proposalIPFSHash: uploadResult.file.hash
-			})
-		}
-		
-		// TODO: get rid of this helper, or maybe even keep it...
+		const descriptionHash = await uploadString(this.state.description)
 		const from = this.props.account
 		const contractObj = omitInvalidContractKeys(this.state)
 		const contractValues = Object.values(contractObj)
+		contractValues.splice(3, 0, descriptionHash)
+		
 		createOrganization(contractValues, from)
-	}
-
-	// TODO: Make this a reuseable function and move it somewhere else
-	uploadProposalToIPFS() {
-		return new Promise((resolve, reject) => {
-
-			if (this.state.proposalArrayBuffer.length > 0) {
-				const ipfsNode = new IPFS();
-				const content = Buffer.from(this.state.proposalArrayBuffer);
-
-				ipfsNode.on('ready', () => {
-					ipfsNode.files.add({ content }, (err, files) => {
-						if (err) { reject(err) }
-						resolve({
-							success: true,
-							file: files[0],
-							errors: []
-						})
-					});
-				});
-			} else {
-				resolve({
-					success: false,
-					file: null,
-					errors: ['No proposal file provided']
-				})
-			}
-		});
 	}
 
 	render() {

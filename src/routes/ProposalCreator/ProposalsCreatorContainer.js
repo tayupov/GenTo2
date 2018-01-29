@@ -19,11 +19,14 @@ export default class ProposalsCreatorContainer extends React.Component {
 	}
 
 	async handleCreate() {
+<<<<<<< 37436535dd234a8f9f81c8cb57bd7dbbf3d72daf
 
 		const from = this.props.account
 		const contractObj = omitInvalidProposalKeys(this.state)
 		const contractValues = Object.values(contractObj)
 		createProposal(contractValues, from, this.props.address)
+=======
+>>>>>>> I cant get git to work
 	}	
 
 	componentDidMount() {
