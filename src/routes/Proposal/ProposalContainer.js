@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { loadProposal, loadVote, vote } from 'provider/ProposalProvider'
+import { loadProposal, loadVote, vote, executeProposal } from 'provider/ProposalProvider'
 
 import Proposal from './Proposal';
 
@@ -46,20 +46,24 @@ export default class ProposalContainer extends React.Component {
     }
 
 
-    async approve(){
+    async approveCallback(){
         await vote(this.props.address, this.props.proposalNumber,true, this.props.account)
     }
 
-    async disapprove(){
+    async disapproveCallback(){
         await vote(this.props.address, this.props.proposalNumber,false, this.props.account)
 
+    }
+    async executeCallback(){
+        await executeProposal(this.props.address, this.props.proposalNumber)
     }
 
     render() {
         return (<Proposal proposal={this.state.proposal}
                           vote={this.state.vote}
-                          approve={this.approve.bind(this)}
-                          disapprove={this.disapprove.bind(this)}
+                          approveCallback={this.approveCallback.bind(this)}
+                          disapproveCallback={this.disapproveCallback.bind(this)}
+                          executeCallback={this.executeCallback.bind(this)}
                           address={this.props.address} />
                 )
     }

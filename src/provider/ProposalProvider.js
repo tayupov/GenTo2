@@ -48,16 +48,29 @@ export async function vote(daoAddress, proposalNumber, supportsProposal, from) {
 
     var dao = await GentoDAO.at(daoAddress);
     var parameters = [proposalNumber, supportsProposal]
-    if (await willThrow(dao, parameters, from)) {
+    if (await willThrow(dao.vote, parameters, from)) {
         console.log("can not create a proposal, either the ico is still running or the user is not a shareholder. UX People, tell the user!")
     } else {
         return dao.vote.sendTransaction(...parameters, {from})
     }
 }
 
-async function willThrow(dao, parameters, from) {
+export async function executeProposal(daoAddress, proposalNumber, from) {
+    const GentoDAO = contract(GentoDAOArtifact);
+    GentoDAO.setProvider(web3.currentProvider);
+
+    var dao = await GentoDAO.at(daoAddress);
+    var parameters = [proposalNumber]
+    if (await willThrow(dao.executeProposal, parameters, from)) {
+        console.log("can not create a proposal, either the ico is still running or the user is not a shareholder. UX People, tell the user!")
+    } else {
+        return dao.executeProposal.sendTransaction(...parameters, {from})
+    }
+}
+
+async function willThrow(command, parameters, from) {
     try {
-        await dao.vote.estimateGas(...parameters, {from})
+        await command.estimateGas(...parameters, {from})
         return false
     } catch (e) {
         return true
