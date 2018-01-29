@@ -126,7 +126,6 @@ contract GentoDao is DaoWithDelegation {
     function executeProposal(uint proposalId) public votingAllowed {
         DaoWithProposals.executeProposal(proposalId);
         Proposal storage proposal = proposals[proposalId];
-
         if (proposal.proposalPassed) {
             if (proposal.dividend > 0) {
                 distributeDividend(proposal.dividend);
