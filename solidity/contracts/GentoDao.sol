@@ -102,9 +102,9 @@ contract GentoDao is DaoWithDelegation {
             uint productReward = (productDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[j], FieldOfWork.Product) * 10 ** 2) / getVRTokenInFoW(FieldOfWork.Product))) / 100;
             uint partnerReward = (partnerDmr * ((getVRTokenInFoWOfDecisionMaker(shareholders[j], FieldOfWork.Partnership) * 10 ** 2) / getVRTokenInFoW(FieldOfWork.Partnership))) / 100;
             
-            uint dmr = financeReward + productReward + organisationalReward + partnerReward;
+            uint shareholderDmr = financeReward + productReward + organisationalReward + partnerReward;
 
-            decisionmakerRewards[shareholders[j]] = dmr;
+            decisionmakerRewards[shareholders[j]] = shareholderDmr;
         }
 
         for (uint l = 0; l < shareholders.length; ++l) {
