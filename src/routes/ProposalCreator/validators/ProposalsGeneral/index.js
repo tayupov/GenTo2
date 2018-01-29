@@ -12,11 +12,6 @@ export default function ValidateProposalsGeneral() {
   const nameValue = document.getElementById(PROPOSALNAME).value;
   const categoryContainer = document.getElementById(PROPOSALCATEGORY).getElementsByClassName("selected")[0];
   const categoryId = getPositionInParent(categoryContainer);
-<<<<<<< HEAD
-=======
-  console.log(categoryId)
-  // can not work
->>>>>>> Fixed all fieldOfWork usages in front end
   const descriptionValue = document.getElementById(PROPOSALDESCRIPTION).value;
   const beneficiary = document.getElementById(PROPOSALBENEFICIARY).value;
 
