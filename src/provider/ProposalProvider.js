@@ -15,7 +15,8 @@ const mapProposal =  (proposalNumber, proposalArray) => {
       finished:proposalArray[5],
       proposalPassed:proposalArray[6],
       passedPercent: proposalArray[7],
-      dividend:proposalArray[8]
+      fieldOfWork: proposalArray[8],
+      dividend:proposalArray[9]
   }
 }
 const mapVote =  (voteArray) => {

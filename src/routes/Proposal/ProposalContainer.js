@@ -36,8 +36,9 @@ export default class ProposalContainer extends React.Component {
         proposal.dividend = proposal.dividend.toString(10)
         proposal.passedPercent = proposal.passedPercent.toString(10)
         proposal.proposalDeadline = proposal.proposalDeadline.toString(10)
+        proposal.fieldOfWork = proposal.fieldOfWork.toString(10)
         this.setState({proposal});
-        
+
         const vote = await loadVote(this.props.address, this.props.proposalNumber, this.props.account)
         this.setState({vote});
     }
