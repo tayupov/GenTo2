@@ -3,8 +3,7 @@ pragma solidity ^0.4.8;
 import './DaoWithDelegation.sol';
 
 contract GentoDao is DaoWithDelegation {
-
-    mapping(address => mapping(uint => uint256)) public votingRewardTokens;
+    
     mapping(address => uint256) public dividends;
     mapping(address => uint256) public decisionmakerRewards;
 
@@ -46,17 +45,18 @@ contract GentoDao is DaoWithDelegation {
         require(proposal.finished && proposal.proposalPassed && proposal.recipient == msg.sender
             && proposal.claimed[msg.sender] == false && proposal.amount > 0);
 
-        require(msg.sender.send(proposal.amount));
         proposal.claimed[msg.sender] = true;
         Claimed("payout", msg.sender, proposal.amount);
+        require(msg.sender.send(proposal.amount));
 
         return proposal.amount;
     }
 
     function claimDividend() public onlyShareholders {
         require(dividends[msg.sender] > 0);
+        uint dividend = dividends[msg.sender]; 
         dividends[msg.sender] = 0;
-        require(msg.sender.send(dividends[msg.sender]));
+        require(msg.sender.send(dividend));
         
         Claimed("dividend", msg.sender, dividends[msg.sender]);
     }
@@ -64,8 +64,9 @@ contract GentoDao is DaoWithDelegation {
 
     function claimDecisionMakerReward() public onlyShareholders {
         require(decisionmakerRewards[msg.sender] > 0);
+        uint decisionmakerReward = decisionmakerRewards[msg.sender];
         decisionmakerRewards[msg.sender] = 0;
-        require(msg.sender.send(decisionmakerRewards[msg.sender]));
+        require(msg.sender.send(decisionmakerReward));
 
         Claimed("decision maker reward", msg.sender, decisionmakerRewards[msg.sender]);
     }

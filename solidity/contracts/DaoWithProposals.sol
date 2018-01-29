@@ -7,6 +7,8 @@ contract DaoWithProposals is DaoWithIco {
     uint public debatingPeriodInMinutes;
     enum FieldOfWork { Finance, Organisational, Product, Partnership }
 
+    mapping(address => mapping(uint => uint256)) public votingRewardTokens;
+
     struct Proposal {
         address recipient;
         uint amount;
@@ -44,6 +46,7 @@ contract DaoWithProposals is DaoWithIco {
         require(isIcoFinished());
         _;
     }
+
     function DaoWithProposals(uint256 _maxAmountToRaiseInICO,
     string _symbol,
     string _name,
