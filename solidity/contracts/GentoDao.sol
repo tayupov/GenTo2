@@ -3,7 +3,7 @@ pragma solidity ^0.4.8;
 import './DaoWithDelegation.sol';
 
 contract GentoDao is DaoWithDelegation {
-
+    string public descriptionHash;
     mapping(address => mapping(uint => uint256)) public votingRewardTokens;
 
     event Claimed(string claimType, uint proposalID, address beneficiary, bool claim);
@@ -12,13 +12,15 @@ contract GentoDao is DaoWithDelegation {
     function GentoDao(uint256 _maxAmountToRaiseInICO,
     string _symbol,
     string _name,
+    string _descriptionHash,
     uint256 _buyPriceStart,
     uint256 _buyPriceEnd,
     uint256 _saleStart,
     uint256 _saleEnd,
     bool _dev) DaoWithDelegation(_maxAmountToRaiseInICO, _symbol, _name, _buyPriceStart, _buyPriceEnd, _saleStart, _saleEnd, _dev) public {
+      descriptionHash = _descriptionHash;
     }
-    
+
     function claimPayout(uint proposalNumber) public daoActive returns (uint amount) {
         Proposal storage proposal = proposals[proposalNumber];
 
