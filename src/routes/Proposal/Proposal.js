@@ -11,23 +11,10 @@ export default class Proposal extends React.Component {
     constructor() {
         super();
     }
-    async componentDidMount() {
-        console.log("props");
-        console.log(this.props);
-        this.approve = this.props.approve;
-        this.disapprove = this.props.disapprove;
-    }
 
-    async approve(){
-        console.log("approve stub");
-    }
-
-    async disapprove(){
-        console.log("disapprove stub");
-    }
-    
     render() {
         const { proposal, vote } = this.props;
+        const { approve, disapprove}= this.props;
         return (
         <div>
             <h1>{proposal.name}</h1>
@@ -41,8 +28,8 @@ export default class Proposal extends React.Component {
             <h2>dividend: {proposal.dividend}</h2>
             <h2>this user voted: {String(vote.voted)}</h2>
             <h2>support from this user: {String(vote.support)}</h2>
-            <Button  onClick={this.approve} content="Approve" />
-            <Button  onClick={this.disapprove} content="Disapprove" />
+            <Button  onClick={approve} content="Approve" />
+            <Button  onClick={disapprove} content="Disapprove" />
         </div>)
     }
 }
