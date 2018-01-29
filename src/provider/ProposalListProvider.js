@@ -20,6 +20,28 @@ const mapProposal =  (proposalNumber, proposalArray) => {
     }
 }
 
+export async function filterExecuted (proposals) {
+    const res = []
+    for (let i=0; i<proposals.length; i++) {
+        console.log(proposals[i].finished)
+        if (proposals[i].finished) {
+            res.push(proposals[i])
+        }
+    }
+    return res
+}
+
+export async function filterActive (proposals) {
+    const res = []
+    for (let i=0; i<proposals.length; i++) {
+        if (!proposals[i].finished) {
+            res.push(proposals[i])
+        }
+    }
+    return res
+}
+
+
 export async function loadAllProposals(address) {
     const GentoDAO = contract(GentoDAOArtifact);
     GentoDAO.setProvider(web3.currentProvider);
