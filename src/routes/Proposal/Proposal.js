@@ -17,7 +17,7 @@ export default class Proposal extends React.Component {
         <h3>{vote.stateDescription}</h3>
         <h3>{vote.influenceDescription}</h3>
         <Divider section hidden />
-        
+
         <Message>
           <Message.Header>Proposal Description:</Message.Header>
           <p> {proposal.description} </p>
@@ -81,7 +81,7 @@ export default class Proposal extends React.Component {
                 <Label size='large'>{proposal.dividend} Wei</Label>
               </Table.Cell>
             </Table.Row>
-          </Table.Body>  
+          </Table.Body>
         </Table>
       </div>
     )
