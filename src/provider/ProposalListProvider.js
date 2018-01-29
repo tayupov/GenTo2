@@ -25,7 +25,6 @@ const mapProposal =  (proposalNumber, proposalArray) => {
 export async function filterExecuted (proposals) {
     const res = []
     for (let i=0; i<proposals.length; i++) {
-        console.log(proposals[i].finished)
         if (proposals[i].finished) {
             res.push(proposals[i])
         }
@@ -50,7 +49,6 @@ export async function loadAllProposals(address) {
 
     var proposalCount = await GentoDAO.at(address).getNumProposals();
 
-    console.log("proposal count" + proposalCount);
     var proposals = [];
 
     for(let i=0; i< proposalCount;i++){
