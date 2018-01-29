@@ -1,12 +1,10 @@
 import React from 'react';
-import IPFS from 'ipfs';
 import DAOCreator from './DAOCreator';
 import steps from './steps';
 import { createOrganization } from 'provider/DAOCreatorProvider';
 import uploadString from 'provider/IPFSUploadProvider'
 import { adjustStepZilla } from 'utils/stepzilla';
 import { omitInvalidContractKeys } from 'utils/contracts';
-import { Buffer } from 'buffer';
 
 export default class DAOCreatorContainer extends React.Component {
 
