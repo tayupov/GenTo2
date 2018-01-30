@@ -37,7 +37,7 @@ export async function loadProposal(daoAddress, proposalNumber) {
 export async function loadVote(daoAddress, proposalNumber, address) {
     const GentoDAO = contract(GentoDAOArtifact);
     GentoDAO.setProvider(web3.currentProvider);
-    var voteArray = await GentoDAO.at(daoAddress).getVote(proposalNumber, address);
+    var voteArray = await GentoDAO.at(daoAddress).getVote(proposalNumber, address); //TODO: unhandled rejection is not a function!
 
     return mapVote(voteArray);
 }
@@ -63,6 +63,7 @@ export async function executeProposal(daoAddress, proposalNumber, from) {
     var dao = await GentoDAO.at(daoAddress);
     var parameters = [proposalNumber]
     if (await willThrow(dao.executeProposal, parameters, from)) {
+        //TODO: clicking the execute button leads me here!
         console.log("can not create a proposal, either the ico is still running or the user is not a shareholder. UX People, tell the user!")
     } else {
         return dao.executeProposal.sendTransaction(...parameters, {from})
