@@ -1,6 +1,9 @@
 pragma solidity ^0.4.8;
 
-import './DaoWithIco.sol';
+import "./DaoWithIco.sol";
+/* import {votingRewardTokens} from "./GentoDao.sol"; */
+
+
 contract DaoWithProposals is DaoWithIco {
 
     Proposal[] public proposals;
@@ -10,6 +13,7 @@ contract DaoWithProposals is DaoWithIco {
     struct Proposal {
         address recipient;
         uint amount;
+        string name;
         string description;
         FieldOfWork fieldOfWork;
         uint proposalDeadline;
@@ -38,11 +42,13 @@ contract DaoWithProposals is DaoWithIco {
         require(isShareholder(msg.sender));
         _;
     }
+
     // Modifier checks whether the ICO is finished and if so the ICO become a DAO and voting is allowed
     modifier votingAllowed {
         require(isIcoFinished());
         _;
     }
+
     function DaoWithProposals(uint256 _maxAmountToRaiseInICO,
     string _symbol,
     string _name,
@@ -56,6 +62,7 @@ contract DaoWithProposals is DaoWithIco {
 
     function getProposal(uint proposalID) public constant returns (address recipient,
     uint amount,
+    string name,
     string description,
     uint proposalDeadline,
     bool finished,
@@ -64,8 +71,8 @@ contract DaoWithProposals is DaoWithIco {
     uint dividend,
     uint dmr) {
         Proposal storage proposal = proposals[proposalID];
-        return (proposal.recipient, proposal.amount, proposal.description, proposal.proposalDeadline, proposal.finished,
-            proposal.proposalPassed, proposal.passedPercent, proposal.dividend, proposal.dmr);
+        return (proposal.recipient, proposal.amount, proposal.name, proposal.description, proposal.proposalDeadline,
+        proposal.finished, proposal.proposalPassed, proposal.passedPercent, proposal.dividend, proposal.dmr);
     }
 
     function getNumProposals() public constant returns (
@@ -75,25 +82,24 @@ contract DaoWithProposals is DaoWithIco {
 
     function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) public constant returns (uint influence);
 
-    function newProposalDividend(
+    function newDividendProposal(
         address beneficiary,
         uint dividend) public votingAllowed onlyShareholders
     returns(uint proposalID)
     {
-        uint proposalDividendID = newProposal(beneficiary, 0, FieldOfWork.Finance);
+        uint proposalDividendID = newProposal("Dividend", "Dividend", beneficiary, 0, FieldOfWork.Finance);
         Proposal storage proposal  = proposals[proposalDividendID];
         proposal.dividend = dividend;
         return proposalDividendID;
 
     }
 
-    function newDMRProposal(
+    function newDMRewardProposal(
         address beneficiary,
         uint dmr) public votingAllowed onlyShareholders
     returns(uint proposalID)
     {
-
-        uint proposalDividendID = newProposal(beneficiary, 0, FieldOfWork.Finance);
+        uint proposalDividendID = newProposal("DMR", "DMR", beneficiary, 0, FieldOfWork.Finance);
         Proposal storage proposal  = proposals[proposalDividendID];
         proposal.dmr = dmr;
         return proposalDividendID;
@@ -101,6 +107,8 @@ contract DaoWithProposals is DaoWithIco {
     }
 
     function newProposal(
+        string name,
+        string description,
         address beneficiary,
         uint weiAmount,
         FieldOfWork fieldOfWork) public votingAllowed onlyShareholders
@@ -110,6 +118,8 @@ contract DaoWithProposals is DaoWithIco {
         proposalID = proposals.length++;
         Proposal storage proposal = proposals[proposalID];
         proposal.recipient = beneficiary;
+        proposal.name = name;
+        proposal.description = description;
         proposal.amount = weiAmount;
         proposal.proposalHash = keccak256(beneficiary, weiAmount); // TODO add transactionBytecode
         proposal.proposalDeadline = currentTime() + debatingPeriodInMinutes * 1 minutes;
@@ -152,6 +162,7 @@ contract DaoWithProposals is DaoWithIco {
         for (uint i = 0; i < proposal.votes.length; ++i) {
             Vote storage v = proposal.votes[i];
             uint voteWeight = getInfluenceOfVoter(v.voter, proposal.fieldOfWork);
+
             if (v.inSupport) {
                 approve += voteWeight;
             } else {

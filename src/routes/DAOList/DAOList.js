@@ -1,30 +1,44 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Image } from 'semantic-ui-react';
+import { Card, Divider, Tab } from 'semantic-ui-react';
 
 export default class DAOList extends React.Component {
   render() {
-    const { gentoOrganizations } = this.props
+    const { gentoDAOs, gentoICOs } = this.props
+    const panes = [
+      { menuItem: 'ICOs', render: () => <Tab.Pane>{renderTabPane(gentoICOs)}</Tab.Pane> },
+      { menuItem: 'DAOs', render: () => <Tab.Pane>{renderTabPane(gentoDAOs)}</Tab.Pane> }
+    ]
+
     return (
-      <Card.Group>
-        {gentoOrganizations.map((org, index) => {
-          return (
-
-            <Card as={Link} to={{ pathname: `/dao/${org.address}` }} key={index}>
-              <Image src="https://i.imgur.com/NSwmqep.jpg" />
-              <Card.Content>
-                <Card.Header>
-                  {org.name}
-                </Card.Header>
-                <Card.Description>
-                  {org.description}
-                </Card.Description>
-              </Card.Content>
-            </Card>
-
-          )
-        })}
-      </Card.Group>
+      <div>
+      <h1>All GenTo ICOs and DAOs</h1>
+      <Divider section hidden />
+      <Tab panes= {panes} />
+      </div>
     )
   }
+}
+
+function renderTabPane(gentoOrganizations) {
+  return (
+    <Card.Group>
+      {gentoOrganizations.map((org, index) => {
+        return (
+          <Card as={Link} to={{ pathname: `/dao/${org.address}` }} key={index}>
+            <Card.Content>
+              <Card.Header> {org.name} </Card.Header>
+              <Card.Meta> {org.symbol} </Card.Meta>
+            </Card.Content>
+            <Card.Content description = {"Sale from " + org.saleStart + " to " + org.saleEnd} />
+            <Card.Content description = {org.totalSupply.c + " Tokens sold"} />
+            <Card.Content description = {org.remainingTokensForICOPurchase.c + " remaining Tokens"} />
+            <Card.Content description = {org.numberOfShareholders.c + " Shareholders"} />
+            <Card.Content description = {org.numberOfProposals.c + " Proposals"} />
+            
+          </Card>
+        )
+      })}
+    </Card.Group>
+  )
 }

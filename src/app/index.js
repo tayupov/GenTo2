@@ -4,7 +4,7 @@ import DAOSidebar from 'components/DAOSidebar';
 import Routes from 'routes';
 import 'styles/app.css';
 import provider from 'provider'
-import { loadAllOrganizations } from 'provider/DAOListProvider'
+import { loadAllOrganizationsOfOwner } from 'provider/DAOListProvider'
 
 export default class App extends React.Component {
 
@@ -24,7 +24,7 @@ export default class App extends React.Component {
 
   async componentWillUpdate(nextProps, nextState) {
     if (nextState.account !== this.state.account) {
-      const organizations = await loadAllOrganizations(nextState.account)
+      const organizations = await loadAllOrganizationsOfOwner(nextState.account)
       this.setState({ organizations });
     }
   }
