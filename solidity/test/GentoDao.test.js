@@ -24,9 +24,7 @@ contract('GentoDao', function(accounts) {
   }
 
   /**
-
   METHODS
-
   */
 
   // getTokenPrice()
@@ -315,9 +313,7 @@ it("should ensure that the voting reward tokens gets resetted by executing the p
 })
 
 /**
-
 PROPERTIES
-
 */
 
 // decisionmakerRewards

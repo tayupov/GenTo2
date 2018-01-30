@@ -11,9 +11,10 @@ let defaultICOdata = {
   organisational: 30,
   partner: 1
 }
+
 async function createNewDAO(invalidData) {
   let data = {}
-  Object.assign(data, defaultICOdata, invalidData)
+  Object.assign(data, defaultICOdata)
   let genToFactory = await GenToFactory.deployed()
   await genToFactory.createDAO.sendTransaction(
     data.totalSupply,
@@ -26,8 +27,7 @@ async function createNewDAO(invalidData) {
     data.finance,
     data.product,
     data.organisational,
-    data.partner
-  )
+    data.partner)
   const daoAddress = await genToFactory.DAOs.call(0)
   const instance = await GentoDao.at(daoAddress)
 
@@ -41,7 +41,9 @@ const GenToFactory = artifacts.require("./GentoDaoFactory.sol");
 const should = require('should')
 const expect = require('expect')
 
-contract('GenToFactory', function(accounts) {
+contract('GentoDaoFactory', function(accounts) {
+
+
   it("should be possible to start a valid ICO", async function() {
 
     try {
@@ -53,6 +55,10 @@ contract('GenToFactory', function(accounts) {
       expect(+await instance.buyPriceEnd()).toEqual(defaultICOdata.buyPriceEnd)
       expect(+await instance.saleStart()).toEqual(defaultICOdata.saleStart)
       expect(+await instance.saleEnd()).toEqual(defaultICOdata.saleEnd)
+      expect(+await instance.finance()).toEqual(defaultICOdata.finance)
+      expect(+await instance.product()).toEqual(defaultICOdata.product)
+      expect(+await instance.organisational()).toEqual(defaultICOdata.organisational)
+      expect(+await instance.partner()).toEqual(defaultICOdata.partner)
     }
     catch (e) {
       console.error(e)
@@ -69,8 +75,8 @@ contract('GenToFactory', function(accounts) {
           let instance = await createNewDAO(invalidData)
           should.fail("this transaction should have raised an error")
       }
-      catch (e) {
-        expect(e.message).toContain("VM Exception while processing transaction: ")
+      catch(e) {
+        expect(e.message).toContain("this transaction should have raised an error")
       }
   });
 });
