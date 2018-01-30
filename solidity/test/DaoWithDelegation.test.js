@@ -25,18 +25,11 @@ contract('DaoWithDelegation', function(accounts) {
     newProposalEventListener = contract.NewProposalCreated();
   });
 
-  /*it("shouldn't be possible for a shareholder to claim DMR if he doesn't get delegated VP", async function() {
-      await contract.setCurrentTime.sendTransaction(1200000)
-      await contract.buy.sendTransaction({from: accounts[1], value: 200})
-      await contract.buy.sendTransaction({from: accounts[2], value: 200})
-      await contract.buy.sendTransaction({from: accounts[3], value: 200})
-      await contract.setCurrentTime.sendTransaction(2200000)
-      await contract.newProposal.sendTransaction(accounts[1], 345, 0, {from: accounts[1]})
-      let proposalID = await getProposalID()
-  })*/
 
   /**
+
   METHODS
+
   */
 
   // delegate()
@@ -48,24 +41,23 @@ contract('DaoWithDelegation', function(accounts) {
     await contract.buy.sendTransaction({from: accounts[3], value: 1000})
     await contract.setCurrentTime.sendTransaction(2200000)
     // first create a new Proposal before user can vote
-    await contract.newProposal.sendTransaction(accounts[1], 20, 0, {from: accounts[1]})
+    await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 20, 0, {from: accounts[1]})
     let proposalID = await getProposalID();
     // user 3 delegates his Proposal power in FoW 0 (Finance) to user 1
-    // await contract.delegate.sendTransaction(0, accounts[1], {from: accounts[3]})
-    // await contract.vote.sendTransaction(proposalID, false, {from: accounts[3]})
-    // // user 1 has more Proposal power then user 3
-    // await contract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
-    // // Set time to after the Proposal period
-    // await contract.setCurrentTime.sendTransaction(2300000)
-    // // executes the Proposal
-    // await contract.executeProposal.sendTransaction(proposalID)
-    //
-    // const p = await contract.getProposal.call(proposalID);
-    //
-    // expect(contract.getInfluenceOfVoter.call(accounts[1], 0)).toBe(10)
-    // expect(contract.getInfluenceOfVoter.call(accounts[3], 0)).toBe()
-    // expect(p[4]).toBe(true)
-    // expect(p[5]).toBe(true)
+    await contract.delegate.sendTransaction(0, accounts[1], {from: accounts[3]})
+    await contract.vote.sendTransaction(proposalID, false, {from: accounts[3]})
+    // user 1 has more Proposal power then user 3
+    await contract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
+    // Set time to after the Proposal period
+    await contract.setCurrentTime.sendTransaction(2300000)
+    // executes the Proposal
+    await contract.executeProposal.sendTransaction(proposalID)
+    const p = await contract.getProposal.call(proposalID);
+
+    expect(+await contract.getInfluenceOfVoter.call(accounts[1], 0)).toBe(70)
+    expect(+await contract.getInfluenceOfVoter.call(accounts[3], 0)).toBe(0)
+    expect(p[5]).toBe(true)
+    expect(p[6]).toBe(true)
   })
 
   // delegate()
@@ -79,7 +71,7 @@ contract('DaoWithDelegation', function(accounts) {
       // Set time to after ICO
       await contract.setCurrentTime.sendTransaction(2200000)
       // Create Proposal in Field of work 2
-      await contract.newProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
+      await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 100, 2, {from: accounts[1]})
       let proposalID = await getProposalID();
       // User 1 and User 3 Vote
       await contract.vote.sendTransaction(proposalID, false, {from: accounts[1]})
@@ -93,7 +85,7 @@ contract('DaoWithDelegation', function(accounts) {
       // Get Proposal details
       const p = await contract.getProposal.call(proposalID);
       // Proposal should pass with 33 %
-      expect(Number(p[6])).toBe(33)
+      expect(Number(p[7])).toBe(33)
   })
 
   // delegate()
@@ -120,7 +112,7 @@ contract('DaoWithDelegation', function(accounts) {
       // Set time to after ICO
       await contract.setCurrentTime.sendTransaction(2200000)
       // Create Proposal in Field of work 2
-      await contract.newProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
+      await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 100, 2, {from: accounts[1]})
       let proposalID = await getProposalID();
       // User 2 delegates power in Field of Work 0 to User 3
       await contract.delegate.sendTransaction(2, accounts[3], {from: accounts[2]})
@@ -134,9 +126,9 @@ contract('DaoWithDelegation', function(accounts) {
       // getNumProposals()-1 because it accesses the Proposal in the Proposal array
       const p = await contract.getProposal.call(proposalID);
       // Proposal should pass with 55%
-      expect(Number(p[6])).toBe(55)
-      expect(p[4]).toBe(true)
+      expect(Number(p[7])).toBe(55)
       expect(p[5]).toBe(true)
+      expect(p[6]).toBe(true)
   })
 
   // delegate()
@@ -150,7 +142,7 @@ contract('DaoWithDelegation', function(accounts) {
       // Set time to after ICO
       await contract.setCurrentTime.sendTransaction(2200000)
       // Create Proposal in Field of work 2
-      await contract.newProposal.sendTransaction(accounts[1], 100, 2, {from: accounts[1]})
+      await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 100, 2, {from: accounts[1]})
       let proposalID = await getProposalID();
       // User 2 delegates power in all Field of Works except 2 to User 3
       await contract.delegate.sendTransaction(0, accounts[3], {from: accounts[2]})
@@ -166,9 +158,9 @@ contract('DaoWithDelegation', function(accounts) {
       // Get Proposal details
       const p = await contract.getProposal.call(proposalID);
       // Proposal should pass with 33 %
-      expect(Number(p[6])).toBe(33)
-      expect(p[4]).toBe(true)
-      expect(p[5]).toBe(false)
+      expect(Number(p[7])).toBe(33)
+      expect(p[5]).toBe(true)
+      expect(p[6]).toBe(false)
   })
 
   // getInfluenceOfVoter()

@@ -135,7 +135,7 @@ contract('DaoWithICO', function(accounts) {
     expect(await contract.isIcoFinished.call()).toBe(false)
     // set time after ICO
     await contract.setCurrentTime.sendTransaction(2200000)
-    await contract.newProposal.sendTransaction(accounts[1], 345, 0, {from: accounts[1]})
+    await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 345, 0, {from: accounts[1]})
     let proposalID = await getProposalID();
     await contract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
     await contract.vote.sendTransaction(proposalID, true, {from: accounts[2]})
@@ -182,7 +182,7 @@ contract('DaoWithICO', function(accounts) {
     await contract.buy.sendTransaction({from: accounts[1], value: 100})
     await contract.buy.sendTransaction({from: accounts[2], value: 200})
     await contract.setCurrentTime.sendTransaction(2200000)
-    await contract.newProposal.sendTransaction(accounts[1], 345, 0, {from: accounts[1]})
+    await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 345, 0, {from: accounts[1]})
     let proposalID = await getProposalID();
     await contract.setCurrentTime.sendTransaction(0)
     try {

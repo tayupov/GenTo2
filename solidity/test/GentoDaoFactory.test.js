@@ -5,7 +5,11 @@ let defaultICOdata = {
   buyPriceStart: 1,
   buyPriceEnd: 2,
   saleStart: new Date().getTime(),
-  saleEnd: new Date().getTime()+10000
+  saleEnd: new Date().getTime()+10000,
+  finance: 40,
+  product: 20,
+  organisational: 30,
+  partner: 1
 }
 
 async function createNewDAO(invalidData) {
@@ -19,7 +23,11 @@ async function createNewDAO(invalidData) {
     data.buyPriceStart,
     data.buyPriceEnd,
     data.saleStart,
-    data.saleEnd)
+    data.saleEnd,
+    data.finance,
+    data.product,
+    data.organisational,
+    data.partner)
   const daoAddress = await genToFactory.DAOs.call(0)
   const instance = await GentoDao.at(daoAddress)
 
@@ -47,6 +55,10 @@ contract('GentoDaoFactory', function(accounts) {
       expect(+await instance.buyPriceEnd()).toEqual(defaultICOdata.buyPriceEnd)
       expect(+await instance.saleStart()).toEqual(defaultICOdata.saleStart)
       expect(+await instance.saleEnd()).toEqual(defaultICOdata.saleEnd)
+      expect(+await instance.finance()).toEqual(defaultICOdata.finance)
+      expect(+await instance.product()).toEqual(defaultICOdata.product)
+      expect(+await instance.organisational()).toEqual(defaultICOdata.organisational)
+      expect(+await instance.partner()).toEqual(defaultICOdata.partner)
     }
     catch (e) {
       console.error(e)

@@ -2,7 +2,6 @@ const tokenFactory = artifacts.require("./GentoDaoFactory.sol");
 const DAO = artifacts.require("./GentoDao.sol");
 
 module.exports = async function(deployer, network, accounts) {
-  console.log('Mama!');
   await deployer.deploy(tokenFactory);
   const GentoFactory = await tokenFactory.deployed()
   await GentoFactory.createDAO.sendTransaction(web3.toWei(100, "ether"), "YAY", "Theo Software Solutions", 1, 10, 0, 100)

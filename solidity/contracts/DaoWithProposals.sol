@@ -84,12 +84,10 @@ contract DaoWithProposals is DaoWithIco {
 
     function newDividendProposal(
         address beneficiary,
-        uint dividend,
-        FieldOfWork fieldOfWork) public votingAllowed onlyShareholders
+        uint dividend) public votingAllowed onlyShareholders
     returns(uint proposalID)
     {
-        // hardcoded fow finance
-        uint proposalDividendID = newProposal("Dividend", "Dividend", beneficiary, 0, fieldOfWork);
+        uint proposalDividendID = newProposal("Dividend", "Dividend", beneficiary, 0, FieldOfWork.Finance);
         Proposal storage proposal  = proposals[proposalDividendID];
         proposal.dividend = dividend;
         return proposalDividendID;
@@ -98,12 +96,10 @@ contract DaoWithProposals is DaoWithIco {
 
     function newDMRewardProposal(
         address beneficiary,
-        uint dmr,
-        FieldOfWork fieldOfWork) public votingAllowed onlyShareholders
+        uint dmr) public votingAllowed onlyShareholders
     returns(uint proposalID)
     {
-        // hardcoded fow
-        uint proposalDividendID = newProposal("DMR", "DMR", beneficiary, 0, fieldOfWork);
+        uint proposalDividendID = newProposal("DMR", "DMR", beneficiary, 0, FieldOfWork.Finance);
         Proposal storage proposal  = proposals[proposalDividendID];
         proposal.dmr = dmr;
         return proposalDividendID;

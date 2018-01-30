@@ -16,6 +16,7 @@ contract GentoDao is DaoWithDelegation {
 
     event Claimed(string claimType, address beneficiary, uint amount);
     event Balance(uint balance);
+    event TokenPrice(uint tokenPrice);
 
     function GentoDao(uint256 _maxAmountToRaiseInICO,
     string _symbol,
@@ -35,7 +36,7 @@ contract GentoDao is DaoWithDelegation {
         partner = _partner;
     }
 
-    function getTokenPrice() constant returns (uint tokenPrice) {
+    function getTokenPrice() public constant returns (uint tokenPrice) {
         tokenPrice = this.balance / totalSupply;
         NumberLogger("TokenPrice", tokenPrice);
         return tokenPrice;
@@ -122,6 +123,7 @@ contract GentoDao is DaoWithDelegation {
 
     function distributeDividend(uint dividend) {
         uint tokenPrice = getTokenPrice();
+        TokenPrice(tokenPrice);
         for (uint i = 0; i < shareholders.length; ++i) {
             uint shareholderDividend = ((balances[shareholders[i]] * tokenPrice) * dividend) / 100;
             dividends[shareholders[i]] += shareholderDividend;

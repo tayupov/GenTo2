@@ -27,7 +27,6 @@ contract StandardTokenWithShareholderList is DevContract, StandardToken{
 
     function sendEtherToWallet(uint val) public payable {
         msg.sender.send(val);
-        // BasicToken.transfer(dst, val)
     }
 
     function transfer(address dst, uint wad) public returns (bool) {
@@ -41,6 +40,7 @@ contract StandardTokenWithShareholderList is DevContract, StandardToken{
     }
 
     function transferFrom(address src, address dst, uint wad) public returns (bool) {
+        TransferSuccess(false);
         uint oldBalanceDest = balances[dst];
         uint oldBalanceSrc = balances[src];
         Debug(oldBalanceSrc);
