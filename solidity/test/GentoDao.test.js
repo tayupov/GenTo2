@@ -139,7 +139,7 @@ contract('GentoDao', function(accounts) {
       expect(e.message).toContain("VM Exception while processing transaction: ")
     }
   })
-
+/*
   it("should be possible to claim the payout after the proposal period is over", async function() {
     // set time between ICO START and END
     await contract.setCurrentTime.sendTransaction(1200000)
@@ -341,5 +341,5 @@ it("shouldn't be possible for a shareholder to claim DMR if he doesn't get deleg
     expect(Number(await contract.getVRTInFoWOfDM.call(accounts[2], 0))).toBe(0)
     expect(Number(await contract.getVRTinFoW.call(0))).toBe(14)
 })
-
+*/
 });
