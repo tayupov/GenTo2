@@ -40,13 +40,13 @@ contract DaoWithProposals is DaoWithIco {
 
     // Modifier that allows only shareholders to vote and create new proposals
     modifier onlyShareholders {
-      //  require(isShareholder(msg.sender));
+        require(isShareholder(msg.sender));
         _;
     }
 
     // Modifier checks whether the ICO is finished and if so the ICO become a DAO and voting is allowed
     modifier votingAllowed {
-        //require(isIcoFinished());
+        require(isIcoFinished());
         _;
     }
 
@@ -177,9 +177,21 @@ contract DaoWithProposals is DaoWithIco {
             && !proposal.finished);                                             // and it has not already been finished
             // && proposal.proposalHash == sha3(proposal.recipient, proposal.amount)); // and the supplied code matches
 
+        var (approve, disapprove, passedPercent) = calculateVotingStatistics(proposalId);
+        proposal.finished = true;
+
+        proposal.proposalPassed =  (approve > disapprove);
+        proposal.passedPercent = passedPercent;
+
+        ProposalFinishedLogger(proposalId, approve+disapprove, approve, disapprove);
+    }
+
+    function calculateVotingStatistics(uint proposalId)  public constant returns (uint currentApprove, uint currentDisapprove,
+    uint currentPercent){
         uint approve = 0;
         uint disapprove = 0;
 
+        Proposal storage proposal = proposals[proposalId];
         for (uint i = 0; i < proposal.votes.length; ++i) {
             Vote storage v = proposal.votes[i];
             uint voteWeight = getInfluenceOfVoter(v.voter, proposal.fieldOfWork);
@@ -190,17 +202,11 @@ contract DaoWithProposals is DaoWithIco {
                 disapprove += voteWeight;
             }
         }
-        proposal.finished = true;
-
-        if (approve > disapprove) {
-            // Proposal passed; execute the transaction
-            proposal.proposalPassed = true;
-        } else {
-            // Proposal failed
-            proposal.proposalPassed = false;
+        uint percent = 0;
+        if(approve+disapprove > 0){ // If no one voted, just show 0%
+            percent = approve * 100 / (approve+disapprove);
         }
-        proposal.passedPercent = approve * 100 / (approve+disapprove);
 
-        ProposalFinishedLogger(proposalId, approve+disapprove, approve, disapprove);
+        return (approve, disapprove, percent);
     }
 }

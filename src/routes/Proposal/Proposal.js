@@ -15,6 +15,7 @@ export default class Proposal extends React.Component {
         <Button onClick={disapproveCallback} content="Disapprove" />
         <Button onClick={executeCallback} content="Execute" />
         <h3>{vote.stateDescription}</h3>
+        <h3>{vote.influenceDescription}</h3>
         <Divider section hidden />
         
         <Message>
@@ -61,7 +62,7 @@ export default class Proposal extends React.Component {
                 <Label size='large'>Voters currently approving the Proposal</Label>
               </Table.Cell>
               <Table.Cell>
-                <Label size='large'>{proposal.passedPercent}%</Label>
+                <Label size='large'>{proposal.approve}/{proposal.approve+proposal.disapprove} ({proposal.percent}%)</Label>
               </Table.Cell>
             </Table.Row>
             <Table.Row>
