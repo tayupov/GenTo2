@@ -1,6 +1,7 @@
 const GentoDao = artifacts.require("./GentoDao.sol");
 
 const GentoDaoDeployer = require("./util/GentoDaoDeployer.js")(GentoDao)
+const getProposalHelperAbstract = require("./util/getProposalHelper")
 
 const should = require('should');
 const expect = require('expect');
@@ -9,11 +10,11 @@ const expect = require('expect');
 /*
 method signatures:
 
-newproposal.sendTransaction("ProposalName", "ProposalDescription",account, value, {from})
+newProposal.sendTransaction("ProposalName", "ProposalDescription",account, value, {from})
 buy.sendTransaction({from, value})
 vote.sendTransaction(voteId, supportsProposal, {from})
 executeProposal.sendTransaction(voteId, {from})
-newproposal.sendTransaction("ProposalName", "ProposalDescription",account, value, FoW, {from})
+newProposal.sendTransaction("ProposalName", "ProposalDescription",account, value, FoW, {from})
 getProposal(proposalID)
 delegate(FoW, to, {from})
 */
@@ -21,13 +22,15 @@ delegate(FoW, to, {from})
 contract('ProposalToken', function(accounts) {
   let testContract;
   let newProposalEventListener;
-    beforeEach(async function() {
+  let getProposal
+  beforeEach(async function() {
     // Every auction token is a Proposal token
     testContract = await GentoDaoDeployer()
+    getProposal = getProposalHelperAbstract(testContract)
     newProposalEventListener = testContract.NewProposalCreated();
   });
 
-
+/*
   it("should check the voting for different Field of Works", async function() {
       // set time between ICO START and END
       await testContract.setCurrentTime.sendTransaction(1200000)
@@ -41,7 +44,7 @@ contract('ProposalToken', function(accounts) {
       // set time to after ICO
       await testContract.setCurrentTime.sendTransaction(2200000)
       // create a new proposal
-      await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[0], 100, 0, {from: accounts[0]})
+      await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[0], 100, 0, {from: accounts[0]})
       // is necessary to get proposal id as return value by triggering the NewProposalCreated event
       let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
           (error, log) => error ? reject(error) : resolve(log)));
@@ -58,7 +61,7 @@ contract('ProposalToken', function(accounts) {
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[3]})
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[4]})
       // create a new proposal
-      await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 100, 2, {from: accounts[1]})
+      await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 100, 2, {from: accounts[1]})
       // similar for the second proposal
       let newProposalLog2 = await new Promise((resolve, reject) => newProposalEventListener.get(
           (error, log) => error ? reject(error) : resolve(log)));
@@ -84,18 +87,18 @@ contract('ProposalToken', function(accounts) {
       await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
       await testContract.executeProposal.sendTransaction(newProposalArgs2.proposalID)
       // get the first and second proposal by id
-      var p1 = await testContract.getProposal.call(newProposalArgs.proposalID)
-      var p2 = await testContract.getProposal.call(newProposalArgs2.proposalID)
+      var p1 = await getProposal(newProposalArgs.proposalID)
+      var p2 = await getProposal(newProposalArgs2.proposalID)
       // first proposal is finished
-      expect(p1[4]).toBe(true)
+      expect(p1.finished).toBe(true)
       // first proposal isn't passed
-      expect(p1[5]).toBe(false)
+      expect(p1.proposalPassed).toBe(false)
       // second proposal is finished
-      expect(p2[4]).toBe(true)
+      expect(p2.finished).toBe(true)
       // second proposal is passed
-      expect(p2[5]).toBe(true)
+      expect(p2.proposalPassed).toBe(true)
   })
-
+*/
 
 
   it("should display the right number of initial Proposals", async function() {
@@ -113,13 +116,13 @@ contract('ProposalToken', function(accounts) {
     // set time to after ICO
     await testContract.setCurrentTime.sendTransaction(2200000)
     // create 3 new Proposals
-    await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 100, 1, {from: accounts[1]})
+    await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 100, 1, {from: accounts[1]})
     expect(+await testContract.getNumProposals.call()).toBe(1 + numberOfProposals)
 
-    await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 200, 2, {from: accounts[1]})
+    await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 200, 2, {from: accounts[1]})
     expect(+await testContract.getNumProposals.call()).toBe(2 + numberOfProposals)
 
-    await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 300, 2, {from: accounts[1]})
+    await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 300, 2, {from: accounts[1]})
     expect(+await testContract.getNumProposals.call()).toBe(3)
   })
 
@@ -134,7 +137,7 @@ contract('ProposalToken', function(accounts) {
       // set time to after ICO
       await testContract.setCurrentTime.sendTransaction(2200000)
       // create a new proposal
-      await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 100, 2, {from: accounts[1]})
+      await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 100, 2, {from: accounts[1]})
       // is necessary to get proposal id as return value by triggering the NewProposalCreated event
       let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
           (error, log) => error ? reject(error) : resolve(log)));
@@ -151,11 +154,11 @@ contract('ProposalToken', function(accounts) {
       // execute the proposal
       await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
       // get the proposal by proposal id
-      const p = await testContract.getProposal.call(newProposalArgs.proposalID)
+      const p = await getProposal(newProposalArgs.proposalID)
       // proposal is finished
-      expect(p[4]).toBe(true)
+      expect(p.finished).toBe(true)
       // proposal is passed
-      expect(p[5]).toBe(true)
+      expect(p.proposalPassed).toBe(true)
   })
 
   it("should reject proposals with 1/3 confirmed votes", async function() {
@@ -168,7 +171,7 @@ contract('ProposalToken', function(accounts) {
       // set time to after ICO
       await testContract.setCurrentTime.sendTransaction(2200000)
       // create a new proposal
-      await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 100, 2, {from: accounts[1]})
+      await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 100, 2, {from: accounts[1]})
       // is necessary to get proposal id as return value by triggering the NewProposalCreated event
       let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
           (error, log) => error ? reject(error) : resolve(log)));
@@ -185,11 +188,11 @@ contract('ProposalToken', function(accounts) {
       // ececute the proposal
       await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
       // get the proposal by proposal id
-      const p = await testContract.getProposal.call(newProposalArgs.proposalID);
+      const p = await getProposal(newProposalArgs.proposalID);
       // proposal is finished
-      expect(p[4]).toBe(true)
+      expect(p.finished).toBe(true)
       // proposal isn't passed
-      expect(p[5]).toBe(false)
+      expect(p.proposalPassed).toBe(false)
   })
 
   it("checks whether the proposal gets finished after executing", async function() {
@@ -200,7 +203,7 @@ contract('ProposalToken', function(accounts) {
     // set time to after ICO
     await testContract.setCurrentTime.sendTransaction(2200000)
     //create a new Proposal
-    await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 103, 2, {from: accounts[1]})
+    await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 103, 2, {from: accounts[1]})
     let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
         (error, log) => error ? reject(error) : resolve(log)));
     assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
@@ -213,15 +216,15 @@ contract('ProposalToken', function(accounts) {
     // ececute the proposal
     await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
     // get the proposal by proposal id
-    const p = await testContract.getProposal.call(newProposalArgs.proposalID)
+    const p = await getProposal(newProposalArgs.proposalID)
     // recipient of the proposal is user 1
-    expect(p[0]).toBe(accounts[1])
+    expect(p.recipient).toBe(accounts[1])
     // value of the proposal should be 103
-    expect(Number(p[1])).toBe(103)
+    expect(Number(p.amount)).toBe(103)
     // proposal is finished
-    expect(p[4]).toBe(true)
+    expect(p.finished).toBe(true)
     // proposal is passed
-    expect(p[5]).toBe(true)
+    expect(p.proposalPassed).toBe(true)
   })
 
   it("should check whether the Proposal is not passed and not finished", async function() {
@@ -232,7 +235,7 @@ contract('ProposalToken', function(accounts) {
     // set time to after ICO
     await testContract.setCurrentTime.sendTransaction(2200000)
     // create a new proposal for field of work 0 (Finance)
-    await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 29, 0, {from: accounts[1]})
+    await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 29, 0, {from: accounts[1]})
 
     let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
         (error, log) => error ? reject(error) : resolve(log)));
@@ -241,11 +244,11 @@ contract('ProposalToken', function(accounts) {
     // user 1 votes for the proposal
     await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[1]})
     // get the proposal by proposal id
-    const p = await testContract.getProposal.call(newProposalArgs.proposalID)
+    const p = await getProposal(newProposalArgs.proposalID)
     // proposal isn't finished
-    expect(p[4]).toBe(false)
+    expect(p.finished).toBe(false)
     // proposal isn't passed
-    expect(p[5]).toBe(false)
+    expect(p.proposalPassed).toBe(false)
     // number of proposals is 1
     expect(+await testContract.getNumProposals.call()).toBe(1)
   })
@@ -274,7 +277,7 @@ contract('ProposalToken', function(accounts) {
     // set time to after ICO
     await testContract.setCurrentTime.sendTransaction(2200000)
     // create a new proposal in field of work 0 (Finance)
-    await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[0], 10, 0, {from: accounts[0]})
+    await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[0], 10, 0, {from: accounts[0]})
 
     let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
         (error, log) => error ? reject(error) : resolve(log)));
@@ -288,15 +291,15 @@ contract('ProposalToken', function(accounts) {
     // execute the proposals
     await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
     // get the proposal by proposal id
-    const p = await testContract.getProposal.call(newProposalArgs.proposalID)
+    const p = await getProposal(newProposalArgs.proposalID)
     // the creator of the proposal is user 0
-    expect(p[0]).toBe(accounts[0])
+    expect(p.recipient).toBe(accounts[0])
     // the amount of token in the poposal should be 10
-    expect(Number(p[1])).toBe(10)
+    expect(Number(p.amount)).toBe(10)
     // the proposal is finished
-    expect(p[4]).toBe(true)
+    expect(p.finished).toBe(true)
     // the proposal is passed
-    expect(p[5]).toBe(true)
+    expect(p.proposalPassed).toBe(true)
 
 
   })
@@ -312,7 +315,7 @@ contract('ProposalToken', function(accounts) {
     // set time to after ICO
     await testContract.setCurrentTime.sendTransaction(2200000)
     // first create a new Proposal before user can vote
-    await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 10, 0, {from: accounts[1]})
+    await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 10, 0, {from: accounts[1]})
 
     let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
         (error, log) => error ? reject(error) : resolve(log)));
@@ -327,11 +330,11 @@ contract('ProposalToken', function(accounts) {
     // executes the proposal
     await testContract.executeProposal.sendTransaction(0)
     // get the proposal by id
-    const p = await testContract.getProposal.call(newProposalArgs.proposalID);
+    const p = await getProposal(newProposalArgs.proposalID);
     // proposal is finished
-    expect(p[4]).toBe(true)
+    expect(p.finished).toBe(true)
     // proposal is passed
-    expect(p[5]).toBe(true)
+    expect(p.proposalPassed).toBe(true)
   })
 
   it("should fail the delegation if the tokenholder isn't a shareholder", async function() {
@@ -357,7 +360,7 @@ contract('ProposalToken', function(accounts) {
     // set time to after ICO
     await testContract.setCurrentTime.sendTransaction(2200000)
     // create a new proposal
-    await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[0], 100, 0, {from: accounts[0]})
+    await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[0], 100, 0, {from: accounts[0]})
     // number of proposals should be 1
     expect(numberOfInitialProposals + 1).toBe(+await testContract.getNumProposals())
   })
@@ -384,7 +387,7 @@ contract('ProposalToken', function(accounts) {
     // set time to after ICO
     await testContract.setCurrentTime.sendTransaction(2200000)
     // create a new proposal
-    await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 100, 0, {from: accounts[1]})
+    await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 100, 0, {from: accounts[1]})
 
     let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
         (error, log) => error ? reject(error) : resolve(log)));
@@ -399,11 +402,11 @@ contract('ProposalToken', function(accounts) {
     // execute the proposal -> it's requiered to pass the time to the end of proposal's period before executing
     await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
     // get the proposal by id
-    const p = await testContract.getProposal.call(newProposalArgs.proposalID);
+    const p = await getProposal(newProposalArgs.proposalID);
     // proposal is finished
-    expect(p[4]).toBe(true)
+    expect(p.finished).toBe(true)
     // proposal isn't passed
-    expect(p[5]).toBe(false)
+    expect(p.proposalPassed).toBe(false)
   })
 
   it("should approve the proposal with 3/5 confirmed votes", async function() {
@@ -418,7 +421,7 @@ contract('ProposalToken', function(accounts) {
     // set time to after ICO
     await testContract.setCurrentTime.sendTransaction(2200000)
     // create a new proposal
-    await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[0], 100, 0, {from: accounts[0]})
+    await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[0], 100, 0, {from: accounts[0]})
 
     let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
         (error, log) => error ? reject(error) : resolve(log)));
@@ -435,11 +438,11 @@ contract('ProposalToken', function(accounts) {
     // execute the Proposals
     await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
     // get the proposal
-    const p = await testContract.getProposal.call(newProposalArgs.proposalID);
+    const p = await getProposal(newProposalArgs.proposalID);
     // proposal is finished
-    expect(p[4]).toBe(true)
+    expect(p.finished).toBe(true)
     // proposal is passed
-    expect(p[5]).toBe(true)
+    expect(p.proposalPassed).toBe(true)
   })
 
   it("should count the correct number of proposals", async function() {
@@ -455,9 +458,9 @@ contract('ProposalToken', function(accounts) {
     const numberOfInitialProposals = +await testContract.getNumProposals.call()
     expect(numberOfInitialProposals).toBe(0)
     // create three new proposals
-    await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[5], 10, 0, {from: accounts[5]})
-    await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[4], 20, 0, {from: accounts[4]})
-    await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[7], 3, 0, {from: accounts[7]})
+    await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[5], 10, 0, {from: accounts[5]})
+    await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[4], 20, 0, {from: accounts[4]})
+    await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[7], 3, 0, {from: accounts[7]})
     // the number of proposals should be 3
     expect(+await testContract.getNumProposals.call()).toBe(3 + Number(numberOfInitialProposals))
   })
@@ -472,7 +475,7 @@ contract('ProposalToken', function(accounts) {
     // set time to after ICO
     await testContract.setCurrentTime.sendTransaction(2200000)
     // create a new proposal
-    await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[2], 10, 0, {from: accounts[2]})
+    await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[2], 10, 0, {from: accounts[2]})
 
     let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
         (error, log) => error ? reject(error) : resolve(log)));
@@ -483,11 +486,11 @@ contract('ProposalToken', function(accounts) {
     await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[1]})
     await testContract.vote.sendTransaction(newProposalArgs.proposalID, false, {from: accounts[2]})
     // get the proposal by id
-    const p = await testContract.getProposal.call(newProposalArgs.proposalID)
+    const p = await getProposal(newProposalArgs.proposalID)
     // proposal isn't finished
-    expect(p[4]).toBe(false)
+    expect(p.finished).toBe(false)
     // proposal isn't passed
-    expect(p[5]).toBe(false)
+    expect(p.proposalPassed).toBe(false)
     // number of proposals should be 3
     expect(+await testContract.getNumProposals.call()).toBe(1)
   })
@@ -502,7 +505,7 @@ contract('ProposalToken', function(accounts) {
       // set time to after ICO
       await testContract.setCurrentTime.sendTransaction(2200000)
       // create proposal in field of work 2
-      await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 100, 2, {from: accounts[1]})
+      await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 100, 2, {from: accounts[1]})
       let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
           (error, log) => error ? reject(error) : resolve(log)));
       assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
@@ -514,7 +517,7 @@ contract('ProposalToken', function(accounts) {
       await testContract.vote.sendTransaction(newProposalArgs.proposalID, true, {from: accounts[3]})
 
       // create another proposal
-      await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[2], 200, 0, {from: accounts[2]})
+      await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[2], 200, 0, {from: accounts[2]})
 
       let newProposalLog2 = await new Promise((resolve, reject) => newProposalEventListener.get(
           (error, log) => error ? reject(error) : resolve(log)));
@@ -535,15 +538,15 @@ contract('ProposalToken', function(accounts) {
       // execute the second proposal
       await testContract.executeProposal.sendTransaction(newProposalArgs2.proposalID)
       //get the first proposal by id
-      const p1 = await testContract.getProposal.call(newProposalArgs.proposalID);
+      const p1 = await getProposal(newProposalArgs.proposalID);
       // get the second proposal by id
-      const p2 = await testContract.getProposal.call(newProposalArgs2.proposalID);
+      const p2 = await getProposal(newProposalArgs2.proposalID);
       // first proposal should should have 55 token influence
-      expect(Number(p1[6])).toBe(55)
+      expect(Number(p1.passedPercent)).toBe(55)
       // first proposal is finished
-      expect(p1[4]).toBe(true)
+      expect(p1.finished).toBe(true)
       // second proposal should be passed with token influence
-      expect(Number(p2[6])).toBe(100)
+      expect(Number(p2.passedPercent)).toBe(100)
   })
 
   it("delegation in one field should not affect the others", async function() {
@@ -556,7 +559,7 @@ contract('ProposalToken', function(accounts) {
       // set time to after ICO
       await testContract.setCurrentTime.sendTransaction(2200000)
       // create proposal in field of work 2
-      await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 100, 2, {from: accounts[1]})
+      await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 100, 2, {from: accounts[1]})
 
       let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
           (error, log) => error ? reject(error) : resolve(log)));
@@ -574,11 +577,11 @@ contract('ProposalToken', function(accounts) {
       // execute the proposal
       await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
       // get the proposal by id
-      const p = await testContract.getProposal.call(newProposalArgs.proposalID);
+      const p = await getProposal(newProposalArgs.proposalID);
       // proposal should pass with 33 token influence
-      expect(Number(p[6])).toBe(33)
+      expect(Number(p.passedPercent)).toBe(33)
       // proposal is finished
-      expect(p[4]).toBe(true)
+      expect(p.finished).toBe(true)
   })
 
   it("delegation after ending a vote should not have an effect on the vote", async function() {
@@ -591,7 +594,7 @@ contract('ProposalToken', function(accounts) {
       // set time to after ICO
       await testContract.setCurrentTime.sendTransaction(2200000)
       // create proposal in field of work 2
-      await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 100, 2, {from: accounts[1]})
+      await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 100, 2, {from: accounts[1]})
       let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
           (error, log) => error ? reject(error) : resolve(log)));
       assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
@@ -606,9 +609,9 @@ contract('ProposalToken', function(accounts) {
       // User 2 delegates power in Field of Work 2 to User 3
       await testContract.delegate.sendTransaction(2, accounts[0], {from: accounts[2]})
       // Get proposal details
-      const p = await testContract.getProposal.call(newProposalArgs.proposalID);
+      const p = await getProposal(newProposalArgs.proposalID);
       // proposal should pass with 33 token influence
-      expect(Number(p[6])).toBe(33)
+      expect(Number(p.passedPercent)).toBe(33)
   })
 
   it("users that are not shareholders should not be able to vote", async function() {
@@ -619,7 +622,7 @@ contract('ProposalToken', function(accounts) {
       // set time to after ICO
       await testContract.setCurrentTime.sendTransaction(2200000)
       // Create Proposal in Field of work 2
-      await testContract.newproposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 100, 2, {from: accounts[1]})
+      await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 100, 2, {from: accounts[1]})
       let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
           (error, log) => error ? reject(error) : resolve(log)));
       assert.equal(newProposalLog.length, 1, 'should be 1 new Proposal');
