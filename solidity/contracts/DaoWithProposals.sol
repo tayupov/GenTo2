@@ -162,7 +162,7 @@ contract DaoWithProposals is DaoWithIco {
     {
         Proposal storage proposal = proposals[proposalNumber];
         require(proposal.voted[msg.sender] != true);
-        require(!proposal.finished);
+        require(proposal.finished != true);
 
         voteID = proposal.votes.length++;
         proposal.votes[voteID] = Vote({inSupport: supportsProposal, voter: msg.sender});
