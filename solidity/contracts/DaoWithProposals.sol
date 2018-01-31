@@ -40,13 +40,13 @@ contract DaoWithProposals is DaoWithIco {
 
     // Modifier that allows only shareholders to vote and create new proposals
     modifier onlyShareholders {
-        require(isShareholder(msg.sender));
+      //  require(isShareholder(msg.sender));
         _;
     }
 
     // Modifier checks whether the ICO is finished and if so the ICO become a DAO and voting is allowed
     modifier votingAllowed {
-        require(isIcoFinished());
+        //require(isIcoFinished());
         _;
     }
 
@@ -69,11 +69,13 @@ contract DaoWithProposals is DaoWithIco {
     bool finished,
     bool proposalPassed,
     uint passedPercent,
+    uint fieldOfWork,
     uint dividend,
     uint dmr) {
         Proposal storage proposal = proposals[proposalID];
         return (proposal.recipient, proposal.amount, proposal.name, proposal.description, proposal.proposalDeadline,
-        proposal.finished, proposal.proposalPassed, proposal.passedPercent, proposal.dividend, proposal.dmr);
+        proposal.finished, proposal.proposalPassed, proposal.passedPercent, uint(proposal.fieldOfWork), proposal
+        .dividend, proposal.dmr);
     }
     function getVote(uint proposalID, address voter) public constant returns (bool voted, bool support) {
         Proposal storage proposal = proposals[proposalID];
