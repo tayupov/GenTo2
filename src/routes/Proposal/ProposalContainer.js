@@ -37,6 +37,9 @@ export default class ProposalContainer extends React.Component {
     proposal.dividend = proposal.dividend.toString(10)
     proposal.passedPercent = proposal.passedPercent.toString(10)
     proposal.proposalDeadline = proposal.proposalDeadline.toString(10)
+    proposal.approve = parseInt(proposal.approve.toString(10))
+    proposal.disapprove = parseInt(proposal.disapprove.toString(10))
+    proposal.percent = parseInt(proposal.percent.toString(10))
     switch (proposal.fieldOfWork.toString(10)) {
       case "0": proposal.fieldOfWorkDescription = "Finance"; break
       case "1": proposal.fieldOfWorkDescription = "Organisational"; break
@@ -55,7 +58,7 @@ export default class ProposalContainer extends React.Component {
     }
     this.setState({proposal});
 
-    const vote = await loadVote(this.props.address, this.props.proposalNumber, this.props.account)
+    const vote = await loadVote(this.props.address, proposal, this.props.account)
     if (vote.voted && vote.support) {
       vote.stateDescription = "You approved this proposal"
     } else if (vote.voted && !vote.support) {
@@ -65,6 +68,7 @@ export default class ProposalContainer extends React.Component {
     } else {
       vote.stateDescription = "No information"
     }
+    vote.influenceDescription = "Your influence in this field of work is " + vote.influence;
     this.setState({vote});
   }
 
