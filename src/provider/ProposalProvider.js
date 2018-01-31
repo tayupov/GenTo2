@@ -5,7 +5,6 @@ import { default as contract } from 'truffle-contract'
 import web3 from 'utils/web3';
 
 const mapProposal =  (proposalNumber, proposalArray, proposalStatistics) => {
-
   return {
       proposalNumber: proposalNumber,
       recipient:proposalArray[0],

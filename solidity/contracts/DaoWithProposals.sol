@@ -41,13 +41,13 @@ contract DaoWithProposals is DaoWithIco {
 
     // Modifier that allows only shareholders to vote and create new proposals
     modifier onlyShareholders {
-      //  require(isShareholder(msg.sender));
+        require(isShareholder(msg.sender));
         _;
     }
 
     // Modifier checks whether the ICO is finished and if so the ICO become a DAO and voting is allowed
     modifier votingAllowed {
-        //require(isIcoFinished());
+        require(isIcoFinished());
         _;
     }
 
