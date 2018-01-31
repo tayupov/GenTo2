@@ -17,6 +17,7 @@ contract DaoWithDelegation is DaoWithProposals {
     }
 
     function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) public constant returns (uint influence) {
+        require(isShareholder(voter));
         uint influence1 = 0;
         for (uint i = 0; i < shareholders.length; ++i) {
             if (delegations[shareholders[i]][uint(fieldOfWork)] == voter) {
@@ -31,10 +32,9 @@ contract DaoWithDelegation is DaoWithProposals {
     }
 
     function delegate(FieldOfWork fieldOfWork, address recipient) public {
-        // shareholder delegates to recipient ??
         require(isShareholder(msg.sender));
+        require(isShareholder(recipient));
 
         delegations[msg.sender][uint(fieldOfWork)] = recipient;
     }
-
 }

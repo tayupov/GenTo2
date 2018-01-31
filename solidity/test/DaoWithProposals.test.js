@@ -2,6 +2,7 @@ const GentoDao = artifacts.require("./GentoDao.sol");
 
 const GentoDaoDeployer = require("./util/GentoDaoDeployer.js")(GentoDao)
 const getProposalHelperAbstract = require("./util/getProposalHelper")
+const expectInvalidOptcode = require("./util/expectInvalidOptcode")
 
 const should = require('should');
 const expect = require('expect');
@@ -31,7 +32,7 @@ async function getProposalID() {
   return newProposalLog[0].args.proposalID;
 }
 
-contract('Proposal', function(accounts) {
+contract('DaoWithProposals', function(accounts) {
   let testContract;
   let getProposal
     beforeEach(async function() {
@@ -49,28 +50,18 @@ contract('Proposal', function(accounts) {
   it("should display correct number of Proposals", async function() {
 
     await testContract.setCurrentTime.sendTransaction(1300000)
-
     const numberOfInitialProposals = 0;
-
     // user 1 become a shareholder
     await testContract.buy.sendTransaction({from: accounts[1], value: 10000})
-
     await testContract.setCurrentTime.sendTransaction(2300000)
-
     // create 3 new Proposals
     await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 100, 1, {from: accounts[1]})
-
     expect(+await testContract.getNumProposals.call()).toBe(1 + numberOfInitialProposals)
-
     await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 200, 2, {from: accounts[1]})
-
     expect(+await testContract.getNumProposals.call()).toBe(2 + numberOfInitialProposals)
-
     await testContract.newProposal.sendTransaction("ProposalName", "ProposalDescription",accounts[1], 300, 2, {from: accounts[1]})
-
     expect(+await testContract.getNumProposals.call()).toBe(3)
   })
-
 
   it("should execute Proposals with 2/3 confirmed votes", async function() {
       await testContract.setCurrentTime.sendTransaction(1200000)
@@ -432,7 +423,7 @@ contract('Proposal', function(accounts) {
       // End Proposal
       await testContract.executeProposal.sendTransaction(proposalID)
       // User 2 delegates power in Field of Work 2 to User 3
-      await testContract.delegate.sendTransaction(2, accounts[0], {from: accounts[2]})
+      await testContract.delegate.sendTransaction(2, accounts[3], {from: accounts[2]})
       // Get Proposal details
       const p = await getProposal(proposalID);
       // Proposal should pass with 33 %
@@ -501,5 +492,11 @@ contract('Proposal', function(accounts) {
         expect(+await testContract.getInfluenceOfVoter.call(accounts[3], 2)).toBe(35)
         expect(+await testContract.getInfluenceOfVoter.call(accounts[4], 2)).toBe(35)
 
+  })
+  it("can only return an influence if the field of work is valid", async function() {
+    await testContract.setCurrentTime.sendTransaction(1200000)
+    await testContract.buy.sendTransaction({from: accounts[1], value: 1000})
+    await testContract.setCurrentTime.sendTransaction(2200000)
+    expectInvalidOptcode(testContract.getInfluenceOfVoter.call(accounts[1], 4), "can not get influence for an invalid field of work")
   })
 });

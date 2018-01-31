@@ -607,7 +607,7 @@ contract('ProposalToken', function(accounts) {
       // End Proposal
       await testContract.executeProposal.sendTransaction(newProposalArgs.proposalID)
       // User 2 delegates power in Field of Work 2 to User 3
-      await testContract.delegate.sendTransaction(2, accounts[0], {from: accounts[2]})
+      await testContract.delegate.sendTransaction(2, accounts[3], {from: accounts[2]})
       // Get proposal details
       const p = await getProposal(newProposalArgs.proposalID);
       // proposal should pass with 33 token influence

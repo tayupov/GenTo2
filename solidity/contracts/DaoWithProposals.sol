@@ -17,7 +17,6 @@ contract DaoWithProposals is DaoWithIco {
         bool finished;
         bool proposalPassed;
         uint passedPercent;
-        bytes32 proposalHash;
         uint dividend;
         uint dmr;
         Vote[] votes;
@@ -90,13 +89,15 @@ contract DaoWithProposals is DaoWithIco {
     function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) public constant returns (uint influence);
 
     function newProposalDividend(
-        address beneficiary,
+        string name,
+        string description,
         FieldOfWork fieldOfWork,
         uint dividend) public votingAllowed onlyShareholders
     returns(uint proposalID)
     {
-
-        uint proposalDividendID = newProposal("none", "none", beneficiary, 0, fieldOfWork);
+        require(dividend > 0);
+        require(dividend < this.balance);
+        uint proposalDividendID = newProposal(name, description, address(0), 0, fieldOfWork);
         Proposal storage proposal  = proposals[proposalDividendID];
         proposal.dividend = dividend;
         return proposalDividendID;
@@ -104,13 +105,16 @@ contract DaoWithProposals is DaoWithIco {
     }
 
     function newDMRProposal(
-        address beneficiary,
+        string name,
+        string description,
         FieldOfWork fieldOfWork,
         uint dmr) public votingAllowed onlyShareholders
     returns(uint proposalID)
     {
+        require(dmr > 0);
+        require(dmr < this.balance);
 
-        uint proposalDividendID = newProposal("none", "none", beneficiary, 0, fieldOfWork);
+        uint proposalDividendID = newProposal(name, description, address(0), 0, fieldOfWork);
         Proposal storage proposal  = proposals[proposalDividendID];
         proposal.dmr = dmr;
         return proposalDividendID;
@@ -125,14 +129,14 @@ contract DaoWithProposals is DaoWithIco {
         FieldOfWork fieldOfWork) public votingAllowed onlyShareholders
     returns (uint proposalID)
     {
-        AddressLogger("BENEFICIARY", beneficiary);
+        // if a wei amount is given, a beneficiary must exist
+        require((weiAmount > 0 && beneficiary != address(0)) || (weiAmount == 0 && beneficiary == address(0)));
         proposalID = proposals.length++;
         Proposal storage proposal = proposals[proposalID];
         proposal.recipient = beneficiary;
         proposal.name = name;
         proposal.description = description;
         proposal.amount = weiAmount;
-        proposal.proposalHash = keccak256(beneficiary, weiAmount); // TODO add transactionBytecode
         proposal.proposalDeadline = currentTime() + debatingPeriodInMinutes * 1 minutes;
         proposal.finished = false;
         proposal.fieldOfWork = fieldOfWork;
@@ -151,6 +155,7 @@ contract DaoWithProposals is DaoWithIco {
     {
         Proposal storage proposal = proposals[proposalNumber];
         require(proposal.voted[msg.sender] != true);
+        require(!proposal.finished);
 
         voteID = proposal.votes.length++;
         proposal.votes[voteID] = Vote({inSupport: supportsProposal, voter: msg.sender});
@@ -165,7 +170,6 @@ contract DaoWithProposals is DaoWithIco {
 
         require(currentTime() > proposal.proposalDeadline                       // If it is past the proposal deadline
             && !proposal.finished);                                             // and it has not already been finished
-            // && proposal.proposalHash == sha3(proposal.recipient, proposal.amount)); // and the supplied code matches
 
         uint approve = 0;
         uint disapprove = 0;
