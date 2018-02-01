@@ -7,27 +7,12 @@ const expect = require('expect');
 
 contract('StandardTokenWithShareholderList', function(accounts) {
     let contract;
+    let proposalHelper;
 
     beforeEach(async function() {
       contract = await GentoDaoDeployer()
+      proposalHelper = require("./util/ProposalHelper.js")(contract, accounts)
   });
-
-  async function listenForEvent(eventName) {
-    // get the event listener for the specific event
-    const listener = contract[eventName]();
-    const log = await new Promise((resolve, reject) => listener.get(
-        (error, log) => error ? reject(error) : resolve(log)));
-    // check that there one new log object
-    assert.equal(log.length, 1, 'should be one new event log object');
-    // return only the properties which are important for testing
-    return log[0].args;
-  }
-
-  /**
-
-  METHODS
-
-  */
 
   // isShareholder()
   it("should check that only if the user buys token he becomes a shareholder", async function() {
@@ -47,7 +32,7 @@ contract('StandardTokenWithShareholderList', function(accounts) {
     await contract.buy.sendTransaction({from: accounts[0], value: 500})
     // console.log('balance after buying: ', +await contract.getBalance.call(accounts[0]))
     await contract.transfer.sendTransaction(accounts[1], 10, {from: accounts[0]})
-    transferSuccessObj = await listenForEvent('TransferSuccess')
+    transferSuccessObj = await proposalHelper.listenForEvent('TransferSuccess')
     expect(transferSuccessObj.success).toBe(true)
   })
 
@@ -56,7 +41,7 @@ contract('StandardTokenWithShareholderList', function(accounts) {
     await contract.setCurrentTime.sendTransaction(1200000)
     await contract.setBalance.sendTransaction(accounts[0], 100)
     await contract.transfer.sendTransaction(accounts[1], 10, {from: accounts[0]})
-    let transferSuccessObj = await listenForEvent('TransferSuccess')
+    let transferSuccessObj = await proposalHelper.listenForEvent('TransferSuccess')
     expect(transferSuccessObj.success).toBe(true)
   })
 
@@ -65,7 +50,7 @@ contract('StandardTokenWithShareholderList', function(accounts) {
     await contract.setBalance.sendTransaction(accounts[0], 100)
     await contract.setBalance.sendTransaction(accounts[1], 100)
     await contract.setBalance.sendTransaction(accounts[2], 100)
-    let shareholders = (await listenForEvent('NewShareholderList')).shareholders
+    let shareholders = (await proposalHelper.listenForEvent('NewShareholderList')).shareholders
     console.log('shareholders: ', shareholders)
     expect(shareholders).toContain(accounts[0])
     expect(shareholders).toContain(accounts[1])
@@ -86,8 +71,8 @@ contract('StandardTokenWithShareholderList', function(accounts) {
     await contract.setCurrentTime.sendTransaction(1200000)
     await contract.buy.sendTransaction({from: accounts[0], value: 500})
     await contract.setBalance.sendTransaction(accounts[0], 100)
-    let shareholders = (await listenForEvent('NewShareholderList')).shareholders
-    let balanceObj = await listenForEvent('BalanceUpdated')
+    let shareholders = (await proposalHelper.listenForEvent('NewShareholderList')).shareholders
+    let balanceObj = await proposalHelper.listenForEvent('BalanceUpdated')
     expect(+balanceObj.oldBalance).toBe(17)
     expect(+balanceObj.newBalance).toBe(100)
     expect(+balanceObj.newBalance).toBe(+balanceObj.balance)
@@ -100,18 +85,18 @@ contract('StandardTokenWithShareholderList', function(accounts) {
     // console.log('inital balance: ', +await contract.getBalance.call(accounts[0]))
     await contract.buy.sendTransaction({from: accounts[0], value: 500})
     // after buying the shareholder gets pushed into the shareholder list
-    let shareholders = (await listenForEvent('NewShareholderList')).shareholders
+    let shareholders = (await proposalHelper.listenForEvent('NewShareholderList')).shareholders
     expect(shareholders).toContain(accounts[0])
     // console.log('balance after buying: ', +await contract.getBalance.call(accounts[0]))
     // after setting the balance to 0 the shareholder gets removed from shareholder list
     await contract.setBalance.sendTransaction(accounts[0], 0)
     // console.log('balance after setBalance: ', +await contract.getBalance.call(accounts[0]))
-    let balanceObj = await listenForEvent('BalanceUpdated')
+    let balanceObj = await proposalHelper.listenForEvent('BalanceUpdated')
     expect(+balanceObj.oldBalance).toBe(17)
     expect(+balanceObj.newBalance).toBe(0)
     expect(+balanceObj.balance).toBe(0)
 
-    shareholders = (await listenForEvent('NewShareholderList')).shareholders
+    shareholders = (await proposalHelper.listenForEvent('NewShareholderList')).shareholders
     expect(shareholders).not.toContain(accounts[0])
 
   })
@@ -122,7 +107,7 @@ contract('StandardTokenWithShareholderList', function(accounts) {
     expect(+await contract.getBalance.call(accounts[0])).toBe(0)
     await contract.buy.sendTransaction({from: accounts[0], value: 100})
     expect(+await contract.getBalance.call(accounts[0])).toBe(3)
-    let balanceObj = await listenForEvent('BalanceUpdated')
+    let balanceObj = await proposalHelper.listenForEvent('BalanceUpdated')
 
     expect(+balanceObj.oldBalance).toBe(0)
     expect(+balanceObj.newBalance).toBe(3)
@@ -133,11 +118,11 @@ contract('StandardTokenWithShareholderList', function(accounts) {
   // onBalanceChange()
   it("should add and remove the shareholder to/from the list with onBalanceChange()", async function() {
     await contract.onBalanceChange.sendTransaction(accounts[0], 0, 100)
-    let shareholders = (await listenForEvent('NewShareholderList')).shareholders
+    let shareholders = (await proposalHelper.listenForEvent('NewShareholderList')).shareholders
     expect(shareholders).toContain(accounts[0])
 
     await contract.onBalanceChange.sendTransaction(accounts[0], 100, 0)
-    shareholders = (await listenForEvent('NewShareholderList')).shareholders
+    shareholders = (await proposalHelper.listenForEvent('NewShareholderList')).shareholders
     expect(shareholders).not.toContain(accounts[0])
   })
 
@@ -146,7 +131,7 @@ contract('StandardTokenWithShareholderList', function(accounts) {
     await contract.setCurrentTime.sendTransaction(1200000)
     await contract.buy.sendTransaction({from: accounts[0], value: 500})
     await contract.onBalanceChange.sendTransaction(accounts[0], 0, 100)
-    let shareholders = (await listenForEvent('NewShareholderList')).shareholders
+    let shareholders = (await proposalHelper.listenForEvent('NewShareholderList')).shareholders
     expect(shareholders).toContain(accounts[0])
   })
 
