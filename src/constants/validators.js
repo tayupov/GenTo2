@@ -30,6 +30,7 @@ export const ENDPRICE = 'endprice'
 // proposals
 export const PROPOSALNAME = 'name'
 export const PROPOSALCATEGORY = 'proposalCategory'
+export const PROPOSALTYPE = 'proposalType'
 export const PROPOSALDESCRIPTION = 'description'
 
 export const PROPOSALPAYOUT = 'weiAmount'
