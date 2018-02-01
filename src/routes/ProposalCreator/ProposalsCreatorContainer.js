@@ -21,20 +21,22 @@ export default class ProposalsCreatorContainer extends React.Component {
 
 	async handleCreate() {
 		const from = this.props.account
-		console.log(this.state)
+		var res = 0;
 		switch(this.state.proposalType){
 			case 1:
-				createProposal(Object.values(omitInvalidProposalKeys(this.state)), from, this.props.address)
+				res = await createProposal(Object.values(omitInvalidProposalKeys(this.state)), from, this.props.address)
 				break;
 			case 2:
-				createDividendProposal(Object.values(omitInvalidDividendProposalKeys(this.state)), from, this.props.address)
+				res = await createDividendProposal(Object.values(omitInvalidDividendProposalKeys(this.state)), from, this.props.address)
 				break;
 			case 3:
-				createDmrProposal(Object.values(omitInvalidDmrProposalKeys(this.state)), from, this.props.address)
+				res = await createDmrProposal(Object.values(omitInvalidDmrProposalKeys(this.state)), from, this.props.address)
 				break;
 
 		}
-
+		if(res === -1){
+			this.props.notify("Proposal could not be created. Please check input and priviliges.")
+		}
 	}
 
 	componentDidMount() {
