@@ -41,7 +41,7 @@ contract('GentoDao', function(accounts) {
       expect(+await contract.dividends.call(accounts[i])).toBeCloseTo(userBalances[i]*totalDividend, -1)
     }
   })
- 
+
   // getTokenPrice()
   // it("should return the token price after executing the dividend proposal", async function() {
   //   await proposalHelper.simulateIco({1: 200})
