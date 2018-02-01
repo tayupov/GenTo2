@@ -2,14 +2,11 @@ let defaultICOdata = {
   totalSupply: 100,
   symbol: "TST",
   name: "TestToken",
+  descriptionHash: "....",
   buyPriceStart: 1,
   buyPriceEnd: 2,
   saleStart: new Date().getTime(),
-  saleEnd: new Date().getTime()+10000,
-  finance: 40,
-  product: 20,
-  organisational: 30,
-  partner: 1
+  saleEnd: new Date().getTime()+10000
 }
 
 async function createNewDAO(invalidData) {
@@ -20,14 +17,11 @@ async function createNewDAO(invalidData) {
     data.totalSupply,
     data.symbol,
     data.name,
+    data.descriptionHash,
     data.buyPriceStart,
     data.buyPriceEnd,
     data.saleStart,
-    data.saleEnd,
-    data.finance,
-    data.product,
-    data.organisational,
-    data.partner)
+    data.saleEnd)
   const daoAddress = await genToFactory.DAOs.call(0)
   const instance = await GentoDao.at(daoAddress)
 

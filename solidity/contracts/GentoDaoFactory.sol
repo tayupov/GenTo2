@@ -19,11 +19,7 @@ contract GentoDaoFactory {
                             uint256 buyPriceStart,
                             uint256 buyPriceEnd,
                             uint256 saleStart,
-                            uint256 saleEnd,
-                            uint8 finance,
-                            uint8 product,
-                            uint8 organisational,
-                            uint8 partner
+                            uint256 saleEnd
                             ) returns (address contractAddress){
 
         GentoDao gentoDao = new GentoDao(totalSupply,
@@ -34,10 +30,6 @@ contract GentoDaoFactory {
                                             buyPriceEnd,
                                             saleStart,
                                             saleEnd,
-                                            finance,
-                                            product,
-                                            organisational,
-                                            partner,
                                             true);
 
         address auctionAddress = address(gentoDao);

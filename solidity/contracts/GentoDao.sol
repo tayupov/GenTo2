@@ -9,10 +9,10 @@ contract GentoDao is DaoWithDelegation {
     mapping(address => uint256) public dividends;
     mapping(address => uint256) public decisionmakerRewards;
 
-    uint8 finance;
-    uint8 product;
-    uint8 organisational;
-    uint8 partner;
+    uint8 finance = 25;
+    uint8 product = 25;
+    uint8 organisational = 25;
+    uint8 partner = 25;
 
     event Claimed(string claimType, address beneficiary, uint amount);
     event Balance(uint balance);
@@ -26,15 +26,7 @@ contract GentoDao is DaoWithDelegation {
     uint256 _buyPriceEnd,
     uint256 _saleStart,
     uint256 _saleEnd,
-    uint8 _finance,
-    uint8 _product,
-    uint8 _organisational,
-    uint8 _partner,
     bool _dev) DaoWithDelegation(_maxAmountToRaiseInICO, _symbol, _name, _buyPriceStart, _buyPriceEnd, _saleStart, _saleEnd, _dev) public {
-        finance = _finance;
-        product = _product;
-        organisational = _organisational;
-        partner = _partner;
         descriptionHash = _descriptionHash;
     }
 
