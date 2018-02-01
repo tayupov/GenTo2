@@ -17,8 +17,6 @@ const mapOrganization = async (organization) => {
     numberOfShareholders: await organization.getShareholderCount(),
     totalSupply: await organization.totalSupply(),
     remainingTokensForICOPurchase: await organization.remainingTokensForICOPurchase()
- // buyPrice: await organization.getBuyPrice() 
- // does not work for all organizations, we need some error handling here or leave it out
   }
 }
 
