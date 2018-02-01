@@ -5,7 +5,7 @@ import { default as contract } from 'truffle-contract'
 import web3 from 'utils/web3';
 
 const mapProposal =  (proposalNumber, proposalArray, proposalStatistics) => {
-    
+
   return {
       proposalNumber: proposalNumber,
       recipient:proposalArray[0],
@@ -66,6 +66,18 @@ export async function vote(daoAddress, proposalNumber, supportsProposal, from) {
     } else {
         return dao.vote.sendTransaction(...parameters, {from})
     }
+}
+
+export async function onVote(daoAddress, proposalNumber, cb) {
+  const GentoDAO = contract(GentoDAOArtifact);
+  GentoDAO.setProvider(web3.currentProvider);
+  const dao = await GentoDAO.at(daoAddress);
+  dao.Voted().watch((err, response) => {
+    if (err) {
+      return cb(err, null)
+    }
+    return cb(null, response.args)
+  });
 }
 
 export async function executeProposal(daoAddress, proposalNumber, from) {
