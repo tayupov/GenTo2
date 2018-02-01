@@ -1,6 +1,7 @@
 import React from 'react';
-import { Form, Input, Container, Popup, Icon, Dropdown, Divider } from 'semantic-ui-react';
-import { PROPOSALPAYOUT, PROPOSALEND } from 'constants/validators';
+import { Form, Input, Container, Popup, Icon, Dropdown, Divider, Select } from 'semantic-ui-react';
+import { PROPOSALPAYOUT, PROPOSALEND, PROPOSALTYPE} from 'constants/validators';
+import proposalType from 'constants/proposalType';
 
 import currencyOptions from 'constants/currencyOptions';
 
@@ -28,12 +29,14 @@ export default class Organisational extends React.Component {
             />
           </Form.Field>
           <Form.Field>
-            <label>How long should the voting last?</label>
-            <Input
-              type="date"
-              name={PROPOSALEND}
-              id={PROPOSALEND}
-              size='small'
+            <label>Type of proposal</label>
+            <Select
+                id={PROPOSALTYPE}
+                name={PROPOSALTYPE}
+                compact
+                required
+                options={proposalType}
+                defaultValue="business"
             />
           </Form.Field>
         </Form>
