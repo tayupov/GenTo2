@@ -33,17 +33,12 @@ export default class ProposalContainer extends React.Component {
 
   async componentDidMount() {
     const proposal = await loadProposal(this.props.address, this.props.proposalNumber)
-    proposal.amount = proposal.amount.toString(10)
-    proposal.dividend = proposal.dividend.toString(10)
-    proposal.passedPercent = proposal.passedPercent.toString(10)
-    proposal.approve = parseInt(proposal.approve.toString(10))
-    proposal.disapprove = parseInt(proposal.disapprove.toString(10)) // TODO move this to provider
-    proposal.percent = parseInt(proposal.percent.toString(10))
-    switch (proposal.fieldOfWork.toString(10)) {
-      case "0": proposal.fieldOfWorkDescription = "Finance"; break
-      case "1": proposal.fieldOfWorkDescription = "Organisational"; break
-      case "2": proposal.fieldOfWorkDescription = "Product"; break
-      case "3": proposal.fieldOfWorkDescription = "Marketing"; break
+
+    switch (proposal.fieldOfWork) {
+      case 0: proposal.fieldOfWorkDescription = "Finance"; break
+      case 1: proposal.fieldOfWorkDescription = "Organisational"; break
+      case 2: proposal.fieldOfWorkDescription = "Product"; break
+      case 3: proposal.fieldOfWorkDescription = "Marketing"; break
       default: proposal.fieldOfWorkDescription = "Unknown"
     }
     if (!proposal.isFinished) {

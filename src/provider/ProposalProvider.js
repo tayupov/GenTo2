@@ -9,18 +9,18 @@ const mapProposal =  (proposalNumber, proposalArray, proposalStatistics) => {
   return {
       proposalNumber: proposalNumber,
       recipient:proposalArray[0],
-      amount:proposalArray[1],
+      amount:parseInt(proposalArray[1]),
       name:proposalArray[2],
       description:proposalArray[3],
       //proposalDeadline:proposalArray[4], // Deprecated
-      finished:proposalArray[5],
+      finished:parseInt(proposalArray[5]),
       proposalPassed:proposalArray[6],
-      passedPercent: proposalArray[7], // Deprecated
+      passedPercent: parseInt(proposalArray[7]), // Deprecated
       fieldOfWork: proposalArray[8],
-      dividend:proposalArray[9],
-      approve:proposalStatistics[0],
-      disapprove:proposalStatistics[1],
-      percent:proposalStatistics[2],
+      dividend:parseInt(proposalArray[9]),
+      approve:parseInt(proposalStatistics[0]),
+      disapprove:parseInt(proposalStatistics[1]),
+      percent:parseInt(proposalStatistics[2]),
       proposalStartTime: parseInt(proposalStatistics[3], 10),
       proposalDeadline:parseInt(proposalStatistics[4], 10),
       currentTime:parseInt(proposalStatistics[5], 10)
