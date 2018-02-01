@@ -9,18 +9,18 @@ const mapProposal =  (proposalNumber, proposalArray, proposalStatistics) => {
   return {
       proposalNumber: proposalNumber,
       recipient:proposalArray[0],
-      amount:parseInt(proposalArray[1]),
+       amount:parseInt(proposalArray[1], 10),
       name:proposalArray[2],
       description:proposalArray[3],
       //proposalDeadline:proposalArray[4], // Deprecated
-      finished:parseInt(proposalArray[5]),
+      finished:parseInt(proposalArray[5], 10),
       proposalPassed:proposalArray[6],
-      passedPercent: parseInt(proposalArray[7]), // Deprecated
+      passedPercent: parseInt(proposalArray[7], 10), // Deprecated
       fieldOfWork: proposalArray[8],
-      dividend:parseInt(proposalArray[9]),
-      approve:parseInt(proposalStatistics[0]),
-      disapprove:parseInt(proposalStatistics[1]),
-      percent:parseInt(proposalStatistics[2]),
+      dividend:parseInt(proposalArray[9], 10),
+      approve:parseInt(proposalStatistics[0], 10),
+      disapprove:parseInt(proposalStatistics[1], 10),
+      percent:parseInt(proposalStatistics[2], 10),
       proposalStartTime: parseInt(proposalStatistics[3], 10),
       proposalDeadline:parseInt(proposalStatistics[4], 10),
       currentTime:parseInt(proposalStatistics[5], 10)
@@ -48,8 +48,7 @@ export async function loadProposal(daoAddress, proposalNumber) {
 export async function loadVote(daoAddress, proposal, address) {
     const GentoDAO = contract(GentoDAOArtifact);
     GentoDAO.setProvider(web3.currentProvider);
-    var voteArray = await GentoDAO.at(daoAddress).getVote(proposal.proposalNumber, address); //TODO: unhandled
-    // rejection is not a function!
+    var voteArray = await GentoDAO.at(daoAddress).getVote(proposal.proposalNumber, address);
     var influence = await GentoDAO.at(daoAddress).getInfluenceOfVoter(address, proposal.fieldOfWork);
 
     return mapVote(voteArray, influence);
@@ -63,7 +62,7 @@ export async function vote(daoAddress, proposalNumber, supportsProposal, from) {
     var dao = await GentoDAO.at(daoAddress);
     var parameters = [proposalNumber, supportsProposal]
     if (await willThrow(dao.vote, parameters, from)) {
-        console.log("can not create a proposal, either the ico is still running or the user is not a shareholder. UX People, tell the user!")
+        return -1;
     } else {
         return dao.vote.sendTransaction(...parameters, {from})
     }
@@ -88,8 +87,7 @@ export async function executeProposal(daoAddress, proposalNumber, from) {
     var dao = await GentoDAO.at(daoAddress);
     var parameters = [proposalNumber]
     if (await willThrow(dao.executeProposal, parameters, from)) {
-        //TODO: clicking the execute button leads me here!
-        console.log("can not create a proposal, either the ico is still running or the user is not a shareholder. UX People, tell the user!")
+        return -1
     } else {
         return dao.executeProposal.sendTransaction(...parameters, {from})
     }

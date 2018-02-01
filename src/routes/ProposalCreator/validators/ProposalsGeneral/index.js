@@ -15,8 +15,6 @@ export default function ValidateProposalsGeneral() {
   const descriptionValue = document.getElementById(PROPOSALDESCRIPTION).value;
   const beneficiary = document.getElementById(PROPOSALBENEFICIARY).value;
 
-  //TODO: validate
-
   return {
     name: nameValue,
     fieldOfWork: categoryId,
