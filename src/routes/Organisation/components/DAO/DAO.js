@@ -8,6 +8,8 @@ import downloadString from 'provider/IPFSDownloadProvider';
 import DetailsSection from './components/DetailsSection';
 import TokenSection from './components/TokenSection';
 
+import ICO from './ICO';
+
 export default class DAO extends React.Component {
 
   async componentDidMount() {
@@ -15,17 +17,20 @@ export default class DAO extends React.Component {
     this.setState({ DAO })
 
     const descriptionHash = await DAO.descriptionHash.call()
+    const saleEnd = await DAO.saleEnd.call();
+    const timeSinceIcoEnded = Date.now() - saleEnd;
+    const icoEnded = timeSinceIcoEnded > 0;
     const description = await downloadString(descriptionHash)
     this.setState({ description })
   }
 
   render() {
     const address = this.props.address;
+
     return (
       <div>
         <Button as={Link} to={{ pathname: `/dao/${address}/proposals` }} content="Proposals" />
-        <DetailsSection />
-        <TokenSection />
+        {icoEnded && <ICO />}
       </div>
     )
   }
