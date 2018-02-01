@@ -1,3 +1,3 @@
-import Proposal from './Proposal';
+import Proposal from './ProposalContainer';
 
 export default Proposal;

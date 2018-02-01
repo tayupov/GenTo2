@@ -19,7 +19,6 @@ export default class ProposalsCreatorContainer extends React.Component {
 	}
 
 	async handleCreate() {
-
 		const from = this.props.account
 		const contractObj = omitInvalidProposalKeys(this.state)
 		const contractValues = Object.values(contractObj)

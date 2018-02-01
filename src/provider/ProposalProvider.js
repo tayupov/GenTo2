@@ -2,11 +2,11 @@ import GentoDAOArtifact from 'assets/contracts/GentoDao'
 
 import { default as contract } from 'truffle-contract'
 
-import { loadOrganization } from './DAOProvider'
 import web3 from 'utils/web3';
 
-const mapProposal =  (proposalArray) => {
+const mapProposal =  (proposalNumber, proposalArray) => {
   return {
+      proposalNumber: proposalNumber,
       recipient:proposalArray[0],
       amount:proposalArray[1],
       name:proposalArray[2],
@@ -18,26 +18,40 @@ const mapProposal =  (proposalArray) => {
       dividend:proposalArray[8]
   }
 }
+const mapVote =  (voteArray) => {
+  return {
+      voted : voteArray[0],
+      support: voteArray[1]
+  }
+}
 
-export async function loadProposals(daoAddress, proposalNumber) {
+export async function loadProposal(daoAddress, proposalNumber) {
     const GentoDAO = contract(GentoDAOArtifact);
     GentoDAO.setProvider(web3.currentProvider);
 
     var proposalArray = await GentoDAO.at(daoAddress).getProposal(proposalNumber);
-    return mapProposal(proposalArray);
+    return mapProposal(proposalNumber, proposalArray);
+}
+
+export async function loadVote(daoAddress, proposalNumber, address) {
+    const GentoDAO = contract(GentoDAOArtifact);
+    GentoDAO.setProvider(web3.currentProvider);
+    var voteArray = await GentoDAO.at(daoAddress).getVote(proposalNumber, address);
+
+    return mapVote(voteArray);
 }
 
 
-export async function voteOnProposal(daoAddress, proposalNumber, supportsProposal, from) {
+export async function vote(daoAddress, proposalNumber, supportsProposal, from) {
     const GentoDAO = contract(GentoDAOArtifact);
     GentoDAO.setProvider(web3.currentProvider);
 
     var dao = await GentoDAO.at(daoAddress);
-    parameters = [proposalNumber, supportsProposal]
+    var parameters = [proposalNumber, supportsProposal]
     if (await willThrow(dao, parameters, from)) {
         console.log("can not create a proposal, either the ico is still running or the user is not a shareholder. UX People, tell the user!")
     } else {
-        return dao.vote.sendTransaction(...input, {from})
+        return dao.vote.sendTransaction(...parameters, {from})
     }
 }
 

@@ -2,9 +2,9 @@ import React from 'react';
 import AlertContainer from 'react-alert';
 import DAOSidebar from 'components/DAOSidebar';
 import Routes from 'routes';
-import 'styles/app.css';
-import provider from 'provider'
+import web3Connect from 'provider/web3Provider'
 import { loadAllOrganizationsOfOwner } from 'provider/DAOListProvider'
+import 'styles/app.css';
 
 export default class App extends React.Component {
 
@@ -19,7 +19,7 @@ export default class App extends React.Component {
   }
 
   async componentDidMount() {
-    await provider(this.notify, this)
+    await web3Connect(this.notify, this)
   }
 
   async componentWillUpdate(nextProps, nextState) {

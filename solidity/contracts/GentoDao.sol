@@ -4,7 +4,7 @@ import './DaoWithDelegation.sol';
 
 
 contract GentoDao is DaoWithDelegation {
-
+    string public descriptionHash;
     mapping(address => mapping(uint => uint256)) public votingRewardTokens;
     mapping(address => uint256) public dividends;
     mapping(address => uint256) public decisionmakerRewards;
@@ -21,6 +21,7 @@ contract GentoDao is DaoWithDelegation {
     function GentoDao(uint256 _maxAmountToRaiseInICO,
     string _symbol,
     string _name,
+    string _descriptionHash,
     uint256 _buyPriceStart,
     uint256 _buyPriceEnd,
     uint256 _saleStart,
@@ -34,6 +35,7 @@ contract GentoDao is DaoWithDelegation {
         product = _product;
         organisational = _organisational;
         partner = _partner;
+        descriptionHash = _descriptionHash;
     }
 
     function getTokenPrice() public constant returns (uint tokenPrice) {
