@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { loadProposal, loadVote, vote, executeProposal } from 'provider/ProposalProvider'
+import { loadProposal, onVote, loadVote, vote, executeProposal } from 'provider/ProposalProvider'
 
 import Proposal from './Proposal';
 
@@ -30,8 +30,7 @@ export default class ProposalContainer extends React.Component {
       }
     }
   }
-
-  async componentDidMount() {
+  async loadStateFromBlockchain() {
     const proposal = await loadProposal(this.props.address, this.props.proposalNumber)
 
     switch (proposal.fieldOfWork) {
@@ -64,6 +63,14 @@ export default class ProposalContainer extends React.Component {
     }
     vote.influenceDescription = "Your influence in this field of work is " + vote.influence;
     this.setState({vote});
+  }
+  async componentDidMount() {
+    this.loadStateFromBlockchain()
+    onVote(this.props.address, this.props.proposalNumber, (err, eventData) => {
+      this.loadStateFromBlockchain()
+      console.log("onVote", eventData)
+      //TODO UX People: It would be lovely if a popup would show up indicating that somebody just voted
+    })
   }
 
   async approveCallback(){
