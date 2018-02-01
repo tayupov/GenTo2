@@ -56,4 +56,8 @@ module.exports = async function(deployer, network, accounts) {
   await paul.setCurrentTime.sendTransaction(1800)
   await paul.newProposal.sendTransaction("Test Proposal3", "Wer hier abstimmt ist doof", "0x257c1440ef68c42cb5ccc0738883e39253719610", 0, 0, {from: accounts[1]})
   await paul.setCurrentTime.sendTransaction(2000)
+
+  await paul.setProduction.sendTransaction()
+  await roman.setProduction.sendTransaction()
+  await theo.setProduction.sendTransaction()
 };
