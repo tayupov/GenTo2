@@ -62,7 +62,7 @@ export async function vote(daoAddress, proposalNumber, supportsProposal, from) {
     var dao = await GentoDAO.at(daoAddress);
     var parameters = [proposalNumber, supportsProposal]
     if (await willThrow(dao.vote, parameters, from)) {
-        console.log("can not create a proposal, either the ico is still running or the user is not a shareholder. UX People, tell the user!")
+        return -1;
     } else {
         return dao.vote.sendTransaction(...parameters, {from})
     }
@@ -75,7 +75,7 @@ export async function executeProposal(daoAddress, proposalNumber, from) {
     var dao = await GentoDAO.at(daoAddress);
     var parameters = [proposalNumber]
     if (await willThrow(dao.executeProposal, parameters, from)) {
-        console.log("can not create a proposal, either the ico is still running or the user is not a shareholder. UX People, tell the user!")
+        return -1
     } else {
         return dao.executeProposal.sendTransaction(...parameters, {from})
     }
