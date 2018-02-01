@@ -18,6 +18,7 @@ contract DaoWithProposals is DaoWithIco {
         string name;
         string description;
         FieldOfWork fieldOfWork;
+        uint proposalStartTime;
         uint proposalDeadline;
         bool finished;
         bool proposalPassed;
@@ -142,6 +143,8 @@ contract DaoWithProposals is DaoWithIco {
         proposal.name = name;
         proposal.description = description;
         proposal.amount = weiAmount;
+        proposal.proposalHash = keccak256(beneficiary, weiAmount); // TODO add transactionBytecode
+        proposal.proposalStartTime  = currentTime();
         proposal.proposalDeadline = currentTime() + debatingPeriodInMinutes * 1 minutes;
         proposal.finished = false;
         proposal.fieldOfWork = fieldOfWork;
@@ -177,7 +180,7 @@ contract DaoWithProposals is DaoWithIco {
             && !proposal.finished);                                             // and it has not already been finished
             // && proposal.proposalHash == sha3(proposal.recipient, proposal.amount)); // and the supplied code matches
 
-        var (approve, disapprove, passedPercent) = calculateVotingStatistics(proposalId);
+        var (approve, disapprove, passedPercent, proposalStartTime, proposalDeadline, curTime) = calculateVotingStatistics(proposalId);
         proposal.finished = true;
 
         proposal.proposalPassed =  (approve > disapprove);
@@ -187,7 +190,7 @@ contract DaoWithProposals is DaoWithIco {
     }
 
     function calculateVotingStatistics(uint proposalId)  public constant returns (uint currentApprove, uint currentDisapprove,
-    uint currentPercent){
+    uint currentPercent, uint proposalStartTime, uint proposalDeadline, uint curTime){
         uint approve = 0;
         uint disapprove = 0;
 
@@ -207,6 +210,6 @@ contract DaoWithProposals is DaoWithIco {
             percent = approve * 100 / (approve+disapprove);
         }
 
-        return (approve, disapprove, percent);
+        return (approve, disapprove, percent, proposal.proposalStartTime, proposal.proposalDeadline, currentTime());
     }
 }

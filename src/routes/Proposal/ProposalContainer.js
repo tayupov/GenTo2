@@ -36,9 +36,8 @@ export default class ProposalContainer extends React.Component {
     proposal.amount = proposal.amount.toString(10)
     proposal.dividend = proposal.dividend.toString(10)
     proposal.passedPercent = proposal.passedPercent.toString(10)
-    proposal.proposalDeadline = proposal.proposalDeadline.toString(10)
     proposal.approve = parseInt(proposal.approve.toString(10))
-    proposal.disapprove = parseInt(proposal.disapprove.toString(10))
+    proposal.disapprove = parseInt(proposal.disapprove.toString(10)) // TODO move this to provider
     proposal.percent = parseInt(proposal.percent.toString(10))
     switch (proposal.fieldOfWork.toString(10)) {
       case "0": proposal.fieldOfWorkDescription = "Finance"; break

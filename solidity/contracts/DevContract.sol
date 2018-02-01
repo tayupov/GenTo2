@@ -27,6 +27,6 @@ contract DevContract {
       cTime = time;
   }
   function setProduction(){
-      this.active = false;
+      active = false;
   }
 }
