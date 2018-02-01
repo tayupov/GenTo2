@@ -5,7 +5,7 @@ import './DaoWithDelegation.sol';
 
 contract GentoDao is DaoWithDelegation {
     string public descriptionHash;
-    mapping(address => mapping(uint => uint256)) public votingRewardTokens;
+
     mapping(address => uint256) public dividends;
     mapping(address => uint256) public decisionmakerRewards;
 
@@ -28,38 +28,35 @@ contract GentoDao is DaoWithDelegation {
     bool _dev) DaoWithDelegation(_maxAmountToRaiseInICO, _symbol, _name, _buyPriceStart, _buyPriceEnd, _saleStart, _saleEnd, _dev) public {
         descriptionHash = _descriptionHash;
     }
-
+    
     function claimPayout(uint proposalNumber) public daoActive returns (uint amount) {
         Proposal storage proposal = proposals[proposalNumber];
 
         require(proposal.finished && proposal.proposalPassed && proposal.recipient == msg.sender
             && proposal.claimed[msg.sender] == false && proposal.amount > 0);
 
-        /* require(msg.sender.send(proposal.amount)); */
         proposal.claimed[msg.sender] = true;
         Claimed("payout", msg.sender, proposal.amount);
+        require(msg.sender.send(proposal.amount));
 
         return proposal.amount;
     }
 
-    function claimDividend(uint proposalNumber) public onlyShareholders {
-        Proposal storage proposal = proposals[proposalNumber];
-        require(dividends[msg.sender] > 0 && proposal.claimed[msg.sender] == false);
-
+    function claimDividend() public onlyShareholders {
+        require(dividends[msg.sender] > 0);
+        uint dividend = dividends[msg.sender]; 
         dividends[msg.sender] = 0;
-        require(msg.sender.send(dividends[msg.sender]));
-
-        proposal.claimed[msg.sender] = true;
+        require(msg.sender.send(dividend));
+        
         Claimed("dividend", msg.sender, dividends[msg.sender]);
     }
 
-    // wie bekommt jeder user DMR?
-    function claimDecisionMakerReward(uint proposalNumber) public onlyShareholders {
-        Proposal storage proposal = proposals[proposalNumber];
+    function claimDecisionMakerReward() public onlyShareholders {
         require(decisionmakerRewards[msg.sender] > 0);
+        uint decisionmakerReward = decisionmakerRewards[msg.sender];
         decisionmakerRewards[msg.sender] = 0;
-        require(msg.sender.send(decisionmakerRewards[msg.sender]));
-        proposal.claimed[msg.sender] = true;
+        require(msg.sender.send(decisionmakerReward));
+
         Claimed("decision maker reward", msg.sender, decisionmakerRewards[msg.sender]);
     }
 
@@ -71,7 +68,7 @@ contract GentoDao is DaoWithDelegation {
                 vrt1 += votingRewardTokens[shareholders[i]][uint(fow)];
             }
         }
-        // check for 0 and setting to any number so it doesn't throw
+        // check for 0 and setting to any number so the calculation doesn't throw
         if (vrt1 == 0) {
             vrt1 = 1;
         }
@@ -100,11 +97,11 @@ contract GentoDao is DaoWithDelegation {
             decisionmakerRewards[shareholders[j]] = dmrSum;
         }
 
-        for (uint l = 0; l < shareholders.length; ++l) {
-            votingRewardTokens[shareholders[l]][uint(FieldOfWork.Finance)] = 0;
-            votingRewardTokens[shareholders[l]][uint(FieldOfWork.Product)] = 0;
-            votingRewardTokens[shareholders[l]][uint(FieldOfWork.Organisational)] = 0;
-            votingRewardTokens[shareholders[l]][uint(FieldOfWork.Partnership)] = 0;
+        for (uint r = 0; r < shareholders.length; ++r) {
+            votingRewardTokens[shareholders[r]][uint(FieldOfWork.Finance)] = 0;
+            votingRewardTokens[shareholders[r]][uint(FieldOfWork.Product)] = 0;
+            votingRewardTokens[shareholders[r]][uint(FieldOfWork.Organisational)] = 0;
+            votingRewardTokens[shareholders[r]][uint(FieldOfWork.Partnership)] = 0;
         }
     }
 

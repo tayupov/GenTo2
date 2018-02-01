@@ -10,6 +10,8 @@ contract DaoWithProposals is DaoWithIco {
     uint public debatingPeriodInMinutes;
     enum FieldOfWork { Finance, Organisational, Product, Partnership }
 
+    mapping(address => mapping(uint => uint256)) public votingRewardTokens;
+
     struct Proposal {
         address recipient;
         uint amount;
@@ -174,7 +176,7 @@ contract DaoWithProposals is DaoWithIco {
         for (uint i = 0; i < proposal.votes.length; ++i) {
             Vote storage v = proposal.votes[i];
             uint voteWeight = getInfluenceOfVoter(v.voter, proposal.fieldOfWork);
-
+            votingRewardTokens[v.voter][uint(proposal.fieldOfWork)] += voteWeight;
             if (v.inSupport) {
                 approve += voteWeight;
             } else {
