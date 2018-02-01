@@ -4,23 +4,12 @@ const GentoDaoDeployer = require("./util/GentoDaoDeployer.js")(GentoDao)
 const should = require('should')
 const expect = require('expect')
 
-let newProposalEventListener;
-
-async function getProposalID() {
-  let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-      (error, log) => error ? reject(error) : resolve(log)));
-  // check whether the proposal gets created
-  assert.equal(newProposalLog.length, 1, 'should be one new Proposal');
-  // returns the proposal log object with proposal id
-  return newProposalLog[0].args.proposalID;
-}
 
 contract('DevContract', function(accounts) {
   let contract;
 
   beforeEach(async function() {
     contract = await GentoDaoDeployer()
-    newProposalEventListener = contract.NewProposalCreated();
   });
 
   // setCurrentTime() + currentTime()

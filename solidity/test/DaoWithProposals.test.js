@@ -158,32 +158,30 @@ contract('DaoWithProposals', function(accounts) {
   })
 
   // executeProposal()
-  // it("should check whether the inital proposal is not passed and not finished", async function() {
-  //   await proposalHelper.simulateIco({1: 100000});
-  //   // create new proposal in FoW = 0
-  //   await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 29, 0, {from: accounts[1]})
-  //   let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
-  //   await contract.vote.sendTransaction(proposalDividendID, false, {from: accounts[1]})
-  //   // await proposalHelper.voteBulk(proposalID, {1: false})
-  //   const p = await proposalHelper.getFormattedProposal(proposalID)
-  //   // Proposal not finished
-  //   expect(p.finished).toBe(false)
-  //   // Proposal not passed
-  //   expect(p.proposalPassed).toBe(false)
-  //   // number of Proposals = 1
-  //   expect(+await contract.getNumProposals.call()).toBe(1)
-  // })
+  it("should check whether the inital proposal is not passed and not finished", async function() {
+    await proposalHelper.simulateIco({1: 100000});
+    // create new proposal in FoW = 0
+    await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 29, 0, {from: accounts[1]})
+    let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+    await contract.vote.sendTransaction(proposalDividendID, false, {from: accounts[1]})
+    // await proposalHelper.voteBulk(proposalID, {1: false})
+    const p = await proposalHelper.getFormattedProposal(proposalID)
+    // Proposal not finished
+    expect(p.finished).toBe(false)
+    // Proposal not passed
+    expect(p.proposalPassed).toBe(false)
+    // number of Proposals = 1
+    expect(+await contract.getNumProposals.call()).toBe(1)
+  })
 
   // newProposal()
   it("should instantiate a new proposal", async function() {
     await proposalHelper.simulateIco({0: 100000});
     await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[0], 10, 0, {from: accounts[0]})
-    console.log('vor proposalid')
     let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
-    console.log('nach proposal id: ', proposalID)
-    // await proposalHelper.voteBulk(proposalID, {0: true})
-    // const p = await proposalHelper.getFormattedProposal(proposalID)
-    // expect(+p.amount).toBe(10)
+    await proposalHelper.voteBulk(proposalID, {0: true})
+    const p = await proposalHelper.getFormattedProposal(proposalID)
+    expect(+p.amount).toBe(10)
   })
 
   // newProposal()
@@ -195,47 +193,47 @@ contract('DaoWithProposals', function(accounts) {
   })
 
   // newDividendProposal()
-  // it("should be possible to create and to vote on a new dividend proposal", async function() {
-  //   await proposalHelper.simulateIco({0: 100000, 1: 100000});
-  //   await contract.newDividendProposal.sendTransaction(accounts[0], 100, {from: accounts[0]})
-  //
-  //   let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
-  //   await proposalHelper.voteBulk(proposalID, {0: true, 1: true})
-  //   await contract.executeProposal.sendTransaction(proposalID)
-  //   const p = await proposalHelper.getFormattedProposal(proposalID)
-  //
-  //   expect(p.recipient).toBe(accounts[0])
-  //   expect(+p.amount).toBe(0)
-  //   expect(p.name).toBe('Dividend')
-  //   expect(p.description).toBe('Dividend')
-  //   expect(+p.proposalDeadline).toBe(2200600)
-  //   expect(p.finished).toBe(true)
-  //   expect(p.proposalPassed).toBe(true)
-  //   expect(+p.passedPercent).toBe(100)
-  //   expect(+p.dividend).toBe(100)
-  //   expect(+p.dmr).toBe(0)
-  // })
+  it("should be possible to create and to vote on a new dividend proposal", async function() {
+    await proposalHelper.simulateIco({0: 100000, 1: 100000});
+    await contract.newDividendProposal.sendTransaction(accounts[0], 100, {from: accounts[0]})
+
+    let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+    await proposalHelper.voteBulk(proposalID, {0: true, 1: true})
+    await contract.executeProposal.sendTransaction(proposalID)
+    const p = await proposalHelper.getFormattedProposal(proposalID)
+
+    expect(p.recipient).toBe(accounts[0])
+    expect(+p.amount).toBe(0)
+    expect(p.name).toBe('Dividend')
+    expect(p.description).toBe('Dividend')
+    expect(+p.proposalDeadline).toBe(2200600)
+    expect(p.finished).toBe(true)
+    expect(p.proposalPassed).toBe(true)
+    expect(+p.passedPercent).toBe(100)
+    expect(+p.dividend).toBe(100)
+    expect(+p.dmr).toBe(0)
+  })
 
   // newDMRewardPropsal()
-  // it("should be possible to create and to vote on a new decision maker reward proposal", async function() {
-  //   await proposalHelper.simulateIco({0: 100000, 1: 100000});
-  //   await contract.newDMRewardProposal.sendTransaction(accounts[0], 100, {from: accounts[0]})
-  //   let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
-  //   await proposalHelper.voteBulk(proposalID, {0: true, 1: true})
-  //   await contract.executeProposal.sendTransaction(proposalID)
-  //   const p = await proposalHelper.getFormattedProposal(proposalID)
-  //
-  //   expect(p.recipient).toBe(accounts[0])
-  //   expect(+p.amount).toBe(0)
-  //   expect(p.name).toBe('DMR')
-  //   expect(p.description).toBe('DMR')
-  //   expect(+p.proposalDeadline).toBe(2200600)
-  //   expect(p.finished).toBe(true)
-  //   expect(p.proposalPassed).toBe(true)
-  //   expect(+p.passedPercent).toBe(100)
-  //   expect(+p.dividend).toBe(0)
-  //   expect(+p.dmr).toBe(100)
-  // })
+  it("should be possible to create and to vote on a new decision maker reward proposal", async function() {
+    await proposalHelper.simulateIco({0: 100000, 1: 100000});
+    await contract.newDMRewardProposal.sendTransaction(accounts[0], 100, {from: accounts[0]})
+    let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+    await proposalHelper.voteBulk(proposalID, {0: true, 1: true})
+    await contract.executeProposal.sendTransaction(proposalID)
+    const p = await proposalHelper.getFormattedProposal(proposalID)
+
+    expect(p.recipient).toBe(accounts[0])
+    expect(+p.amount).toBe(0)
+    expect(p.name).toBe('DMR')
+    expect(p.description).toBe('DMR')
+    expect(+p.proposalDeadline).toBe(2200600)
+    expect(p.finished).toBe(true)
+    expect(p.proposalPassed).toBe(true)
+    expect(+p.passedPercent).toBe(100)
+    expect(+p.dividend).toBe(0)
+    expect(+p.dmr).toBe(100)
+  })
 
   // votingAllowed
   it("should be not allowed to vote on the new proposal if the dao isn't created", async function() {

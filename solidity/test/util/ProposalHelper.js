@@ -37,7 +37,7 @@ module.exports = function(contract, accounts) {
   async function simulateIco(accObj) {
     // Set time between ICO start and END
     await contract.setCurrentTime.sendTransaction(1200000)
-    Object.keys(accObj).forEach(async function(accKey) {
+    await Object.keys(accObj).forEach(async function(accKey) {
       await contract.buy.sendTransaction({from: accounts[accKey] , value: accObj[accKey]})
     });
     // Set time to after ICO
@@ -66,7 +66,7 @@ module.exports = function(contract, accounts) {
   }
 
   async function voteBulk(proposalID, accObj) {
-    Object.keys(accObj).forEach(async function(accKey) {
+    await Object.keys(accObj).forEach(async function(accKey) {
       await contract.vote.sendTransaction(proposalID, accObj[accKey], {from: accounts[accKey]})
     })
     // Set time to after the Proposal period
