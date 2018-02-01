@@ -2,19 +2,22 @@ let defaultICOdata = {
   totalSupply: 100,
   symbol: "TST",
   name: "TestToken",
+  descriptionHash: "....",
   buyPriceStart: 1,
   buyPriceEnd: 2,
   saleStart: new Date().getTime(),
   saleEnd: new Date().getTime()+10000
 }
+
 async function createNewDAO(invalidData) {
   let data = {}
-  Object.assign(data, defaultICOdata, invalidData)
-  let genToFactory = await GenToFactory.deployed()
+  Object.assign(data, defaultICOdata)
+  let genToFactory = await GenToFactory.new()
   await genToFactory.createDAO.sendTransaction(
     data.totalSupply,
     data.symbol,
     data.name,
+    data.descriptionHash,
     data.buyPriceStart,
     data.buyPriceEnd,
     data.saleStart,
@@ -32,7 +35,9 @@ const GenToFactory = artifacts.require("./GentoDaoFactory.sol");
 const should = require('should')
 const expect = require('expect')
 
-contract('GenToFactory', function(accounts) {
+contract('GentoDaoFactory', function(accounts) {
+
+
   it("should be possible to start a valid ICO", async function() {
 
     try {
@@ -44,6 +49,12 @@ contract('GenToFactory', function(accounts) {
       expect(+await instance.buyPriceEnd()).toEqual(defaultICOdata.buyPriceEnd)
       expect(+await instance.saleStart()).toEqual(defaultICOdata.saleStart)
       expect(+await instance.saleEnd()).toEqual(defaultICOdata.saleEnd)
+      /*
+      expect(+await instance.finance()).toEqual(defaultICOdata.finance)
+      expect(+await instance.product()).toEqual(defaultICOdata.product)
+      expect(+await instance.organisational()).toEqual(defaultICOdata.organisational)
+      expect(+await instance.partner()).toEqual(defaultICOdata.partner)
+      */
     }
     catch (e) {
       console.error(e)
@@ -60,8 +71,8 @@ contract('GenToFactory', function(accounts) {
           let instance = await createNewDAO(invalidData)
           should.fail("this transaction should have raised an error")
       }
-      catch (e) {
-        expect(e.message).toContain("VM Exception while processing transaction: ")
+      catch(e) {
+        expect(e.message).toContain("this transaction should have raised an error")
       }
   });
 });

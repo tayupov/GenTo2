@@ -1,6 +1,9 @@
 pragma solidity ^0.4.8;
 
-import './DaoWithIco.sol';
+import "./DaoWithIco.sol";
+/* import {votingRewardTokens} from "./GentoDao.sol"; */
+
+
 contract DaoWithProposals is DaoWithIco {
 
     Proposal[] public proposals;
@@ -39,11 +42,13 @@ contract DaoWithProposals is DaoWithIco {
         require(isShareholder(msg.sender));
         _;
     }
+
     // Modifier checks whether the ICO is finished and if so the ICO become a DAO and voting is allowed
     modifier votingAllowed {
         require(isIcoFinished());
         _;
     }
+
     function DaoWithProposals(uint256 _maxAmountToRaiseInICO,
     string _symbol,
     string _name,
@@ -89,28 +94,24 @@ contract DaoWithProposals is DaoWithIco {
 
     function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) public constant returns (uint influence);
 
-    function newProposalDividend(
+    function newDividendProposal(
         address beneficiary,
-        FieldOfWork fieldOfWork,
         uint dividend) public votingAllowed onlyShareholders
     returns(uint proposalID)
     {
-
-        uint proposalDividendID = newProposal("none", "none", beneficiary, 0, fieldOfWork);
+        uint proposalDividendID = newProposal("Dividend", "Dividend", beneficiary, 0, FieldOfWork.Finance);
         Proposal storage proposal  = proposals[proposalDividendID];
         proposal.dividend = dividend;
         return proposalDividendID;
 
     }
 
-    function newDMRProposal(
+    function newDMRewardProposal(
         address beneficiary,
-        FieldOfWork fieldOfWork,
         uint dmr) public votingAllowed onlyShareholders
     returns(uint proposalID)
     {
-
-        uint proposalDividendID = newProposal("none", "none", beneficiary, 0, fieldOfWork);
+        uint proposalDividendID = newProposal("DMR", "DMR", beneficiary, 0, FieldOfWork.Finance);
         Proposal storage proposal  = proposals[proposalDividendID];
         proposal.dmr = dmr;
         return proposalDividendID;
@@ -173,6 +174,7 @@ contract DaoWithProposals is DaoWithIco {
         for (uint i = 0; i < proposal.votes.length; ++i) {
             Vote storage v = proposal.votes[i];
             uint voteWeight = getInfluenceOfVoter(v.voter, proposal.fieldOfWork);
+
             if (v.inSupport) {
                 approve += voteWeight;
             } else {

@@ -19,17 +19,18 @@ contract GentoDaoFactory {
                             uint256 buyPriceStart,
                             uint256 buyPriceEnd,
                             uint256 saleStart,
-                            uint256 saleEnd) returns (address contractAddress){
+                            uint256 saleEnd
+                            ) returns (address contractAddress){
 
         GentoDao gentoDao = new GentoDao(totalSupply,
-                                                     symbol,
-                                                     name,
-                                                     descriptionHash,
-                                                     buyPriceStart,
-                                                     buyPriceEnd,
-                                                     saleStart,
-                                                     saleEnd,
-                                                     true);
+                                            symbol,
+                                            name,
+                                            descriptionHash,
+                                            buyPriceStart,
+                                            buyPriceEnd,
+                                            saleStart,
+                                            saleEnd,
+                                            true);
 
         address auctionAddress = address(gentoDao);
         DAOs.push(auctionAddress);
