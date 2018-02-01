@@ -67,15 +67,27 @@ export default class ProposalContainer extends React.Component {
   }
 
   async approveCallback(){
-    await vote(this.props.address, this.props.proposalNumber,true, this.props.account)
+    var res = await vote(this.props.address, this.props.proposalNumber,true, this.props.account)
+
+    if(res === -1){
+      this.props.notify("Vote failed. Please check deadline and priviliges.")
+    }
   }
 
   async disapproveCallback(){
-    await vote(this.props.address, this.props.proposalNumber,false, this.props.account)
+    var res = await vote(this.props.address, this.props.proposalNumber,false, this.props.account)
+
+    if(res === -1){
+      this.props.notify("Vote failed. Please check deadline and priviliges.")
+    }
   }
 
   async executeCallback(){
-    await executeProposal(this.props.address, this.props.proposalNumber)
+    var res = await executeProposal(this.props.address, this.props.proposalNumber)
+
+    if(res === -1){
+      this.props.notify("Execution failed. Please check deadline, status and priviliges.")
+    }
   }
 
   render() {
