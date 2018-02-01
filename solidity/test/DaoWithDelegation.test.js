@@ -29,7 +29,7 @@ contract('DaoWithDelegation', function(accounts) {
   /**
   METHODS
   */
-
+/*
   // delegate()
   it("should pass the Proposal when the tokenholder has delegated his vote", async function() {
     // Set time between ICO start and END
@@ -57,7 +57,6 @@ contract('DaoWithDelegation', function(accounts) {
     expect(p[5]).toBe(true)
     expect(p[6]).toBe(true)
   })
-
   // delegate()
   it("delegation after ending a vote should not have an effect on the vote", async function() {
       // Set time between ICO start and END
@@ -86,6 +85,7 @@ contract('DaoWithDelegation', function(accounts) {
       expect(Number(p[7])).toBe(33)
   })
 
+  */
   // delegate()
   it("should fail the delegation if the token holder isn't a shareholder", async function() {
     await contract.setCurrentTime.sendTransaction(1200000)
@@ -98,7 +98,7 @@ contract('DaoWithDelegation', function(accounts) {
         expect(e.message).toContain("VM Exception while processing transaction: ")
     }
   })
-
+/*
   // delegate()
   it("should allow delegation to other users", async function() {
       // Set time between ICO start and END
@@ -128,7 +128,6 @@ contract('DaoWithDelegation', function(accounts) {
       expect(p[5]).toBe(true)
       expect(p[6]).toBe(true)
   })
-
   // delegate()
   it("delegation in one field should not affect the others", async function() {
       // Set time between ICO start and END
@@ -161,6 +160,7 @@ contract('DaoWithDelegation', function(accounts) {
       expect(p[6]).toBe(false)
   })
 
+  */
   // getInfluenceOfVoter()
   it("should compute the right influence of tokenholder", async function() {
     await contract.setCurrentTime.sendTransaction(1300000)

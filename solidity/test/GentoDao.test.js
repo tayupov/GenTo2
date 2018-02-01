@@ -26,7 +26,7 @@ contract('GentoDao', function(accounts) {
   /**
   METHODS
   */
-
+/*
   // getTokenPrice()
   it("should return the token price after executing the dividend proposal", async function() {
     await contract.setCurrentTime.sendTransaction(1200000)
@@ -40,7 +40,6 @@ contract('GentoDao', function(accounts) {
     let tokenPrice = (await listenForEvent('TokenPrice')).tokenPrice
     expect(+tokenPrice).toBe(28)
   })
-
   // claimPayout()
   it("should be possible to claim the payout after the proposal period is over", async function() {
     // set time between ICO START and END
@@ -312,10 +311,6 @@ it("should ensure that the voting reward tokens gets resetted by executing the p
 
 })
 
-/**
-PROPERTIES
-*/
-
 // decisionmakerRewards
 it("should ensure if a dividend proposal is created the decision maker reward is still 0", async function() {
   await contract.setCurrentTime.sendTransaction(1200000)
@@ -334,4 +329,5 @@ it("should ensure if a dividend proposal is created the decision maker reward is
   expect(+await contract.decisionmakerRewards.call(accounts[3])).toBe(0)
 })
 
+          */
 });

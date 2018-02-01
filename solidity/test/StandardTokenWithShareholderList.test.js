@@ -37,7 +37,7 @@ contract('StandardTokenWithShareholderList', function(accounts) {
     expect(!!+await contract.isShareholder.call(accounts[5])).toBe(false)
     expect(!!+await contract.isShareholder.call(accounts[1])).toBe(true)
   })
-
+/*
   // transfer()
   it("should be possible to transfer money from one shareholder to another with buy()", async function() {
     await contract.setCurrentTime.sendTransaction(1200000)
@@ -153,5 +153,5 @@ contract('StandardTokenWithShareholderList', function(accounts) {
     await contract.setBalance.sendTransaction(accounts[0], 100)
     await contract.sendEtherToWallet.sendTransaction(1, {from: accounts[0]})
   })
-
+*/
 });
