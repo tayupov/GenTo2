@@ -47,7 +47,6 @@ export async function loadAllProposals(address) {
     GentoDAO.setProvider(web3.currentProvider);
 
     var proposalCount = await GentoDAO.at(address).getNumProposals();
-
     var proposals = [];
 
     for(let i=0; i< proposalCount;i++){

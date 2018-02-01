@@ -1,6 +1,6 @@
 export default [
-    { key: 'finance', text: 'finance', value: 1 },
-    { key: 'organisational', text: 'organisational', value: 2 },
-    { key: 'product', text: 'product', value: 3 },
-    { key: 'marketing', text: 'marketing', value: 4 }
+    { key: 'organisational', text: 'Organisational', value: 1 },
+    { key: 'product', text: 'Product', value: 2 },
+    { key: 'finance', text: 'Finance', value: 3 },
+    { key: 'marketing', text: 'Marketing', value: 4 }
 ]
