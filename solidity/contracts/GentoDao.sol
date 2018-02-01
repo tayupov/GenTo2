@@ -9,14 +9,13 @@ contract GentoDao is DaoWithDelegation {
     mapping(address => uint256) public dividends;
     mapping(address => uint256) public decisionmakerRewards;
 
-    uint8 finance = 25;
-    uint8 product = 25;
-    uint8 organisational = 25;
-    uint8 partner = 25;
+    uint8 public finance = 25;
+    uint8 public product = 25;
+    uint8 public organisational = 25;
+    uint8 public partner = 25;
 
     event Claimed(string claimType, address beneficiary, uint amount);
     event Balance(uint balance);
-    event TokenPrice(uint tokenPrice);
 
     function GentoDao(uint256 _maxAmountToRaiseInICO,
     string _symbol,
@@ -28,12 +27,6 @@ contract GentoDao is DaoWithDelegation {
     uint256 _saleEnd,
     bool _dev) DaoWithDelegation(_maxAmountToRaiseInICO, _symbol, _name, _buyPriceStart, _buyPriceEnd, _saleStart, _saleEnd, _dev) public {
         descriptionHash = _descriptionHash;
-    }
-
-    function getTokenPrice() public constant returns (uint tokenPrice) {
-        tokenPrice = this.balance / totalSupply;
-        NumberLogger("TokenPrice", tokenPrice);
-        return tokenPrice;
     }
 
     function claimPayout(uint proposalNumber) public daoActive returns (uint amount) {
@@ -89,7 +82,7 @@ contract GentoDao is DaoWithDelegation {
         return votingRewardTokens[dm][uint(fow)];
     }
 
-    function distributeDMReward(uint dmr) {
+    function distributeDMReward(uint dmr) private {
         uint financeDmr = (dmr * finance) / 100;
         uint productDmr = (dmr * product) / 100;
         uint organisationalDmr = (dmr * organisational) / 100;
@@ -115,11 +108,9 @@ contract GentoDao is DaoWithDelegation {
         }
     }
 
-    function distributeDividend(uint dividend) {
-        uint tokenPrice = getTokenPrice();
-        TokenPrice(tokenPrice);
+    function distributeDividend(uint dividend) private {
         for (uint i = 0; i < shareholders.length; ++i) {
-            uint shareholderDividend = ((balances[shareholders[i]] * tokenPrice) * dividend) / 100;
+            uint shareholderDividend = ((totalSupply * dividend) / 100) / (totalSupply / balances[shareholders[i]]);
             dividends[shareholders[i]] += shareholderDividend;
         }
     }
