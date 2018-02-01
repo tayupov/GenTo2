@@ -16,7 +16,9 @@ export async function mapOrganization (organization) {
     totalSupply: await organization.totalSupply(),
     remainingTokensForICOPurchase: await organization.remainingTokensForICOPurchase(),
     descriptionHash: await organization.descriptionHash(),
-    delegate: await organization.delegate
+    delegate: await organization.delegate,
+    claimDividend: await organization.claimDividend,
+    claimDecisionMakerReward: await organization.claimDecisionMakerReward
   }
 }
 

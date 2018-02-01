@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Segment, Header, Image, Input, Select, Button, Divider } from 'semantic-ui-react';
+import { Grid, Segment, Header, List, Image, Input, Form, Button, Table, Message } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 import { loadOrganization } from 'provider/DAOProvider';
@@ -7,13 +7,17 @@ import { loadAllProposals } from 'provider/ProposalListProvider'
 import downloadString from 'provider/IPFSDownloadProvider';
 import fieldsOfWork from 'constants/fieldsOfWork'
 
+import web3 from 'utils/web3';
+
 export default class DAO extends React.Component {
 
   constructor(props) {
     super(props)
-    this.delegate = this.delegate.bind(this)    
+    this.delegate = this.delegate.bind(this)
+    this.claimDividend = this.claimDividend.bind(this)
+    this.claimVotingReward = this.claimVotingReward.bind(this)
+    this.loadOrganizationData = this.loadOrganizationData.bind(this)
     this.state = {
-      loading: false,
       address: null,
       name: null,
       symbol: null,
@@ -30,35 +34,47 @@ export default class DAO extends React.Component {
     }
   }
 
-  async componentDidMount() {
-    const DAO = await loadOrganization(this.props.address, true)
+  async loadOrganizationData(address) {
+    const DAO = await loadOrganization(address, true)
     this.setState({ ...DAO })
 
-    const proposals = loadAllProposals(this.props.address)
-    .then(proposals => this.setState({ proposals }) )
+    loadAllProposals(address)
+      .then(proposals => this.setState({ proposals }))
 
-    const description = downloadString(this.state.descriptionHash)
-    .then(description => this.setState({ description }) )
+    downloadString(this.state.descriptionHash)
+      .then(description => this.setState({ description }))
+  }
+
+  async componentDidMount() {
+    this.loadOrganizationData(this.props.address)
   }
 
   async componentWillReceiveProps(nextProps) {
-    this.setState({ loading: true })
-    const DAO = await loadOrganization(nextProps.address, true)
-    this.setState({ ...DAO })
+    this.loadOrganizationData(nextProps.address)
   }
 
-  async delegate(event, element) {
-    const delegatePower = this.state.delegate
+  async delegate(e, data) {
+    const address = data.value
+    if (web3.isAddress(address)) {
+      const from = this.props.account
+      const res = await this.state.delegate.sendTransaction(data.fieldofwork, address, { from })
+    }
+  }
 
-    const delegateeElement = document.getElementById('delegatee-input')
-    const delegatee = delegateeElement.value
-    const fow = this.state.fieldOfWorkValue
+  async claimDividend(e) {
+    const from = this.props.account
+    const res = await this.state.claimDividend()
+  }
 
-    const res = await delegatePower(fow, delegatee)
+  async claimVotingReward(e) {
+    const from = this.props.account
+    const res = await this.state.claimDecisionMakerReward.sendTransaction({from})
   }
 
   render() {
     const address = this.props.address;
+    const proposals = this.state.proposals
+
     return (
       <div>
         <Header as="h1">{this.state.name}</Header>
@@ -66,29 +82,110 @@ export default class DAO extends React.Component {
           <Image src="https://react.semantic-ui.com/assets/images/wireframe/paragraph.png" />
         </Segment>
 
-
-        <Grid columns='three'>
+        <Grid>
           <Grid.Row>
-            <Grid.Column as={Link} to={{ pathname: `/dao/${address}/proposals` }} content="Proposals">
-              <Segment>
-                <Header as='h5'>Proposals</Header>
-                <Image src="https://react.semantic-ui.com/assets/images/wireframe/paragraph.png" />
-              </Segment>
+            {/* TODO: Move this to a seperate file*/}
+            <Grid.Column width='3'>
+              <List selection>
+                <Header><u>Proposals</u></Header>
+                {proposals.length > 0 &&
+                  proposals.slice(0, 6).map((proposal, index) =>
+                    <List.Item
+                      key={index}
+                      as={Link}
+                      to={{ pathname: `/dao/${address}/proposals/${proposal.proposalNumber}` }}
+                    >
+                      <List.Header>{proposal.name}</List.Header>
+                    </List.Item>
+                  )
+                }
+                {proposals.length >= 6 &&
+                  <List.Item as={Link} to={{ pathname: `/dao/${address}/proposals` }}>More...</List.Item>
+                }
+              </List>
+            </Grid.Column>
+
+            <Grid.Column width='13'>
+
+              {/*TODO: Move this to a seperate file*/}
+              <Table basic='very'>
+
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>Delegatee Address</Table.HeaderCell>
+                    <Table.HeaderCell>Field Of Work</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+
+                <Table.Body>
+                  <Table.Row>
+                    <Table.Cell>
+                      <Input
+                        fluid
+                        placeholder={`0xe42c3D57eD0827f866AA773c6BeDec49b0EEaa3e`}
+                        fieldofwork='1'
+                        onChange={(e, data) => this.delegate(e, data)}
+                      />
+                    </Table.Cell>
+                    <Table.Cell>Organisational</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell>
+                      <Input
+                        fluid
+                        placeholder={`0xe42c3D57eD0827f866AA773c6BeDec49b0EEaa3e`}
+                        fieldofwork='2'
+                        onChange={(e, data) => this.delegate(e, data)}
+                      />
+                    </Table.Cell>
+                    <Table.Cell>Product</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell>
+                      <Input
+                        fluid
+                        placeholder={`0xe42c3D57eD0827f866AA773c6BeDec49b0EEaa3e`}
+                        fieldofwork='3'
+                        onChange={(e, data) => this.delegate(e, data)}
+                      />
+                    </Table.Cell>
+                    <Table.Cell>Finance</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell>
+                      <Input
+                        fluid
+                        placeholder={`0xe42c3D57eD0827f866AA773c6BeDec49b0EEaa3e`}
+                        fieldofwork='4'
+                        onChange={(e, data) => this.delegate(e, data)}
+                      />
+                    </Table.Cell>
+                    <Table.Cell>Marketing</Table.Cell>
+                  </Table.Row>
+                </Table.Body>
+
+              </Table>
+
             </Grid.Column>
           </Grid.Row>
+
+          <Grid.Row>
+            <Grid.Column width='2'>
+              <Form>
+                <Form.Field>Dividend payout: 0</Form.Field>
+                <Button type='submit' onClick={this.claimDividend}>Claim</Button>
+              </Form>
+            </Grid.Column>
+
+            <Grid.Column width='2'>
+              <Form>
+                <Form.Field>Voting Reward: 0</Form.Field>
+                <Button type='submit' onClick={this.claimVotingReward}>Claim</Button>
+              </Form>
+            </Grid.Column>
+          </Grid.Row>
+
         </Grid>
-
-        <Divider hidden />
-
-        <Input fluid type='text' placeholder='Address...' action id="delegatee-input">
-          <input />
-          <Select
-            options={fieldsOfWork}
-            defaultValue={1}
-            onChange={(e, data) => this.setState({ fieldOfWorkValue: data.value })}
-          />
-          <Button onClick={this.delegate}>Delegate</Button>
-        </Input>
 
       </div>
     )
