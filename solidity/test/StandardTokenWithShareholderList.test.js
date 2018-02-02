@@ -16,7 +16,6 @@ contract('StandardTokenWithShareholderList', function(accounts) {
 
   // isShareholder()
   it("should check that only if the user buys token he becomes a shareholder", async function() {
-    console.log('proposalHelper: ', proposalHelper)
     await contract.setCurrentTime.sendTransaction(1600000)
     // user 1 become a shareholder
     await contract.buy.sendTransaction({from: accounts[1], value: web3.toWei(10, 'Gwei')})
