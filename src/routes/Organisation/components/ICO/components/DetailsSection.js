@@ -21,11 +21,13 @@ class DetailsSection extends Component {
     setAuctionTimer = () => {
         const { details, status } = this.props;
         let timeCountDown;
+        console.log('DETAILS+++++++DETAILS+++++++++DETAILS');
+        console.log(details);
 
         if(status === "pending") {
-            timeCountDown = "Auction will start at " + moment.unix(details._saleStart).format('LLL');
+            timeCountDown = "Auction will start at " + moment.unix(details.saleStart).format('LLL');
         } else if (status === "running") {
-            const endTime = moment.unix(details._saleEnd);
+            const endTime = moment.unix(details.saleEnd);
             let duration = moment.duration(endTime.diff(moment()));
             const interval = 1000;
 
@@ -37,7 +39,7 @@ class DetailsSection extends Component {
                 }
                 duration = moment.duration(duration - interval);
                 timeCountDown = duration.days() + " d " + duration.hours() + " h " + duration.minutes() + " m " + duration.seconds() + " s left";
-                let currentPercentage = ((endTime.diff(moment()) / endTime.diff(moment.unix(details._saleStart))) * 100).toFixed(0);
+                let currentPercentage = ((endTime.diff(moment()) / endTime.diff(moment.unix(details.saleStart))) * 100).toFixed(0);
                 this.setState({
                     timeCountDown,
                     currentPercentage
@@ -74,7 +76,7 @@ class DetailsSection extends Component {
                         Token Name
                     </Header>
                     <Segment attached padded raised textAlign='left' color='olive'>
-                        {details._name}
+                        {details.name}
                     </Segment>
                 </Grid.Column>
                 <Grid.Column width={8}>
@@ -82,7 +84,7 @@ class DetailsSection extends Component {
                         Created at
                     </Header>
                     <Segment attached padded raised textAlign='right' color='olive'>
-                        {moment.unix(details._creationDate).format('LLL')}
+                        {moment.unix(details.creationDate).format('LLL')}
                     </Segment>
                 </Grid.Column>
             </Grid.Row>
@@ -93,7 +95,7 @@ class DetailsSection extends Component {
                         Ticker Symbol
                     </Header>
                     <Segment attached padded raised textAlign='left' color='olive'>
-                        {details._symbol}
+                        {details.symbol}
                     </Segment>
                 </Grid.Column>
                 <Grid.Column width={8}>
@@ -101,7 +103,7 @@ class DetailsSection extends Component {
                         Owned By
                     </Header>
                     <Segment attached padded raised textAlign='right' color='olive'>
-                        {details._owner}
+                        No Owner
                     </Segment>
                 </Grid.Column>
             </Grid.Row>

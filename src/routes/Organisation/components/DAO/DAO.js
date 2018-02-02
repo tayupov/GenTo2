@@ -8,8 +8,6 @@ import downloadString from 'provider/IPFSDownloadProvider';
 import DetailsSection from './components/DetailsSection';
 import TokenSection from './components/TokenSection';
 
-import ICO from './ICO';
-
 export default class DAO extends React.Component {
 
   async componentDidMount() {
@@ -30,7 +28,8 @@ export default class DAO extends React.Component {
     return (
       <div>
         <Button as={Link} to={{ pathname: `/dao/${address}/proposals` }} content="Proposals" />
-        {icoEnded && <ICO />}
+        <DetailsSection />
+        <TokenSection />
       </div>
     )
   }

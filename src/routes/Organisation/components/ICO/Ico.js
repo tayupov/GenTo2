@@ -8,7 +8,7 @@ import Chart from './components/Chart';
 import TokenSection from './components/TokenSection';
 
 const Ico = ({
-    auctionDetailsParsed,
+    auctionDetails,
     priceDevelopmentString,
     timeCountDown,
     currentPercentage,
@@ -21,9 +21,9 @@ const Ico = ({
 }) => (
     <Container style={{ width: '800px' }}>
         <HeaderSection />
-        {auctionDetailsParsed && priceDevelopmentString && 
+        {auctionDetails && priceDevelopmentString && 
         <DetailsSection
-            details={auctionDetailsParsed}
+            details={auctionDetails}
             priceDevelopmentString={priceDevelopmentString}
             timeCountDown={timeCountDown}
             currentPercentage={currentPercentage}
