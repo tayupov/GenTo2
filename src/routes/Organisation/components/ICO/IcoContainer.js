@@ -2,18 +2,17 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 
+import { loadOrganization } from 'provider/DAOProvider';
+
 import web3 from 'utils/web3';
 import { isFunction } from 'utils/functional';
-
-import AuctionToken from 'assets/contracts/AuctionToken.json'
-
  
 import Ico from './Ico';
 
 class IcoContainer extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             unit: 'finney',
@@ -21,31 +20,37 @@ class IcoContainer extends Component {
             buyPriceStart: null,
             buyPriceEnd: null,
             auctionDetails: {},
-            auctionDetailsParsed: {},
             tokenCount: 0,
             tokenCountMsg: null,
             accountChanged: false,
             priceDevelopmentString: null,
             currentPercentage: null,
             timeCountDown: null,
-            chartDataArr: []
+            chartDataArr: [],
         }
     }
 
     componentWillMount() {
-        let contractAddress = this.props.match.params.address;
-        if (contractAddress) {
-            if (web3.isAddress(contractAddress)) {
-                this.getContractDetails(contractAddress);
-            } else {
-                console.log('Not a valid ethereum address: ' + contractAddress);
-            }
-        } else {
-            console.log('Missing address parameter');
-        }
 
+        this.getContractDetails();
+        this.setState({
+            auctionDetails: {
+                ...this.props.auctionDetails
+            }
+        })
         this.setMyTokenCount();
         setInterval(this.getChartData, 10000);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.getContractDetails();
+        console.log('NEXT PROPS');
+        console.log(nextProps);
+        this.setState({
+            auctionDetails: {
+                ...nextProps.auctionDetails
+            }
+        })
     }
 
     componentDidUpdate(nextProps) {
@@ -64,7 +69,7 @@ class IcoContainer extends Component {
                 this.setState({
                     tokenCount: amount
                 });
-                msg = "You own <strong>" + amount + " </strong>" + this.state.auctionDetails._symbol + " <strong>(=" + (amount * 100 / this.state.auctionDetails._totalSupply).toFixed(0) + "%)</strong> "
+                msg = "You own <strong>" + amount + " </strong>" + this.state.auctionDetails.symbol + " <strong>(=" + (amount * 100 / this.state.auctionDetails.totalSupply).toFixed(0) + "%)</strong> "
             }
             this.setState({
                 tokenCountMsg: msg
@@ -72,14 +77,14 @@ class IcoContainer extends Component {
         })
     }
 
-    checkSupply = (address, callback) => {
+    checkSupply = async (address, callback) => {
         
-        if(!(web3 && this.state.auctionDetails && this.props.match.params.address && isFunction(callback))) {
+        if(!(web3 && this.state.auctionDetails && this.props.address && isFunction(callback))) {
             if (!web3) {
                 console.log("Web3 has closed!");
             } else if (!this.state.auctionDetails) {
                 console.log("The contract data isn't loaded in.");
-            } else if (!this.props.match.params.address) {
+            } else if (!this.props.address) {
                 console.log("The contract address isn't loaded in.");
             } else if (!isFunction(callback)) {
                 console.log("The callback is not a function!")
@@ -90,8 +95,8 @@ class IcoContainer extends Component {
             return;
         }
 
-        createAuctionTokenInstance(this.props.match.params.address)
-        .balanceOf(address, (error, result) => {
+        const ico = await loadOrganization(this.props.address);
+        ico.balanceOf(address, (error, result) => {
             if(error) {
                 callback(error);
             } else {
@@ -100,10 +105,10 @@ class IcoContainer extends Component {
         })
     }
 
-    getAuctionType = (data) => {
-        if(data._buyPriceStart < data._buyPriceEnd) {
+    getAuctionType = () => {
+        if(this.state.buyPriceStart < this.state.buyPriceEnd) {
             return 'english';
-        } else if (data._buyPriceStart > data._buyPriceEnd){
+        } else if (this.state.buyPriceStart > this.state.buyPriceEnd){
             return 'dutch';
         } else {
             return 'fixed';
@@ -123,13 +128,11 @@ class IcoContainer extends Component {
         return priceDev;
     }
 
-    initAuctionDetails = (data) => {
+    initAuctionDetails = () => {
         this.setState({
-            auctionDetails: data,
-            buyPriceStart: parseInt(web3.fromWei(data._buyPriceStart, this.state.unit), 10),
-            buyPriceEnd: parseInt(web3.fromWei(data._buyPriceEnd, this.state.unit), 10),
-            status: this.getCurrentStatus(data),
-            auctionType: this.getAuctionType(data)
+            buyPriceStart: parseInt(web3.fromWei(this.state.buyPriceStart, this.state.unit), 10),
+            buyPriceEnd: parseInt(web3.fromWei(this.state.buyPriceEnd, this.state.unit), 10),
+            auctionType: this.getAuctionType()
         })
     }
 
@@ -140,32 +143,8 @@ class IcoContainer extends Component {
         })
     }
 
-    parseContractDetails = (rawData) => {
-        return {
-            _owner: rawData[0],
-            _name: rawData[1],
-            _symbol: rawData[2],
-            _totalSupply: rawData[3],
-            _creationDate: rawData[4].toNumber(),
-            _buyPriceStart: rawData[5].toNumber(),
-            _buyPriceEnd: rawData[6].toNumber(),
-            _sellPrice: rawData[7].toNumber(),
-            _saleStart: rawData[8].toNumber(),
-            _saleEnd: rawData[9].toNumber(),
-        }
-    }
-
     getContractDetails = (address) => {
-
-        if(this.checkForError()) {
-            return;
-        }
-
-        let data = this.parseContractDetails();
-        this.setState({
-            auctionDetailsParsed: data,
-        })
-        this.initAuctionDetails(data);
+        this.initAuctionDetails();
         this.getChartData();                    
         this.setPriceDevelopmentString();
         
@@ -175,43 +154,25 @@ class IcoContainer extends Component {
         const data = this.state.auctionDetails;
         let cd = [];
         cd.push({
-            x: moment.unix(data._saleStart).valueOf(),
+            x: moment.unix(data.saleStart).valueOf(),
             y: this.state.buyPriceStart
         });
-        const duration = data._saleEnd - data._saleStart;
+        const duration = data.saleEnd - data.saleStart;
 
-        const passed = moment().unix() - data._saleStart;
+        const passed = moment().unix() - data.saleStart;
         const currPrice = Math.floor(this.state.buyPriceStart + ((this.state.buyPriceEnd - this.state.buyPriceStart) * passed) / duration);
         cd.push({
-            x: moment.unix(data._saleStart + passed).valueOf(),
+            x: moment.unix(data.saleStart + passed).valueOf(),
             y: currPrice
         })
 
         cd.push({
-            x: moment.unix(data._saleEnd).valueOf(),
+            x: moment.unix(data.saleEnd).valueOf(),
             y: this.state.buyPriceEnd
         });
         this.setState({
             chartDataArr: cd
         })
-    }
- 
-    checkForError = () => {
-
-        if(!(web3 && this.state.auctionDetails && this.props.match.params.address)) {
-            if (!web3) {
-                console.log("Web3 has closed!");
-            } else if (!this.state.auctionDetails) {
-                console.log("The contract data isn't loaded in.");
-            } else if (!this.props.match.params.address) {
-                console.log("The contract address isn't loaded in.");
-            } else {
-                console.log("An unidentified error occurred!");
-            }
-            return true;
-        } else {
-            return false;
-        }
     }
 
     setSupplyInterval = (cb) => {
@@ -223,8 +184,8 @@ class IcoContainer extends Component {
                     console.error(err);
                 } else {
                     supply = supply.toNumber();
-                    const supplyPct = ((supply / data._totalSupply) * 100).toFixed(0);
-                    const supplyString = `${supply} of ${data._totalSupply} left for sale`;
+                    const supplyPct = ((supply / data.totalSupply) * 100).toFixed(0);
+                    const supplyString = `${supply} of ${data.totalSupply} left for sale`;
                     cb({
                         supplyPct,
                         supplyString
@@ -234,25 +195,21 @@ class IcoContainer extends Component {
         }    
     }
 
-    buyToken = (amount, etherUnit) => {
+    buyToken = async (amount, etherUnit) => {
 
         console.log('buytoken')
 
-        if(this.checkForError()) {
-            return;
-        }
-
         const buyer = this.props.account;
         const value = web3.toWei(amount, etherUnit);
+        const ico = await loadOrganization(this.props.address);
      
         web3.eth.estimateGas({
-            data: AuctionToken.bytecode
+            data: ico.bytecode
         }, (err, gas) => {
-            createAuctionTokenInstance(this.props.match.params.address)
-                .buy(
+                ico.buy(
                     {
                         from: buyer,
-                        data: AuctionToken.bytecode,
+                        data: ico.bytecode,
                         value,
                         gas
                     }, (error, result) => {
@@ -264,14 +221,11 @@ class IcoContainer extends Component {
             })
         }
 
-    listenForTokenBuy = (cb) => {
-        
-        if(this.checkForError()) {
-            return;
-        }
+    listenForTokenBuy = async (cb) => {
 
         const data = this.state.auctionDetails;
-        const transfers = this.props.ico.Transfer();
+        const ico = await loadOrganization(this.props.address)
+        const transfers = ico.Transfer();
 
         transfers.watch((error, result) => {
             if(error) {
@@ -279,8 +233,8 @@ class IcoContainer extends Component {
             } else {
                 if (this.state.auctionDetails) {
                     const remainingSupply = result.args._remainingSupply.toNumber();
-                    const supplyPct = ((remainingSupply / data._totalSupply) * 100).toFixed(0);
-                    const supplyString = `${remainingSupply} of ${data._totalSupply} left for sale`;
+                    const supplyPct = ((remainingSupply / data.totalSupply) * 100).toFixed(0);
+                    const supplyString = `${remainingSupply} of ${data.totalSupply} left for sale`;
                     cb({
                         supplyPct,
                         supplyString
@@ -305,7 +259,7 @@ class IcoContainer extends Component {
             <Ico
                 {...this.props}
                 {...this.state}
-                key={this.props.match.params.address}
+                key={this.props.address}
                 setSupplyInterval={this.setSupplyInterval}
                 buyToken={this.buyToken}
                 listenForTokenBuy={this.listenForTokenBuy}

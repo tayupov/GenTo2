@@ -4,10 +4,13 @@ import { default as contract } from 'truffle-contract'
 import web3 from 'utils/web3';
 
 export async function mapOrganization (organization) {
+  console.log(organization);
   return {
     address: await organization.address,
     name: await organization.name(),
     symbol: await organization.symbol(),
+    buyPriceStart: await organization.buyPriceStart(),
+    buyPriceEnd: await organization.buyPriceEnd(),
     saleStart: await organization.saleStart(),
     saleEnd: await organization.saleEnd(),
     isICOFinished: await organization.isIcoFinished(),
