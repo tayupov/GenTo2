@@ -38,14 +38,15 @@ class IcoContainer extends Component {
                 ...this.props.auctionDetails
             }
         })
-        this.setMyTokenCount();
         setInterval(this.getChartData, 10000);
+    }
+
+    componentDidMount() {
+        // this.setMyTokenCount();
     }
 
     componentWillReceiveProps(nextProps) {
         this.getContractDetails();
-        console.log('NEXT PROPS');
-        console.log(nextProps);
         this.setState({
             auctionDetails: {
                 ...nextProps.auctionDetails
@@ -59,50 +60,32 @@ class IcoContainer extends Component {
         }
     }
 
-    setMyTokenCount = () => {
-        this.checkSupply(this.props.account, (err, res) => {
-            let msg;
-            if(err) {
-                msg = "Pending...";
-            } else {
-                let amount = res.toNumber();
-                this.setState({
-                    tokenCount: amount
-                });
-                msg = "You own <strong>" + amount + " </strong>" + this.state.auctionDetails.symbol + " <strong>(=" + (amount * 100 / this.state.auctionDetails.totalSupply).toFixed(0) + "%)</strong> "
-            }
-            this.setState({
-                tokenCountMsg: msg
-            })
+    setMyTokenCount = async () => {
+        const ico = await loadOrganization(this.props.address);
+        const amount = +await ico.balanceOf.call([this.props.account]);
+        const totalSupply = +await ico.totalSupply.call();
+        const symbol = +await ico.symbol.call();
+        this.setState({
+            tokenCount: amount
+        });
+        const msg = "You own <strong>" + amount + " </strong>" + symbol + " <strong>(=" + (amount * 100 / totalSupply).toFixed(0) + "%)</strong> "
+        this.setState({
+            tokenCountMsg: msg
         })
     }
 
-    checkSupply = async (address, callback) => {
-        
-        if(!(web3 && this.state.auctionDetails && this.props.address && isFunction(callback))) {
-            if (!web3) {
-                console.log("Web3 has closed!");
-            } else if (!this.state.auctionDetails) {
-                console.log("The contract data isn't loaded in.");
-            } else if (!this.props.address) {
-                console.log("The contract address isn't loaded in.");
-            } else if (!isFunction(callback)) {
-                console.log("The callback is not a function!")
-            } else {
-                console.log("An unidentified error occurred!");
-            }
-            callback(new Error("Contract not ready for usage"));
-            return;
-        }
 
-        const ico = await loadOrganization(this.props.address);
-        ico.balanceOf(address, (error, result) => {
-            if(error) {
-                callback(error);
-            } else {
-                callback(null, result);
-            }
-        })
+    getCurrentStatus = () => {
+        const start = moment.unix(this.state.auctionDetails.saleStart);
+        const end = moment.unix(this.state.auctionDetails.saleEnd);
+        const now = moment();
+        if(now.diff(start) < 0) {
+            return 'pending';
+        } else if (now.diff(end) < 0){
+            return 'running';
+        } else {
+            return 'over'
+        }
     }
 
     getAuctionType = () => {
@@ -132,6 +115,7 @@ class IcoContainer extends Component {
         this.setState({
             buyPriceStart: parseInt(web3.fromWei(this.state.buyPriceStart, this.state.unit), 10),
             buyPriceEnd: parseInt(web3.fromWei(this.state.buyPriceEnd, this.state.unit), 10),
+            status: this.getCurrentStatus(),
             auctionType: this.getAuctionType()
         })
     }
@@ -158,14 +142,14 @@ class IcoContainer extends Component {
             y: this.state.buyPriceStart
         });
         const duration = data.saleEnd - data.saleStart;
-
-        const passed = moment().unix() - data.saleStart;
-        const currPrice = Math.floor(this.state.buyPriceStart + ((this.state.buyPriceEnd - this.state.buyPriceStart) * passed) / duration);
-        cd.push({
-            x: moment.unix(data.saleStart + passed).valueOf(),
-            y: currPrice
-        })
-
+        if(this.state.status === 'running'){
+            const passed = moment().unix() - data.saleStart;
+            const currPrice = Math.floor(this.state.buyPriceStart + ((this.state.buyPriceEnd - this.state.buyPriceStart) * passed) / duration);
+            cd.push({
+                x: moment.unix(data.saleStart + passed).valueOf(),
+                y: currPrice
+            })
+        }
         cd.push({
             x: moment.unix(data.saleEnd).valueOf(),
             y: this.state.buyPriceEnd
@@ -175,29 +159,20 @@ class IcoContainer extends Component {
         })
     }
 
-    setSupplyInterval = (cb) => {
-        const data = this.state.auctionDetails;
+    setSupplyInterval = async (cb) => {
+        const ico = await loadOrganization(this.props.address, true);
+        const supply = ico.remainingTokensForICOPurchase;
+        const totalSupply = ico.totalSupply;
+        const supplyPct = ((supply / totalSupply) * 100).toFixed(0);
+        const supplyString = `${supply} of ${totalSupply} left for sale`;
+        cb({
+            supplyPct,
+            supplyString
+        });
+    }    
 
-        if (data) {
-            this.checkSupply(this.props.account, (err, supply) => {
-                if(err) {
-                    console.error(err);
-                } else {
-                    supply = supply.toNumber();
-                    const supplyPct = ((supply / data.totalSupply) * 100).toFixed(0);
-                    const supplyString = `${supply} of ${data.totalSupply} left for sale`;
-                    cb({
-                        supplyPct,
-                        supplyString
-                    });
-                }
-            })
-        }    
-    }
 
     buyToken = async (amount, etherUnit) => {
-
-        console.log('buytoken')
 
         const buyer = this.props.account;
         const value = web3.toWei(amount, etherUnit);

@@ -8,10 +8,16 @@ module.exports = async function(deployer, network, accounts) {
   const theosHash = "QmV4CrUumLgsSLPMQTjCC65tdKFtfBTu7eVFLt7THnGtE9"
   const romansHash = "QmeQ5zEeW4vhAL1GC4GHUt2qJPB8Dws8RKJ8HFFpJYwzdK"
   const paulsHash = "QmWTY8m6uZj9uJnrkCFdJWu9htP5HcxLw1SZbdxFBUXkY4"
+<<<<<<< HEAD
 
   await GentoFactory.createDAO.sendTransaction(web3.toWei(100, "ether"), "YAY", "Theo Software Solutions", theosHash, 1, 10, 0, 100)
   await GentoFactory.createDAO.sendTransaction(web3.toWei(100, "ether"), "RBR", "Rolls by the Roman", romansHash, 1, 10, 0, 100)
   await GentoFactory.createDAO.sendTransaction(web3.toWei(100, "ether"), "PP", "Project Paul", paulsHash, 1, 10, 0, 100)
+=======
+  await GentoFactory.createDAO.sendTransaction(web3.toWei(100, "ether"), "YAY", "Theo Software Solutions", theosHash, 1, 10, 1517562000, 1517702400)
+  await GentoFactory.createDAO.sendTransaction(web3.toWei(100, "ether"), "RBR", "Rolls by the Roman", romansHash, 1, 10, 1517562000, 1517702400)
+  await GentoFactory.createDAO.sendTransaction(web3.toWei(100, "ether"), "PP", "Project Paul", paulsHash, 1, 10, 1517562000, 1517702400)
+>>>>>>> Add complete ICO view, working on the state flow
 
   const [theo, roman, paul] = await Promise.all((await GentoFactory.getDAOs.call()).map(address => DAO.at(address)))
 
