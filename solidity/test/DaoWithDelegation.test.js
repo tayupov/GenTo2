@@ -12,11 +12,7 @@ contract('DaoWithDelegation', function(accounts) {
 
     beforeEach(async function() {
       contract = await GentoDaoDeployer();
-<<<<<<< HEAD
       proposalHelper = await require("./util/ProposalHelper.js")(contract, accounts);
-=======
-      proposalHelper = await require("./util/ProposalHelper.js")(contract, accounts)
->>>>>>> integrated all adapted tests with using helper function to the current progress of the develop branch
     });
 
   // delegate()
