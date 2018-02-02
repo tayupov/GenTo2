@@ -40,7 +40,8 @@ contract('DaoWithDelegation', function(accounts) {
       await proposalHelper.simulateIco({1: 4000, 2: 3000, 3:2000})
       // Create Proposal in Field of work 2
       await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 100, 2, {from: accounts[1]})
-      let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+      let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID
+      console.log(proposalID)
       // User 1 and User 3 Vote
       await proposalHelper.voteBulk(proposalID, {1: false, 3: true})
       await contract.executeProposal.sendTransaction(proposalID)
