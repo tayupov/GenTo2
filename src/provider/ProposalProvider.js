@@ -41,7 +41,6 @@ export async function loadProposal(daoAddress, proposalNumber) {
     var proposalArray = await GentoDAO.at(daoAddress).getProposal(proposalNumber);
     var proposalStatistics = await GentoDAO.at(daoAddress).calculateVotingStatistics(proposalNumber);
     var mappedProposal = mapProposal(proposalNumber, proposalArray, proposalStatistics);
-    console.log(mappedProposal)
     return mappedProposal;
 }
 
