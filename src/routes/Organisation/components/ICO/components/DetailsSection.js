@@ -22,9 +22,9 @@ class DetailsSection extends Component {
         const { details, status } = this.props;
         let timeCountDown;
 
-        // if(status === "pending") {
-        //     timeCountDown = "Auction will start at " + moment.unix(details.saleStart).format('LLL');
-        // } else if (status === "running") {
+        if(status === "pending") {
+            timeCountDown = "Auction will start at " + moment.unix(details.saleStart).format('LLL');
+        } else if (status === "running") {
             const endTime = moment.unix(details.saleEnd);
             let duration = moment.duration(endTime.diff(moment()));
             const interval = 1000;
@@ -43,6 +43,7 @@ class DetailsSection extends Component {
                     currentPercentage
                 })
             }, interval)
+        }
     }
 
     componentWillMount() {
