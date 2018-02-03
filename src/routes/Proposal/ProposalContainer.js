@@ -30,6 +30,7 @@ export default class ProposalContainer extends React.Component {
       }
     }
   }
+
   async loadStateFromBlockchain() {
     const proposal = await loadProposal(this.props.address, this.props.proposalNumber)
 
@@ -64,6 +65,12 @@ export default class ProposalContainer extends React.Component {
     vote.influenceDescription = "Your influence in this field of work is " + vote.influence;
     this.setState({vote});
   }
+
+  async componentWillReceiveProps(nextProps) {
+    this.setState({ loading: true })
+    this.loadStateFromBlockchain()
+  }
+
   async componentDidMount() {
     this.loadStateFromBlockchain()
     onVote(this.props.address, this.props.proposalNumber, (err, eventData) => {
