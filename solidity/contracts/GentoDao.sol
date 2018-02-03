@@ -30,12 +30,6 @@ contract GentoDao is DaoWithDelegation {
         descriptionHash = _descriptionHash;
     }
 
-    function getTokenPrice() public constant returns (uint tokenPrice) {
-        tokenPrice = this.balance / totalSupply;
-        NumberLogger("TokenPrice", tokenPrice);
-        return tokenPrice;
-    }
-
     function claimPayout(uint proposalNumber) public daoActive returns (uint amount) {
         Proposal storage proposal = proposals[proposalNumber];
 
@@ -49,14 +43,12 @@ contract GentoDao is DaoWithDelegation {
         return proposal.amount;
     }
 
-    function claimDividend(uint proposalNumber) public onlyShareholders {
-        Proposal storage proposal = proposals[proposalNumber];
-        require(dividends[msg.sender] > 0 && proposal.claimed[msg.sender] == false);
-
+    function claimDividend() public onlyShareholders {
+        require(dividends[msg.sender] > 0);
+        uint dividend = dividends[msg.sender];
         dividends[msg.sender] = 0;
-        require(msg.sender.send(dividends[msg.sender]));
+        require(msg.sender.send(dividend));
 
-        proposal.claimed[msg.sender] = true;
         Claimed("dividend", msg.sender, dividends[msg.sender]);
     }
 
@@ -119,7 +111,7 @@ contract GentoDao is DaoWithDelegation {
         uint tokenPrice = getTokenPrice();
         TokenPrice(tokenPrice);
         for (uint i = 0; i < shareholders.length; ++i) {
-            uint shareholderDividend = ((balances[shareholders[i]] * tokenPrice) * dividend) / 100;
+            uint shareholderDividend = (dividend * balances[shareholders[i]] * (10 ** 3)) / totalSupply / (10 ** 3);
             dividends[shareholders[i]] += shareholderDividend;
         }
     }
