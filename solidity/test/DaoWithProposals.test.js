@@ -297,7 +297,7 @@ contract('DaoWithProposals', function(accounts) {
     await contract.buy.sendTransaction({from: accounts[1], value: 100000})
 
     await contract.setCurrentTime.sendTransaction(2200000)
-    await contract.newDividendProposal.sendTransaction(accounts[0], 100, {from: accounts[0]})
+    await contract.newDividendProposal.sendTransaction("dividend", "dividend", 100, {from: accounts[0]})
 
     let proposalID = await getProposalID()
     await contract.vote.sendTransaction(proposalID, true, {from: accounts[0]})
@@ -307,10 +307,7 @@ contract('DaoWithProposals', function(accounts) {
     await contract.executeProposal.sendTransaction(proposalID)
     const p = await contract.getProposal.call(proposalID)
 
-    expect(p[0]).toBe(accounts[0])
     expect(Number(p[1])).toBe(0)
-    expect(p[2]).toBe('Dividend')
-    expect(p[3]).toBe('Dividend')
     expect(Number(p[4])).toBe(2200600)
     expect(p[5]).toBe(true)
     expect(p[6]).toBe(true)
@@ -326,7 +323,7 @@ contract('DaoWithProposals', function(accounts) {
     await contract.buy.sendTransaction({from: accounts[1], value: 100000})
 
     await contract.setCurrentTime.sendTransaction(2200000)
-    await contract.newDMRewardProposal.sendTransaction(accounts[0], 100, {from: accounts[0]})
+    await contract.newDMRewardProposal.sendTransaction("proposal", "description", 100, {from: accounts[0]})
     let proposalID = await getProposalID();
     await contract.vote.sendTransaction(proposalID, true, {from: accounts[0]})
     await contract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
@@ -335,10 +332,7 @@ contract('DaoWithProposals', function(accounts) {
     await contract.executeProposal.sendTransaction(proposalID)
     const p = await contract.getProposal.call(proposalID)
 
-    expect(p[0]).toBe(accounts[0])
     expect(Number(p[1])).toBe(0)
-    expect(p[2]).toBe('DMR')
-    expect(p[3]).toBe('DMR')
     expect(Number(p[4])).toBe(2200600)
     expect(p[5]).toBe(true)
     expect(p[6]).toBe(true)
@@ -359,7 +353,7 @@ contract('DaoWithProposals', function(accounts) {
     await contract.buy.sendTransaction({from: accounts[1], value: 100000})
 
     await contract.setCurrentTime.sendTransaction(2200000)
-    await contract.newDMRewardProposal.sendTransaction(accounts[0], 100, {from: accounts[0]})
+    await contract.newDMRewardProposal.sendTransaction("name", "description", 100, {from: accounts[0]})
     let proposalID = await getProposalID();
     // reset the time between ico start and end
     await contract.setCurrentTime.sendTransaction(1200000)
@@ -375,7 +369,7 @@ contract('DaoWithProposals', function(accounts) {
   it("should be possible to create a new DMR proposal only if the user are shareholder", async function() {
     await contract.setCurrentTime.sendTransaction(2200000)
     try {
-      await contract.newDMRewardProposal.sendTransaction(accounts[0], 100, {from: accounts[0]})
+      await contract.newDMRewardProposal.sendTransaction("name", "description", 100, {from: accounts[0]})
     } catch(e) {
         expect(e.message).toContain("VM Exception while processing transaction")
     }

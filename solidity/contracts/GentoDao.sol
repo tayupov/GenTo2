@@ -28,7 +28,7 @@ contract GentoDao is DaoWithDelegation {
     bool _dev) DaoWithDelegation(_maxAmountToRaiseInICO, _symbol, _name, _buyPriceStart, _buyPriceEnd, _saleStart, _saleEnd, _dev) public {
         descriptionHash = _descriptionHash;
     }
-    
+
     function claimPayout(uint proposalNumber) public daoActive returns (uint amount) {
         Proposal storage proposal = proposals[proposalNumber];
 
@@ -44,10 +44,10 @@ contract GentoDao is DaoWithDelegation {
 
     function claimDividend() public onlyShareholders {
         require(dividends[msg.sender] > 0);
-        uint dividend = dividends[msg.sender]; 
+        uint dividend = dividends[msg.sender];
         dividends[msg.sender] = 0;
         require(msg.sender.send(dividend));
-        
+
         Claimed("dividend", msg.sender, dividends[msg.sender]);
     }
 
@@ -62,7 +62,6 @@ contract GentoDao is DaoWithDelegation {
 
     function getVRTokenInFoW(FieldOfWork fow) public constant returns(uint vrt) {
         uint vrt1 = 0;
-        NumberLogger("shareholders.length", shareholders.length);
         for (uint i = 0; i < shareholders.length; ++i) {
             if (votingRewardTokens[shareholders[i]][uint(fow)] > 0) {
                 vrt1 += votingRewardTokens[shareholders[i]][uint(fow)];
@@ -105,7 +104,7 @@ contract GentoDao is DaoWithDelegation {
         }
     }
 
-    function distributeDividend(uint dividend) {
+    function distributeDividend(uint dividend) internal{
         for (uint i = 0; i < shareholders.length; ++i) {
             uint shareholderDividend = (dividend * balances[shareholders[i]] * (10 ** 3)) / totalSupply / (10 ** 3);
             dividends[shareholders[i]] += shareholderDividend;

@@ -8,7 +8,7 @@ contract GentoDaoFactory {
 
     event DAOCreated(address contractAddress);
 
-    function getDAOs() public returns (address[] daos) {
+    function getDAOs() public constant returns (address[] daos) {
         return DAOs;
     }
 

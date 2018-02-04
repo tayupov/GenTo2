@@ -38,7 +38,7 @@ contract('GentoDao', function(accounts) {
       await contract.buy.sendTransaction({from: accounts[i], value: Math.floor(totalSpendInICO*userBalances[i])})
     }
     await contract.setCurrentTime.sendTransaction(2000000)
-    await contract.newDividendProposal.sendTransaction(null, totalDividend, {from: accounts[1]})
+    await contract.newDividendProposal.sendTransaction("dividend", "dividend", totalDividend, {from: accounts[1]})
 
     for (let i=0; i<userBalances.length; i++){
       await contract.vote.sendTransaction(proposalID, true, {from: accounts[i]})
