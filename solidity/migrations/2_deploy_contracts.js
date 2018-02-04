@@ -49,5 +49,5 @@ module.exports = async function(deployer, network, accounts) {
   await roman.setCurrentTime.sendTransaction(100)
   await paul.setCurrentTime.sendTransaction(1000)
 
-  await paul.newProposal.sendTransaction("Test Proposal", "Wer hier abstimmt ist doof", "0x257c1440ef68c42cb5ccc0738883e39253719610", 0, 0, {from: accounts[1]})
+  await paul.newProposal.sendTransaction("Test Proposal", "Wer hier abstimmt ist doof", "0x257c1440ef68c42cb5ccc0738883e39253719610", web3.toWei(1, "MWEI"), 0, {from: accounts[1]})
 };

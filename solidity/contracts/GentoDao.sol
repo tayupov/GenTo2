@@ -5,18 +5,17 @@ import './DaoWithDelegation.sol';
 
 contract GentoDao is DaoWithDelegation {
     string public descriptionHash;
-    mapping(address => mapping(uint => uint256)) public votingRewardTokens;
+
     mapping(address => uint256) public dividends;
     mapping(address => uint256) public decisionmakerRewards;
 
-    uint8 finance = 25;
-    uint8 product = 25;
-    uint8 organisational = 25;
-    uint8 partner = 25;
+    uint8 public finance = 25;
+    uint8 public product = 25;
+    uint8 public organisational = 25;
+    uint8 public partner = 25;
 
     event Claimed(string claimType, address beneficiary, uint amount);
     event Balance(uint balance);
-    event TokenPrice(uint tokenPrice);
 
     function GentoDao(uint256 _maxAmountToRaiseInICO,
     string _symbol,
@@ -30,55 +29,45 @@ contract GentoDao is DaoWithDelegation {
         descriptionHash = _descriptionHash;
     }
 
-    function getTokenPrice() public constant returns (uint tokenPrice) {
-        tokenPrice = this.balance / totalSupply;
-        NumberLogger("TokenPrice", tokenPrice);
-        return tokenPrice;
-    }
-
     function claimPayout(uint proposalNumber) public daoActive returns (uint amount) {
         Proposal storage proposal = proposals[proposalNumber];
 
         require(proposal.finished && proposal.proposalPassed && proposal.recipient == msg.sender
             && proposal.claimed[msg.sender] == false && proposal.amount > 0);
 
-        /* require(msg.sender.send(proposal.amount)); */
         proposal.claimed[msg.sender] = true;
         Claimed("payout", msg.sender, proposal.amount);
+        require(msg.sender.send(proposal.amount));
 
         return proposal.amount;
     }
 
-    function claimDividend(uint proposalNumber) public onlyShareholders {
-        Proposal storage proposal = proposals[proposalNumber];
-        require(dividends[msg.sender] > 0 && proposal.claimed[msg.sender] == false);
-
+    function claimDividend() public onlyShareholders {
+        require(dividends[msg.sender] > 0);
+        uint dividend = dividends[msg.sender];
         dividends[msg.sender] = 0;
-        require(msg.sender.send(dividends[msg.sender]));
+        require(msg.sender.send(dividend));
 
-        proposal.claimed[msg.sender] = true;
         Claimed("dividend", msg.sender, dividends[msg.sender]);
     }
 
-    // wie bekommt jeder user DMR?
-    function claimDecisionMakerReward(uint proposalNumber) public onlyShareholders {
-        Proposal storage proposal = proposals[proposalNumber];
+    function claimDecisionMakerReward() public onlyShareholders {
         require(decisionmakerRewards[msg.sender] > 0);
+        uint decisionmakerReward = decisionmakerRewards[msg.sender];
         decisionmakerRewards[msg.sender] = 0;
-        require(msg.sender.send(decisionmakerRewards[msg.sender]));
-        proposal.claimed[msg.sender] = true;
+        require(msg.sender.send(decisionmakerReward));
+
         Claimed("decision maker reward", msg.sender, decisionmakerRewards[msg.sender]);
     }
 
     function getVRTokenInFoW(FieldOfWork fow) public constant returns(uint vrt) {
         uint vrt1 = 0;
-        NumberLogger("shareholders.length", shareholders.length);
         for (uint i = 0; i < shareholders.length; ++i) {
             if (votingRewardTokens[shareholders[i]][uint(fow)] > 0) {
                 vrt1 += votingRewardTokens[shareholders[i]][uint(fow)];
             }
         }
-        // check for 0 and setting to any number so it doesn't throw
+        // check for 0 and setting to any number so the calculation doesn't throw
         if (vrt1 == 0) {
             vrt1 = 1;
         }
@@ -89,7 +78,7 @@ contract GentoDao is DaoWithDelegation {
         return votingRewardTokens[dm][uint(fow)];
     }
 
-    function distributeDMReward(uint dmr) {
+    function distributeDMReward(uint dmr) private {
         uint financeDmr = (dmr * finance) / 100;
         uint productDmr = (dmr * product) / 100;
         uint organisationalDmr = (dmr * organisational) / 100;
@@ -107,19 +96,17 @@ contract GentoDao is DaoWithDelegation {
             decisionmakerRewards[shareholders[j]] = dmrSum;
         }
 
-        for (uint l = 0; l < shareholders.length; ++l) {
-            votingRewardTokens[shareholders[l]][uint(FieldOfWork.Finance)] = 0;
-            votingRewardTokens[shareholders[l]][uint(FieldOfWork.Product)] = 0;
-            votingRewardTokens[shareholders[l]][uint(FieldOfWork.Organisational)] = 0;
-            votingRewardTokens[shareholders[l]][uint(FieldOfWork.Partnership)] = 0;
+        for (uint r = 0; r < shareholders.length; ++r) {
+            votingRewardTokens[shareholders[r]][uint(FieldOfWork.Finance)] = 0;
+            votingRewardTokens[shareholders[r]][uint(FieldOfWork.Product)] = 0;
+            votingRewardTokens[shareholders[r]][uint(FieldOfWork.Organisational)] = 0;
+            votingRewardTokens[shareholders[r]][uint(FieldOfWork.Partnership)] = 0;
         }
     }
 
-    function distributeDividend(uint dividend) {
-        uint tokenPrice = getTokenPrice();
-        TokenPrice(tokenPrice);
+    function distributeDividend(uint dividend) internal{
         for (uint i = 0; i < shareholders.length; ++i) {
-            uint shareholderDividend = ((balances[shareholders[i]] * tokenPrice) * dividend) / 100;
+            uint shareholderDividend = (dividend * balances[shareholders[i]] * (10 ** 3)) / totalSupply / (10 ** 3);
             dividends[shareholders[i]] += shareholderDividend;
         }
     }

@@ -20,6 +20,10 @@ contract StandardTokenWithShareholderList is DevContract, StandardToken{
         symbol = _symbol;
         name = _name;
     }
+    
+    function isShareholder(address userAddress) public constant returns (bool shareholder) {
+      return balances[userAddress] > 0;
+    }
 
     function sendEtherToWallet(uint val) public payable {
         msg.sender.send(val);

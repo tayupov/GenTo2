@@ -254,7 +254,7 @@ contract('DaoWithProposals', function(accounts) {
   it("should be possible to create a new DMR proposal only if the user are shareholder", async function() {
     await contract.setCurrentTime.sendTransaction(2200000)
     try {
-      await contract.newDMRewardProposal.sendTransaction(accounts[0], 100, {from: accounts[0]})
+      await contract.newDMRewardProposal.sendTransaction("name", "description", 100, {from: accounts[0]})
     } catch(e) {
         expect(e.message).toContain("VM Exception while processing transaction")
     }
