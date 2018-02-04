@@ -105,9 +105,9 @@ contract GentoDao is DaoWithDelegation {
         }
     }
 
-    function distributeDividend(uint dividend) private {
+    function distributeDividend(uint dividend) {
         for (uint i = 0; i < shareholders.length; ++i) {
-            uint shareholderDividend = ((totalSupply * dividend) / 100) / (totalSupply / balances[shareholders[i]]);
+            uint shareholderDividend = (dividend * balances[shareholders[i]] * (10 ** 3)) / totalSupply / (10 ** 3);
             dividends[shareholders[i]] += shareholderDividend;
         }
     }
