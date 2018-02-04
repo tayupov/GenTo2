@@ -56,144 +56,144 @@ contract('GentoDao', function(accounts) {
   */
 /*
   // getTokenPrice()
-  it("should return the token price after executing the dividend proposal", async function() {
-    await proposalHelper.simulateIco({1: 200})
-    await contract.newDividendProposal.sendTransaction(accounts[1], 100, {from: accounts[1]})
-    let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
-    await proposalHelper.voteBulk(proposalID, {1: true})
-    await contract.executeProposal.sendTransaction(proposalID)
-    let tokenPrice = (await proposalHelper.listenForEvent('TokenPrice')).tokenPrice
-    expect(+tokenPrice).toBe(28)
-  })
+  // it("should return the token price after executing the dividend proposal", async function() {
+  //   await proposalHelper.simulateIco({1: 200})
+  //   await contract.newDividendProposal.sendTransaction(accounts[1], 100, {from: accounts[1]})
+  //   // let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+  //   await proposalHelper.voteBulk(0, {1: true})
+  //   await contract.executeProposal.sendTransaction(0)
+  //   let tokenPrice = (await proposalHelper.listenForEvent('TokenPrice')).tokenPrice
+  //   expect(+tokenPrice).toBe(28)
+  // })
 
-  // claimPayout()
-  it("should be possible to claim the payout after the proposal period is over", async function() {
-    await proposalHelper.simulateIco({0: 100, 1: 200, 2: 300})
-    // create a new proposal in field of work 0
-    await contract.newProposal.sendTransaction('Prop','Prop', accounts[1], 345, 0, {from: accounts[1]})
-    let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
-    await proposalHelper.voteBulk(proposalID, {0: true, 1: true, 2: true})
-    // execute the proposal therefor the proposal gets passed and finished
-    await contract.executeProposal.sendTransaction(proposalID)
-    // get the proposal by id
-    var p = await proposalHelper.getFormattedProposal(proposalID)
-    // claim payout is only possible if the proposal is finished and passed
-    expect(p.finished).toBe(true)
-    expect(p.proposalPassed).toBe(true)
-    // get the proposal payout by id
-    await contract.claimPayout.sendTransaction(proposalID, {from: accounts[1]})
-    // the proposal payout should be the same as the param value while creating the proposal
-    // user 1 is the creator of the proposal and he gets the payout
-    // truffle returns strings for numbers
-    expect(+p.amount).toBe(345)
-  })
-
-  // claimPayout()
-  it("should ensure that the claimer of the payout can get the payout only once", async function() {
-    await proposalHelper.simulateIco({5: 100, 6: 200})
-    // create a new proposal in field of work 0
-    await contract.newProposal.sendTransaction('Prop','Prop', accounts[5], 345, 0, {from: accounts[5]})
-    let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
-    await proposalHelper.voteBulk(proposalID, {5: true, 6: true})
-    // execute the proposal therefor the proposal gets passed and finished
-    await contract.executeProposal.sendTransaction(proposalID)
-    // get the proposal by id
-    var p = await proposalHelper.getFormattedProposal(proposalID)
-    // user 1 claims the payout for the first time
-    await contract.claimPayout.sendTransaction(proposalID, {from: accounts[5]})
-    //if user 5 claims the payout again it should be rejected
-    try {
-      await contract.claimPayout.sendTransaction(proposalID, {from: accounts[5]})
-      await contract.claimPayout.sendTransaction(proposalID, {from: accounts[5]})
-      await contract.claimPayout.sendTransaction(proposalID, {from: accounts[5]})
-    } catch(e) {
-        expect(e.message).toContain("VM Exception while processing transaction: ")
-    }
-  })
-
-  // claimDividend()
-  it("should be able for different users to claim the dividend for a succesful proposal", async function() {
-    await proposalHelper.simulateIco({1: 100, 2: 200})
-    await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 500, 0, {from: accounts[1]})
-    let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
-    await proposalHelper.voteBulk(proposalID, {1: true, 2: true})
-    await contract.executeProposal.sendTransaction(proposalID)
-    var p1 = await proposalHelper.getFormattedProposal(proposalID)
-    // proposals is passed and finished
-    expect(p1.finished).toBe(true)
-    expect(p1.proposalPassed).toBe(true)
-    expect(+p1.dividend).toBe(0)
-    // create dividend proposal
-    await contract.setCurrentTime.sendTransaction(2200000)
-    await contract.newDividendProposal.sendTransaction(accounts[1], 100, {from: accounts[1]})
-    let proposalDividendID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
-    await proposalHelper.voteBulk(proposalDividendID, {1: true, 2: true})
-    await contract.executeProposal.sendTransaction(proposalDividendID)
-    var p2 = await proposalHelper.getFormattedProposal(proposalDividendID)
-
-    await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[1]})
-    await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[2]})
-
-    expect(+p2.dividend).toBe(100)
-  })
-
-  // claimDividend()
-  it("should ensure that the shareholder can claim the dividend only once", async function() {
-    await proposalHelper.simulateIco({1: 100, 2: 200})
-    await contract.newDividendProposal.sendTransaction(accounts[1], 100, {from: accounts[1]})
-    let proposalDividendID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
-    await proposalHelper.voteBulk(proposalDividendID, {1: true, 2: true})
-    await contract.executeProposal.sendTransaction(proposalDividendID)
-
-    await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[1]})
-    await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[2]})
-    // user 1 tries to claim again but it should fail
-    try {
-      await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[1]})
-    } catch(e) {
-        expect(e.message).toContain("VM Exception while processing transaction: ")
-    }
-  })
-
-  // claimDMR()
-  it("should ensure that the decision maker reward can be claimed only once", async function() {
-    await proposalHelper.simulateIco({1: 100, 2: 200})
-    await contract.newDMRewardProposal.sendTransaction(accounts[1], 100, {from: accounts[1]})
-    let proposalDMRID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
-    await proposalHelper.voteBulk(proposalDMRID, {1: true, 2: true})
-    await contract.executeProposal.sendTransaction(proposalDMRID)
-
-    await contract.claimDecisionMakerReward.sendTransaction(proposalDMRID, {from: accounts[1]})
-    try {
-      await contract.claimDecisionMakerReward.sendTransaction(proposalDMRID, {from: accounts[1]})
-    } catch(e) {
-        expect(e.message).toContain("VM Exception while processing transaction: ")
-    }
-  })
-
-  // claimDMR()
-  it("should allow for a decision maker to claim the voting reward token", async function() {
-    await proposalHelper.simulateIco({1: 100, 2: 200})
-    await contract.newDMRewardProposal.sendTransaction(accounts[1], 100, {from: accounts[1]})
-    let proposalVRTID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
-    await proposalHelper.voteBulk(proposalVRTID, {1: true, 2: true})
-    await contract.executeProposal.sendTransaction(proposalVRTID)
-    var p = await proposalHelper.getFormattedProposal(proposalVRTID)
-    expect(p.finished).toBe(true)
-    expect(p.proposalPassed).toBe(true)
-    // if shareholder claim the DMR it's required that the decision maker reward of the shareholder is greater than 0
-    expect(+await contract.decisionmakerRewards.call(accounts[1])).toBeGreaterThan(0)
-    expect(+await contract.decisionmakerRewards.call(accounts[2])).toBeGreaterThan(0)
-
-    await contract.claimDecisionMakerReward.sendTransaction(proposalVRTID, {from: accounts[1]})
-    await contract.claimDecisionMakerReward.sendTransaction(proposalVRTID, {from: accounts[2]})
-    expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[1], 0)).toBe(0)
-    expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[2], 0)).toBe(0)
-    // should be 1 because the sum of VRT after executing is 0 and then it's set to 1
-    expect(+await contract.getVRTokenInFoW.call(0)).toBe(1)
-    // get the amount of DMR during the proposal creation
-    expect(+p.dmr).toBe(100)
-  })
+  // // claimPayout()
+  // it("should be possible to claim the payout after the proposal period is over", async function() {
+  //   await proposalHelper.simulateIco({0: 100, 1: 200, 2: 300})
+  //   // create a new proposal in field of work 0
+  //   await contract.newProposal.sendTransaction('Prop','Prop', accounts[1], 345, 0, {from: accounts[1]})
+  //   // let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+  //   await proposalHelper.voteBulk(0, {0: true, 1: true, 2: true})
+  //   // execute the proposal therefor the proposal gets passed and finished
+  //   await contract.executeProposal.sendTransaction(0)
+  //   // get the proposal by id
+  //   var p = await proposalHelper.getFormattedProposal(0)
+  //   // claim payout is only possible if the proposal is finished and passed
+  //   expect(p.finished).toBe(true)
+  //   expect(p.proposalPassed).toBe(true)
+  //   // get the proposal payout by id
+  //   await contract.claimPayout.sendTransaction(0, {from: accounts[1]})
+  //   // the proposal payout should be the same as the param value while creating the proposal
+  //   // user 1 is the creator of the proposal and he gets the payout
+  //   // truffle returns strings for numbers
+  //   expect(+p.amount).toBe(345)
+  // })
+  //
+  // // claimPayout()
+  // it("should ensure that the claimer of the payout can get the payout only once", async function() {
+  //   await proposalHelper.simulateIco({5: 100, 6: 200})
+  //   // create a new proposal in field of work 0
+  //   await contract.newProposal.sendTransaction('Prop','Prop', accounts[5], 345, 0, {from: accounts[5]})
+  //   let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+  //   await proposalHelper.voteBulk(proposalID, {5: true, 6: true})
+  //   // execute the proposal therefor the proposal gets passed and finished
+  //   await contract.executeProposal.sendTransaction(proposalID)
+  //   // get the proposal by id
+  //   var p = await proposalHelper.getFormattedProposal(proposalID)
+  //   // user 1 claims the payout for the first time
+  //   await contract.claimPayout.sendTransaction(proposalID, {from: accounts[5]})
+  //   //if user 5 claims the payout again it should be rejected
+  //   try {
+  //     await contract.claimPayout.sendTransaction(proposalID, {from: accounts[5]})
+  //     await contract.claimPayout.sendTransaction(proposalID, {from: accounts[5]})
+  //     await contract.claimPayout.sendTransaction(proposalID, {from: accounts[5]})
+  //   } catch(e) {
+  //       expect(e.message).toContain("VM Exception while processing transaction: ")
+  //   }
+  // })
+  //
+  // // claimDividend()
+  // it("should be able for different users to claim the dividend for a succesful proposal", async function() {
+  //   await proposalHelper.simulateIco({1: 100, 2: 200})
+  //   await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 500, 0, {from: accounts[1]})
+  //   let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+  //   await proposalHelper.voteBulk(proposalID, {1: true, 2: true})
+  //   await contract.executeProposal.sendTransaction(proposalID)
+  //   var p1 = await proposalHelper.getFormattedProposal(proposalID)
+  //   // proposals is passed and finished
+  //   expect(p1.finished).toBe(true)
+  //   expect(p1.proposalPassed).toBe(true)
+  //   expect(+p1.dividend).toBe(0)
+  //   // create dividend proposal
+  //   await contract.setCurrentTime.sendTransaction(2200000)
+  //   await contract.newDividendProposal.sendTransaction(accounts[1], 100, {from: accounts[1]})
+  //   let proposalDividendID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+  //   await proposalHelper.voteBulk(proposalDividendID, {1: true, 2: true})
+  //   await contract.executeProposal.sendTransaction(proposalDividendID)
+  //   var p2 = await proposalHelper.getFormattedProposal(proposalDividendID)
+  //
+  //   await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[1]})
+  //   await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[2]})
+  //
+  //   expect(+p2.dividend).toBe(100)
+  // })
+  //
+  // // claimDividend()
+  // it("should ensure that the shareholder can claim the dividend only once", async function() {
+  //   await proposalHelper.simulateIco({1: 100, 2: 200})
+  //   await contract.newDividendProposal.sendTransaction(accounts[1], 100, {from: accounts[1]})
+  //   let proposalDividendID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+  //   await proposalHelper.voteBulk(proposalDividendID, {1: true, 2: true})
+  //   await contract.executeProposal.sendTransaction(proposalDividendID)
+  //
+  //   await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[1]})
+  //   await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[2]})
+  //   // user 1 tries to claim again but it should fail
+  //   try {
+  //     await contract.claimDividend.sendTransaction(proposalDividendID, {from: accounts[1]})
+  //   } catch(e) {
+  //       expect(e.message).toContain("VM Exception while processing transaction: ")
+  //   }
+  // })
+  //
+  // // claimDMR()
+  // it("should ensure that the decision maker reward can be claimed only once", async function() {
+  //   await proposalHelper.simulateIco({1: 100, 2: 200})
+  //   await contract.newDMRewardProposal.sendTransaction(accounts[1], 100, {from: accounts[1]})
+  //   let proposalDMRID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+  //   await proposalHelper.voteBulk(proposalDMRID, {1: true, 2: true})
+  //   await contract.executeProposal.sendTransaction(proposalDMRID)
+  //
+  //   await contract.claimDecisionMakerReward.sendTransaction(proposalDMRID, {from: accounts[1]})
+  //   try {
+  //     await contract.claimDecisionMakerReward.sendTransaction(proposalDMRID, {from: accounts[1]})
+  //   } catch(e) {
+  //       expect(e.message).toContain("VM Exception while processing transaction: ")
+  //   }
+  // })
+  //
+  // // claimDMR()
+  // it("should allow for a decision maker to claim the voting reward token", async function() {
+  //   await proposalHelper.simulateIco({1: 100, 2: 200})
+  //   await contract.newDMRewardProposal.sendTransaction(accounts[1], 100, {from: accounts[1]})
+  //   let proposalVRTID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+  //   await proposalHelper.voteBulk(proposalVRTID, {1: true, 2: true})
+  //   await contract.executeProposal.sendTransaction(proposalVRTID)
+  //   var p = await proposalHelper.getFormattedProposal(proposalVRTID)
+  //   expect(p.finished).toBe(true)
+  //   expect(p.proposalPassed).toBe(true)
+  //   // if shareholder claim the DMR it's required that the decision maker reward of the shareholder is greater than 0
+  //   expect(+await contract.decisionmakerRewards.call(accounts[1])).toBeGreaterThan(0)
+  //   expect(+await contract.decisionmakerRewards.call(accounts[2])).toBeGreaterThan(0)
+  //
+  //   await contract.claimDecisionMakerReward.sendTransaction(proposalVRTID, {from: accounts[1]})
+  //   await contract.claimDecisionMakerReward.sendTransaction(proposalVRTID, {from: accounts[2]})
+  //   expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[1], 0)).toBe(0)
+  //   expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[2], 0)).toBe(0)
+  //   // should be 1 because the sum of VRT after executing is 0 and then it's set to 1
+  //   expect(+await contract.getVRTokenInFoW.call(0)).toBe(1)
+  //   // get the amount of DMR during the proposal creation
+  //   expect(+p.dmr).toBe(100)
+  // })
 
   // getVRTokenInFoWOfDecisionMaker() + getVRTokenInFoW()
   it("compute the right amount of voting reward token if the proposal isn't passed", async function() {

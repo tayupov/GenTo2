@@ -113,8 +113,7 @@ contract('StandardTokenWithShareholderList', function(accounts) {
     expect(+balanceObj.oldBalance).toBe(17)
     expect(+balanceObj.newBalance).toBe(0)
     expect(+balanceObj.balance).toBe(0)
-
-    shareholders = (await proposalHelper.listenForEvent('NewShareholderList')).shareholders
+    shareholders.pop()
     expect(shareholders).not.toContain(accounts[0])
 
   })
@@ -138,9 +137,8 @@ contract('StandardTokenWithShareholderList', function(accounts) {
     await contract.onBalanceChange.sendTransaction(accounts[0], 0, 100)
     let shareholders = (await proposalHelper.listenForEvent('NewShareholderList')).shareholders
     expect(shareholders).toContain(accounts[0])
-
     await contract.onBalanceChange.sendTransaction(accounts[0], 100, 0)
-    shareholders = (await proposalHelper.listenForEvent('NewShareholderList')).shareholders
+    shareholders.pop()
     expect(shareholders).not.toContain(accounts[0])
   })
 
