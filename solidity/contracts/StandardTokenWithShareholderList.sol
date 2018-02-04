@@ -16,7 +16,7 @@ contract StandardTokenWithShareholderList is DevContract, StandardToken{
     name = _name;
   }
 
-  function isShareholder(address userAddress) public returns (bool shareholder) {
+  function isShareholder(address userAddress) public constant returns (bool shareholder) {
     return balances[userAddress] > 0;
   }
 

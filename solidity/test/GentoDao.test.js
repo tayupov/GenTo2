@@ -22,7 +22,33 @@ contract('GentoDao', function(accounts) {
     // return only the properties which are important for testing
     return log[0].args;
   }
+  it("distributes a dividend evenly to all shareholders", async function () {
+  const totalDividend = web3.toWei(0.8, "ether")
+  const totalSpendInICO = web3.toWei(1, "ether")
+  const userBalances = [0.3, 0.3, 0.25, 0.15]
+  const buyPrice =1000
+    contract = await GentoDaoDeployer({
+      buyPriceStart: buyPrice,
+      buyPriceEnd: buyPrice,
+      totalSupply: web3.toWei(1, "ether")
+    })
+    const proposalID = 0
+    await contract.setCurrentTime.sendTransaction(1000000)
+    for (let i=0; i<userBalances.length; i++) {
+      await contract.buy.sendTransaction({from: accounts[i], value: Math.floor(totalSpendInICO*userBalances[i])})
+    }
+    await contract.setCurrentTime.sendTransaction(2000000)
+    await contract.newDividendProposal.sendTransaction("dividend", "dividend", totalDividend, {from: accounts[1]})
 
+    for (let i=0; i<userBalances.length; i++){
+      await contract.vote.sendTransaction(proposalID, true, {from: accounts[i]})
+    }
+    await contract.setCurrentTime.sendTransaction(2100000)
+    await contract.executeProposal.sendTransaction(proposalID)
+    for (let i=0; i<userBalances.length; i++) {
+      expect(+await contract.dividends.call(accounts[i])).toBeCloseTo(userBalances[i]*totalDividend, -1)
+    }
+  })
   /**
   METHODS
   */

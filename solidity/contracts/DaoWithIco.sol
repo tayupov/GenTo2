@@ -32,7 +32,8 @@ contract DaoWithIco is StandardTokenWithShareholderList{
     uint256 _buyPriceEnd,
     uint256 _saleStart,
     uint256 _saleEnd,
-    bool _dev) StandardTokenWithShareholderList(_symbol, _name, _dev)  public {
+    bool _dev) StandardTokenWithShareholderList(_symbol, _name, _dev)  public 
+    {
         require(_saleEnd > _saleStart);
 
         buyPriceStart = _buyPriceStart;
@@ -55,7 +56,7 @@ contract DaoWithIco is StandardTokenWithShareholderList{
         return currentPrice;
     }
 
-    function buy() icoRunning payable returns (uint amount) {
+    function buy() icoRunning public payable returns (uint amount) {
         // calculates the amount
         amount = msg.value / getBuyPrice();
         // checks if it has enough to sell
