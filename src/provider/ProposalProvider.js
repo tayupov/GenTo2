@@ -4,24 +4,33 @@ import { default as contract } from 'truffle-contract'
 
 import web3 from 'utils/web3';
 
-const mapProposal =  (proposalNumber, proposalArray) => {
+const mapProposal =  (proposalNumber, proposalArray, proposalStatistics) => {
+
   return {
       proposalNumber: proposalNumber,
       recipient:proposalArray[0],
-      amount:proposalArray[1],
+       amount:parseInt(proposalArray[1], 10),
       name:proposalArray[2],
       description:proposalArray[3],
-      proposalDeadline:proposalArray[4],
-      finished:proposalArray[5],
+      //proposalDeadline:proposalArray[4], // Deprecated
+      finished:parseInt(proposalArray[5], 10),
       proposalPassed:proposalArray[6],
-      passedPercent: proposalArray[7],
-      dividend:proposalArray[8]
+      passedPercent: parseInt(proposalArray[7], 10), // Deprecated
+      fieldOfWork: proposalArray[8],
+      dividend:parseInt(proposalArray[9], 10),
+      approve:parseInt(proposalStatistics[0], 10),
+      disapprove:parseInt(proposalStatistics[1], 10),
+      percent:parseInt(proposalStatistics[2], 10),
+      proposalStartTime: parseInt(proposalStatistics[3], 10),
+      proposalDeadline:parseInt(proposalStatistics[4], 10),
+      currentTime:parseInt(proposalStatistics[5], 10)
   }
 }
-const mapVote =  (voteArray) => {
+const mapVote =  (voteArray, influence) => {
   return {
       voted : voteArray[0],
-      support: voteArray[1]
+      support: voteArray[1],
+      influence: influence
   }
 }
 
@@ -30,15 +39,18 @@ export async function loadProposal(daoAddress, proposalNumber) {
     GentoDAO.setProvider(web3.currentProvider);
 
     var proposalArray = await GentoDAO.at(daoAddress).getProposal(proposalNumber);
-    return mapProposal(proposalNumber, proposalArray);
+    var proposalStatistics = await GentoDAO.at(daoAddress).calculateVotingStatistics(proposalNumber);
+    var mappedProposal = mapProposal(proposalNumber, proposalArray, proposalStatistics);
+    return mappedProposal;
 }
 
-export async function loadVote(daoAddress, proposalNumber, address) {
+export async function loadVote(daoAddress, proposal, address) {
     const GentoDAO = contract(GentoDAOArtifact);
     GentoDAO.setProvider(web3.currentProvider);
-    var voteArray = await GentoDAO.at(daoAddress).getVote(proposalNumber, address);
+    var voteArray = await GentoDAO.at(daoAddress).getVote(proposal.proposalNumber, address);
+    var influence = await GentoDAO.at(daoAddress).getInfluenceOfVoter(address, proposal.fieldOfWork);
 
-    return mapVote(voteArray);
+    return mapVote(voteArray, influence);
 }
 
 
@@ -48,16 +60,41 @@ export async function vote(daoAddress, proposalNumber, supportsProposal, from) {
 
     var dao = await GentoDAO.at(daoAddress);
     var parameters = [proposalNumber, supportsProposal]
-    if (await willThrow(dao, parameters, from)) {
-        console.log("can not create a proposal, either the ico is still running or the user is not a shareholder. UX People, tell the user!")
+    if (await willThrow(dao.vote, parameters, from)) {
+        return -1;
     } else {
         return dao.vote.sendTransaction(...parameters, {from})
     }
 }
 
-async function willThrow(dao, parameters, from) {
+export async function onVote(daoAddress, proposalNumber, cb) {
+  const GentoDAO = contract(GentoDAOArtifact);
+  GentoDAO.setProvider(web3.currentProvider);
+  const dao = await GentoDAO.at(daoAddress);
+  dao.Voted().watch((err, response) => {
+    if (err) {
+      return cb(err, null)
+    }
+    return cb(null, response.args)
+  });
+}
+
+export async function executeProposal(daoAddress, proposalNumber, from) {
+    const GentoDAO = contract(GentoDAOArtifact);
+    GentoDAO.setProvider(web3.currentProvider);
+
+    var dao = await GentoDAO.at(daoAddress);
+    var parameters = [proposalNumber]
+    if (await willThrow(dao.executeProposal, parameters, from)) {
+        return -1
+    } else {
+        return dao.executeProposal.sendTransaction(...parameters, {from})
+    }
+}
+
+async function willThrow(command, parameters, from) {
     try {
-        await dao.vote.estimateGas(...parameters, {from})
+        await command.estimateGas(...parameters, {from})
         return false
     } catch (e) {
         return true
