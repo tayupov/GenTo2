@@ -19,5 +19,17 @@ const validProposalKeys = [
   'weiAmount',
   'fieldOfWork'
 ]
+const validDividendProposalKeys = [
+  'name',
+  'description',
+  'weiAmount'
+]
+const validDmrProposalKeys = [
+  'name',
+  'description',
+  'weiAmount'
+]
 
 export const omitInvalidProposalKeys = (state) => _.pick(state, validProposalKeys)
+export const omitInvalidDividendProposalKeys = (state) => _.pick(state, validDividendProposalKeys)
+export const omitInvalidDmrProposalKeys = (state) => _.pick(state, validDmrProposalKeys)
