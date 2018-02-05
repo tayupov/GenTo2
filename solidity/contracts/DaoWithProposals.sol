@@ -143,7 +143,6 @@ contract DaoWithProposals is DaoWithIco {
         proposal.name = name;
         proposal.description = description;
         proposal.amount = weiAmount;
-        proposal.proposalHash = keccak256(beneficiary, weiAmount); // TODO add transactionBytecode
         proposal.proposalStartTime  = currentTime();
         proposal.proposalDeadline = currentTime() + debatingPeriodInMinutes * 1 minutes;
         proposal.finished = false;

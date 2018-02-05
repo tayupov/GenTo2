@@ -20,11 +20,13 @@ const validProposalKeys = [
   'fieldOfWork'
 ]
 const validDividendProposalKeys = [
-  'beneficiary',
+  'name',
+  'description',
   'weiAmount'
 ]
 const validDmrProposalKeys = [
-  'beneficiary',
+  'name',
+  'description',
   'weiAmount'
 ]
 
