@@ -1,66 +1,117 @@
 import React from 'react';
 
-import { loadProposal, loadVote, vote } from 'provider/ProposalProvider'
+import { loadProposal, onVote, loadVote, vote, executeProposal } from 'provider/ProposalProvider'
 
 import Proposal from './Proposal';
 
 export default class ProposalContainer extends React.Component {
 
-    constructor() {
-        super();
-        this.state = {
-                proposal: {
-                    proposalNumber: "",
-                    recipient:"",
-                    amount:"",
-                    name:"",
-                    description:"",
-                    proposalDeadline:"",
-                    finished:"",
-                    proposalPassed:"",
-                    passedPercent: "",
-                    dividend:""
-                },
-            vote: {
-                support: "?",
-                voted: "?"
-
-            }
-        }
+  constructor() {
+    super();
+    this.state = {
+      proposal: {
+          proposalNumber: "",
+          recipient: "",
+          amount: "",
+          name: "",
+          fieldOfWorkDescription: "",
+          description: "",
+          proposalDeadline: "",
+          finished: "",
+          stateDescription: "",
+          proposalPassed: "",
+          passedPercent: "",
+          dividend: ""
+      },
+      vote: {
+          support: "",
+          voted: "",
+          stateDescription: ""
+      }
     }
+  }
 
-    async componentDidMount() {
+  async loadStateFromBlockchain() {
+    const proposal = await loadProposal(this.props.address, this.props.proposalNumber)
 
-        const proposal = await loadProposal(this.props.address, this.props.proposalNumber)
-        proposal.amount = proposal.amount.toString(10)
-        proposal.dividend = proposal.dividend.toString(10)
-        proposal.passedPercent = proposal.passedPercent.toString(10)
-        proposal.proposalDeadline = proposal.proposalDeadline.toString(10)
-        this.setState({proposal});
-        
-        const vote = await loadVote(this.props.address, this.props.proposalNumber, this.props.account)
-        this.setState({vote});
+    switch (proposal.fieldOfWork) {
+      case 0: proposal.fieldOfWorkDescription = "Finance"; break
+      case 1: proposal.fieldOfWorkDescription = "Organisational"; break
+      case 2: proposal.fieldOfWorkDescription = "Product"; break
+      case 3: proposal.fieldOfWorkDescription = "Marketing"; break
+      default: proposal.fieldOfWorkDescription = "Unknown"
     }
-    async handleCreate() {
-
+    if (!proposal.isFinished) {
+      proposal.stateDescription = "Proposal pending"
+    } else if (proposal.isFinished && !proposal.proposalPassed) {
+      proposal.stateDescription = "Proposal rejected"
+    } else if (proposal.isFinished && proposal.proposalPassed) {
+      proposal.stateDescription = "Proposal passed"
+    } else {
+      proposal.stateDescription = "No information"
     }
+    this.setState({proposal});
 
-
-    async approve(){
-        await vote(this.props.address, this.props.proposalNumber,true, this.props.account)
+    const vote = await loadVote(this.props.address, proposal, this.props.account)
+    if (vote.voted && vote.support) {
+      vote.stateDescription = "You approved this proposal"
+    } else if (vote.voted && !vote.support) {
+      vote.stateDescription = "You disapproved this proposal"
+    } else if (!vote.voted) {
+      vote.stateDescription = "You did not vote on this proposal yet."
+    } else {
+      vote.stateDescription = "No information"
     }
+    vote.influenceDescription = "Your influence in this field of work is " + vote.influence;
+    this.setState({vote});
+  }
 
-    async disapprove(){
-        await vote(this.props.address, this.props.proposalNumber,false, this.props.account)
+  async componentWillReceiveProps(nextProps) {
+    this.setState({ loading: true })
+    this.loadStateFromBlockchain()
+  }
 
+  async componentDidMount() {
+    this.loadStateFromBlockchain()
+    onVote(this.props.address, this.props.proposalNumber, (err, eventData) => {
+      this.loadStateFromBlockchain()
+      console.log("onVote", eventData)
+      //TODO UX People: It would be lovely if a popup would show up indicating that somebody just voted
+    })
+  }
+
+  async approveCallback(){
+    var res = await vote(this.props.address, this.props.proposalNumber,true, this.props.account)
+
+    if(res === -1){
+      this.props.notify("Vote failed. Please check deadline and priviliges.")
     }
+  }
 
-    render() {
-        return (<Proposal proposal={this.state.proposal}
-                          vote={this.state.vote}
-                          approve={this.approve.bind(this)}
-                          disapprove={this.disapprove.bind(this)}
-                          address={this.props.address} />
-                )
+  async disapproveCallback(){
+    var res = await vote(this.props.address, this.props.proposalNumber,false, this.props.account)
+
+    if(res === -1){
+      this.props.notify("Vote failed. Please check deadline and priviliges.")
     }
+  }
+
+  async executeCallback(){
+    var res = await executeProposal(this.props.address, this.props.proposalNumber)
+
+    if(res === -1){
+      this.props.notify("Execution failed. Please check deadline, status and priviliges.")
+    }
+  }
+
+  render() {
+    return (
+      <Proposal proposal={this.state.proposal}
+                vote={this.state.vote}
+                approveCallback={this.approveCallback.bind(this)}
+                disapproveCallback={this.disapproveCallback.bind(this)}
+                executeCallback={this.executeCallback.bind(this)}
+                address={this.props.address} />
+    )
+  }
 }

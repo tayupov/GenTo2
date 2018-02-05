@@ -18,6 +18,7 @@ contract DaoWithProposals is DaoWithIco {
         string name;
         string description;
         FieldOfWork fieldOfWork;
+        uint proposalStartTime;
         uint proposalDeadline;
         bool finished;
         bool proposalPassed;
@@ -69,11 +70,13 @@ contract DaoWithProposals is DaoWithIco {
     bool finished,
     bool proposalPassed,
     uint passedPercent,
+    uint fieldOfWork,
     uint dividend,
     uint dmr) {
         Proposal storage proposal = proposals[proposalID];
         return (proposal.recipient, proposal.amount, proposal.name, proposal.description, proposal.proposalDeadline,
-        proposal.finished, proposal.proposalPassed, proposal.passedPercent, proposal.dividend, proposal.dmr);
+        proposal.finished, proposal.proposalPassed, proposal.passedPercent, uint(proposal.fieldOfWork), proposal
+        .dividend, proposal.dmr);
     }
     function getVote(uint proposalID, address voter) public constant returns (bool voted, bool support) {
         Proposal storage proposal = proposals[proposalID];
@@ -140,6 +143,7 @@ contract DaoWithProposals is DaoWithIco {
         proposal.name = name;
         proposal.description = description;
         proposal.amount = weiAmount;
+        proposal.proposalStartTime  = currentTime();
         proposal.proposalDeadline = currentTime() + debatingPeriodInMinutes * 1 minutes;
         proposal.finished = false;
         proposal.fieldOfWork = fieldOfWork;
@@ -175,9 +179,21 @@ contract DaoWithProposals is DaoWithIco {
             && !proposal.finished);                                             // and it has not already been finished
             // && proposal.proposalHash == sha3(proposal.recipient, proposal.amount)); // and the supplied code matches
 
+        var (approve, disapprove, passedPercent, proposalStartTime, proposalDeadline, curTime) = calculateVotingStatistics(proposalId);
+        proposal.finished = true;
+
+        proposal.proposalPassed =  (approve > disapprove);
+        proposal.passedPercent = passedPercent;
+
+        ProposalFinishedLogger(proposalId, approve+disapprove, approve, disapprove);
+    }
+
+    function calculateVotingStatistics(uint proposalId)  public constant returns (uint currentApprove, uint currentDisapprove,
+    uint currentPercent, uint proposalStartTime, uint proposalDeadline, uint curTime){
         uint approve = 0;
         uint disapprove = 0;
 
+        Proposal storage proposal = proposals[proposalId];
         for (uint i = 0; i < proposal.votes.length; ++i) {
             Vote storage v = proposal.votes[i];
             uint voteWeight = getInfluenceOfVoter(v.voter, proposal.fieldOfWork);
@@ -188,17 +204,11 @@ contract DaoWithProposals is DaoWithIco {
                 disapprove += voteWeight;
             }
         }
-        proposal.finished = true;
-
-        if (approve > disapprove) {
-            // Proposal passed; execute the transaction
-            proposal.proposalPassed = true;
-        } else {
-            // Proposal failed
-            proposal.proposalPassed = false;
+        uint percent = 0;
+        if(approve+disapprove > 0){ // If no one voted, just show 0%
+            percent = approve * 100 / (approve+disapprove);
         }
-        proposal.passedPercent = approve * 100 / (approve+disapprove);
 
-        ProposalFinishedLogger(proposalId, approve+disapprove, approve, disapprove);
+        return (approve, disapprove, percent, proposal.proposalStartTime, proposal.proposalDeadline, currentTime());
     }
 }
