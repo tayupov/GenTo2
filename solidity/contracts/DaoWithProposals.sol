@@ -10,6 +10,8 @@ contract DaoWithProposals is DaoWithIco {
     uint public debatingPeriodInMinutes;
     enum FieldOfWork { Finance, Organisational, Product, Partnership }
 
+    mapping(address => mapping(uint => uint256)) public votingRewardTokens;
+
     struct Proposal {
         address recipient;
         uint amount;
@@ -21,7 +23,6 @@ contract DaoWithProposals is DaoWithIco {
         bool finished;
         bool proposalPassed;
         uint passedPercent;
-        bytes32 proposalHash;
         uint dividend;
         uint dmr;
         Vote[] votes;
@@ -98,11 +99,14 @@ contract DaoWithProposals is DaoWithIco {
     function getInfluenceOfVoter(address voter, FieldOfWork fieldOfWork) public constant returns (uint influence);
 
     function newDividendProposal(
-        address beneficiary,
+        string name,
+        string description,
         uint dividend) public votingAllowed onlyShareholders
     returns(uint proposalID)
     {
-        uint proposalDividendID = newProposal("Dividend", "Dividend", beneficiary, 0, FieldOfWork.Finance);
+        require(dividend > 0);
+        require(dividend < this.balance);
+        uint proposalDividendID = newProposal(name, description, address(0), 0, FieldOfWork.Finance);
         Proposal storage proposal  = proposals[proposalDividendID];
         proposal.dividend = dividend;
         return proposalDividendID;
@@ -110,11 +114,14 @@ contract DaoWithProposals is DaoWithIco {
     }
 
     function newDMRewardProposal(
-        address beneficiary,
+        string name,
+        string description,
         uint dmr) public votingAllowed onlyShareholders
     returns(uint proposalID)
     {
-        uint proposalDividendID = newProposal("DMR", "DMR", beneficiary, 0, FieldOfWork.Finance);
+        require(dmr > 0);
+        require(dmr < this.balance);
+        uint proposalDividendID = newProposal(name, description, address(0), 0, FieldOfWork.Finance);
         Proposal storage proposal  = proposals[proposalDividendID];
         proposal.dmr = dmr;
         return proposalDividendID;
@@ -129,7 +136,7 @@ contract DaoWithProposals is DaoWithIco {
         FieldOfWork fieldOfWork) public votingAllowed onlyShareholders
     returns (uint proposalID)
     {
-        AddressLogger("BENEFICIARY", beneficiary);
+        require((weiAmount > 0 && beneficiary != address(0)) || (weiAmount == 0 && beneficiary == address(0)));
         proposalID = proposals.length++;
         Proposal storage proposal = proposals[proposalID];
         proposal.recipient = beneficiary;
@@ -156,7 +163,7 @@ contract DaoWithProposals is DaoWithIco {
     {
         Proposal storage proposal = proposals[proposalNumber];
         require(proposal.voted[msg.sender] != true);
-        require(proposal.finished != true);
+        require(!proposal.finished);
 
         voteID = proposal.votes.length++;
         proposal.votes[voteID] = Vote({inSupport: supportsProposal, voter: msg.sender});
@@ -191,7 +198,7 @@ contract DaoWithProposals is DaoWithIco {
         for (uint i = 0; i < proposal.votes.length; ++i) {
             Vote storage v = proposal.votes[i];
             uint voteWeight = getInfluenceOfVoter(v.voter, proposal.fieldOfWork);
-
+            votingRewardTokens[v.voter][uint(proposal.fieldOfWork)] += voteWeight;
             if (v.inSupport) {
                 approve += voteWeight;
             } else {
