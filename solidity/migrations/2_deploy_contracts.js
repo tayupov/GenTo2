@@ -1,63 +1,43 @@
 const tokenFactory = artifacts.require("./GentoDaoFactory.sol");
 const DAO = artifacts.require("./GentoDao.sol");
-
+const fieldOfWorks = ["Finance", "Organisational", "Product", "Partnership"]
+const yaml = require('js-yaml');
+const fs   = require('fs');
+const daosData = yaml.safeLoad(fs.readFileSync('../migrationsToyData/daos.yml', 'utf8')).DAOs;
 module.exports = async function(deployer, network, accounts) {
   await deployer.deploy(tokenFactory);
   const GentoFactory = await tokenFactory.deployed()
+  const now = Math.floor(Date.now() / 1000)
+  for (let i=0; i<daosData.length; i++) {
+    const daoData = daosData[i]
+    daoData.totalSupply = web3.toWei(+daoData.totalSupply, "ether") //add more digits to total supply
+    daoData.saleStart += now
+    daoData.saleEnd += now
+    await GentoFactory.createDAO.sendTransaction(daoData.totalSupply, daoData.symbol, daoData.name, daoData.descriptionHash, daoData.buyPriceStart, daoData.buyPriceEnd, daoData.saleStart, daoData.saleEnd)
+    const daoList = await GentoFactory.getDAOs.call()
+    const dao = await DAO.at(daoList[daoList.length-1])
 
-  const theosHash = "QmV4CrUumLgsSLPMQTjCC65tdKFtfBTu7eVFLt7THnGtE9"
-  const romansHash = "QmeQ5zEeW4vhAL1GC4GHUt2qJPB8Dws8RKJ8HFFpJYwzdK"
-  const paulsHash = "QmWTY8m6uZj9uJnrkCFdJWu9htP5HcxLw1SZbdxFBUXkY4"
-
-  await GentoFactory.createDAO.sendTransaction(web3.toWei(100, "ether"), "YAY", "Theo Software Solutions", theosHash, 1, 10, 0, 100)
-  await GentoFactory.createDAO.sendTransaction(web3.toWei(100, "ether"), "RBR", "Rolls by the Roman", romansHash, 1, 10, 0, 100)
-  await GentoFactory.createDAO.sendTransaction(web3.toWei(100, "ether"), "PP", "Project Paul", paulsHash, 1, 10, 0, 100)
-
-  const [theo, roman, paul] = await Promise.all((await GentoFactory.getDAOs.call()).map(address => DAO.at(address)))
-
-  await theo.buy.sendTransaction({
-    from: accounts[0],
-    value: web3.toWei(0.001, "ether")
-  })
-  await theo.buy.sendTransaction({
-    from: accounts[1],
-    value: web3.toWei(0.002, "ether")
-  })
-  await theo.buy.sendTransaction({
-    from: accounts[2],
-    value: web3.toWei(0.001, "ether")
-  })
-
-  await paul.buy.sendTransaction({
-    from: accounts[1],
-    value: web3.toWei(0.002, "ether")
-  })
-  await paul.buy.sendTransaction({
-    from: accounts[2],
-    value: web3.toWei(0.001, "ether")
-  })
-
-  await roman.buy.sendTransaction({
-    from: accounts[0],
-    value: web3.toWei(0.001, "ether")
-  })
-  await roman.buy.sendTransaction({
-    from: accounts[1],
-    value: web3.toWei(0.002, "ether")
-  })
-
-  await roman.setCurrentTime.sendTransaction(100)
-  await paul.setCurrentTime.sendTransaction(1000)
-
-  await paul.newProposal.sendTransaction("Test Proposal", "Wer hier abstimmt ist doof", "0x257c1440ef68c42cb5ccc0738883e39253719610", 0, 0, {from: accounts[1]})
-
-  await paul.setCurrentTime.sendTransaction(1200)
-  await paul.newProposal.sendTransaction("Test Proposal2", "Wer hier abstimmt ist doof", "0x257c1440ef68c42cb5ccc0738883e39253719610", 0, 0, {from: accounts[1]})
-  await paul.setCurrentTime.sendTransaction(1800)
-  await paul.newProposal.sendTransaction("Test Proposal3", "Wer hier abstimmt ist doof", "0x257c1440ef68c42cb5ccc0738883e39253719610", 0, 0, {from: accounts[1]})
-  await paul.setCurrentTime.sendTransaction(2000)
-
-  await paul.setProduction.sendTransaction()
-  await roman.setProduction.sendTransaction()
-  await theo.setProduction.sendTransaction()
+    await dao.setCurrentTime.sendTransaction(daoData.saleStart)
+    for (let i=0; i<daoData.owners.length; i++) {
+      const ownerData = daoData.owners[i]
+      const buySize = ownerData.percentage * daoData.totalSupply * daoData.buyPriceStart
+      await dao.buy.sendTransaction({
+        from: accounts[ownerData.account],
+        value: buySize
+      })
+    }
+    if (daoData.saleEnd > now) {
+      await dao.setProduction.sendTransaction()
+      return
+    }
+    await dao.setCurrentTime.sendTransaction(daoData.saleEnd)
+    for (let i=0; i<daoData.proposals.length; i++) {
+      const proposalData = daoData.proposals[i]
+      const beneficiary = proposalData.beneficiary !== undefined? accounts[proposalData.beneficiary] : 0
+      const payout = proposalData.payout? web3.toWei(proposalData.payout, "ether") : 0
+      const fieldOfWork = fieldOfWorks.indexOf(proposalData.fieldOfWork)
+      await dao.newProposal.sendTransaction(proposalData.name, proposalData.description, beneficiary, payout, fieldOfWork)
+    }
+    await dao.setProduction.sendTransaction()
+  }
 };
