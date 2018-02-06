@@ -33,7 +33,7 @@ export default class ProposalList extends React.Component {
                   <Card.Content>
                     <Card.Header>{proposal.name}</Card.Header>
                     <Card.Description>{proposal.description}</Card.Description>
-                    <Card.Description>Deadline:{proposal.proposalDeadline.toString(10)}</Card.Description>
+                    <Card.Description>Deadline: {proposal.proposalDeadlineFormatted}</Card.Description>
                   </Card.Content>
                 </Card>
               );
@@ -51,7 +51,7 @@ export default class ProposalList extends React.Component {
                   <Card.Content>
                     <Card.Header>{proposal.name}</Card.Header>
                     <Card.Description>{proposal.description}</Card.Description>
-                    <Card.Description>Deadline:{proposal.proposalDeadline.toString(10)}</Card.Description>
+                    <Card.Description>Deadline: {proposal.proposalDeadlineFormatted}</Card.Description>
                   </Card.Content>
                 </Card>
               );
