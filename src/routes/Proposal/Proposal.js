@@ -11,9 +11,9 @@ export default class Proposal extends React.Component {
       <div>
         <h1>Information on proposal: {proposal.name}</h1>
         <Divider section hidden />
-        <Button onClick={approveCallback} content="Approve" />
-        <Button onClick={disapproveCallback} content="Disapprove" />
-        <Button onClick={executeCallback} content="Execute" />
+        { this.props.executeAllowed ? <Button onClick={executeCallback} content="Execute" /> : null }
+        { this.props.votingAllowed ? <Button onClick={approveCallback} content="Approve" /> : null }
+        { this.props.votingAllowed ? <Button onClick={disapproveCallback} content="Disapprove" /> : null }
         <h3>{vote.stateDescription}</h3>
         <h3>{vote.influenceDescription}</h3>
         <Divider section hidden />
@@ -46,7 +46,7 @@ export default class Proposal extends React.Component {
                 <Label size='large'>Deadline of Proposal</Label>
               </Table.Cell>
               <Table.Cell>
-                <Label size='large'>{proposal.proposalDeadline}</Label>
+                <Label size='large'>{proposal.proposalDeadlineFormatted}</Label>
               </Table.Cell>
             </Table.Row>
             <Table.Row>

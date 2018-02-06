@@ -23,6 +23,7 @@ const mapProposal =  (proposalNumber, proposalArray, proposalStatistics) => {
       percent:parseInt(proposalStatistics[2], 10),
       proposalStartTime: parseInt(proposalStatistics[3], 10),
       proposalDeadline:parseInt(proposalStatistics[4], 10),
+      proposalDeadlineFormatted:new Date(parseInt(proposalArray[4]) * 1000).toISOString().substring(0, 19).replace(/T/i, ' '),
       currentTime:parseInt(proposalStatistics[5], 10)
   }
 }

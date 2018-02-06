@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { loadProposal, onVote, loadVote, vote, executeProposal } from 'provider/ProposalProvider'
+import { isShareholder } from 'provider/DAOProvider'
 
 import Proposal from './Proposal';
 
@@ -27,12 +28,15 @@ export default class ProposalContainer extends React.Component {
           support: "",
           voted: "",
           stateDescription: ""
-      }
+      },
+      executeAllowed: false,
+      votingAllowed: false,
     }
   }
 
   async loadStateFromBlockchain() {
     const proposal = await loadProposal(this.props.address, this.props.proposalNumber)
+    const isShareHolderOfDao = await isShareholder(this.props.address, this.props.account)
 
     switch (proposal.fieldOfWork) {
       case 0: proposal.fieldOfWorkDescription = "Finance"; break
@@ -63,7 +67,15 @@ export default class ProposalContainer extends React.Component {
       vote.stateDescription = "No information"
     }
     vote.influenceDescription = "Your influence in this field of work is " + vote.influence;
+    
+    var executeAllowed =  proposal.currentTime > proposal.proposalDeadline  && !proposal.finished && isShareHolderOfDao;
+    var votingAllowed =  proposal.currentTime < proposal.proposalDeadline  && !proposal.finished && isShareHolderOfDao  && !vote.voted;
+    console.log("aaaaaaaaaaaa")
+    console.log(proposal.currentTime)
+    console.log(proposal.proposalDeadline)
     this.setState({vote});
+    this.setState({votingAllowed});
+    this.setState({executeAllowed});
   }
 
   async componentWillReceiveProps(nextProps) {
@@ -86,6 +98,9 @@ export default class ProposalContainer extends React.Component {
     if(res === -1){
       this.props.notify("Vote failed. Please check deadline and priviliges.")
     }
+    else {
+      this.props.notify("Approval submitted. Check back later")
+    }
   }
 
   async disapproveCallback(){
@@ -93,6 +108,9 @@ export default class ProposalContainer extends React.Component {
 
     if(res === -1){
       this.props.notify("Vote failed. Please check deadline and priviliges.")
+    }
+    else {
+      this.props.notify("Disapproval submitted. Check back later")
     }
   }
 
@@ -102,12 +120,17 @@ export default class ProposalContainer extends React.Component {
     if(res === -1){
       this.props.notify("Execution failed. Please check deadline, status and priviliges.")
     }
+    else {
+      this.props.notify("Execute submitted. Check back later")
+    }
   }
 
   render() {
     return (
       <Proposal proposal={this.state.proposal}
                 vote={this.state.vote}
+                executeAllowed={this.state.executeAllowed}
+                votingAllowed={this.state.votingAllowed}
                 approveCallback={this.approveCallback.bind(this)}
                 disapproveCallback={this.disapproveCallback.bind(this)}
                 executeCallback={this.executeCallback.bind(this)}

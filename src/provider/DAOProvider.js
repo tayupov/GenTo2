@@ -9,3 +9,9 @@ export async function loadOrganization(address) {
 
   return GentoDAO.at(address)
 }
+export async function isShareholder(daoAaddress, userAddress) {
+  const GentoDAO = contract(GentoDAOArtifact);
+  GentoDAO.setProvider(web3.currentProvider);
+
+  return GentoDAO.at(daoAaddress).isShareholder(userAddress)
+}
