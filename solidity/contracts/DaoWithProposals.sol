@@ -144,7 +144,7 @@ contract DaoWithProposals is DaoWithIco {
         proposal.name = name;
         proposal.description = description;
         proposal.amount = weiAmount;
-        proposal.proposalStartTime  = currentTime();
+        proposal.proposalStartTime = currentTime();
         proposal.proposalDeadline = currentTime() + debatingPeriodInMinutes * 1 minutes;
         proposal.finished = false;
         proposal.fieldOfWork = fieldOfWork;
@@ -183,7 +183,7 @@ contract DaoWithProposals is DaoWithIco {
         var (approve, disapprove, passedPercent, proposalStartTime, proposalDeadline, curTime) = calculateVotingStatistics(proposalId);
         proposal.finished = true;
 
-        proposal.proposalPassed =  (approve > disapprove);
+        proposal.proposalPassed = (approve > disapprove);
         proposal.passedPercent = passedPercent;
 
         ProposalFinishedLogger(proposalId, approve+disapprove, approve, disapprove);
@@ -206,7 +206,7 @@ contract DaoWithProposals is DaoWithIco {
             }
         }
         uint percent = 0;
-        if(approve+disapprove > 0){ // If no one voted, just show 0%
+        if (approve+disapprove > 0) { // If no one voted, just show 0%
             percent = approve * 100 / (approve+disapprove);
         }
 
