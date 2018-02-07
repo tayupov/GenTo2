@@ -37,12 +37,12 @@ contract('DaoWithDelegation', function(accounts) {
   it("delegation after ending a vote should not have an effect on the vote", async function() {
       await proposalHelper.simulateIco({1: 4000, 2: 3000, 3:2000});
       // Create Proposal in Field of work 2
-      await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 100, 0, {from: accounts[1]})
+      await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 100, 2, {from: accounts[1]})
       // user 1 and 3 vote
       await proposalHelper.voteBulk(0, {1: false, 3: true})
       await contract.executeProposal.sendTransaction(0)
-      // User 2 delegates power in Field of Work 2 to User 3
-      await contract.delegate.sendTransaction(2, accounts[0], {from: accounts[2]})
+      // during delegation both user should be sharehlder
+      await contract.delegate.sendTransaction(2, accounts[1], {from: accounts[2]})
       // Get Proposal details
       const p = await proposalHelper.getFormattedProposal(0)
       // Proposal should pass with 33 %

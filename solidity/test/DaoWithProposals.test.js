@@ -195,17 +195,16 @@ contract('DaoWithProposals', function(accounts) {
   // newDividendProposal()
   it("should be possible to create and to vote on a new dividend proposal", async function() {
     await proposalHelper.simulateIco({0: 100000, 1: 100000});
-    await contract.newDividendProposal.sendTransaction(accounts[0], 100, {from: accounts[0]})
+    await contract.newDividendProposal.sendTransaction('dividend', 'div desc', 100, {from: accounts[0]})
 
     let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
     await proposalHelper.voteBulk(proposalID, {0: true, 1: true})
     await contract.executeProposal.sendTransaction(proposalID)
     const p = await proposalHelper.getFormattedProposal(proposalID)
 
-    expect(p.recipient).toBe(accounts[0])
     expect(+p.amount).toBe(0)
-    expect(p.name).toBe('Dividend')
-    expect(p.description).toBe('Dividend')
+    expect(p.name).toBe('dividend')
+    expect(p.description).toBe('div desc')
     expect(+p.proposalDeadline).toBe(2200600)
     expect(p.finished).toBe(true)
     expect(p.proposalPassed).toBe(true)
@@ -217,16 +216,15 @@ contract('DaoWithProposals', function(accounts) {
   // newDMRewardPropsal()
   it("should be possible to create and to vote on a new decision maker reward proposal", async function() {
     await proposalHelper.simulateIco({0: 100000, 1: 100000});
-    await contract.newDMRewardProposal.sendTransaction(accounts[0], 100, {from: accounts[0]})
+    await contract.newDMRewardProposal.sendTransaction('dmr', 'dmr desc', 100, {from: accounts[0]})
     let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
     await proposalHelper.voteBulk(proposalID, {0: true, 1: true})
     await contract.executeProposal.sendTransaction(proposalID)
     const p = await proposalHelper.getFormattedProposal(proposalID)
 
-    expect(p.recipient).toBe(accounts[0])
     expect(+p.amount).toBe(0)
-    expect(p.name).toBe('DMR')
-    expect(p.description).toBe('DMR')
+    expect(p.name).toBe('dmr')
+    expect(p.description).toBe('dmr desc')
     expect(+p.proposalDeadline).toBe(2200600)
     expect(p.finished).toBe(true)
     expect(p.proposalPassed).toBe(true)
@@ -238,7 +236,7 @@ contract('DaoWithProposals', function(accounts) {
   // votingAllowed
   it("should be not allowed to vote on the new proposal if the dao isn't created", async function() {
     await proposalHelper.simulateIco({0: 100000, 1: 100000});
-    await contract.newDMRewardProposal.sendTransaction(accounts[0], 100, {from: accounts[0]})
+    await contract.newDMRewardProposal.sendTransaction('dmr', 'dmr desc', 100, {from: accounts[0]})
     let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
     // reset the time between ico start and end
     await contract.setCurrentTime.sendTransaction(1200000)

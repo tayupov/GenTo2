@@ -154,13 +154,14 @@ contract('DaoWithICO', function(accounts) {
   })
 
   // daoActive
-  it("should be not possible to vote if the DAO isn't active", async function() {
+  it("should not be possible to vote if the DAO isn't active", async function() {
     await proposalHelper.simulateIco({1: 100, 2: 200});
     await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 345, 0, {from: accounts[1]})
     let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
     await contract.setCurrentTime.sendTransaction(0)
     try {
         await contract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
+        should.fail("this transaction should have raised an error")
     }
     catch(e) {
       expect(e.message).toContain("VM Exception while processing transaction: ")
