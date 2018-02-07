@@ -1,0 +1,66 @@
+DAOs:
+- totalSupply: 10
+  symbol: RBR
+  name: Rolls By The Roman
+  descriptionHash: QmeQ5zEeW4vhAL1GC4GHUt2qJPB8Dws8RKJ8HFFpJYwzdK
+  buyPriceStart: 1
+  buyPriceEnd: 1
+  saleStart: -2000
+  saleEnd: -1000
+  owners:
+  - account: 0
+    percentage: 0.1
+  - account: 1
+    percentage: 0.4
+  - account: 2
+    percentage: 0.3
+  - account: 3
+    percentage: 0.1
+  proposals:
+  - name: Create Ad-Campaign on Facebook
+    description: "Execute the following ad Campaign: ...."
+    beneficiary: 0
+    fieldOfWork: Finance
+    payout: 1.5
+  - name: Crash tests
+    description: Crash Tests our bikes
+    beneficiary: 1
+    fieldOfWork: Product
+    payout: 2
+- totalSupply: 10
+  symbol: CWC
+  name: Co-Work Chain
+  descriptionHash: QmV4CrUumLgsSLPMQTjCC65tdKFtfBTu7eVFLt7THnGtE9
+  buyPriceStart: 1
+  buyPriceEnd: 5
+  saleStart: -2000
+  saleEnd: -1000
+  owners:
+  - account: 0
+    percentage: 0.3
+  - account: 2
+    percentage: 0.3
+  - account: 3
+    percentage: 0.1
+  proposals:
+  - name: Buy new couches
+    description: "Buy these couches: ..."
+    beneficiary: 0
+    fieldOfWork: Product
+    payout: 1.5
+  - name: Extend our opening hours
+    description: "Change our opening hours to 8am-11:30pm"
+    fieldOfWork: Organisational
+- totalSupply: 10
+  symbol: THEO
+  name: Theo Software Solutions
+  descriptionHash: QmV4CrUumLgsSLPMQTjCC65tdKFtfBTu7eVFLt7THnGtE9
+  buyPriceStart: 1
+  buyPriceEnd: 5
+  saleStart: -2000
+  saleEnd: 1000
+  owners:
+  - account: 4
+    percentage: 0.3
+  - account: 6
+    percentage: 0.1
