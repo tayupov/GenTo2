@@ -195,7 +195,7 @@ contract('GentoDao', function(accounts) {
   // getVRTokenInFoWOfDecisionMaker() + getVRTokenInFoW()
   it("compute the right amount of voting reward token if the proposal isn't passed", async function() {
     await proposalHelper.simulateIco({1: 100, 2: 200})
-    await contract.newDMRewardProposal.sendTransaction(accounts[1], 100, {from: accounts[1]})
+    await contract.newDMRewardProposal.sendTransaction('dmr', 'dmr desc', 100, {from: accounts[1]})
     let proposalVRTID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
     await proposalHelper.voteBulk(proposalVRTID, {1: true, 2: false})
     await contract.executeProposal.sendTransaction(proposalVRTID)
@@ -204,10 +204,10 @@ contract('GentoDao', function(accounts) {
     expect(+await contract.decisionmakerRewards.call(accounts[1])).toBe(0)
     expect(+await contract.decisionmakerRewards.call(accounts[2])).toBe(0)
     // not invoking claimDecisionMakerReward() doesn't reset the votingRewardTokens to 0 for testing
-    expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[1], 0)).toBe(3)
-    expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[2], 0)).toBe(7)
+    expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[1], 0)).toBe(6)
+    expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[2], 0)).toBe(14)
     // should be the sum of VRT of both shareholder in FoW 2
-    expect(+await contract.getVRTokenInFoW.call(0)).toBe(10)
+    expect(+await contract.getVRTokenInFoW.call(0)).toBe(20)
     // get the amount of DMR during the proposal creation
     expect(+p.dmr).toBe(100)
   })
@@ -215,7 +215,7 @@ contract('GentoDao', function(accounts) {
   // getVRTinFoW() + getVRTInFoWOfDM()
   it("shouldn't be possible for a shareholder to claim DMR if he doesn't get delegated VP", async function() {
       await proposalHelper.simulateIco({1: 200, 2: 200})
-      await contract.newDMRewardProposal.sendTransaction(accounts[1], 100, {from: accounts[1]})
+      await contract.newDMRewardProposal.sendTransaction('dmr', 'dmr desc', 100, {from: accounts[1]})
       let proposalVRTID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
       await contract.delegate.sendTransaction(0, accounts[1], {from: accounts[2]})
       await contract.vote.sendTransaction(proposalVRTID, true, {from: accounts[1]})
@@ -235,28 +235,28 @@ contract('GentoDao', function(accounts) {
   // executeProposal()
   it("should ensure that the voting reward tokens gets resetted by executing the proposal", async function() {
     await proposalHelper.simulateIco({1: 200, 2: 200, 3: 200})
-    await contract.newDividendProposal.sendTransaction(accounts[1], 100, {from: accounts[1]})
+    await contract.newDividendProposal.sendTransaction('div', 'div desc', 100, {from: accounts[1]})
     let proposalDivID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
     await contract.delegate.sendTransaction(0, accounts[1], {from: accounts[2]})
     await contract.delegate.sendTransaction(0, accounts[2], {from: accounts[3]})
     await proposalHelper.voteBulk(proposalDivID, {1: true, 2: false, 3: true})
     await contract.executeProposal.sendTransaction(proposalDivID)
     // if it's a dividend proposal the VRT don't get resetted to 0
-    expect(+await contract.getVRTokenInFoW.call(0)).toBe(21)
-    expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[1], 0)).toBe(14)
-    expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[2], 0)).toBe(7)
+    expect(+await contract.getVRTokenInFoW.call(0)).toBe(42)
+    expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[1], 0)).toBe(28)
+    expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[2], 0)).toBe(14)
     expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[3], 0)).toBe(0)
 
-    expect(+await contract.dividends.call(accounts[1])).toBe(196)
-    expect(+await contract.dividends.call(accounts[2])).toBe(196)
-    expect(+await contract.dividends.call(accounts[3])).toBe(196)
+    expect(+await contract.dividends.call(accounts[1])).toBe(33)
+    expect(+await contract.dividends.call(accounts[2])).toBe(33)
+    expect(+await contract.dividends.call(accounts[3])).toBe(33)
 
   })
 
   // decisionmakerRewards
   it("should ensure if a dividend proposal is created the decision maker reward is still 0", async function() {
     await proposalHelper.simulateIco({1: 200, 2: 200})
-    await contract.newDividendProposal.sendTransaction(accounts[1], 100, {from: accounts[1]})
+    await contract.newDividendProposal.sendTransaction('div', 'div desc', 100, {from: accounts[1]})
     let proposalDivID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
     await proposalHelper.voteBulk(proposalDivID, {1: true, 2: false})
     await contract.executeProposal.sendTransaction(proposalDivID)
