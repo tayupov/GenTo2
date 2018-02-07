@@ -25,7 +25,7 @@ contract('StandardTokenWithShareholderList', function(accounts) {
     expect(!!+await contract.isShareholder.call(accounts[1])).toBe(true)
   })
 
-  // transfer()
+  // // transfer()
   // it("should be possible to transfer money from one shareholder to another with buy()", async function(done) {
   //   expect(+await contract.getBalance.call(accounts[0])).toBe(0)
   //   await proposalHelper.simulateIco({0: 500})
