@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Divider, Table, Message, Label } from 'semantic-ui-react';
+import {ReactMarkdown} from 'react-markdown'
 
 import { loadProposal } from 'provider/ProposalProvider'
 
@@ -62,7 +63,7 @@ export default class Proposal extends React.Component {
                 <Label size='large'>Proposal State</Label>
               </Table.Cell>
               <Table.Cell>
-                <Label size='large'>{proposal.stateDescription}</Label>
+                <Label size='large'><ReactMarkdown source={proposal.stateDescription} /></Label>
               </Table.Cell>
             </Table.Row>
             <Table.Row>
