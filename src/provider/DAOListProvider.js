@@ -27,12 +27,12 @@ async function prepareOrganizations() {
 
 export async function loadAllOrganizations() {
   const organizations = await prepareOrganizations()
-  return Promise.all(organizations.map(mapOrganization))
+  return Promise.all(organizations.map(org => mapOrganization(org)))
 }
 
 export async function loadAllOrganizationsOfOwner(owner) {
   if (!owner) return []
   const organizations = await prepareOrganizations()
   const organizationsWithOwnership = await filterByBalance(organizations, owner)
-  return Promise.all(organizationsWithOwnership.map(mapOrganization))
+  return Promise.all(organizationsWithOwnership.map(org => mapOrganization(org)))
 }

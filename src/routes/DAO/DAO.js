@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Segment, Header, Image, Form, Button } from 'semantic-ui-react';
+import { Grid, Segment, Header, Button } from 'semantic-ui-react';
+
+import Balances from './components/Balances'
+import Claiming from './components/Claiming'
 import Delegation from './components/Delegation'
 import ProposalsCompact from './components/ProposalsCompact'
 
@@ -32,8 +35,12 @@ export default class DAO extends React.Component {
       description: null,
       descriptionHash: null,
       delegate: null,
-      delegations: [],
-      proposals: []
+      delegationsForAccount: [],
+      proposals: [],
+      dividendForAccount: null,
+      votingRewardForAccount: null,
+      balanceForAccount: null,
+      totalNumberOfTokens: null,
     }
   }
 
@@ -44,8 +51,9 @@ export default class DAO extends React.Component {
     loadAllProposals(address)
       .then(proposals => this.setState({ proposals }))
 
+    this.setState({ description: null })
     downloadString(this.state.descriptionHash)
-      .then(description => this.setState({ description }))
+      .then(description => setTimeout(() => this.setState({ description }), 1500))
   }
 
   async componentDidMount() {
@@ -70,45 +78,52 @@ export default class DAO extends React.Component {
 
   async claimDividend(e) {
     const from = this.props.account
-    const res = await this.state.claimDividend.sendTransaction({ from })
+    await this.state.claimDividend.sendTransaction({ from })
   }
 
   async claimVotingReward(e) {
     const from = this.props.account
-    const res = await this.state.claimDecisionMakerReward.sendTransaction({ from })
+    await this.state.claimDecisionMakerReward.sendTransaction({ from })
   }
 
   render() {
+    const { balanceForAccount, totalNumberOfTokens } = this.state
+    const { dividendForAccount, votingRewardForAccount } = this.state
     return (
       <div>
         <Header as="h1">{this.state.name}</Header>
         <Grid>
 
           <Grid.Row>
-
             <Grid.Column width='12'>
-              <Segment>
+              <Segment secondary={this.state.description !== null}>
                 {this.state.description || <div className='skeleton'></div>}
               </Segment>
             </Grid.Column>
 
             <Grid.Column width='4'>
-              <Button type='submit' onClick={this.claimDividend}>Dividend: 0</Button>
-              <Button type='submit' onClick={this.claimVotingReward}>Voting Reward: 0</Button>
+              <Balances balanceForAccount={balanceForAccount} totalNumberOfTokens={totalNumberOfTokens} />
+              <Claiming
+                claimDividend={this.claimDividend}
+                claimVotingReward={this.claimVotingReward}
+                dividendForAccount={dividendForAccount}
+                votingRewardForAccount={votingRewardForAccount}
+              />
             </Grid.Column>
-
           </Grid.Row>
 
           <Grid.Row>
-
             <Grid.Column width='3'>
               <ProposalsCompact address={this.state.address} proposals={this.state.proposals} />
             </Grid.Column>
 
             <Grid.Column width='9'>
-              <Delegation delegate={this.delegate} delegations={this.state.delegations} />
+              <Delegation
+                account={this.props.account}
+                delegate={this.delegate}
+                delegationsForAccount={this.state.delegationsForAccount}
+              />
             </Grid.Column>
-
           </Grid.Row>
 
         </Grid>
