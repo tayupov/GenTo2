@@ -49,10 +49,20 @@ export default class ProposalContainer extends React.Component {
       case 3: proposal.fieldOfWorkDescription = "Marketing"; break
       default: proposal.fieldOfWorkDescription = "Unknown"
     }
+
+    if(proposal.dividend > 0){
+      proposal.proposalType = "Dividend proposal"
+    } else if(proposal.dmr > 0){
+      proposal.proposalType = "Dmr proposal"
+    } else {
+      proposal.proposalType = "Business proposal";
+    }
+
+
+
     if(executeAllowed){
       proposal.stateDescription = "Waiting for execution"
-    }
-    else if (proposal.isFinished && !proposal.proposalPassed) {
+    } else if (proposal.isFinished && !proposal.proposalPassed) {
       proposal.stateDescription = "Proposal rejected"
     } else if (proposal.isFinished && proposal.proposalPassed) {
       proposal.stateDescription = "Proposal passed"

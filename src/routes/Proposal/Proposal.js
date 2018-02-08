@@ -27,6 +27,14 @@ export default class Proposal extends React.Component {
           <Table.Body>
             <Table.Row>
               <Table.Cell>
+                <Label size='large'>Proposal type</Label>
+              </Table.Cell>
+              <Table.Cell>
+                <Label size='large'>{proposal.proposalType} Wei</Label>
+              </Table.Cell>
+            </Table.Row>
+            <Table.Row>
+              <Table.Cell>
                 <Label size='large'>Tokens transferred to Recipient when finished</Label>
               </Table.Cell>
               <Table.Cell>
