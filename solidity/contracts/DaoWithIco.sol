@@ -47,7 +47,7 @@ contract DaoWithIco is StandardTokenWithShareholderList{
         totalSupply = 0;
     }
 
-    function getBuyPrice() icoRunning public constant returns (uint) {
+    function getBuyPrice() public constant returns (uint) {
         uint currentPrice;
         uint passed;
 
