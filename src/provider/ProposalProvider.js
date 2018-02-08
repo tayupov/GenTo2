@@ -16,7 +16,7 @@ const mapProposal =  (proposalNumber, proposalArray, proposalStatistics) => {
       finished:parseInt(proposalArray[5], 10),
       proposalPassed:proposalArray[6],
       passedPercent: parseInt(proposalArray[7], 10), // Deprecated
-      fieldOfWork: proposalArray[8],
+      fieldOfWork: parseInt(proposalArray[8]),
       dividend:parseInt(proposalArray[9], 10),
       approve:parseInt(proposalStatistics[0], 10)/1000000000000000000, // TODO with web3
       disapprove:parseInt(proposalStatistics[1], 10)/1000000000000000000,
