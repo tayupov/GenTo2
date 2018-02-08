@@ -25,8 +25,11 @@ export async function mapOrganization (organization) {
 
 /* "extract" boolean flag to receive object in contrast to actual contract */
 export async function loadOrganization(address, extract) {
-  const GentoDAO = contract(GentoDAOArtifact);
-  GentoDAO.setProvider(web3.currentProvider);
+  const GentoDAOContract = contract(GentoDAOArtifact);
+  GentoDAOContract.setProvider(web3.currentProvider);
   
-  return extract ? mapOrganization(GentoDAO.at(address)) : GentoDAO.at(address)
+  // const GentoDAO = await GentoDAOContract.deployed(); 
+  
+  return extract ? mapOrganization(GentoDAOContract.at(address)) : GentoDAOContract.at(address)
 }
+

@@ -82,6 +82,7 @@ export default class Routes extends React.Component {
                 <Route path="/dao/:address"
                     render={(props) => (
                         <Organisation
+                            key={props.match.params.address}
                             account={account}
                             address={props.match.params.address}
                             network={network}

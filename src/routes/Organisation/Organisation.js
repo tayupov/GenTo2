@@ -31,8 +31,12 @@ export default class Organisation extends React.Component {
     }
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
+    console.log('component');
+    console.log(this.props);
     const organisation = await loadOrganization(this.props.address, true)
+    console.log('organisation');
+    console.log(organisation);
     this.setState({ auctionDetails: { ...organisation } })
 
     // const description = await downloadString(this.state.descriptionHash)
@@ -40,7 +44,9 @@ export default class Organisation extends React.Component {
   }
 
   async componentWillReceiveProps(nextProps) {
-    const organisation = await loadOrganization(this.props.address, true)
+    console.log('nextProps');
+    console.log(nextProps);
+    const organisation = await loadOrganization(nextProps.address, true)
     this.setState({ auctionDetails: { ...organisation } })
 
     // const description = await downloadString(this.state.descriptionHash)

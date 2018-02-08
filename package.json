@@ -78,7 +78,7 @@
     "test": "node scripts/test.js --env=jsdom",
     "test:truffle": "cd solidity && truffle test",
     "test:coverage": "./node_modules/.bin/solidity-coverage",
-    "build:contracts": "cd solidity && truffle migrate && rimraf ../src/assets/contracts && cp -R build/contracts ../src/assets/contracts/",
+    "build:contracts": "cd solidity && truffle.cmd migrate && rimraf ../src/assets/contracts && cp -R build/contracts ../src/assets/contracts/",
     "rebuild:contracts": "rm -rf soldity/build && cd solidity && truffle migrate  --reset --compile-all && rimraf ../src/assets/contracts && cp -R build/contracts ../src/assets/contracts/"
   },
   "devDependencies": {

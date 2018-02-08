@@ -32,7 +32,7 @@ const Ico = ({
             listenForTokenBuy={listenForTokenBuy}
         />
         }
-        <Chart chartDataArr={chartDataArr} />
+        {chartDataArr.length === 3 && <Chart chartDataArr={chartDataArr} />}
         {tokenCountMsg &&
         <TokenSection
             tokenCountMsg={tokenCountMsg}

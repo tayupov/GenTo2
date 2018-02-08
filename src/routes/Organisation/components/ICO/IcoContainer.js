@@ -7,8 +7,8 @@ import { loadOrganization } from 'provider/DAOProvider';
 import web3 from 'utils/web3';
 import { isFunction } from 'utils/functional'
 
-import GentoDao from 'assets/contracts/GentoDao.json';
-import DaoWithIco from 'assets/contracts/DaoWithIco.json';
+import GentoDao from 'assets/contracts/GentoDao';
+import DaoWithIco from 'assets/contracts/DaoWithIco';
  
 import Ico from './Ico';
 
@@ -34,8 +34,6 @@ class IcoContainer extends Component {
     }
 
     componentWillMount() {
-
-        this.getContractDetails();
         this.setState({
             auctionDetails: {
                 ...this.props.auctionDetails
@@ -44,17 +42,15 @@ class IcoContainer extends Component {
         setInterval(this.getChartData, 10000);
     }
 
-    componentDidMount() {
-        // this.setMyTokenCount();
-    }
-
     componentWillReceiveProps(nextProps) {
-        this.getContractDetails();
         this.setState({
             auctionDetails: {
                 ...nextProps.auctionDetails
             }
         })
+        if (nextProps.auctionDetails.saleStart !== null) {
+            this.getContractDetails(nextProps.auctionDetails);
+        }
     }
 
     componentDidUpdate(nextProps) {
@@ -68,8 +64,6 @@ class IcoContainer extends Component {
         const amount = +await ico.balanceOf.call([this.props.account]);
         const totalSupply = +await ico.remainingTokensForICOPurchase.call();
         const symbol = await ico.symbol.call();
-        console.log('symbol');
-        console.log(symbol);
         this.setState({
             tokenCount: amount
         });
@@ -80,9 +74,9 @@ class IcoContainer extends Component {
     }
 
 
-    getCurrentStatus = () => {
-        const start = moment.unix(this.state.saleStart);
-        const end = moment.unix(this.state.saleEnd);
+    getCurrentStatus = (details) => {
+        const start = moment.unix(details.saleStart);
+        const end = moment.unix(details.saleEnd);
         const now = moment();
         if(now.diff(start) < 0) {
             return 'pending';
@@ -93,71 +87,90 @@ class IcoContainer extends Component {
         }
     }
 
-    getAuctionType = () => {
-        if(this.state.buyPriceStart < this.state.buyPriceEnd) {
+    getAuctionType = (details) => {
+        if(details.buyPriceStart < details.buyPriceEnd) {
             return 'english';
-        } else if (this.state.buyPriceStart > this.state.buyPriceEnd){
+        } else if (details.buyPriceStart > details.buyPriceEnd){
             return 'dutch';
         } else {
             return 'fixed';
         }
     }
 
-    getPriceDevelopmentString = () => {
+    getPriceDevelopmentString = (details) => {
         let priceDev = "The token price ";
         if(this.state.auctionType === "dutch") {
-            priceDev += "will <strong>decrease</strong> from <strong>" + this.state.buyPriceStart + "</strong> to <strong>" + this.state.buyPriceEnd + "</strong>";
+            priceDev += "will <strong>decrease</strong> from <strong>" + details.buyPriceStart + "</strong> to <strong>" + details.buyPriceEnd + "</strong>";
         } else if(this.state.auctionType === "english") {
-            priceDev += "will <strong>increase</strong> from <strong>" + this.state.buyPriceStart + "</strong> to <strong>" + this.state.buyPriceEnd + "</strong>";            
+            priceDev += "will <strong>increase</strong> from <strong>" + details.buyPriceStart + "</strong> to <strong>" + details.buyPriceEnd + "</strong>";            
         } else {
-            priceDev += "is <strong>" + this.state.buyPriceStart + "</strong>";
+            priceDev += "is <strong>" + details.buyPriceStart + "</strong>";
         }
         priceDev += " " + this.state.unit;
         return priceDev;
     }
 
-    initAuctionDetails = () => {
+    initAuctionDetails = (details) => {
         this.setState({
-            buyPriceStart: parseInt(web3.fromWei(this.state.auctionDetails.buyPriceStart, this.state.unit), 10),
-            buyPriceEnd: parseInt(web3.fromWei(this.state.auctionDetails.buyPriceEnd, this.state.unit), 10),
-            status: this.getCurrentStatus(),
-            auctionType: this.getAuctionType()
+            buyPriceStart: parseInt(web3.fromWei(details.buyPriceStart.c, this.state.unit), 10),
+            buyPriceEnd: parseInt(web3.fromWei(details.buyPriceEnd.c, this.state.unit), 10),
+            status: this.getCurrentStatus(details),
+            auctionType: this.getAuctionType(details)
         })
     }
 
-    setPriceDevelopmentString = () => {
-        const msg = this.getPriceDevelopmentString();
+    setPriceDevelopmentString = (details) => {
+        const msg = this.getPriceDevelopmentString(details);
         this.setState({
             priceDevelopmentString: msg
         })
     }
 
-    getContractDetails = (address) => {
-        this.initAuctionDetails();
-        this.getChartData();                    
-        this.setPriceDevelopmentString();   
+    getContractDetails = (details) => {
+        this.initAuctionDetails(details);
+        this.getChartData(details);                    
+        this.setPriceDevelopmentString(details);   
     }
 
-    getChartData = () => {
-        const data = this.state.auctionDetails;
+    getChartData = (details) => {
         let cd = [];
+        if (!details) {
+            return;
+        }
+        console.log('this.state.buyPriceStart');
+        console.log(this.state.buyPriceStart);
+        console.log('this.state.buyPriceEnd');
+        console.log(this.state.buyPriceEnd);
+        console.log('details.saleStart');
+        console.log(moment.unix(details.saleStart).valueOf());
         cd.push({
-            x: moment.unix(data.saleStart).valueOf(),
+            x: moment.unix(details.saleStart).valueOf(),
             y: this.state.buyPriceStart
         });
-        const duration = data.saleEnd - data.saleStart;
+        const duration = details.saleEnd - details.saleStart;
+        console.log('duration');
+        console.log(duration);
         if(this.state.status === 'running'){
-            const passed = moment().unix() - data.saleStart;
+            const passed = moment().unix() - details.saleStart;
+            console.log('passed');
+            console.log(passed);
+            console.log('details.saleStart + passed');
+            const currTime = moment.unix(details.saleStart).valueOf() + passed;
+            console.log(currTime);
+            console.log(moment.unix(currTime));
             const currPrice = Math.floor(this.state.buyPriceStart + ((this.state.buyPriceEnd - this.state.buyPriceStart) * passed) / duration);
             cd.push({
-                x: moment.unix(data.saleStart + passed).valueOf(),
+                x: moment.unix(currTime).valueOf(),
                 y: currPrice
             })
         }
         cd.push({
-            x: moment.unix(data.saleEnd).valueOf(),
+            x: moment.unix(details.saleEnd).valueOf(),
             y: this.state.buyPriceEnd
         });
+
+        console.log('CDCDCDCD');
+        console.log(cd);
         this.setState({
             chartDataArr: cd
         })
@@ -165,8 +178,9 @@ class IcoContainer extends Component {
 
     setSupplyInterval = async (cb) => {
         const ico = await loadOrganization(this.props.address, true);
-        const supply = ico.remainingTokensForICOPurchase;
-        const totalSupply = ico.remainingTokensForICOPurchase;
+        console.log(ico.remainingTokensForICOPurchase);
+        const supply = ico.remainingTokensForICOPurchase.c;
+        const totalSupply = supply - ico.totalSupply.c;
         const supplyPct = ((supply / totalSupply) * 100).toFixed(0);
         const supplyString = `${supply} of ${totalSupply} left for sale`;
         cb({
@@ -175,17 +189,18 @@ class IcoContainer extends Component {
         });
     }    
 
+    
+
 
     buyToken = async (amount, etherUnit) => {
 
         const buyer = this.props.account;
+        console.log('buyer');
+        console.log(buyer);
         const value = web3.toWei(amount, etherUnit);
         const ico = await loadOrganization(this.props.address);
-
-        ico.buy.call({
-                from: buyer,
-                value: 10000
-            });
+    
+        await ico.buy.sendTransaction({from: buyer, value})
 
         // web3.eth.estimateGas({
         //     data: GentoDao.bytecode

@@ -14,17 +14,21 @@ class DetailsSection extends Component {
         this.state = {
             timeCountDown: '',
             currentPercentage: null,
-            supplyObj: { }
+            supplyObj: { },
+            timerStarted: false
         }
     }
 
     setAuctionTimer = () => {
         const { details, status } = this.props;
-        let timeCountDown;
+        let timeCountDown
 
         if(status === "pending") {
             timeCountDown = "Auction will start at " + moment.unix(details.saleStart).format('LLL');
         } else if (status === "running") {
+            this.setState({
+                timerStarted: true
+            })
             const endTime = moment.unix(details.saleEnd);
             let duration = moment.duration(endTime.diff(moment()));
             const interval = 1000;
@@ -47,7 +51,27 @@ class DetailsSection extends Component {
     }
 
     componentWillMount() {
-        this.setAuctionTimer();
+        if (!this.state.timerStarted) {
+            this.setAuctionTimer();
+        }
+
+        this.props.setSupplyInterval((obj) => {
+            this.setState({
+                supplyObj: obj
+            })
+        });
+
+        this.props.listenForTokenBuy((obj) => {
+            this.setState({
+                supplyObj: obj
+            })
+        })
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (!this.state.timerStarted) {
+            this.setAuctionTimer();
+        }
 
         this.props.setSupplyInterval((obj) => {
             this.setState({
