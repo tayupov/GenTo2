@@ -6,7 +6,8 @@ DAOs:
     Rolls By The Roman
 
     We produce things that really move people: Bicycles.
-  descriptionHash: QmeQ5zEeW4vhAL1GC4GHUt2qJPB8Dws8RKJ8HFFpJYwzdK
+  # Important: After changing description, you MUST update the hash too!
+  descriptionHash: QmXqxqFK4F81JpEj75pGDHME9SVorbvvAqdm3JUXw99SQK
   buyPriceStart: 1
   buyPriceEnd: 1
   saleStart: -1296000
@@ -42,7 +43,8 @@ DAOs:
     Distributed Workspace for the Tech Community
 
     Primalbase is transforming traditional office rental and creating a next-generation community-based ecosystem where participants can share, sell or rent out high-quality office spaces using Ethereum and Waves-based digital tokens.
-  descriptionHash: QmV4CrUumLgsSLPMQTjCC65tdKFtfBTu7eVFLt7THnGtE9
+  # Important: After changing description, you MUST update the hash too!
+  descriptionHash: QmSihtvHfyjGfutVqxiZ9Mf7fXM9Q6xdAL9JiU9Y2w6GB5
   buyPriceStart: 1
   buyPriceEnd: 5
   saleStart: -2592000
@@ -56,7 +58,9 @@ DAOs:
     percentage: 0.1
   proposals:
   - name: Buy new couches
-    description: "Buy 5 of these couches: made.com/de/chou-schlafsofa-in-quartzblau"
+    description: |
+      # Markdown Test!
+      Buy 5 of these couches: made.com/de/chou-schlafsofa-in-quartzblau
     beneficiary: 0
     fieldOfWork: Product
     startingDate: -40000
@@ -71,8 +75,14 @@ DAOs:
     accepted: true
     execute: false
     fieldOfWork: Organisational
-  - name: Placeholder proposal
-    description: Fill me with some info
+  - name: Markdown test proposal
+    description: |
+      # Test
+      1. Test
+      2. Kartoffel
+      ---
+      - blub blub blub
+      Fill me with some info
     startingDate: -302400
     accepted: true
     fieldOfWork: Organisational
@@ -86,7 +96,9 @@ DAOs:
 - totalSupply: 10
   symbol: THEO
   name: Theo Software Solutions
-  descriptionHash: QmV4CrUumLgsSLPMQTjCC65tdKFtfBTu7eVFLt7THnGtE9
+  description: |
+    ICOs have descriptions too
+  descriptionHash: QmWSRpoiagcmiwfvCyJgXhBL979969nXx6oefKeYzrRvmh
   buyPriceStart: 1
   buyPriceEnd: 5
   saleStart: -45000
