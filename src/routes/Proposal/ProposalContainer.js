@@ -70,9 +70,6 @@ export default class ProposalContainer extends React.Component {
     
     var executeAllowed =  proposal.currentTime > proposal.proposalDeadline  && !proposal.finished && isShareHolderOfDao;
     var votingAllowed =  proposal.currentTime < proposal.proposalDeadline  && !proposal.finished && isShareHolderOfDao  && !vote.voted;
-    console.log("aaaaaaaaaaaa")
-    console.log(proposal.currentTime)
-    console.log(proposal.proposalDeadline)
     this.setState({vote});
     this.setState({votingAllowed});
     this.setState({executeAllowed});
@@ -87,7 +84,6 @@ export default class ProposalContainer extends React.Component {
     this.loadStateFromBlockchain()
     onVote(this.props.address, this.props.proposalNumber, (err, eventData) => {
       this.loadStateFromBlockchain()
-      console.log("onVote", eventData)
       //TODO UX People: It would be lovely if a popup would show up indicating that somebody just voted
     })
   }
