@@ -1,3 +1,3 @@
-import DAO from './DAO';
+import DAOContainer from './DAOContainer';
 
-export default DAO;
+export default DAOContainer;

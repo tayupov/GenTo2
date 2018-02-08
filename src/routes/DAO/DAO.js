@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Grid, Segment, Header, Button } from 'semantic-ui-react';
+import { Grid, Header } from 'semantic-ui-react';
 
 import Balances from './components/Balances'
 import Claiming from './components/Claiming'
+import Description from './components/Description'
 import Delegation from './components/Delegation'
 import ProposalsCompact from './components/ProposalsCompact'
 
@@ -14,7 +14,6 @@ import downloadString from 'provider/IPFSDownloadProvider';
 import web3 from 'utils/web3';
 
 export default class DAO extends React.Component {
-
   constructor(props) {
     super(props)
     this.delegate = this.delegate.bind(this)
@@ -96,9 +95,7 @@ export default class DAO extends React.Component {
 
           <Grid.Row>
             <Grid.Column width='12'>
-              <Segment secondary={this.state.description !== null}>
-                {this.state.description || <div className='skeleton'></div>}
-              </Segment>
+              <Description description={this.state.description} />
             </Grid.Column>
 
             <Grid.Column width='4'>

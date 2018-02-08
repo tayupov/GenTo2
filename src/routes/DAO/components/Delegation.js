@@ -23,19 +23,11 @@ export default class Delegation extends React.Component {
 
         <Table.Body>
           {delegationsForAccount.map((delegation, index) => {
-            console.log(account)
-            console.log(delegation.delegationAddress)
-            console.log(delegation.influence)
-
             const hasDelegated =
               (delegation.delegationAddress !== account) &&
               (delegation.delegationAddress !== DID_NOT_DELEGATE_ADDRESS)
-
             const placeholder = delegation.delegationAddress === DID_NOT_DELEGATE_ADDRESS ?
               account : delegation.delegationAddress
-
-
-
             return (
               <Table.Row key={index}>
                 <Table.Cell selectable>
