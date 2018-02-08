@@ -37,6 +37,10 @@ export default class ProposalContainer extends React.Component {
   async loadStateFromBlockchain() {
     const proposal = await loadProposal(this.props.address, this.props.proposalNumber)
     const isShareHolderOfDao = await isShareholder(this.props.address, this.props.account)
+    const vote = await loadVote(this.props.address, proposal, this.props.account)
+    var executeAllowed =  proposal.currentTime > proposal.proposalDeadline  && !proposal.finished && isShareHolderOfDao;
+    var votingAllowed =  proposal.currentTime < proposal.proposalDeadline  && !proposal.finished && isShareHolderOfDao  && !vote.voted;
+
 
     switch (proposal.fieldOfWork) {
       case 0: proposal.fieldOfWorkDescription = "Finance"; break
@@ -45,18 +49,21 @@ export default class ProposalContainer extends React.Component {
       case 3: proposal.fieldOfWorkDescription = "Marketing"; break
       default: proposal.fieldOfWorkDescription = "Unknown"
     }
-    if (!proposal.isFinished) {
-      proposal.stateDescription = "Proposal pending"
-    } else if (proposal.isFinished && !proposal.proposalPassed) {
+    if(executeAllowed){
+      proposal.stateDescription = "Waiting for execution"
+    }
+    else if (proposal.isFinished && !proposal.proposalPassed) {
       proposal.stateDescription = "Proposal rejected"
     } else if (proposal.isFinished && proposal.proposalPassed) {
       proposal.stateDescription = "Proposal passed"
+    } else if (!proposal.isFinished) {
+      proposal.stateDescription = "Proposal pending"
     } else {
-      proposal.stateDescription = "No information"
+      proposal.stateDescription = "Unknown"
     }
     this.setState({proposal});
 
-    const vote = await loadVote(this.props.address, proposal, this.props.account)
+
     if (vote.voted && vote.support) {
       vote.stateDescription = "You approved this proposal"
     } else if (vote.voted && !vote.support) {
@@ -67,9 +74,7 @@ export default class ProposalContainer extends React.Component {
       vote.stateDescription = "No information"
     }
     vote.influenceDescription = "Your influence in this field of work is " + vote.influence;
-    
-    var executeAllowed =  proposal.currentTime > proposal.proposalDeadline  && !proposal.finished && isShareHolderOfDao;
-    var votingAllowed =  proposal.currentTime < proposal.proposalDeadline  && !proposal.finished && isShareHolderOfDao  && !vote.voted;
+
     this.setState({vote});
     this.setState({votingAllowed});
     this.setState({executeAllowed});
