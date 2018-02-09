@@ -8,6 +8,11 @@ contract DevContract {
     event NumberLogger(string description, uint number);
     event AddressLogger(string description, address addr);
 
+    modifier devFlag {
+        require(active);
+        _;
+    }
+
     bool internal active;
     uint internal cTime;
 
