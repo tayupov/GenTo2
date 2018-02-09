@@ -4,7 +4,7 @@ import { Card, Icon } from 'semantic-ui-react';
 
 export default class ProposalList extends React.Component {
   render() {
-    const { proposals, activeProposals, executedProposals } = this.props;
+    const { activeProposals, executedProposals } = this.props;
     return (
         <div>
             <Card.Group>

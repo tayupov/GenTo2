@@ -2,8 +2,6 @@ import React from 'react';
 import { Button, Divider, Table, Message, Label } from 'semantic-ui-react';
 import {ReactMarkdown} from 'react-markdown'
 
-import { loadProposal } from 'provider/ProposalProvider'
-
 export default class Proposal extends React.Component {
   render() {
     const { proposal, vote } = this.props;
