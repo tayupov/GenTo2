@@ -23,7 +23,6 @@ export default class Organisational extends React.Component {
             <Input
               name={PROPOSALPAYOUT}
               id={PROPOSALPAYOUT}
-              label={<Dropdown defaultValue='finney' options={currencyOptions} />}
               labelPosition='right'
               size='small'
             />
