@@ -289,7 +289,7 @@ contract('DaoWithProposals', function(accounts) {
     await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[0], 100, 0, {from: accounts[0]})
     expect(numberOfInitialProposals + 1).toBe(+await contract.getNumProposals())
   })
-
+/*
   // newDividendProposal()
   it("should be possible to create and to vote on a new dividend proposal", async function() {
     await contract.setCurrentTime.sendTransaction(1200000)
@@ -340,7 +340,7 @@ contract('DaoWithProposals', function(accounts) {
     expect(Number(p[8])).toBe(0)
     expect(Number(p[9])).toBe(100)
   })
-
+*/
   /**
   MODIFIER
   */
