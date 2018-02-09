@@ -38,6 +38,9 @@ export default class ProposalsCreatorContainer extends React.Component {
 		if(res === -1){
 			this.props.notify("Proposal could not be created. Please check input and priviliges.")
 		}
+		else {
+			this.props.notify("Proposal create submitted. Check back later")
+		}
 	}
 
 	componentDidMount() {
