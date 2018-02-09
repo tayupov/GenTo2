@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Divider, Table, Message, Label } from 'semantic-ui-react';
-import {ReactMarkdown} from 'react-markdown'
+import ReactMarkdown from 'react-markdown'
 
 export default class Proposal extends React.Component {
   render() {
@@ -19,7 +19,7 @@ export default class Proposal extends React.Component {
         
         <Message>
           <Message.Header>Proposal Description:</Message.Header>
-          <p> {proposal.description} </p>
+          <p><ReactMarkdown source={proposal.description} /></p>
         </Message>
 
         <Table celled>
@@ -61,7 +61,7 @@ export default class Proposal extends React.Component {
                 <Label size='large'>Proposal State</Label>
               </Table.Cell>
               <Table.Cell>
-                <Label size='large'><ReactMarkdown source={proposal.stateDescription} /></Label>
+                <Label size='large'>{proposal.stateDescription}</Label>
               </Table.Cell>
             </Table.Row>
             <Table.Row>
