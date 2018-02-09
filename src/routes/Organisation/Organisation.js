@@ -27,16 +27,14 @@ export default class Organisation extends React.Component {
         remainingTokensForICOPurchase: null,
         descriptionHash: null,
         delegate: null,
+        balanceForAccount: null,
+        totalNumberOfTokens: null,
       }
     }
   }
 
   async componentWillMount() {
-    console.log('component');
-    console.log(this.props);
-    const organisation = await loadOrganization(this.props.address, true)
-    console.log('organisation');
-    console.log(organisation);
+    const organisation = await loadOrganization(this.props.address, this.props.account, true)
     this.setState({ auctionDetails: { ...organisation } })
 
     // const description = await downloadString(this.state.descriptionHash)
@@ -44,9 +42,7 @@ export default class Organisation extends React.Component {
   }
 
   async componentWillReceiveProps(nextProps) {
-    console.log('nextProps');
-    console.log(nextProps);
-    const organisation = await loadOrganization(nextProps.address, true)
+    const organisation = await loadOrganization(nextProps.address, nextProps.account, true)
     this.setState({ auctionDetails: { ...organisation } })
 
     // const description = await downloadString(this.state.descriptionHash)

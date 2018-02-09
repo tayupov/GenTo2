@@ -17,12 +17,6 @@ const getPointColor = (length) => {
 }
 
 const Chart = ({ chartDataArr }) => {
-    console.log('charDataArrChart.js');
-    console.log(chartDataArr);
-
-    // if (chartDataArr === null || typeof chartDataArr !== 'array') {
-    //     return;
-    // }
 
     const chartData = {
         datasets: [{
@@ -31,8 +25,8 @@ const Chart = ({ chartDataArr }) => {
             pointBackgroundColor: getPointColor(chartDataArr.length),
             pointBorderColor: getPointColor(chartDataArr.length),
             fill: false,
-            data: [{x: 1518048000000, y: 1}, {x: 1518566300000, y: 3}, {x: 1518566400000, y: 4}],
-            // data: chartDataArr,
+            // data: [{x: 1518118421000, y: 1}, {x: 1518118472930, y: 2}, {x: 1518246421000, y: 5}],
+            data: chartDataArr,
             xAxisID: 'timeAxis'
         }]
     }
