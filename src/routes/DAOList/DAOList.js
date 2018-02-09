@@ -6,8 +6,8 @@ export default class DAOList extends React.Component {
   render() {
     const { gentoDAOs, gentoICOs } = this.props
     const panes = [
-      { menuItem: 'ICOs', render: () => <Tab.Pane>{renderTabPane(gentoICOs)}</Tab.Pane> },
-      { menuItem: 'DAOs', render: () => <Tab.Pane>{renderTabPane(gentoDAOs)}</Tab.Pane> }
+      { menuItem: 'ICOs', render: () => <Tab.Pane>{renderTabPane(false, gentoICOs)}</Tab.Pane> },
+      { menuItem: 'DAOs', render: () => <Tab.Pane>{renderTabPane(true, gentoDAOs)}</Tab.Pane> }
     ]
 
     return (
@@ -20,7 +20,7 @@ export default class DAOList extends React.Component {
   }
 }
 
-function renderTabPane(gentoOrganizations) {
+function renderTabPane(icoDone, gentoOrganizations) {
   return (
     <Card.Group>
       {gentoOrganizations.map((org, index) => {
@@ -30,12 +30,15 @@ function renderTabPane(gentoOrganizations) {
               <Card.Header> {org.name} </Card.Header>
               <Card.Meta> {org.symbol} </Card.Meta>
             </Card.Content>
-            <Card.Content description = {"Sale from " + org.saleStart + " to " + org.saleEnd} />
+
+            { !icoDone ?  <Card.Content description = {"Sale from " + org.saleStart + " to " + org.saleEnd} /> : null }
+            { icoDone ?  <Card.Content description = {"Sale ended on " + org.saleEnd} /> : null }
             <Card.Content description = {org.totalSupply.c + " Tokens sold"} />
-            <Card.Content description = {org.remainingTokensForICOPurchase.c + " remaining Tokens"} />
+            { !icoDone ? <Card.Content description = {org.remainingTokensForICOPurchase.c + " remaining Tokens"} /> : null }
             <Card.Content description = {org.numberOfShareholders.c + " Shareholders"} />
-            <Card.Content description = {org.numberOfProposals.c + " Proposals"} />
-            
+            { icoDone ? <Card.Content description = {org.numberOfProposals.c + " Proposals"} /> : null }
+
+
           </Card>
         )
       })}
