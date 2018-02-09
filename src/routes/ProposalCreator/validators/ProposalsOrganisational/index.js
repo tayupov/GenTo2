@@ -1,9 +1,10 @@
 import { PROPOSALPAYOUT, PROPOSALTYPE } from 'constants/validators';
 
 function getPositionInParent(elem) {
-  var sibs = [];
-  while (elem = elem.previousSibling) {
+  let sibs = [];
+  while (elem) {
     sibs.push(elem);
+    elem = elem.previousSibling
   }
   return sibs.length+1; // Add 1 for item itself
 }
@@ -13,7 +14,7 @@ export default function ValidateProposalsOrganisational() {
   const proposalType = getPositionInParent(proposalTypeContainer);
 
   return {
-    weiAmount: parseInt(payoutValue),
+    weiAmount: parseInt(payoutValue, 10),
     proposalType: proposalType
   }
 }

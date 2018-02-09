@@ -1,9 +1,6 @@
 import web3 from 'utils/web3';
 import GentoDAOArtifact from 'assets/contracts/GentoDao'
-
 import { default as contract } from 'truffle-contract'
-
-import { loadOrganization } from './DAOProvider'
 
 const mapProposal =  (proposalNumber, proposalArray) => {
     return {
@@ -47,7 +44,6 @@ export async function loadAllProposals(address) {
     GentoDAO.setProvider(web3.currentProvider);
 
     var proposalCount = await GentoDAO.at(address).getNumProposals();
-
     var proposals = [];
 
     for(let i=0; i< proposalCount;i++){
