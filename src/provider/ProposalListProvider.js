@@ -1,9 +1,6 @@
 import web3 from 'utils/web3';
 import GentoDAOArtifact from 'assets/contracts/GentoDao'
-
 import { default as contract } from 'truffle-contract'
-
-import { loadOrganization } from './DAOProvider'
 
 const mapProposal =  (proposalNumber, proposalArray) => {
     return {

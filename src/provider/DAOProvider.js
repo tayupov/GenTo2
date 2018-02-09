@@ -1,9 +1,10 @@
 import GentoDAOArtifact from 'assets/contracts/GentoDao'
 import { default as contract } from 'truffle-contract'
-import web3 from 'utils/web3';
-import fieldsOfWorks from 'constants/fieldsOfWork'
 
-const DID_NOT_DELEGATE_ADDRESS = '0x0000000000000000000000000000000000000000'
+import fieldsOfWorks from 'constants/fieldsOfWork'
+import DID_NOT_DELEGATE_ADDRESS from 'constants/defaultAddress'
+
+import web3 from 'utils/web3';
 
 const getDelegationsForAccount = async (organization, account) => {
   if (!account) { return [] }

@@ -2,8 +2,7 @@ import React from 'react'
 import { Table, Input } from 'semantic-ui-react'
 
 import fieldsOfWork from 'constants/fieldsOfWork'
-
-const DID_NOT_DELEGATE_ADDRESS = '0x0000000000000000000000000000000000000000'
+import DID_NOT_DELEGATE_ADDRESS from 'constants/defaultAddress'
 
 export default class Delegation extends React.Component {
   render() {

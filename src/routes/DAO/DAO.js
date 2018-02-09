@@ -70,6 +70,7 @@ export default class DAO extends React.Component {
       const from = this.props.account
       const res = await this.state.delegate.sendTransaction(fieldofwork, delegatee, { from })
       if (res) {
+        // only demo purpose, use an event here
         this.props.notify('Successfully delegated', 'success')
       }
     }
