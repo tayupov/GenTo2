@@ -73,6 +73,16 @@ const getTotalNumberOfTokens = async (organization, address) => {
   return null
 }
 
+const getBigIntegerAsInt = async (organization, fieldName) => {
+  const fieldBigInt = await organization[fieldName]()
+  if (fieldBigInt) {
+    const fieldInt = +web3.fromWei(fieldBigInt, 'finney')
+    return fieldInt
+  }
+  return null
+}
+
+
 export async function mapOrganization(organization, account) {
   return {
     address: await organization.address,
@@ -83,8 +93,8 @@ export async function mapOrganization(organization, account) {
     isICOFinished: await organization.isIcoFinished(),
     numberOfProposals: await organization.getNumProposals(),
     numberOfShareholders: await organization.getShareholderCount(),
-    totalSupply: await organization.totalSupply(),
-    remainingTokensForICOPurchase: await organization.remainingTokensForICOPurchase(),
+    totalSupply: await getBigIntegerAsInt(organization, 'totalSupply'),
+    remainingTokensForICOPurchase: await getBigIntegerAsInt(organization, 'remainingTokensForICOPurchase'),
     descriptionHash: await organization.descriptionHash(),
     delegate: await organization.delegate,
     delegationsForAccount: await getDelegationsForAccount(organization, account),
