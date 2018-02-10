@@ -73,16 +73,6 @@ DAOs:
     fieldOfWork: Product
     startingDate: -40000
     payout: 1.5
-  - name: Extend our opening hours
-    description: "Change our opening hours to 8am-11:30pm"
-    fieldOfWork: Organisational
-  - name: Pay out a dividend
-    description: "In the last term we earned 20 ether. Shall we emit a dividend of 2 ether?"
-    dividend: 2
-    startingDate: -86500
-    accepted: true
-    execute: true
-    fieldOfWork: Organisational
   - name: Monthly Payment for Drinks
     description: |
       # Monthly Payment for Drinks
@@ -103,6 +93,16 @@ DAOs:
     beneficiary: 1
     payout: 0.1
     fieldOfWork: Organisational
+  - name: Extend our opening hours
+    description: "Change our opening hours to 8am-11:30pm"
+    fieldOfWork: Organisational
+  - name: Pay out a dividend
+    description: "In the last term we earned 20 ether. Shall we emit a dividend of 2 ether?"
+    dividend: 2
+    startingDate: -86500
+    accepted: true
+    execute: true
+    fieldOfWork: Organisational
   - name: Hire Design Assistant
     description: Fill me with some info
     beneficiary: 7
@@ -116,12 +116,12 @@ DAOs:
   description: |
     ICOs have descriptions too
   descriptionHash: QmWSRpoiagcmiwfvCyJgXhBL979969nXx6oefKeYzrRvmh
-  buyPriceStart: 1
-  buyPriceEnd: 5
+  buyPriceStart: 10
+  buyPriceEnd: 25
   saleStart: -45000
   saleEnd: 83000
   owners:
   - account: 4
-    percentage: 0.3
+    percentage: 0.15
   - account: 6
-    percentage: 0.1
+    percentage: 0.05
