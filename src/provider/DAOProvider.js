@@ -6,19 +6,20 @@ import web3 from 'utils/web3';
 const balanceForAccount = async (organization, address) => {
   if (!address) { return null }
   const balanceRaw = await organization.balanceOf.call(address)
-  if (balanceRaw.c) {
-    return balanceRaw.c[0]
+  if (balanceRaw) {
+    const balance = +web3.fromWei(balanceRaw, 'finney');
+    return balance;
   }
   return null
 }
 
 const getTotalNumberOfTokens = async (organization, address) => {
   if (!address) { return null }
-  const totalBought = await organization.totalSupply()
-  const remainingTokens = await organization.remainingTokensForICOPurchase()
-  if (totalBought.c && remainingTokens.c) {
-    const totalNumberOfTokens = totalBought.c[0] + remainingTokens.c[0];
-    return totalNumberOfTokens
+  const totalBought = await organization.totalSupply();
+  const tokens = +web3.fromWei(await organization.remainingTokensForICOPurchase(), 'finney');
+  if (totalBought) {
+    const totalNumberOfTokens = +web3.fromWei(totalBought, 'finney'); 
+    return totalNumberOfTokens + tokens;
   }
   return null
 }

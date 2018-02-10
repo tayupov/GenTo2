@@ -4,7 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import Home from './Home';
 import NotFound from './NotFound';
 
-import Organisation from './Organisation';
+import DAO from './DAO';
 import DAOList from './DAOList';
 import DAOCreator from './DAOCreator';
 
@@ -81,7 +81,7 @@ export default class Routes extends React.Component {
 
                 <Route path="/dao/:address"
                     render={(props) => (
-                        <Organisation
+                        <DAO
                             key={props.match.params.address}
                             account={account}
                             address={props.match.params.address}

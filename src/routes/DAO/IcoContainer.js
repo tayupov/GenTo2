@@ -22,7 +22,22 @@ class IcoContainer extends Component {
             auctionType: null,
             buyPriceStart: null,
             buyPriceEnd: null,
-            auctionDetails: {},
+            auctionDetails: {
+                address: null,
+                name: null,
+                symbol: null,
+                saleStart: null,
+                saleEnd: null,
+                isICOFinished: null,
+                numberOfProposals: null,
+                numberOfShareholders: null,
+                totalSupply: null,
+                remainingTokensForICOPurchase: null,
+                descriptionHash: null,
+                delegate: null,
+                balanceForAccount: null,
+                totalNumberOfTokens: null,
+            },
             tokenCount: 0,
             tokenCountMsg: null,
             accountChanged: false,
@@ -33,24 +48,26 @@ class IcoContainer extends Component {
         }
     }
 
-    componentWillMount() {
+    async loadOrganizationData(address, account) {
+        const ICO = await loadOrganization(address, account, true)
+        console.log('ICO DETAILS', ICO);
         this.setState({
             auctionDetails: {
-                ...this.props.auctionDetails
+                ...ICO
             }
         })
-        setInterval(this.getChartData, 10000);
+        if (ICO.saleStart !== null) {
+            this.getContractDetails(ICO);
+        }
+      }
+
+    async componentWillMount() {
+        this.loadOrganizationData(this.props.address, this.props.account)
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({
-            auctionDetails: {
-                ...nextProps.auctionDetails
-            }
-        })
-        if (nextProps.auctionDetails.saleStart !== null) {
-            this.getContractDetails(nextProps.auctionDetails);
-        }
+        this.loadOrganizationData(this.props.address, this.props.account)
+        
     }
 
     componentDidUpdate(nextProps) {
@@ -62,12 +79,14 @@ class IcoContainer extends Component {
     setMyTokenCount = async () => {
         const ico = await loadOrganization(this.props.address);
         const amount = await ico.balanceOf.call(this.props.account);
+        const tokenCount = +web3.fromWei(amount, 'finney')
         const totalSupply = await ico.remainingTokensForICOPurchase.call();
+        const remainingTokensForICOPurchase = +web3.fromWei(totalSupply, 'finney')
         const symbol = await ico.symbol.call();
         this.setState({
-            tokenCount: amount.c[0]
+            tokenCount
         });
-        const msg = "You own <strong>" + amount.c[0] + " </strong>" + symbol + " <strong>(=" + (amount.c[0] * 100 / totalSupply.c[0]).toFixed(0) + "%)</strong> "
+        const msg = "You own <strong>" + tokenCount + " </strong>" + symbol + " <strong>(=" + (tokenCount * 100 / remainingTokensForICOPurchase).toFixed(0) + "%)</strong> "
         this.setState({
             tokenCountMsg: msg
         })
@@ -143,7 +162,9 @@ class IcoContainer extends Component {
             x: moment.unix(details.saleStart).valueOf(),
             y: this.state.buyPriceStart
         });
-        const duration = details.saleEnd - details.saleStart;
+
+        console.log('details', details);
+        const duration = details.saleEnd.c[0] - details.saleStart.c[0];
     
         if(this.state.status === 'running'){
             const passed = moment().unix() - details.saleStart.c[0];
@@ -166,8 +187,10 @@ class IcoContainer extends Component {
 
     setSupplyInterval = async (cb) => {
         const details = this.state.auctionDetails;
-        const supplyPct = ((details.remainingTokensForICOPurchase.c[0] / details.totalNumberOfTokens) * 100).toFixed(0);
-        const supplyString = `${details.remainingTokensForICOPurchase.c[0]} of ${details.totalNumberOfTokens} left for sale`;
+        console.log('details', details);
+        const remainingTokensForICOPurchase = +web3.fromWei(details.remainingTokensForICOPurchase, 'finney');
+        const supplyPct = ((remainingTokensForICOPurchase / details.totalNumberOfTokens) * 100).toFixed(0);
+        const supplyString = `${remainingTokensForICOPurchase} of ${details.totalNumberOfTokens} left for sale`;
         cb({
             supplyPct,
             supplyString
@@ -205,6 +228,18 @@ class IcoContainer extends Component {
         const ico = await loadOrganization(this.props.address)
         const transfers = await ico.ICOPurchase();
         const totalSupply = await ico.remainingTokensForICOPurchase.call();
+
+        // export async function onVote(daoAddress, proposalNumber, cb) {
+        //     const GentoDAO = contract(GentoDAOArtifact);
+        //     GentoDAO.setProvider(web3.currentProvider);
+        //     const dao = await GentoDAO.at(daoAddress);
+        //     dao.Voted().watch((err, response) => {
+        //       if (err) {
+        //         return cb(err, null)
+        //       }
+        //       return cb(null, response.args)
+        //     });
+        //   }
 
         transfers.watch((error, result) => {
 
