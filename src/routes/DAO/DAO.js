@@ -40,6 +40,7 @@ export default class DAO extends React.Component {
       votingRewardForAccount: null,
       balanceForAccount: null,
       totalNumberOfTokens: null,
+      balance: null
     }
   }
 
@@ -87,7 +88,7 @@ export default class DAO extends React.Component {
   }
 
   render() {
-    const { balanceForAccount, totalNumberOfTokens } = this.state
+    const { balanceForAccount, totalNumberOfTokens, balance } = this.state
     const { dividendForAccount, votingRewardForAccount } = this.state
     return (
       <div>
@@ -100,7 +101,7 @@ export default class DAO extends React.Component {
             </Grid.Column>
 
             <Grid.Column width='4'>
-              <Balances balanceForAccount={balanceForAccount} totalNumberOfTokens={totalNumberOfTokens} />
+              <Balances balanceForAccount={balanceForAccount} totalNumberOfTokens={totalNumberOfTokens} balance={balance}/>
               <Claiming
                 claimDividend={this.claimDividend}
                 claimVotingReward={this.claimVotingReward}
