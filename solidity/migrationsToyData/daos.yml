@@ -89,10 +89,10 @@ DAOs:
     fieldOfWork: Organisational
   - name: Placeholder proposal
     description: Fill me with some info
-    beneficiary: 7
+    beneficiary: 1
     payout: 0.05
     startingDate: -302400
-    accepted: false
+    accepted: true
     fieldOfWork: Organisational
 - totalSupply: 10
   symbol: THEO

@@ -111,6 +111,7 @@ export async function mapOrganization(organization, account) {
     remainingTokensForICOPurchase: await getBigIntegerAsInt(organization, 'remainingTokensForICOPurchase'),
     descriptionHash: await organization.descriptionHash(),
     delegate: await organization.delegate,
+    claimProposalPayout: await organization.claimPayout,
     delegationsForAccount: await getDelegationsForAccount(organization, account),
     claimDividend: await organization.claimDividend,
     claimDecisionMakerReward: await organization.claimDecisionMakerReward,
