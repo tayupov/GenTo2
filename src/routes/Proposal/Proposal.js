@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Divider, Table, Message, Label } from 'semantic-ui-react';
+import { Link } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 
 export default class Proposal extends React.Component {
@@ -17,6 +18,10 @@ export default class Proposal extends React.Component {
 
     return (
       <div>
+        <Button
+            as={Link} to={{ pathname: `/dao/${this.props.address}/proposals` }}
+        >Back to proposal list</Button>
+
         <h1>Information on proposal: {proposal.name}</h1>
         <Divider section hidden />
         {executeAllowed ? <Button onClick={executeCallback} content="Execute" /> : null}
