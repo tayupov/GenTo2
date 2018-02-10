@@ -32,10 +32,14 @@ export default class ProposalsCreatorContainer extends React.Component {
 			case 3:
 				res = await createDmrProposal(Object.values(omitInvalidDmrProposalKeys(this.state)), from, this.props.address)
 				break;
-
+			default:
+				res = -1
 		}
 		if(res === -1){
 			this.props.notify("Proposal could not be created. Please check input and priviliges.")
+		}
+		else {
+			this.props.notify("Proposal create submitted. Check back later")
 		}
 	}
 

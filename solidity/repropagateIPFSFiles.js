@@ -1,12 +1,18 @@
 
 let ipfs
+const yaml = require('js-yaml');
 const IPFS = require("ipfs")
 const http = require('http');
+const fs = require('fs');
+const daosData = yaml.safeLoad(fs.readFileSync('./migrationsToyData/daos.yml', 'utf8')).DAOs;
 
 async function repropagate() {
-  console.log(await uploadToIpfs("Theo software solutions. We rumble where you tumble."))
+  for (let i=0; i<daosData.length; i++) {
+    console.log(await uploadToIpfs(daosData[i].description))
+  }
+/*  console.log(await uploadToIpfs("Theo software solutions. We rumble where you tumble."))
   console.log(await uploadToIpfs("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."))
-  console.log(await uploadToIpfs("Block E."))
+  console.log(await uploadToIpfs("Block E."))*/
   ipfs.stop(() => process.exit())
 }
 repropagate()
