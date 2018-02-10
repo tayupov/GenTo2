@@ -5,24 +5,24 @@ import { default as contract } from 'truffle-contract'
 import web3 from 'utils/web3';
 
 const mapProposal =  (proposalNumber, proposalArray, proposalStatistics) => {
-
   return {
       proposalNumber: proposalNumber,
       recipient:proposalArray[0],
-       amount:parseInt(proposalArray[1], 10),
+      amount:parseInt(proposalArray[1], 10),
       name:proposalArray[2],
       description:proposalArray[3],
       //proposalDeadline:proposalArray[4], // Deprecated
       finished:parseInt(proposalArray[5], 10),
       proposalPassed:proposalArray[6],
       passedPercent: parseInt(proposalArray[7], 10), // Deprecated
-      fieldOfWork: proposalArray[8],
+      fieldOfWork: parseInt(proposalArray[8]),
       dividend:parseInt(proposalArray[9], 10),
-      approve:parseInt(proposalStatistics[0], 10),
-      disapprove:parseInt(proposalStatistics[1], 10),
+      approve:parseInt(proposalStatistics[0], 10)/1000000000000000000, // TODO with web3
+      disapprove:parseInt(proposalStatistics[1], 10)/1000000000000000000,
       percent:parseInt(proposalStatistics[2], 10),
       proposalStartTime: parseInt(proposalStatistics[3], 10),
       proposalDeadline:parseInt(proposalStatistics[4], 10),
+      proposalDeadlineFormatted:new Date(parseInt(proposalArray[4]) * 1000).toISOString().substring(0, 19).replace(/T/i, ' '),
       currentTime:parseInt(proposalStatistics[5], 10)
   }
 }
@@ -30,7 +30,7 @@ const mapVote =  (voteArray, influence) => {
   return {
       voted : voteArray[0],
       support: voteArray[1],
-      influence: influence
+      influence: influence /1000000000000000000
   }
 }
 

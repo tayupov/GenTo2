@@ -1,9 +1,6 @@
 import web3 from 'utils/web3';
 import GentoDAOArtifact from 'assets/contracts/GentoDao'
-
 import { default as contract } from 'truffle-contract'
-
-import { loadOrganization } from './DAOProvider'
 
 const mapProposal =  (proposalNumber, proposalArray) => {
     return {
@@ -12,7 +9,8 @@ const mapProposal =  (proposalNumber, proposalArray) => {
         amount:proposalArray[1],
         name:proposalArray[2],
         description:proposalArray[3],
-        proposalDeadline:proposalArray[4],
+        proposalDeadline:parseInt(proposalArray[4]),
+        proposalDeadlineFormatted:new Date(parseInt(proposalArray[4]) * 1000).toISOString().substring(0, 19).replace(/T/i, ' '),
         finished:proposalArray[5],
         proposalPassed:proposalArray[6],
         passedPercent: proposalArray[7],
@@ -47,7 +45,6 @@ export async function loadAllProposals(address) {
     GentoDAO.setProvider(web3.currentProvider);
 
     var proposalCount = await GentoDAO.at(address).getNumProposals();
-
     var proposals = [];
 
     for(let i=0; i< proposalCount;i++){

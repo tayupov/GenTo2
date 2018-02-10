@@ -7,7 +7,7 @@ import "./DaoWithIco.sol";
 contract DaoWithProposals is DaoWithIco {
 
     Proposal[] public proposals;
-    uint public debatingPeriodInMinutes;
+    uint public debatingPeriod;
     enum FieldOfWork { Finance, Organisational, Product, Partnership }
 
     mapping(address => mapping(uint => uint256)) public votingRewardTokens;
@@ -59,7 +59,7 @@ contract DaoWithProposals is DaoWithIco {
     uint256 _saleStart,
     uint256 _saleEnd,
     bool _dev) DaoWithIco(_maxAmountToRaiseInICO, _symbol, _name, _buyPriceStart, _buyPriceEnd, _saleStart, _saleEnd, _dev) public {
-        debatingPeriodInMinutes = 10;  // TODO add to constructor
+        debatingPeriod = 1 days;
     }
 
     function getProposal(uint proposalID) public constant returns (address recipient,
@@ -144,8 +144,8 @@ contract DaoWithProposals is DaoWithIco {
         proposal.name = name;
         proposal.description = description;
         proposal.amount = weiAmount;
-        proposal.proposalStartTime = currentTime();
-        proposal.proposalDeadline = currentTime() + debatingPeriodInMinutes * 1 minutes;
+        proposal.proposalStartTime  = currentTime();
+        proposal.proposalDeadline = currentTime() + debatingPeriod;
         proposal.finished = false;
         proposal.fieldOfWork = fieldOfWork;
         proposal.proposalPassed = false;
@@ -163,6 +163,7 @@ contract DaoWithProposals is DaoWithIco {
     {
         Proposal storage proposal = proposals[proposalNumber];
         require(proposal.voted[msg.sender] != true);
+        require(currentTime() < proposal.proposalDeadline);
         require(!proposal.finished);
 
         voteID = proposal.votes.length++;

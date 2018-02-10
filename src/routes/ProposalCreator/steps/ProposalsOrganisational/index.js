@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Input, Container, Popup, Icon, Dropdown, Divider, Select } from 'semantic-ui-react';
-import { PROPOSALPAYOUT, PROPOSALEND, PROPOSALTYPE} from 'constants/validators';
+import { PROPOSALPAYOUT, PROPOSALTYPE} from 'constants/validators';
 import proposalType from 'constants/proposalType';
 
 import currencyOptions from 'constants/currencyOptions';

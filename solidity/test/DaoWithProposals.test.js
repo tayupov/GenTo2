@@ -191,7 +191,7 @@ contract('DaoWithProposals', function(accounts) {
     await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[0], 100, 0, {from: accounts[0]})
     expect(numberOfInitialProposals + 1).toBe(+await contract.getNumProposals())
   })
-
+/*
   // newDividendProposal()
   it("should be possible to create and to vote on a new dividend proposal", async function() {
     await proposalHelper.simulateIco({0: 100000, 1: 100000});

@@ -2,8 +2,9 @@ import { PROPOSALNAME, PROPOSALCATEGORY, PROPOSALDESCRIPTION, PROPOSALBENEFICIAR
 
 function getPositionInParent(elem) {
   var sibs = [];
-  while (elem = elem.previousSibling) {
+  while (elem) {
     sibs.push(elem);
+    elem = elem.previousSibling
   }
   return sibs.length+1; // Add 1 for item itself
 }
