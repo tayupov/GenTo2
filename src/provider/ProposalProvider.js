@@ -12,13 +12,13 @@ const mapProposal =  (proposalNumber, proposalArray, proposalStatistics) => {
       name:proposalArray[2],
       description:proposalArray[3],
       //proposalDeadline:proposalArray[4], // Deprecated
-      finished:proposalArray[5],//parseInt(proposalArray[5], 10),
+      finished:proposalArray[5],
       proposalPassed:proposalArray[6],
       passedPercent: parseInt(proposalArray[7], 10), // Deprecated
       fieldOfWork: parseInt(proposalArray[8]),
       dividend:parseInt(proposalArray[9], 10),
-      approve:parseInt(proposalStatistics[0], 10)/1000000000000000000, // TODO with web3
-      disapprove:parseInt(proposalStatistics[1], 10)/1000000000000000000,
+      approve:+web3.fromWei(parseInt(proposalStatistics[0], 10), 'finney'),
+      disapprove:+web3.fromWei(parseInt(proposalStatistics[1], 10), 'finney'),
       percent:parseInt(proposalStatistics[2], 10),
       proposalStartTime: parseInt(proposalStatistics[3], 10),
       proposalDeadline:parseInt(proposalStatistics[4], 10),
@@ -30,7 +30,7 @@ const mapVote =  (voteArray, influence) => {
   return {
       voted : voteArray[0],
       support: voteArray[1],
-      influence: influence /1000000000000000000
+      influence: +web3.fromWei(parseInt(influence, 10), 'finney')
   }
 }
 
