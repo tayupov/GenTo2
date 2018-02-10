@@ -181,12 +181,21 @@ contract DaoWithProposals is DaoWithIco {
             // && proposal.proposalHash == sha3(proposal.recipient, proposal.amount)); // and the supplied code matches
 
         var (approve, disapprove, passedPercent, proposalStartTime, proposalDeadline, curTime) = calculateVotingStatistics(proposalId);
+        assignDMRRewards(proposalId);
         proposal.finished = true;
 
         proposal.proposalPassed =  (approve > disapprove);
         proposal.passedPercent = passedPercent;
 
         ProposalFinishedLogger(proposalId, approve+disapprove, approve, disapprove);
+    }
+
+    function assignDMRRewards(uint proposalId) internal {
+      Proposal storage proposal = proposals[proposalId];
+      for (uint i = 0; i < proposal.votes.length; ++i) {
+          Vote storage v = proposal.votes[i];
+          uint voteWeight = getInfluenceOfVoter(v.voter, proposal.fieldOfWork);
+      }
     }
 
     function calculateVotingStatistics(uint proposalId)  public constant returns (uint currentApprove, uint currentDisapprove,
@@ -198,7 +207,7 @@ contract DaoWithProposals is DaoWithIco {
         for (uint i = 0; i < proposal.votes.length; ++i) {
             Vote storage v = proposal.votes[i];
             uint voteWeight = getInfluenceOfVoter(v.voter, proposal.fieldOfWork);
-            votingRewardTokens[v.voter][uint(proposal.fieldOfWork)] += voteWeight;
+        //    votingRewardTokens[v.voter][uint(proposal.fieldOfWork)] += voteWeight;
             if (v.inSupport) {
                 approve += voteWeight;
             } else {
