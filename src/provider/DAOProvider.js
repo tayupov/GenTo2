@@ -94,7 +94,7 @@ export async function mapOrganization(organization, account) {
     votingRewardForAccount: await getVotingRewardForAccount(organization, account),
     balanceForAccount: await balanceForAccount(organization, account),
     totalNumberOfTokens: await getTotalNumberOfTokens(organization, account),
-    balance: parseInt(await promisify(cb => web3.eth.getBalance(organization.address, cb)))
+    balance: +web3.fromWei(parseInt(await promisify(cb => web3.eth.getBalance(organization.address, cb))), 'finney')
   }
 }
 

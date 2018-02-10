@@ -8,13 +8,13 @@ export default class Balances extends React.Component {
       <Table>
         <Table.Body>
           <Table.Row>
-            <Table.Cell>Token</Table.Cell><Table.Cell>{balanceForAccount}</Table.Cell>
+            <Table.Cell>My Tokens</Table.Cell><Table.Cell>{balanceForAccount}</Table.Cell>
           </Table.Row>
           <Table.Row>
             <Table.Cell>Total Token</Table.Cell><Table.Cell>{totalNumberOfTokens}</Table.Cell>
           </Table.Row>
           <Table.Row>
-            <Table.Cell>DAO balance</Table.Cell><Table.Cell>{balance}</Table.Cell>
+            <Table.Cell>DAO balance</Table.Cell><Table.Cell>{balance} finney</Table.Cell>
           </Table.Row>
         </Table.Body>
       </Table>
