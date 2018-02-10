@@ -8,17 +8,11 @@ export default class Proposal extends React.Component {
     const { executeAllowed, votingAllowed } = this.props
     const { claimPayout, approveCallback, disapproveCallback, executeCallback } = this.props;
     
-    let canClaim = false
-    if (proposal.hasClaimed) {
-      proposal.hasClaimed(proposal.proposalNumber, this.props.account)
-        .then(hasClaimed => {
-          canClaim =
-            !hasClaimed &&
-            proposal.finished &&
-            proposal.proposalPassed &&
-            (proposal.recipient === this.props.account)
-        })
-    }
+    let canClaim =
+        !proposal.claimed &&
+        proposal.finished &&
+        proposal.proposalPassed &&
+        (proposal.recipient === this.props.account)
 
     return (
       <div>
