@@ -78,6 +78,12 @@ contract DaoWithProposals is DaoWithIco {
         proposal.finished, proposal.proposalPassed, proposal.passedPercent, uint(proposal.fieldOfWork), proposal
         .dividend, proposal.dmr);
     }
+
+    function hasClaimed(uint proposalID, address voter)  public constant returns (bool hasClaimed) {
+        Proposal storage proposal = proposals[proposalID];
+        return proposal.claimed[voter];
+    }
+
     function getVote(uint proposalID, address voter) public constant returns (bool voted, bool support) {
         Proposal storage proposal = proposals[proposalID];
 
