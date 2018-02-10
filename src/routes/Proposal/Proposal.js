@@ -22,7 +22,7 @@ export default class Proposal extends React.Component {
         
         <Message>
           <Message.Header>Proposal Description:</Message.Header>
-          <p><ReactMarkdown source={proposal.description} /></p>
+          <ReactMarkdown source={proposal.description} />
         </Message>
 
         <Table celled>
