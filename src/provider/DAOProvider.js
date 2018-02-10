@@ -66,7 +66,6 @@ const balanceForAccount = async (organization, address) => {
 }
 
 const getTotalNumberOfTokens = async (organization, address) => {
-  if (!address) { return null }
   const totalBought = await organization.totalSupply()
   if (totalBought) {
     const totalNumberOfTokens = +web3.fromWei(totalBought, 'finney')
@@ -76,7 +75,6 @@ const getTotalNumberOfTokens = async (organization, address) => {
 }
 
 const getNumberOfTokensInICO = async (organization, address) => {
-  if (!address) { return null }
   const totalBought = await organization.totalSupply();
   const tokens = +web3.fromWei(await organization.remainingTokensForICOPurchase(), 'finney');
   if (totalBought) {
@@ -97,6 +95,7 @@ const getBigIntegerAsInt = async (organization, fieldName) => {
 
 
 export async function mapOrganization(organization, account) {
+  console.log('account', account);
   return {
     address: await organization.address,
     name: await organization.name(),

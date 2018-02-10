@@ -36,7 +36,7 @@ class IcoContainer extends Component {
                 descriptionHash: null,
                 delegate: null,
                 balanceForAccount: null,
-                totalNumberOfTokens: null,
+                numberOfTokensInICO: null,
             },
             tokenCount: 0,
             tokenCountMsg: null,
