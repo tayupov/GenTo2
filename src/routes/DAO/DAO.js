@@ -53,7 +53,7 @@ export default class DAO extends React.Component {
 
     this.setState({ description: null })
     downloadString(this.state.descriptionHash)
-      .then(description => setTimeout(() => this.setState({ description }), 1500))
+      .then(description => setTimeout(() => this.setState({ description }), 2200))
   }
 
   async componentDidMount() {

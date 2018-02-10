@@ -5,21 +5,38 @@ import ReactMarkdown from 'react-markdown'
 export default class Proposal extends React.Component {
   render() {
     const { proposal, vote } = this.props;
-    const { approveCallback, disapproveCallback,executeCallback}= this.props;
+    const { executeAllowed, votingAllowed } = this.props
+    const { claimPayout, approveCallback, disapproveCallback, executeCallback } = this.props;
+    
+    let canClaim = false
+    if (proposal.hasClaimed) {
+      proposal.hasClaimed(proposal.proposalNumber, this.props.account)
+        .then(hasClaimed => {
+          canClaim =
+            !hasClaimed &&
+            proposal.finished &&
+            proposal.proposalPassed &&
+            (proposal.recipient === this.props.account)
+        })
+    }
+
     return (
       <div>
         <h1>Information on proposal: {proposal.name}</h1>
         <Divider section hidden />
-        { this.props.executeAllowed ? <Button onClick={executeCallback} content="Execute" /> : null }
-        { this.props.votingAllowed ? <Button onClick={approveCallback} content="Approve" /> : null }
-        { this.props.votingAllowed ? <Button onClick={disapproveCallback} content="Disapprove" /> : null }
+        {executeAllowed ? <Button onClick={executeCallback} content="Execute" /> : null}
+        {votingAllowed ? <Button onClick={approveCallback} content="Approve" /> : null}
+        {votingAllowed ? <Button onClick={disapproveCallback} content="Disapprove" /> : null}
+        {canClaim &&
+          <Button proposal={proposal} onClick={claimPayout} content={`Claim: ${proposal.amount} Ether`} />
+        }
         <h3>{vote.stateDescription}</h3>
         <h3>{vote.influenceDescription}</h3>
         <Divider section hidden />
-        
+
         <Message>
           <Message.Header>Proposal Description:</Message.Header>
-          <p><ReactMarkdown source={proposal.description} /></p>
+          <ReactMarkdown source={proposal.description} />
         </Message>
 
         <Table celled>
@@ -29,15 +46,15 @@ export default class Proposal extends React.Component {
                 <Label size='large'>Proposal type</Label>
               </Table.Cell>
               <Table.Cell>
-                <Label size='large'>{proposal.proposalType} Wei</Label>
+                <Label size='large'>{proposal.proposalType}</Label>
               </Table.Cell>
             </Table.Row>
             <Table.Row>
               <Table.Cell>
-                <Label size='large'>Tokens transferred to Recipient when finished</Label>
+                <Label size='large'>Ether transferred to Recipient when finished</Label>
               </Table.Cell>
               <Table.Cell>
-                <Label size='large'>{proposal.amount} Wei</Label>
+                <Label size='large'>{proposal.amount} Ether</Label>
               </Table.Cell>
             </Table.Row>
             <Table.Row>
@@ -69,7 +86,7 @@ export default class Proposal extends React.Component {
                 <Label size='large'>Voters currently approving the Proposal</Label>
               </Table.Cell>
               <Table.Cell>
-                <Label size='large'>{proposal.approve}/{proposal.approve+proposal.disapprove} ({proposal.percent}%)</Label>
+                <Label size='large'>{proposal.approve}/{proposal.approve + proposal.disapprove} ({proposal.percent}%)</Label>
               </Table.Cell>
             </Table.Row>
             <Table.Row>
@@ -88,7 +105,7 @@ export default class Proposal extends React.Component {
                 <Label size='large'>{proposal.dividend} Wei</Label>
               </Table.Cell>
             </Table.Row>
-          </Table.Body>  
+          </Table.Body>
         </Table>
       </div>
     )
