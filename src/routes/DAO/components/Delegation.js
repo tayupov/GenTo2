@@ -25,8 +25,7 @@ export default class Delegation extends React.Component {
             const hasDelegated =
               (delegation.delegationAddress !== account) &&
               (delegation.delegationAddress !== DID_NOT_DELEGATE_ADDRESS)
-            const placeholder = delegation.delegationAddress === DID_NOT_DELEGATE_ADDRESS ?
-              'Not delegated' : delegation.delegationAddress
+            const placeholder = !hasDelegated ? 'Not delegated' : delegation.delegationAddress
             return (
               <Table.Row key={index}>
                 <Table.Cell collapsing>{fieldsOfWork.find(fow => fow.value === index).text}</Table.Cell>
