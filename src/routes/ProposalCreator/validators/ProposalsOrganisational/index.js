@@ -6,7 +6,7 @@ function getPositionInParent(elem) {
     sibs.push(elem);
     elem = elem.previousSibling
   }
-  return sibs.length; // Add 1 for item itself
+  return sibs.length;
 }
 export default function ValidateProposalsOrganisational() {
   const payoutValue = document.getElementById(PROPOSALPAYOUT).value;
