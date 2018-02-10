@@ -5,14 +5,17 @@ import ReactMarkdown from 'react-markdown'
 export default class Proposal extends React.Component {
   render() {
     const { proposal, vote } = this.props;
-    const { approveCallback, disapproveCallback,executeCallback}= this.props;
-    return (
+    const { executeAllowed, votingAllowed } = this.props
+    const { claimPayout ,approveCallback, disapproveCallback,executeCallback} = this.props;
+
+    return ( 
       <div>
         <h1>Information on proposal: {proposal.name}</h1>
         <Divider section hidden />
-        { this.props.executeAllowed ? <Button onClick={executeCallback} content="Execute" /> : null }
-        { this.props.votingAllowed ? <Button onClick={approveCallback} content="Approve" /> : null }
-        { this.props.votingAllowed ? <Button onClick={disapproveCallback} content="Disapprove" /> : null }
+        { executeAllowed ? <Button onClick={executeCallback} content="Execute" /> : null }
+        { votingAllowed ? <Button onClick={approveCallback} content="Approve" /> : null }
+        { votingAllowed ? <Button onClick={disapproveCallback} content="Disapprove" /> : null }
+        <Button proposal={proposal} onClick={claimPayout} content={`Claim: ${proposal.amount}`} />
         <h3>{vote.stateDescription}</h3>
         <h3>{vote.influenceDescription}</h3>
         <Divider section hidden />
