@@ -45,6 +45,7 @@ export default class DAO extends React.Component {
   }
 
   async loadOrganizationData(address, account) {
+    console.log('account load: ', account);
     const DAO = await loadOrganization(address, account, true)
     this.setState({ ...DAO })
 
