@@ -14,9 +14,9 @@ export default class Delegation extends React.Component {
 
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Delegatee</Table.HeaderCell>
-            <Table.HeaderCell>Influence</Table.HeaderCell>
             <Table.HeaderCell>Field Of Work</Table.HeaderCell>
+            <Table.HeaderCell>Influence</Table.HeaderCell>
+            <Table.HeaderCell>Delegatee</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
 
@@ -26,9 +26,11 @@ export default class Delegation extends React.Component {
               (delegation.delegationAddress !== account) &&
               (delegation.delegationAddress !== DID_NOT_DELEGATE_ADDRESS)
             const placeholder = delegation.delegationAddress === DID_NOT_DELEGATE_ADDRESS ?
-              account : delegation.delegationAddress
+              'Not delegated' : delegation.delegationAddress
             return (
               <Table.Row key={index}>
+                <Table.Cell collapsing>{fieldsOfWork.find(fow => fow.value === index).text}</Table.Cell>
+                <Table.Cell collapsing>{hasDelegated ? 0 : delegation.influence}</Table.Cell>
                 <Table.Cell selectable>
                   <Input
                     fluid
@@ -38,8 +40,6 @@ export default class Delegation extends React.Component {
                     onChange={(e, data) => delegate(e, data)}
                   />
                 </Table.Cell>
-                <Table.Cell collapsing>{hasDelegated ? 0 : delegation.influence}</Table.Cell>
-                <Table.Cell collapsing>{fieldsOfWork.find(fow => fow.value === index).text}</Table.Cell>
               </Table.Row>
             )
           })}
