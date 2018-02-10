@@ -13,12 +13,13 @@ const getDelegationsForAccount = async (organization, account) => {
 
   return Promise.all(fieldsOfWorks.map(async fow => {
     const delegationAddress = await organization.delegations.call(account, fow.value)
-    const influence = delegationAddress !== DID_NOT_DELEGATE_ADDRESS ?
+    const influenceRaw = delegationAddress !== DID_NOT_DELEGATE_ADDRESS ?
       await organization.getInfluenceOfVoter(delegationAddress, fow.value) :
       await organization.getInfluenceOfVoter(account, fow.value)
+    const influence = +web3.fromWei(influenceRaw, 'finney')
     return {
       delegationAddress,
-      influence: influence.c[0]
+      influence
     }
   }))
 }
@@ -33,11 +34,12 @@ const getShareholders = async (organization, account) => {
   return shareholders
 }
 
-const getDividenForAccount = async (organization, account) => {
+const getDividendForAccount = async (organization, account) => {
   if (!account) { return null }
   const dividendRaw = await organization.dividends.call(account)
-  if (dividendRaw.c) {
-    return dividendRaw.c[0]
+  if (dividendRaw) {
+    const dividend = +web3.fromWei(dividendRaw, 'ether')
+    return dividend
   }
   return null
 }
@@ -45,8 +47,9 @@ const getDividenForAccount = async (organization, account) => {
 const getVotingRewardForAccount = async (organization, account) => {
   if (!account) { return null }
   const votingRewardRaw = await organization.decisionmakerRewards(account)
-  if (votingRewardRaw.c) {
-    return votingRewardRaw.c[0]
+  if (votingRewardRaw) {
+    const votingReward = +web3.fromWei(votingRewardRaw, 'ether')
+    return votingReward
   }
   return null
 
@@ -55,8 +58,9 @@ const getVotingRewardForAccount = async (organization, account) => {
 const balanceForAccount = async (organization, address) => {
   if (!address) { return null }
   const balanceRaw = await organization.balanceOf.call(address)
-  if (balanceRaw.c) {
-    return balanceRaw.c[0]
+  if (balanceRaw) {
+    const balance = +web3.fromWei(balanceRaw, 'finney')
+    return balance
   }
   return null
 }
@@ -64,13 +68,22 @@ const balanceForAccount = async (organization, address) => {
 const getTotalNumberOfTokens = async (organization, address) => {
   if (!address) { return null }
   const totalBought = await organization.totalSupply()
-  const remainingTokens = await organization.remainingTokensForICOPurchase()
-  if (totalBought.c && remainingTokens.c) {
-    const totalNumberOfTokens = totalBought.c[0] + remainingTokens.c[0]
+  if (totalBought) {
+    const totalNumberOfTokens = +web3.fromWei(totalBought, 'finney')
     return totalNumberOfTokens
   }
   return null
 }
+
+const getBigIntegerAsInt = async (organization, fieldName) => {
+  const fieldBigInt = await organization[fieldName]()
+  if (fieldBigInt) {
+    const fieldInt = +web3.fromWei(fieldBigInt, 'finney')
+    return fieldInt
+  }
+  return null
+}
+
 
 export async function mapOrganization(organization, account) {
   return {
@@ -82,15 +95,15 @@ export async function mapOrganization(organization, account) {
     isICOFinished: await organization.isIcoFinished(),
     numberOfProposals: await organization.getNumProposals(),
     numberOfShareholders: await organization.getShareholderCount(),
-    totalSupply: await organization.totalSupply(),
-    remainingTokensForICOPurchase: await organization.remainingTokensForICOPurchase(),
+    totalSupply: await getBigIntegerAsInt(organization, 'totalSupply'),
+    remainingTokensForICOPurchase: await getBigIntegerAsInt(organization, 'remainingTokensForICOPurchase'),
     descriptionHash: await organization.descriptionHash(),
     delegate: await organization.delegate,
     delegationsForAccount: await getDelegationsForAccount(organization, account),
     claimDividend: await organization.claimDividend,
     claimDecisionMakerReward: await organization.claimDecisionMakerReward,
     shareholders: await getShareholders(organization, account),
-    dividendForAccount: await getDividenForAccount(organization, account),
+    dividendForAccount: await getDividendForAccount(organization, account),
     votingRewardForAccount: await getVotingRewardForAccount(organization, account),
     balanceForAccount: await balanceForAccount(organization, account),
     totalNumberOfTokens: await getTotalNumberOfTokens(organization, account),

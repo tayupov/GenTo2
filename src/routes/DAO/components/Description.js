@@ -4,9 +4,11 @@ import ReactMarkdown from 'react-markdown'
 
 export default class Description extends React.Component {
   render() {
+    const description = this.props.description
     return (
       <Segment>
-          <p><ReactMarkdown source={this.props.description} /></p>
+          {!description && <div className="skeleton"></div>}
+          {description && <p><ReactMarkdown source={this.props.description} /></p>}
         <Divider />
         <p id='ipfs-disclaimer'>Offchained to IPFS</p>
       </Segment>

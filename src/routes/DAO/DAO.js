@@ -116,7 +116,9 @@ export default class DAO extends React.Component {
               <ProposalsCompact address={this.state.address} proposals={this.state.proposals} />
             </Grid.Column>
 
-            <Grid.Column width='9'>
+            <Grid.Column width='1'></Grid.Column>
+
+            <Grid.Column width='8'>
               <Delegation
                 account={this.props.account}
                 delegate={this.delegate}

@@ -31,9 +31,11 @@ function renderTabPane(gentoOrganizations) {
               <Card.Meta> {org.symbol} </Card.Meta>
             </Card.Content>
             <Card.Content description = {"Sale from " + org.saleStart + " to " + org.saleEnd} />
-            <Card.Content description = {org.totalSupply.c + " Tokens sold"} />
-            <Card.Content description = {org.remainingTokensForICOPurchase.c + " remaining Tokens"} />
-            <Card.Content description = {org.numberOfShareholders.c + " Shareholders"} />
+            <Card.Content description = {org.totalSupply + " Tokens sold"} />
+            {!org.isICOFinished &&
+              <Card.Content description = {org.remainingTokensForICOPurchase + " remaining Tokens"} />
+            }
+            <Card.Content description = {org.numberOfShareholders.c  + " Shareholders"} />
             <Card.Content description = {org.numberOfProposals.c + " Proposals"} />
             
           </Card>
