@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Divider, Table, Message, Label } from 'semantic-ui-react';
-
-import { loadProposal } from 'provider/ProposalProvider'
+import ReactMarkdown from 'react-markdown'
 
 export default class Proposal extends React.Component {
   render() {
@@ -11,20 +10,28 @@ export default class Proposal extends React.Component {
       <div>
         <h1>Information on proposal: {proposal.name}</h1>
         <Divider section hidden />
-        <Button onClick={approveCallback} content="Approve" />
-        <Button onClick={disapproveCallback} content="Disapprove" />
-        <Button onClick={executeCallback} content="Execute" />
+        { this.props.executeAllowed ? <Button onClick={executeCallback} content="Execute" /> : null }
+        { this.props.votingAllowed ? <Button onClick={approveCallback} content="Approve" /> : null }
+        { this.props.votingAllowed ? <Button onClick={disapproveCallback} content="Disapprove" /> : null }
         <h3>{vote.stateDescription}</h3>
         <h3>{vote.influenceDescription}</h3>
         <Divider section hidden />
         
         <Message>
           <Message.Header>Proposal Description:</Message.Header>
-          <p> {proposal.description} </p>
+          <p><ReactMarkdown source={proposal.description} /></p>
         </Message>
 
         <Table celled>
           <Table.Body>
+            <Table.Row>
+              <Table.Cell>
+                <Label size='large'>Proposal type</Label>
+              </Table.Cell>
+              <Table.Cell>
+                <Label size='large'>{proposal.proposalType} Wei</Label>
+              </Table.Cell>
+            </Table.Row>
             <Table.Row>
               <Table.Cell>
                 <Label size='large'>Tokens transferred to Recipient when finished</Label>
@@ -46,7 +53,7 @@ export default class Proposal extends React.Component {
                 <Label size='large'>Deadline of Proposal</Label>
               </Table.Cell>
               <Table.Cell>
-                <Label size='large'>{proposal.proposalDeadline}</Label>
+                <Label size='large'>{proposal.proposalDeadlineFormatted}</Label>
               </Table.Cell>
             </Table.Row>
             <Table.Row>

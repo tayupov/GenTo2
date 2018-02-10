@@ -5,24 +5,24 @@ import { default as contract } from 'truffle-contract'
 import web3 from 'utils/web3';
 
 const mapProposal =  (proposalNumber, proposalArray, proposalStatistics) => {
-
   return {
       proposalNumber: proposalNumber,
       recipient:proposalArray[0],
-       amount:parseInt(proposalArray[1], 10),
+      amount:parseInt(proposalArray[1], 10),
       name:proposalArray[2],
       description:proposalArray[3],
       //proposalDeadline:proposalArray[4], // Deprecated
-      finished:parseInt(proposalArray[5], 10),
+      finished:proposalArray[5],
       proposalPassed:proposalArray[6],
       passedPercent: parseInt(proposalArray[7], 10), // Deprecated
-      fieldOfWork: proposalArray[8],
+      fieldOfWork: parseInt(proposalArray[8]),
       dividend:parseInt(proposalArray[9], 10),
-      approve:parseInt(proposalStatistics[0], 10),
-      disapprove:parseInt(proposalStatistics[1], 10),
+      approve:+web3.fromWei(parseInt(proposalStatistics[0], 10), 'finney'),
+      disapprove:+web3.fromWei(parseInt(proposalStatistics[1], 10), 'finney'),
       percent:parseInt(proposalStatistics[2], 10),
       proposalStartTime: parseInt(proposalStatistics[3], 10),
       proposalDeadline:parseInt(proposalStatistics[4], 10),
+      proposalDeadlineFormatted:new Date(parseInt(proposalArray[4]) * 1000).toISOString().substring(0, 19).replace(/T/i, ' '),
       currentTime:parseInt(proposalStatistics[5], 10)
   }
 }
@@ -30,17 +30,18 @@ const mapVote =  (voteArray, influence) => {
   return {
       voted : voteArray[0],
       support: voteArray[1],
-      influence: influence
+      influence: +web3.fromWei(parseInt(influence, 10), 'finney')
   }
 }
 
 export async function loadProposal(daoAddress, proposalNumber) {
     const GentoDAO = contract(GentoDAOArtifact);
     GentoDAO.setProvider(web3.currentProvider);
+    const DAO = await GentoDAO.at(daoAddress)
+    const proposalArray = await DAO.getProposal.call(proposalNumber);
+    const proposalStatistics = await DAO.calculateVotingStatistics.call(proposalNumber);
 
-    var proposalArray = await GentoDAO.at(daoAddress).getProposal(proposalNumber);
-    var proposalStatistics = await GentoDAO.at(daoAddress).calculateVotingStatistics(proposalNumber);
-    var mappedProposal = mapProposal(proposalNumber, proposalArray, proposalStatistics);
+    const mappedProposal = mapProposal(proposalNumber, proposalArray, proposalStatistics);
     return mappedProposal;
 }
 
