@@ -58,15 +58,13 @@ export default class ProposalContainer extends React.Component {
       proposal.proposalType = "Business proposal";
     }
 
-
-
     if(executeAllowed){
       proposal.stateDescription = "Waiting for execution"
-    } else if (proposal.isFinished && !proposal.proposalPassed) {
+    } else if (proposal.finished && !proposal.proposalPassed) {
       proposal.stateDescription = "Proposal rejected"
-    } else if (proposal.isFinished && proposal.proposalPassed) {
+    } else if (proposal.finished && proposal.proposalPassed) {
       proposal.stateDescription = "Proposal passed"
-    } else if (!proposal.isFinished) {
+    } else if (!proposal.finished) {
       proposal.stateDescription = "Proposal pending"
     } else {
       proposal.stateDescription = "Unknown"
@@ -126,7 +124,7 @@ export default class ProposalContainer extends React.Component {
   }
 
   async executeCallback(){
-    var res = await executeProposal(this.props.address, this.props.proposalNumber)
+    var res = await executeProposal(this.props.address, this.props.proposalNumber, this.props.account)
 
     if(res === -1){
       this.props.notify("Execution failed. Please check deadline, status and priviliges.")

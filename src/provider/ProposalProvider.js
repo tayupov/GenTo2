@@ -37,10 +37,11 @@ const mapVote =  (voteArray, influence) => {
 export async function loadProposal(daoAddress, proposalNumber) {
     const GentoDAO = contract(GentoDAOArtifact);
     GentoDAO.setProvider(web3.currentProvider);
+    const DAO = await GentoDAO.at(daoAddress)
+    const proposalArray = await DAO.getProposal.call(proposalNumber);
+    const proposalStatistics = await DAO.calculateVotingStatistics.call(proposalNumber);
 
-    var proposalArray = await GentoDAO.at(daoAddress).getProposal(proposalNumber);
-    var proposalStatistics = await GentoDAO.at(daoAddress).calculateVotingStatistics(proposalNumber);
-    var mappedProposal = mapProposal(proposalNumber, proposalArray, proposalStatistics);
+    const mappedProposal = mapProposal(proposalNumber, proposalArray, proposalStatistics);
     return mappedProposal;
 }
 
