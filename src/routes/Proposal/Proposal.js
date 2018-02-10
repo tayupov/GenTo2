@@ -43,14 +43,31 @@ export default class Proposal extends React.Component {
                 <Label size='large'>{proposal.proposalType}</Label>
               </Table.Cell>
             </Table.Row>
-            <Table.Row>
+
+            {proposal.dividend > 0 ? <Table.Row>
+              <Table.Cell>
+                <Label size='large'>Proposed dividend</Label>
+              </Table.Cell>
+              <Table.Cell>
+                <Label size='large'>{proposal.dividend} Ether</Label>
+              </Table.Cell>
+            </Table.Row> : null}
+            {proposal.dmr > 0 ? <Table.Row>
+              <Table.Cell>
+                <Label size='large'>Proposed dmr</Label>
+              </Table.Cell>
+              <Table.Cell>
+                <Label size='large'>{proposal.dmr} Ether</Label>
+              </Table.Cell>
+            </Table.Row> : null}
+            {proposal.amount ? <Table.Row>
               <Table.Cell>
                 <Label size='large'>Ether transferred to Recipient when finished</Label>
               </Table.Cell>
               <Table.Cell>
                 <Label size='large'>{proposal.amount} Ether</Label>
               </Table.Cell>
-            </Table.Row>
+            </Table.Row> : null}
             <Table.Row>
               <Table.Cell>
                 <Label size='large'>Recipient Address</Label>

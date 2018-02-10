@@ -16,8 +16,8 @@ const mapProposal = (proposalNumber, proposalArray, proposalStatistics) => {
 		proposalPassed: proposalArray[6],
 		passedPercent: parseInt(proposalArray[7], 10), // Deprecated
 		fieldOfWork: parseInt(proposalArray[8]),
-		dividend: parseInt(proposalArray[9], 10),
-		dmr: parseInt(proposalArray[10], 10),
+		dividend: getAmount(proposalArray[9], 10),
+		dmr: getAmount(proposalArray[10], 10),
 		claimed: proposalArray[11],
 		approve: +web3.fromWei(parseInt(proposalStatistics[0], 10), 'finney'),
 		disapprove: +web3.fromWei(parseInt(proposalStatistics[1], 10), 'finney'),
@@ -46,8 +46,11 @@ export async function loadProposal(daoAddress, proposalNumber) {
 	const GentoDAO = contract(GentoDAOArtifact);
 	GentoDAO.setProvider(web3.currentProvider);
 	const DAO = await GentoDAO.at(daoAddress)
+	console.log("///1")
 	const proposalArray = await DAO.getProposal.call(proposalNumber);
+	console.log("///2")
 	const proposalStatistics = await DAO.calculateVotingStatistics.call(proposalNumber);
+	console.log("///3")
 
 	const mappedProposal = mapProposal(proposalNumber, proposalArray, proposalStatistics);
 
@@ -57,8 +60,14 @@ export async function loadProposal(daoAddress, proposalNumber) {
 export async function loadVote(daoAddress, proposal, address) {
 	const GentoDAO = contract(GentoDAOArtifact);
 	GentoDAO.setProvider(web3.currentProvider);
+	console.log("///4")
+
 	var voteArray = await GentoDAO.at(daoAddress).getVote(proposal.proposalNumber, address);
+
+	console.log("///5")
 	var influence = await GentoDAO.at(daoAddress).getInfluenceOfVoter(address, proposal.fieldOfWork);
+
+	console.log("///6")
 
 	return mapVote(voteArray, influence);
 }
