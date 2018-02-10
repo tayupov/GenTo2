@@ -15,12 +15,16 @@ export default class Claiming extends React.Component {
           <Table.Row>
             <Table.Cell>
               <Button disabled={!canClaimDividend} onClick={claimDividend}>
-                Dividend: {dividendForAccount}
+                Dividend: 
+                <br />
+                {dividendForAccount} Ether
               </Button>
             </Table.Cell>
             <Table.Cell>
               <Button disabled={!canClaimVotingReward}  onClick={claimVotingReward}>
-                Voting Reward: {votingRewardForAccount}
+                Voting Reward:
+                <br />
+                {votingRewardForAccount} Ether
               </Button>
             </Table.Cell>
           </Table.Row>
