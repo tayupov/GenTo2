@@ -65,11 +65,48 @@ DAOs:
   - account: 3
     percentage: 0.1
   proposals:
-  - name: Buy new couches
+  - name: Buy 5 new couches
     description: |
-      # Markdown Test!
-      Buy 5 of these couches: made.com/de/chou-schlafsofa-in-quartzblau
-    beneficiary: 7
+      # 5x Chou-bidu Couch for chillout rooms
+
+      ![N|Solid](https://res-4.cloudinary.com/made-com/image/upload/b_transparent,c_pad,d_made.svg,dpr_1.0,f_auto,h_500,q_auto:best,w_965/v4/catalog/product/asset/b/c/0/8/bc08132c1a968e2134cd1cd34838468b751f25fe_c_h_chou_sofebed_quartz_blue_nolegs_lb01_1.jpg)
+
+      The angled wooden legs, buttoned details on the back rest and cool blue colour give this sofa bed a real retro feel.
+
+      ![N|Solid](https://res-5.cloudinary.com/made-com/image/upload/b_transparent,c_pad,d_made.svg,dpr_1.0,f_auto,h_1500,q_auto:best,w_2889/v4/catalog/product/asset/3/f/5/f/3f5f6461a998ff53c60c76008a486ee5e11788e9_c_h_chou_sofebed_quartz_blue_nolegs_lb08.jpg)
+
+      ![N|Solid](https://res-1.cloudinary.com/made-com/image/upload/b_transparent,c_pad,d_made.svg,dpr_1.0,f_auto,h_1500,q_auto:best,w_2889/v4/catalog/product/asset/0/d/6/2/0d62f6100742cbab9909afc7fb70b21a908de6ed_c_h_chou_sofebed_quartz_blue_nolegs_lb04.jpg)
+
+      ## Room to stretch
+      The back folds down with a simple mechanism. The arms can be removed too, for those taller sleepers.
+
+      ## STRONG & STURDY
+      Ideal for the holidays when you never know how many guests may drop in. Check out our full sofa bed collection here.
+
+
+      | Dimensions| |
+      | ------ | ------ |
+      |Height (cm) |82|
+      |Width (cm) |210|
+      |Depth (cm) |88|
+      |Seat Dimensions (HWD)| 43 x 190 x 55|
+      |Sofabed Mattress Dimension LWD |190 x 110 x 43 cm|
+      |Packaging Dimensions| 27 x 194 x 116 cm|
+
+      |Product Details||
+      | ------ | ------ |
+      |Weight (kg) | 34.8|
+      |Material | Composite / Mixed Fabric|
+      |Assembly Legs | to be fitted|
+      |Cover Type | Fixed|
+      |Fabric Composition | 100% Polyester|
+      |Filling | Foam|
+      |Foam Specification | 30kg/cbm|
+      |Foam Type | Polyethylene|
+      |Instructions Included | Yes|
+      |Caring Instructions | Professional cleaning only|
+      |SKU | SOFCHO010BLU-UK|
+    beneficiary: 0
     fieldOfWork: Product
     startingDate: -40000
     payout: 1.5

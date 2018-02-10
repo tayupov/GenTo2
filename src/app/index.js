@@ -31,15 +31,15 @@ export default class App extends React.Component {
 
   notify = (message, type) => {
     switch (type) {
-      case 'info':
-        return this.msg.info(message);
       case 'success':
         return this.msg.success(message);
       case 'remove':
         return this.msg.removeAll();
       case 'error':
-      default:
         return this.msg.error(message);
+      case 'info':
+      default:
+        return this.msg.info(message);
     }
   }
 
