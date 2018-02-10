@@ -1,7 +1,7 @@
 import React from 'react';
 import { loadOrganization } from 'provider/DAOProvider';
 
-// import DAO from './DAO';
+import DAO from './DAO';
 import ICO from './IcoContainer';
 
 export default class DAOContainer extends React.Component {
@@ -22,7 +22,7 @@ export default class DAOContainer extends React.Component {
     return (
       <div>
         {!isICOFinished  && <ICO {...this.props} />}
-        {/* {isICOFinished && <DAO {...this.props} />} */}
+        {isICOFinished && <DAO {...this.props} />}
       </div>
     )
   }

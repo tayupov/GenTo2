@@ -50,7 +50,7 @@ class IcoContainer extends Component {
 
     async loadOrganizationData(address, account) {
         const ICO = await loadOrganization(address, account, true)
-        console.log('ICO DETAILS', ICO);
+
         this.setState({
             auctionDetails: {
                 ...ICO
@@ -106,9 +106,7 @@ class IcoContainer extends Component {
         }
     }
 
-    getAuctionType = (details) => {
-        console.log('getAuctionType');
-        console.log(details);
+    getAuctionType = (details) => {;
         if(details.buyPriceStart < details.buyPriceEnd) {
             return 'english';
         } else if (details.buyPriceStart > details.buyPriceEnd){
@@ -163,7 +161,6 @@ class IcoContainer extends Component {
             y: this.state.buyPriceStart
         });
 
-        console.log('details', details);
         const duration = details.saleEnd.c[0] - details.saleStart.c[0];
     
         if(this.state.status === 'running'){
@@ -187,10 +184,9 @@ class IcoContainer extends Component {
 
     setSupplyInterval = async (cb) => {
         const details = this.state.auctionDetails;
-        console.log('details', details);
-        const remainingTokensForICOPurchase = +web3.fromWei(details.remainingTokensForICOPurchase, 'finney');
-        const supplyPct = ((remainingTokensForICOPurchase / details.totalNumberOfTokens) * 100).toFixed(0);
-        const supplyString = `${remainingTokensForICOPurchase} of ${details.totalNumberOfTokens} left for sale`;
+        const remainingTokensForICOPurchase = details.remainingTokensForICOPurchase;
+        const supplyPct = ((remainingTokensForICOPurchase / details.numberOfTokensInICO) * 100).toFixed(0);
+        const supplyString = `${remainingTokensForICOPurchase} of ${details.numberOfTokensInICO} left for sale`;
         cb({
             supplyPct,
             supplyString

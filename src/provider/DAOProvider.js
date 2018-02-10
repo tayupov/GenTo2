@@ -75,6 +75,17 @@ const getTotalNumberOfTokens = async (organization, address) => {
   return null
 }
 
+const getNumberOfTokensInICO = async (organization, address) => {
+  if (!address) { return null }
+  const totalBought = await organization.totalSupply();
+  const tokens = +web3.fromWei(await organization.remainingTokensForICOPurchase(), 'finney');
+  if (totalBought) {
+    const totalNumberOfTokens = +web3.fromWei(totalBought, 'finney'); 
+    return totalNumberOfTokens + tokens;
+  }
+  return null
+}
+
 const getBigIntegerAsInt = async (organization, fieldName) => {
   const fieldBigInt = await organization[fieldName]()
   if (fieldBigInt) {
@@ -92,6 +103,8 @@ export async function mapOrganization(organization, account) {
     symbol: await organization.symbol(),
     saleStart: await organization.saleStart(),
     saleEnd: await organization.saleEnd(),
+    buyPriceStart: await organization.buyPriceStart(),
+    buyPriceEnd: await organization.buyPriceEnd(),
     isICOFinished: await organization.isIcoFinished(),
     numberOfProposals: await organization.getNumProposals(),
     numberOfShareholders: await organization.getShareholderCount(),
@@ -107,6 +120,7 @@ export async function mapOrganization(organization, account) {
     votingRewardForAccount: await getVotingRewardForAccount(organization, account),
     balanceForAccount: await balanceForAccount(organization, account),
     totalNumberOfTokens: await getTotalNumberOfTokens(organization, account),
+    numberOfTokensInICO: await getNumberOfTokensInICO(organization, account),
     balance: +web3.fromWei(parseInt(await promisify(cb => web3.eth.getBalance(organization.address, cb))), 'finney')
   }
 }
