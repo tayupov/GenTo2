@@ -27,7 +27,7 @@ contract DaoWithProposals is DaoWithIco {
         uint dmr;
         Vote[] votes;
         mapping (address => bool) voted;
-        mapping (address => bool) claimed;
+        bool claimed;
     }
 
     struct Vote {
@@ -72,16 +72,12 @@ contract DaoWithProposals is DaoWithIco {
     uint passedPercent,
     uint fieldOfWork,
     uint dividend,
-    uint dmr) {
+    uint dmr,
+    bool claimed) {
         Proposal storage proposal = proposals[proposalID];
         return (proposal.recipient, proposal.amount, proposal.name, proposal.description, proposal.proposalDeadline,
         proposal.finished, proposal.proposalPassed, proposal.passedPercent, uint(proposal.fieldOfWork), proposal
-        .dividend, proposal.dmr);
-    }
-
-    function hasClaimed(uint proposalID, address voter)  public constant returns (bool hasClaimed) {
-        Proposal storage proposal = proposals[proposalID];
-        return proposal.claimed[voter];
+        .dividend, proposal.dmr, proposal.claimed);
     }
 
     function getVote(uint proposalID, address voter) public constant returns (bool voted, bool support) {
@@ -156,6 +152,7 @@ contract DaoWithProposals is DaoWithIco {
         proposal.proposalPassed = false;
         proposal.dividend = 0;
         proposal.dmr = 0;
+        proposal.claimed = false;
         NewProposalCreated(proposalID);
         return proposalID;
     }

@@ -4,9 +4,8 @@ import { default as contract } from 'truffle-contract'
 
 import web3 from 'utils/web3';
 
-const mapProposal = (proposalNumber, proposalArray, proposalStatistics, hasClaimed) => {
+const mapProposal = (proposalNumber, proposalArray, proposalStatistics) => {
 	return {
-		hasClaimed,
 		proposalNumber: proposalNumber,
 		recipient: proposalArray[0],
 		amount: getAmount(proposalArray[1]),
@@ -17,14 +16,16 @@ const mapProposal = (proposalNumber, proposalArray, proposalStatistics, hasClaim
 		proposalPassed: proposalArray[6],
 		passedPercent: parseInt(proposalArray[7], 10), // Deprecated
 		fieldOfWork: parseInt(proposalArray[8]),
-		dividend: parseInt(proposalArray[9], 10),
+		dividend: getAmount(proposalArray[9], 10),
+		dmr: getAmount(proposalArray[10], 10),
+		claimed: proposalArray[11],
 		approve: +web3.fromWei(parseInt(proposalStatistics[0], 10), 'finney'),
 		disapprove: +web3.fromWei(parseInt(proposalStatistics[1], 10), 'finney'),
 		percent: parseInt(proposalStatistics[2], 10),
 		proposalStartTime: parseInt(proposalStatistics[3], 10),
 		proposalDeadline: parseInt(proposalStatistics[4], 10),
 		proposalDeadlineFormatted: new Date(parseInt(proposalArray[4]) * 1000).toISOString().substring(0, 19).replace(/T/i, ' '),
-		currentTime: parseInt(proposalStatistics[5], 10) 
+		currentTime: parseInt(proposalStatistics[5], 10)
 	}
 }
 
@@ -45,21 +46,20 @@ export async function loadProposal(daoAddress, proposalNumber) {
 	const GentoDAO = contract(GentoDAOArtifact);
 	GentoDAO.setProvider(web3.currentProvider);
 	const DAO = await GentoDAO.at(daoAddress)
-	const proposalArray = await DAO.getProposal.call(proposalNumber);
+
+  const proposalArray = await DAO.getProposal.call(proposalNumber);
 	const proposalStatistics = await DAO.calculateVotingStatistics.call(proposalNumber);
 
-	const hasClaimed = await GentoDAO.at(daoAddress).hasClaimed
-	const mappedProposal = mapProposal(proposalNumber, proposalArray, proposalStatistics, hasClaimed);
-
+	const mappedProposal = mapProposal(proposalNumber, proposalArray, proposalStatistics);
 	return mappedProposal;
 }
 
 export async function loadVote(daoAddress, proposal, address) {
 	const GentoDAO = contract(GentoDAOArtifact);
 	GentoDAO.setProvider(web3.currentProvider);
+
 	var voteArray = await GentoDAO.at(daoAddress).getVote(proposal.proposalNumber, address);
 	var influence = await GentoDAO.at(daoAddress).getInfluenceOfVoter(address, proposal.fieldOfWork);
-
 	return mapVote(voteArray, influence);
 }
 

@@ -13,7 +13,6 @@ export default class ProposalContainer extends React.Component {
         claimPayout: null
       },
       proposal: {
-        hasClaimed: null,
         proposalNumber: "",
         recipient: "",
         amount: "",

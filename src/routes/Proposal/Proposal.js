@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Divider, Table, Message, Label } from 'semantic-ui-react';
+import { Link } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 
 export default class Proposal extends React.Component {
@@ -8,20 +9,19 @@ export default class Proposal extends React.Component {
     const { executeAllowed, votingAllowed } = this.props
     const { claimPayout, approveCallback, disapproveCallback, executeCallback } = this.props;
     
-    let canClaim = false
-    if (proposal.hasClaimed) {
-      proposal.hasClaimed(proposal.proposalNumber, this.props.account)
-        .then(hasClaimed => {
-          canClaim =
-            !hasClaimed &&
-            proposal.finished &&
-            proposal.proposalPassed &&
-            (proposal.recipient === this.props.account)
-        })
-    }
+    let canClaim =
+        !proposal.claimed &&
+        proposal.finished &&
+        proposal.proposalPassed &&
+        (proposal.recipient === this.props.account)
+
 
     return (
       <div>
+        <Button
+            as={Link} to={{ pathname: `/dao/${this.props.address}/proposals` }}
+        >Back to proposal list</Button>
+
         <h1>Information on proposal: {proposal.name}</h1>
         <Divider section hidden />
         {executeAllowed ? <Button onClick={executeCallback} content="Execute" /> : null}
@@ -36,7 +36,7 @@ export default class Proposal extends React.Component {
 
         <Message>
           <Message.Header>Proposal Description:</Message.Header>
-          <ReactMarkdown source={proposal.description} />
+          <ReactMarkdown source={proposal.description} className="description"/>
         </Message>
 
         <Table celled>
@@ -49,14 +49,30 @@ export default class Proposal extends React.Component {
                 <Label size='large'>{proposal.proposalType}</Label>
               </Table.Cell>
             </Table.Row>
-            <Table.Row>
+            {proposal.dividend > 0 ? <Table.Row>
+              <Table.Cell>
+                <Label size='large'>Proposed dividend</Label>
+              </Table.Cell>
+              <Table.Cell>
+                <Label size='large'>{proposal.dividend} Ether</Label>
+              </Table.Cell>
+            </Table.Row> : null}
+            {proposal.dmr > 0 ? <Table.Row>
+              <Table.Cell>
+                <Label size='large'>Proposed dmr</Label>
+              </Table.Cell>
+              <Table.Cell>
+                <Label size='large'>{proposal.dmr} Ether</Label>
+              </Table.Cell>
+            </Table.Row> : null}
+            {proposal.amount ? <Table.Row>
               <Table.Cell>
                 <Label size='large'>Ether transferred to Recipient when finished</Label>
               </Table.Cell>
               <Table.Cell>
                 <Label size='large'>{proposal.amount} Ether</Label>
               </Table.Cell>
-            </Table.Row>
+            </Table.Row> : null}
             <Table.Row>
               <Table.Cell>
                 <Label size='large'>Recipient Address</Label>
