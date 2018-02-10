@@ -6,6 +6,8 @@ import DID_NOT_DELEGATE_ADDRESS from 'constants/defaultAddress'
 
 import web3 from 'utils/web3';
 
+import promisify from 'utils/promisify'
+
 const getDelegationsForAccount = async (organization, account) => {
   if (!account) { return [] }
 
@@ -92,6 +94,7 @@ export async function mapOrganization(organization, account) {
     votingRewardForAccount: await getVotingRewardForAccount(organization, account),
     balanceForAccount: await balanceForAccount(organization, account),
     totalNumberOfTokens: await getTotalNumberOfTokens(organization, account),
+    balance: parseInt(await promisify(cb => web3.eth.getBalance(organization.address, cb)))
   }
 }
 
