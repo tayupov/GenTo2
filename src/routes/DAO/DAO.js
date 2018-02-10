@@ -37,7 +37,7 @@ export default class DAO extends React.Component {
       delegationsForAccount: [],
       proposals: [],
       dividendForAccount: null,
-      votingRewardForAccount: null,
+      decisionMakerRewardForAccount: null,
       balanceForAccount: null,
       totalNumberOfTokens: null,
       balance: null
@@ -45,7 +45,6 @@ export default class DAO extends React.Component {
   }
 
   async loadOrganizationData(address, account) {
-    console.log('account load: ', account);
     const DAO = await loadOrganization(address, account, true)
     this.setState({ ...DAO })
 
@@ -90,7 +89,7 @@ export default class DAO extends React.Component {
 
   render() {
     const { balanceForAccount, totalNumberOfTokens, balance } = this.state
-    const { dividendForAccount, votingRewardForAccount } = this.state
+    const { dividendForAccount, decisionMakerRewardForAccount } = this.state
     return (
       <div>
         <Header as="h1">{this.state.name}</Header>
@@ -107,7 +106,7 @@ export default class DAO extends React.Component {
                 claimDividend={this.claimDividend}
                 claimVotingReward={this.claimVotingReward}
                 dividendForAccount={dividendForAccount}
-                votingRewardForAccount={votingRewardForAccount}
+                decisionMakerRewardForAccount={decisionMakerRewardForAccount}
               />
             </Grid.Column>
           </Grid.Row>

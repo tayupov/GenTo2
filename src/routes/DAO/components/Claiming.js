@@ -4,10 +4,10 @@ import { Table, Button } from 'semantic-ui-react'
 export default class Claiming extends React.Component {
   render() {
     const { claimDividend, claimVotingReward} = this.props
-    const { dividendForAccount, votingRewardForAccount } = this.props
+    const { dividendForAccount, decisionMakerRewardForAccount } = this.props
 
     const canClaimDividend = dividendForAccount !== 0
-    const canClaimVotingReward = votingRewardForAccount !== 0
+    const canClaimVotingReward = decisionMakerRewardForAccount !== 0
     return (
       <Table basic='very' celled={false} collapsing>
         <Table.Body>
@@ -22,9 +22,9 @@ export default class Claiming extends React.Component {
             </Table.Cell>
             <Table.Cell>
               <Button disabled={!canClaimVotingReward}  onClick={claimVotingReward}>
-                Voting Reward:
+                Decision Maker Reward:
                 <br />
-                {votingRewardForAccount} Ether
+                {decisionMakerRewardForAccount} Ether
               </Button>
             </Table.Cell>
           </Table.Row>
