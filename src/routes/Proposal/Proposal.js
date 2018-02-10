@@ -14,6 +14,7 @@ export default class Proposal extends React.Component {
         proposal.proposalPassed &&
         (proposal.recipient === this.props.account)
 
+
     return (
       <div>
         <h1>Information on proposal: {proposal.name}</h1>
@@ -43,7 +44,6 @@ export default class Proposal extends React.Component {
                 <Label size='large'>{proposal.proposalType}</Label>
               </Table.Cell>
             </Table.Row>
-
             {proposal.dividend > 0 ? <Table.Row>
               <Table.Cell>
                 <Label size='large'>Proposed dividend</Label>

@@ -46,29 +46,20 @@ export async function loadProposal(daoAddress, proposalNumber) {
 	const GentoDAO = contract(GentoDAOArtifact);
 	GentoDAO.setProvider(web3.currentProvider);
 	const DAO = await GentoDAO.at(daoAddress)
-	console.log("///1")
-	const proposalArray = await DAO.getProposal.call(proposalNumber);
-	console.log("///2")
+
+  const proposalArray = await DAO.getProposal.call(proposalNumber);
 	const proposalStatistics = await DAO.calculateVotingStatistics.call(proposalNumber);
-	console.log("///3")
 
 	const mappedProposal = mapProposal(proposalNumber, proposalArray, proposalStatistics);
-
 	return mappedProposal;
 }
 
 export async function loadVote(daoAddress, proposal, address) {
 	const GentoDAO = contract(GentoDAOArtifact);
 	GentoDAO.setProvider(web3.currentProvider);
-	console.log("///4")
 
 	var voteArray = await GentoDAO.at(daoAddress).getVote(proposal.proposalNumber, address);
-
-	console.log("///5")
 	var influence = await GentoDAO.at(daoAddress).getInfluenceOfVoter(address, proposal.fieldOfWork);
-
-	console.log("///6")
-
 	return mapVote(voteArray, influence);
 }
 
