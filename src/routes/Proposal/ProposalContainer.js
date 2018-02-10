@@ -1,15 +1,17 @@
 import React from 'react';
-
-import { loadProposal, onVote, loadVote, vote, executeProposal } from 'provider/ProposalProvider'
-import { isShareholder } from 'provider/DAOProvider'
-
 import Proposal from './Proposal';
+
+import { loadOrganization, isShareholder } from 'provider/DAOProvider'
+import { loadProposal, onVote, loadVote, vote, executeProposal } from 'provider/ProposalProvider'
 
 export default class ProposalContainer extends React.Component {
 
   constructor() {
     super();
     this.state = {
+      dao: {
+        claimPayout: null
+      },
       proposal: {
           proposalNumber: "",
           recipient: "",
@@ -35,9 +37,13 @@ export default class ProposalContainer extends React.Component {
   }
 
   async loadStateFromBlockchain() {
+    const dao = await loadOrganization(this.props.address, this.props.account, true)
+    this.setState({ dao: { claimPayout: dao.claimProposalPayout }})
+
     const proposal = await loadProposal(this.props.address, this.props.proposalNumber)
     const isShareHolderOfDao = await isShareholder(this.props.address, this.props.account)
     const vote = await loadVote(this.props.address, proposal, this.props.account)
+
     var executeAllowed =  proposal.currentTime > proposal.proposalDeadline  && !proposal.finished && isShareHolderOfDao;
     var votingAllowed =  proposal.currentTime < proposal.proposalDeadline  && !proposal.finished && isShareHolderOfDao  && !vote.voted;
 
@@ -134,12 +140,21 @@ export default class ProposalContainer extends React.Component {
     }
   }
 
+  async claimPayout(event, element) {
+    const from = this.props.account
+    const proposal = element.proposal
+    const claimPayout = this.state.dao.claimPayout
+    const res = await claimPayout(proposal.proposalNumber, { from })
+    console.log(res)
+  }
+
   render() {
     return (
       <Proposal proposal={this.state.proposal}
                 vote={this.state.vote}
                 executeAllowed={this.state.executeAllowed}
                 votingAllowed={this.state.votingAllowed}
+                claimPayout={this.claimPayout.bind(this)}
                 approveCallback={this.approveCallback.bind(this)}
                 disapproveCallback={this.disapproveCallback.bind(this)}
                 executeCallback={this.executeCallback.bind(this)}
