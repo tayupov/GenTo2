@@ -27,7 +27,7 @@ contract DaoWithProposals is DaoWithIco {
         uint dmr;
         Vote[] votes;
         mapping (address => bool) voted;
-        mapping (address => bool) claimed;
+        bool claimed;
     }
 
     struct Vote {
@@ -150,6 +150,7 @@ contract DaoWithProposals is DaoWithIco {
         proposal.proposalPassed = false;
         proposal.dividend = 0;
         proposal.dmr = 0;
+        proposal.claimed = false;
         NewProposalCreated(proposalID);
         return proposalID;
     }
