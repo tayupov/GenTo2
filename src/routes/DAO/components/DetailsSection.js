@@ -102,30 +102,11 @@ class DetailsSection extends Component {
                     </Segment>
                 </Grid.Column>
                 <Grid.Column width={8}>
-                    <Header as='h2' attached textAlign='right'>
-                        Created at
-                    </Header>
-                    <Segment attached padded raised textAlign='right' color='olive'>
-                        {moment.unix(details.creationDate).format('LLL')}
-                    </Segment>
-                </Grid.Column>
-            </Grid.Row>
-    
-            <Grid.Row>
-                <Grid.Column width={8}>
                     <Header as='h2' attached textAlign='left'>
                         Ticker Symbol
                     </Header>
                     <Segment attached padded raised textAlign='left' color='olive'>
                         {details.symbol}
-                    </Segment>
-                </Grid.Column>
-                <Grid.Column width={8}>
-                    <Header as='h2' attached textAlign='right'>
-                        Owned By
-                    </Header>
-                    <Segment attached padded raised textAlign='right' color='olive'>
-                        No Owner
                     </Segment>
                 </Grid.Column>
             </Grid.Row>

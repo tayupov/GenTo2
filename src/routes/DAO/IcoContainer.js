@@ -50,19 +50,21 @@ class IcoContainer extends Component {
 
     async loadOrganizationData(address, account) {
         const ICO = await loadOrganization(address, account, true)
-
+        console.log('ICO', ICO);
         this.setState({
             auctionDetails: {
                 ...ICO
             }
         })
+        this.setMyTokenCount();
         if (ICO.saleStart !== null) {
             this.getContractDetails(ICO);
         }
       }
 
     async componentWillMount() {
-        this.loadOrganizationData(this.props.address, this.props.account)
+        
+        this.loadOrganizationData(this.props.address, undefined)
     }
 
     componentWillReceiveProps(nextProps) {
@@ -77,8 +79,10 @@ class IcoContainer extends Component {
     }
 
     setMyTokenCount = async () => {
+        console.log('SET MY TOKENCOUNT | this.props.account', this.props.account);
         const ico = await loadOrganization(this.props.address);
         const amount = await ico.balanceOf.call(this.props.account);
+        console.log('amount', amount);
         const tokenCount = +web3.fromWei(amount, 'finney')
         const totalSupply = await ico.remainingTokensForICOPurchase.call();
         const remainingTokensForICOPurchase = +web3.fromWei(totalSupply, 'finney')
@@ -237,32 +241,32 @@ class IcoContainer extends Component {
         //     });
         //   }
 
-        transfers.watch((error, result) => {
+        // transfers.watch((error, result) => {
 
-            if(error) {
-                console.error(error);
-            } else {
-                if (this.state.auctionDetails) {
-                    const remainingSupply = result.args.remainingSupply.toNumber();
-                    const supplyPct = ((remainingSupply / totalSupply.toNumber()) * 100).toFixed(0);
-                    const supplyString = `${remainingSupply} of ${totalSupply.toNumber()} left for sale`;
-                    cb({
-                        supplyPct,
-                        supplyString
-                    });
-                }
-                let amount = result.args.value.toNumber();
+        //     if(error) {
+        //         console.error(error);
+        //     } else {
+        //         if (this.state.auctionDetails) {
+        //             const remainingSupply = result.args.remainingSupply.toNumber();
+        //             const supplyPct = ((remainingSupply / totalSupply.toNumber()) * 100).toFixed(0);
+        //             const supplyString = `${remainingSupply} of ${totalSupply.toNumber()} left for sale`;
+        //             cb({
+        //                 supplyPct,
+        //                 supplyString
+        //             });
+        //         }
+        //         let amount = result.args.value.toNumber();
                     
-                const transaction = JSON.parse(localStorage.getItem(result.transactionHash));
+        //         const transaction = JSON.parse(localStorage.getItem(result.transactionHash));
 
-                if (amount > 0 && !transaction) {
-                    this.props.notify("Success! " + amount + " Token(s) purchased.", "success")
-                    this.setMyTokenCount();
-                    localStorage.setItem(result.transactionHash, JSON.stringify(result.transactionHash));
-                    this.props.addDemoDao();
-                }
-            }
-        })
+        //         if (amount > 0 && !transaction) {
+        //             this.props.notify("Success! " + amount + " Token(s) purchased.", "success")
+        //             this.setMyTokenCount();
+        //             localStorage.setItem(result.transactionHash, JSON.stringify(result.transactionHash));
+        //             this.props.addDemoDao();
+        //         }
+        //     }
+        // })
     }
 
     render() {

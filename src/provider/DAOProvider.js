@@ -95,7 +95,9 @@ const getBigIntegerAsInt = async (organization, fieldName) => {
 
 
 export async function mapOrganization(organization, account) {
+  console.log('organization', organization);
   console.log('account', account);
+
   return {
     address: await organization.address,
     name: await organization.name(),
@@ -127,6 +129,8 @@ export async function mapOrganization(organization, account) {
 
 /* "extract" boolean flag to receive object in contrast to actual contract */
 export async function loadOrganization(address, account, extract) {
+  console.log('loadOrganization', address);
+
   const GentoDAO = contract(GentoDAOArtifact);
   GentoDAO.setProvider(web3.currentProvider);
 
