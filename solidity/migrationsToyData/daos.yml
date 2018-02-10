@@ -6,7 +6,6 @@ DAOs:
     Rolls By The Roman
 
     We produce things that really move people: Bicycles.
-
   # Important: After changing description, you MUST update the hash too!
   descriptionHash: QmXqxqFK4F81JpEj75pGDHME9SVorbvvAqdm3JUXw99SQK
   buyPriceStart: 1
@@ -41,11 +40,19 @@ DAOs:
   symbol: PMB
   name: Primalbase
   description: |
-    Distributed Workspace for the Tech Community
+    [![Primalbase](https://image.ibb.co/mebULn/image.png)](https://primalbase.com)
 
-    Primalbase is transforming traditional office rental and creating a next-generation community-based ecosystem where participants can share, sell or rent out high-quality office spaces using Ethereum and Waves-based digital tokens.
+    # Distributed Workspace for the Tech Community
+
+    #### Primalbase is transforming traditional office rental and creating a next-generation community-based ecosystem where participants can share, sell or rent out high-quality office spaces using Ethereum and Waves-based digital tokens.
+
+    ---
+
+    # Book your space or office now
+    #### in three easy steps
+    ![alt text](https://preview.ibb.co/kVRtD7/image.png "Locations")
   # Important: After changing description, you MUST update the hash too!
-  descriptionHash: QmSihtvHfyjGfutVqxiZ9Mf7fXM9Q6xdAL9JiU9Y2w6GB5
+  descriptionHash: QmUxxrQ6aehoN6NnHSqDtVHfHQwCf4aVeXaGe3VQ1AUMit
   buyPriceStart: 1
   buyPriceEnd: 5
   saleStart: -2592000
@@ -62,7 +69,7 @@ DAOs:
     description: |
       # Markdown Test!
       Buy 5 of these couches: made.com/de/chou-schlafsofa-in-quartzblau
-    beneficiary: 0
+    beneficiary: 7
     fieldOfWork: Product
     startingDate: -40000
     payout: 1.5
@@ -74,20 +81,29 @@ DAOs:
     dividend: 2
     startingDate: -86500
     accepted: true
-    execute: false
+    execute: true
     fieldOfWork: Organisational
-  - name: Markdown test proposal
+  - name: Monthly Payment for Drinks
     description: |
-      # Test
-      1. Test
-      2. Kartoffel
-      ---
-      - blub blub blub
-      Fill me with some info
+      # Monthly Payment for Drinks
+
+      This month we spend on drinks:
+
+      | Drink | Crates | Cost |
+      | ------ | ------ | ------ |
+      | Club Mate | 5 | 5€ |
+      | Coke | 1 | 10€ |
+      | Beer | 7 | 30€ |
+      | Water | 10| 17€ |
+      | ------ | ------ | ------ |
+      | **TOTAL** | | 74€ |
     startingDate: -302400
     accepted: true
+    execute: false
+    beneficiary: 1
+    payout: 0.1
     fieldOfWork: Organisational
-  - name: Placeholder proposal
+  - name: Hire Design Assistant
     description: Fill me with some info
     beneficiary: 7
     payout: 0.05

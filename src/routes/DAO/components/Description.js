@@ -8,7 +8,7 @@ export default class Description extends React.Component {
     return (
       <Segment>
           {!description && <div className="skeleton"></div>}
-          {description && <p><ReactMarkdown source={this.props.description} /></p>}
+          {description && <p><ReactMarkdown source={this.props.description} className="description"/></p>}
         <Divider />
         <p id='ipfs-disclaimer'>Offchained to IPFS</p>
       </Segment>
