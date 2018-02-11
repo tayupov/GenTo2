@@ -17,6 +17,7 @@ export default class Delegation extends React.Component {
             <Table.HeaderCell>Field Of Work</Table.HeaderCell>
             <Table.HeaderCell>Influence</Table.HeaderCell>
             <Table.HeaderCell>Delegatee</Table.HeaderCell>
+            <Table.HeaderCell>Earned VRT</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
 
@@ -39,6 +40,7 @@ export default class Delegation extends React.Component {
                     onChange={(e, data) => delegate(e, data)}
                   />
                 </Table.Cell>
+                <Table.Cell collapsing>12.000</Table.Cell>
               </Table.Row>
             )
           })}
