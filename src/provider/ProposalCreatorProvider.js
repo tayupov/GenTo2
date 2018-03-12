@@ -34,10 +34,10 @@ export async function createDmrProposal(input, from, daoAddress) {
   GentoDAO.setProvider(web3.currentProvider);
 
   var dao = await GentoDAO.at(daoAddress);
-  if (await willThrow(dao.newDmrProposal, input, from)) {
+  if (await willThrow(dao.newDMRewardProposal, input, from)) {
     return -1
   } else {
-    return dao.newDmrProposal.sendTransaction(...input, {from})
+    return dao.newDMRewardProposal.sendTransaction(...input, {from})
   }
 }
 

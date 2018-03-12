@@ -1,5 +1,11 @@
 @import url("./stepzilla.css");
 
+.description img {
+  max-width: 100%;
+  max-height: 50vh;
+}
+
+
 .content {
     margin-top: 30px;
     margin-left: 200px;
@@ -18,8 +24,8 @@
 }
 
 #ipfs-disclaimer {
-    color: #CCCCCC; 
-    font-size: 12px; 
+    color: #CCCCCC;
+    font-size: 12px;
     font-family: Arial, Helvetica, sans-serif;
 }
 

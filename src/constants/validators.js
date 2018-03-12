@@ -5,7 +5,6 @@ export const DAODESCRIPTION = 'daodescription'
 export const DAOPROPOSAL = 'daoProposal'
 
 // dao fields of work
-export const DMRREWARD = 'dmrreward'
 export const FINANCEPOINTS = 'financepoints'
 export const PRODUCTPOINTS = 'productpoints'
 export const ORGPOINTS = 'orgpoints'

@@ -27,7 +27,7 @@ contract DaoWithProposals is DaoWithIco {
         uint dmr;
         Vote[] votes;
         mapping (address => bool) voted;
-        mapping (address => bool) claimed;
+        bool claimed;
     }
 
     struct Vote {
@@ -72,11 +72,12 @@ contract DaoWithProposals is DaoWithIco {
     uint passedPercent,
     uint fieldOfWork,
     uint dividend,
-    uint dmr) {
+    uint dmr,
+    bool claimed) {
         Proposal storage proposal = proposals[proposalID];
         return (proposal.recipient, proposal.amount, proposal.name, proposal.description, proposal.proposalDeadline,
         proposal.finished, proposal.proposalPassed, proposal.passedPercent, uint(proposal.fieldOfWork), proposal
-        .dividend, proposal.dmr);
+        .dividend, proposal.dmr, proposal.claimed);
     }
 
     function getVote(uint proposalID, address voter) public constant returns (bool voted, bool support) {
@@ -151,6 +152,7 @@ contract DaoWithProposals is DaoWithIco {
         proposal.proposalPassed = false;
         proposal.dividend = 0;
         proposal.dmr = 0;
+        proposal.claimed = false;
         NewProposalCreated(proposalID);
         return proposalID;
     }
@@ -182,12 +184,21 @@ contract DaoWithProposals is DaoWithIco {
             // && proposal.proposalHash == sha3(proposal.recipient, proposal.amount)); // and the supplied code matches
 
         var (approve, disapprove, passedPercent, proposalStartTime, proposalDeadline, curTime) = calculateVotingStatistics(proposalId);
+        assignDMRRewards(proposalId);
         proposal.finished = true;
 
         proposal.proposalPassed =  (approve > disapprove);
         proposal.passedPercent = passedPercent;
 
         ProposalFinishedLogger(proposalId, approve+disapprove, approve, disapprove);
+    }
+
+    function assignDMRRewards(uint proposalId) internal {
+      Proposal storage proposal = proposals[proposalId];
+      for (uint i = 0; i < proposal.votes.length; ++i) {
+          Vote storage v = proposal.votes[i];
+          uint voteWeight = getInfluenceOfVoter(v.voter, proposal.fieldOfWork);
+      }
     }
 
     function calculateVotingStatistics(uint proposalId)  public constant returns (uint currentApprove, uint currentDisapprove,
@@ -199,7 +210,7 @@ contract DaoWithProposals is DaoWithIco {
         for (uint i = 0; i < proposal.votes.length; ++i) {
             Vote storage v = proposal.votes[i];
             uint voteWeight = getInfluenceOfVoter(v.voter, proposal.fieldOfWork);
-            votingRewardTokens[v.voter][uint(proposal.fieldOfWork)] += voteWeight;
+        //    votingRewardTokens[v.voter][uint(proposal.fieldOfWork)] += voteWeight;
             if (v.inSupport) {
                 approve += voteWeight;
             } else {

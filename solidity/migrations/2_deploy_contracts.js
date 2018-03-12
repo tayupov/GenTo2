@@ -63,7 +63,7 @@ async function initMockData(accounts) {
         for (let j = 0; j < owners.length; j++) {
           const owner = owners[j]
           percentageInFavor += owner.percentage
-          const decision = percentageInFavor > 0.5 ? goal : !goal
+          const decision = percentageInFavor < 0.75 ? goal : !goal
           await dao.vote.sendTransaction(i, decision, {
             from: accounts[owner.account]
           })
