@@ -119,7 +119,7 @@ contract GentoDao is DaoWithDelegation {
             uint voteWeight = getInfluenceOfVoter(v.voter, proposal.fieldOfWork);
             votingRewardTokens[v.voter][uint(proposal.fieldOfWork)] += voteWeight;
         }
-        // finished?
+
         if (proposal.proposalPassed) {
             if (proposal.dividend > 0) {
                 distributeDividend(proposal.dividend);

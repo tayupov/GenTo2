@@ -34,19 +34,6 @@ const proposalFields = [
      return proposalFormatted
    }
 
-   // async function listenForEvent(eventName) {
-   //   console.log('TransferSuccess');
-   //   var event = contract.TransferSuccess();
-   //   var log = event.watch(function(error, result) {
-   //     if(!error) {
-   //       console.log('result: ', result);
-   //       return result;
-   //     }
-   //   });
-   //   assert.equal(log.length, 1, 'should be one new event log object');
-   //   return log.args;
-   // }
-
    async function listenForEvent(eventName) {
      // get the event listener for the specific event
      const listener = contract[eventName]();
