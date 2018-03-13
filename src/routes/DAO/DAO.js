@@ -40,10 +40,12 @@ export default class DAO extends React.Component {
       votingRewardForAccount: null,
       balanceForAccount: null,
       totalNumberOfTokens: null,
+      balance: null
     }
   }
 
   async loadOrganizationData(address, account) {
+    console.log('account load: ', account);
     const DAO = await loadOrganization(address, account, true)
     this.setState({ ...DAO })
 
@@ -52,7 +54,7 @@ export default class DAO extends React.Component {
 
     this.setState({ description: null })
     downloadString(this.state.descriptionHash)
-      .then(description => setTimeout(() => this.setState({ description }), 1500))
+      .then(description => setTimeout(() => this.setState({ description }), 2200))
   }
 
   async componentDidMount() {
@@ -87,7 +89,7 @@ export default class DAO extends React.Component {
   }
 
   render() {
-    const { balanceForAccount, totalNumberOfTokens } = this.state
+    const { balanceForAccount, totalNumberOfTokens, balance } = this.state
     const { dividendForAccount, votingRewardForAccount } = this.state
     return (
       <div>
@@ -100,7 +102,7 @@ export default class DAO extends React.Component {
             </Grid.Column>
 
             <Grid.Column width='4'>
-              <Balances balanceForAccount={balanceForAccount} totalNumberOfTokens={totalNumberOfTokens} />
+              <Balances balanceForAccount={balanceForAccount} totalNumberOfTokens={totalNumberOfTokens} balance={balance}/>
               <Claiming
                 claimDividend={this.claimDividend}
                 claimVotingReward={this.claimVotingReward}

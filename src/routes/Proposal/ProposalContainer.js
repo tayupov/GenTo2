@@ -1,33 +1,35 @@
 import React from 'react';
-
-import { loadProposal, onVote, loadVote, vote, executeProposal } from 'provider/ProposalProvider'
-import { isShareholder } from 'provider/DAOProvider'
-
 import Proposal from './Proposal';
+
+import { loadOrganization, isShareholder } from 'provider/DAOProvider'
+import { loadProposal, onVote, loadVote, vote, executeProposal } from 'provider/ProposalProvider'
 
 export default class ProposalContainer extends React.Component {
 
   constructor() {
     super();
     this.state = {
+      dao: {
+        claimPayout: null
+      },
       proposal: {
-          proposalNumber: "",
-          recipient: "",
-          amount: "",
-          name: "",
-          fieldOfWorkDescription: "",
-          description: "",
-          proposalDeadline: "",
-          finished: "",
-          stateDescription: "",
-          proposalPassed: "",
-          passedPercent: "",
-          dividend: ""
+        proposalNumber: "",
+        recipient: "",
+        amount: "",
+        name: "",
+        fieldOfWorkDescription: "",
+        description: "",
+        proposalDeadline: "",
+        finished: "",
+        stateDescription: "",
+        proposalPassed: "",
+        passedPercent: "",
+        dividend: ""
       },
       vote: {
-          support: "",
-          voted: "",
-          stateDescription: ""
+        support: "",
+        voted: "",
+        stateDescription: ""
       },
       executeAllowed: false,
       votingAllowed: false,
@@ -35,11 +37,15 @@ export default class ProposalContainer extends React.Component {
   }
 
   async loadStateFromBlockchain() {
+    const dao = await loadOrganization(this.props.address, this.props.account, true)
+    this.setState({ dao: { claimPayout: dao.claimProposalPayout } })
+
     const proposal = await loadProposal(this.props.address, this.props.proposalNumber)
     const isShareHolderOfDao = await isShareholder(this.props.address, this.props.account)
     const vote = await loadVote(this.props.address, proposal, this.props.account)
-    var executeAllowed =  proposal.currentTime > proposal.proposalDeadline  && !proposal.finished && isShareHolderOfDao;
-    var votingAllowed =  proposal.currentTime < proposal.proposalDeadline  && !proposal.finished && isShareHolderOfDao  && !vote.voted;
+
+    var executeAllowed = proposal.currentTime > proposal.proposalDeadline && !proposal.finished && isShareHolderOfDao;
+    var votingAllowed = proposal.currentTime < proposal.proposalDeadline && !proposal.finished && isShareHolderOfDao && !vote.voted;
 
 
     switch (proposal.fieldOfWork) {
@@ -50,28 +56,26 @@ export default class ProposalContainer extends React.Component {
       default: proposal.fieldOfWorkDescription = "Unknown"
     }
 
-    if(proposal.dividend > 0){
+    if (proposal.dividend > 0) {
       proposal.proposalType = "Dividend proposal"
-    } else if(proposal.dmr > 0){
+    } else if (proposal.dmr > 0) {
       proposal.proposalType = "Dmr proposal"
     } else {
       proposal.proposalType = "Business proposal";
     }
 
-
-
-    if(executeAllowed){
+    if (executeAllowed) {
       proposal.stateDescription = "Waiting for execution"
-    } else if (proposal.isFinished && !proposal.proposalPassed) {
+    } else if (proposal.finished && !proposal.proposalPassed) {
       proposal.stateDescription = "Proposal rejected"
-    } else if (proposal.isFinished && proposal.proposalPassed) {
+    } else if (proposal.finished && proposal.proposalPassed) {
       proposal.stateDescription = "Proposal passed"
-    } else if (!proposal.isFinished) {
+    } else if (!proposal.finished) {
       proposal.stateDescription = "Proposal pending"
     } else {
       proposal.stateDescription = "Unknown"
     }
-    this.setState({proposal});
+    this.setState({ proposal });
 
 
     if (vote.voted && vote.support) {
@@ -85,9 +89,9 @@ export default class ProposalContainer extends React.Component {
     }
     vote.influenceDescription = "Your influence in this field of work is " + vote.influence;
 
-    this.setState({vote});
-    this.setState({votingAllowed});
-    this.setState({executeAllowed});
+    this.setState({ vote });
+    this.setState({ votingAllowed });
+    this.setState({ executeAllowed });
   }
   async componentDidMount() {
     this.loadStateFromBlockchain()
@@ -111,10 +115,10 @@ export default class ProposalContainer extends React.Component {
     })
   }
 
-  async approveCallback(){
-    var res = await vote(this.props.address, this.props.proposalNumber,true, this.props.account)
+  async approveCallback() {
+    var res = await vote(this.props.address, this.props.proposalNumber, true, this.props.account)
 
-    if(res === -1){
+    if (res === -1) {
       this.props.notify("Vote failed. Please check deadline and priviliges.")
     }
     else {
@@ -122,10 +126,10 @@ export default class ProposalContainer extends React.Component {
     }
   }
 
-  async disapproveCallback(){
-    var res = await vote(this.props.address, this.props.proposalNumber,false, this.props.account)
+  async disapproveCallback() {
+    var res = await vote(this.props.address, this.props.proposalNumber, false, this.props.account)
 
-    if(res === -1){
+    if (res === -1) {
       this.props.notify("Vote failed. Please check deadline and priviliges.")
     }
     else {
@@ -133,10 +137,10 @@ export default class ProposalContainer extends React.Component {
     }
   }
 
-  async executeCallback(){
-    var res = await executeProposal(this.props.address, this.props.proposalNumber)
+  async executeCallback() {
+    var res = await executeProposal(this.props.address, this.props.proposalNumber, this.props.account)
 
-    if(res === -1){
+    if (res === -1) {
       this.props.notify("Execution failed. Please check deadline, status and priviliges.")
     }
     else {
@@ -144,16 +148,27 @@ export default class ProposalContainer extends React.Component {
     }
   }
 
+  async claimPayout(event, element) {
+    const from = this.props.account
+    const proposal = element.proposal
+    const claimPayout = this.state.dao.claimPayout
+    const res = await claimPayout(proposal.proposalNumber, { from })
+    console.log(res)
+  }
+
   render() {
     return (
-      <Proposal proposal={this.state.proposal}
-                vote={this.state.vote}
-                executeAllowed={this.state.executeAllowed}
-                votingAllowed={this.state.votingAllowed}
-                approveCallback={this.approveCallback.bind(this)}
-                disapproveCallback={this.disapproveCallback.bind(this)}
-                executeCallback={this.executeCallback.bind(this)}
-                address={this.props.address} />
+      <Proposal
+        account={this.props.account}
+        proposal={this.state.proposal}
+        vote={this.state.vote}
+        executeAllowed={this.state.executeAllowed}
+        votingAllowed={this.state.votingAllowed}
+        claimPayout={this.claimPayout.bind(this)}
+        approveCallback={this.approveCallback.bind(this)}
+        disapproveCallback={this.disapproveCallback.bind(this)}
+        executeCallback={this.executeCallback.bind(this)}
+        address={this.props.address} />
     )
   }
 }

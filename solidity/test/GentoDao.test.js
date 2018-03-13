@@ -14,15 +14,15 @@ contract('GentoDao', function(accounts) {
   });
 
   it("distributes a dividend evenly to all shareholders", async function () {
-  const totalDividend = web3.toWei(0.8, "ether")
-  const totalSpendInICO = web3.toWei(1, "ether")
-  const userBalances = [0.3, 0.3, 0.25, 0.15]
-  const buyPrice =1000
-    contract = await GentoDaoDeployer({
-      buyPriceStart: buyPrice,
-      buyPriceEnd: buyPrice,
-      totalSupply: web3.toWei(1, "ether")
-    })
+    const totalDividend = web3.toWei(0.8, "ether")
+    const totalSpendInICO = web3.toWei(1, "ether")
+    const userBalances = [0.3, 0.3, 0.25, 0.15]
+    const buyPrice =1000
+      contract = await GentoDaoDeployer({
+        buyPriceStart: buyPrice,
+        buyPriceEnd: buyPrice,
+        totalSupply: web3.toWei(1, "ether")
+      })
     const proposalID = 0
     await contract.setCurrentTime.sendTransaction(1000000)
     for (let i=0; i<userBalances.length; i++) {
@@ -155,6 +155,7 @@ contract('GentoDao', function(accounts) {
     expect(+await contract.getVRTokenInFoWOfDecisionMaker.call(accounts[2], 0)).toBe(0)
     // should be 1 because the sum of VRT after executing is 0 and then it's set to 1
     expect(+await contract.getVRTokenInFoW.call(0)).toBe(1)
+
     // get the amount of DMR during the proposal creation
     expect(+p.dmr).toBe(100)
   })

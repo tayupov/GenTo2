@@ -33,9 +33,9 @@ contract GentoDao is DaoWithDelegation {
         Proposal storage proposal = proposals[proposalNumber];
 
         require(proposal.finished && proposal.proposalPassed && proposal.recipient == msg.sender
-            && proposal.claimed[msg.sender] == false && proposal.amount > 0);
+            && proposal.claimed == false && proposal.amount > 0);
 
-        proposal.claimed[msg.sender] = true;
+        proposal.claimed = true;
         Claimed("payout", msg.sender, proposal.amount);
         require(msg.sender.send(proposal.amount));
 

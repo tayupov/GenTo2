@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Input, Container, Popup, Icon, Dropdown, Divider } from 'semantic-ui-react';
-import { DMRREWARD, FINANCEPOINTS, PRODUCTPOINTS, ORGPOINTS, PARTNERPOINTS } from 'constants/validators';
+import { FINANCEPOINTS, PRODUCTPOINTS, ORGPOINTS, PARTNERPOINTS } from 'constants/validators';
 import validateDAOFieldsOfWork from '../../validators/DAOFieldsOfWork';
 
 import currencyOptions from 'constants/currencyOptions'
@@ -15,23 +15,7 @@ export default class DAOFieldsOfWork extends React.Component {
     return (
       <Container text>
         <Divider section hidden />
-        <Form>
-          <Form.Field>
-            <label>
-              Set the DMR Reward
-              <Popup
-                trigger={<Icon name='help' color='grey' size='small' circular />}
-                header='Decisionmaker (DMR) is a shareholder who votes on a proposal'
-              />
-            </label>
-            <Input
-              name={DMRREWARD}
-              id={DMRREWARD}
-              label={<Dropdown defaultValue='finney' options={currencyOptions} />}
-              labelPosition='right'
-              size='small'
-            />
-          </Form.Field>
+        <Form>                  
           <Form.Field>
             <label>
               Distribute the DMR between the Fields of Work
