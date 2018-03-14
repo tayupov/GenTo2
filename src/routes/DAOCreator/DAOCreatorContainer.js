@@ -29,8 +29,7 @@ export default class DAOCreatorContainer extends React.Component {
 			orgPoints: null,
 			partnerPoints: null,
 			minPartic: null,
-			decidingPercentage: null,
-			tokenName: null,
+			decidingPercentage: null,			
 			selectedCurrency: null
 		}
 	}

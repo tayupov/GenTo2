@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Input, Container, Divider } from 'semantic-ui-react';
-import { TOKENNAME, SYMBOL, TOTALSUPPLY, SALESTART, SALEEND } from 'constants/validators';
+import { SYMBOL, TOTALSUPPLY, SALESTART, SALEEND } from 'constants/validators';
 import validateICOGeneral from '../../validators/ICOGeneral';
 
 export default class ICOGeneral extends Component {
@@ -14,10 +14,6 @@ export default class ICOGeneral extends Component {
       <Container text>
         <Divider section hidden />
         <Form>
-          <Form.Field>
-            <label>How shall your Token be named?</label>
-            <Input type="text" name={TOKENNAME} id={TOKENNAME} size='small' />
-          </Form.Field>
           <Form.Field>
             <label>What will be your ticker symbol?</label>
             <input type="text" name={SYMBOL} id={SYMBOL} size='small' />

@@ -15,7 +15,6 @@ export const MINPARTIC = 'minpartic'
 export const DECIDINGPERCENTAGE = 'decidingpercentage'
 
 // ico general
-export const TOKENNAME = 'tokenname'
 export const SYMBOL = 'symbol'
 export const TOTALSUPPLY = 'totalsupply'
 export const SALESTART = 'salestart'
