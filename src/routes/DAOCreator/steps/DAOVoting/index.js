@@ -3,6 +3,10 @@ import { Container, Form, Input, Icon, Popup, Divider } from 'semantic-ui-react'
 import { MINPARTIC, DECIDINGPERCENTAGE } from 'constants/validators';
 import validateDAOVoting from '../../validators/DAOVoting';
 
+// *************************
+// FILE NOT USED IN THE PROTOTYPE
+// *************************
+
 export default class DAOVoting extends Component {
   constructor(props) {
     super(props);

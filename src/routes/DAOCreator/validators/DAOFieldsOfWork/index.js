@@ -1,4 +1,7 @@
 import { FINANCEPOINTS, PRODUCTPOINTS, ORGPOINTS, PARTNERPOINTS } from 'constants/validators';
+// *************************
+// FILE NOT USED IN THE PROTOTYPE
+// *************************
 
 export default function validateDAOFieldsOfWork() {
     const financePointsValue = document.getElementById(FINANCEPOINTS).value;

@@ -1,9 +1,12 @@
 import React from 'react';
-import { Form, Input, Container, Popup, Icon, Dropdown, Divider } from 'semantic-ui-react';
+import { Form, Input, Container, Popup, Icon, Divider } from 'semantic-ui-react';
 import { FINANCEPOINTS, PRODUCTPOINTS, ORGPOINTS, PARTNERPOINTS } from 'constants/validators';
 import validateDAOFieldsOfWork from '../../validators/DAOFieldsOfWork';
 
-import currencyOptions from 'constants/currencyOptions'
+// *************************
+// FILE NOT USED IN THE PROTOTYPE
+// *************************
+
 
 export default class DAOFieldsOfWork extends React.Component {
   constructor(props) {

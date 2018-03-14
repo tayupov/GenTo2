@@ -23,13 +23,6 @@ export default class DAOCreatorContainer extends React.Component {
 			description: null,
 			proposalIPFSHash: null,
 			proposalArrayBuffer: null,
-			financePoints: null,
-			productPoints: null,
-			orgPoints: null,
-			partnerPoints: null,
-			minPartic: null,
-			decidingPercentage: null,			
-			selectedCurrency: null
 		}
 	}
 
