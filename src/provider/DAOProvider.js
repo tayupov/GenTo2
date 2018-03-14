@@ -13,12 +13,18 @@ const getDelegationsForAccount = async (organization, account) => {
 
   return Promise.all(fieldsOfWorks.map(async fow => {
     const delegationAddress = await organization.delegations.call(account, fow.value)
+
+    const votingRewardTokensRaw = await organization.votingRewardTokens.call(account, fow.value)
+    const votingRewardTokens = +web3.fromWei(votingRewardTokensRaw, 'finney')
+
     const influenceRaw = delegationAddress !== DID_NOT_DELEGATE_ADDRESS ?
       await organization.getInfluenceOfVoter(delegationAddress, fow.value) :
       await organization.getInfluenceOfVoter(account, fow.value)
     const influence = +web3.fromWei(influenceRaw, 'finney')
+    
     return {
       delegationAddress,
+      votingRewardTokens,
       influence
     }
   }))
@@ -44,7 +50,7 @@ const getDividendForAccount = async (organization, account) => {
   return null
 }
 
-const getVotingRewardForAccount = async (organization, account) => {
+const getDecisionMakerRewardForAccount = async (organization, account) => {
   if (!account) { return null }
   const votingRewardRaw = await organization.decisionmakerRewards(account)
   if (votingRewardRaw) {
@@ -52,7 +58,6 @@ const getVotingRewardForAccount = async (organization, account) => {
     return votingReward
   }
   return null
-
 }
 
 const balanceForAccount = async (organization, address) => {
@@ -78,7 +83,7 @@ const getNumberOfTokensInICO = async (organization, address) => {
   const totalBought = await organization.totalSupply();
   const tokens = +web3.fromWei(await organization.remainingTokensForICOPurchase(), 'finney');
   if (totalBought) {
-    const totalNumberOfTokens = +web3.fromWei(totalBought, 'finney'); 
+    const totalNumberOfTokens = +web3.fromWei(totalBought, 'finney');
     return totalNumberOfTokens + tokens;
   }
   return null
@@ -95,9 +100,6 @@ const getBigIntegerAsInt = async (organization, fieldName) => {
 
 
 export async function mapOrganization(organization, account) {
-  console.log('organization', organization);
-  console.log('account', account);
-
   return {
     address: await organization.address,
     name: await organization.name(),
@@ -119,7 +121,7 @@ export async function mapOrganization(organization, account) {
     claimDecisionMakerReward: await organization.claimDecisionMakerReward,
     shareholders: await getShareholders(organization, account),
     dividendForAccount: await getDividendForAccount(organization, account),
-    votingRewardForAccount: await getVotingRewardForAccount(organization, account),
+    decisionMakerRewardForAccount: await getDecisionMakerRewardForAccount(organization, account),
     balanceForAccount: await balanceForAccount(organization, account),
     totalNumberOfTokens: await getTotalNumberOfTokens(organization, account),
     numberOfTokensInICO: await getNumberOfTokensInICO(organization, account),
@@ -129,8 +131,6 @@ export async function mapOrganization(organization, account) {
 
 /* "extract" boolean flag to receive object in contrast to actual contract */
 export async function loadOrganization(address, account, extract) {
-  console.log('loadOrganization', address);
-
   const GentoDAO = contract(GentoDAOArtifact);
   GentoDAO.setProvider(web3.currentProvider);
 

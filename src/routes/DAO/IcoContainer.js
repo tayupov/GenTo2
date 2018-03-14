@@ -50,7 +50,6 @@ class IcoContainer extends Component {
 
     async loadOrganizationData(address, account) {
         const ICO = await loadOrganization(address, account, true)
-        console.log('ICO', ICO);
         this.setState({
             auctionDetails: {
                 ...ICO
@@ -79,10 +78,8 @@ class IcoContainer extends Component {
     }
 
     setMyTokenCount = async () => {
-        console.log('SET MY TOKENCOUNT | this.props.account', this.props.account);
         const ico = await loadOrganization(this.props.address);
         const amount = await ico.balanceOf.call(this.props.account);
-        console.log('amount', amount);
         const tokenCount = +web3.fromWei(amount, 'finney')
         const totalSupply = await ico.remainingTokensForICOPurchase.call();
         const remainingTokensForICOPurchase = +web3.fromWei(totalSupply, 'finney')
