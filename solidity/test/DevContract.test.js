@@ -46,7 +46,7 @@ contract('DevContract', function(accounts) {
       await contract.setCurrentTime.sendTransaction(1000)
       should.fail("this transaction should have raised an error")
     } catch (e) {
-      expect(e.message).toContain("VM Exception while processing transaction: ")
+        expect(e.message).toContain("VM Exception while processing transaction: ")
     }
 
     // currentTime should be more or less the current system time (now in a smart contract returns the block time)

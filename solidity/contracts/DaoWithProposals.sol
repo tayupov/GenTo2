@@ -187,7 +187,7 @@ contract DaoWithProposals is DaoWithIco {
         assignDMRRewards(proposalId);
         proposal.finished = true;
 
-        proposal.proposalPassed =  (approve > disapprove);
+        proposal.proposalPassed = (approve > disapprove);
         proposal.passedPercent = passedPercent;
 
         ProposalFinishedLogger(proposalId, approve+disapprove, approve, disapprove);
@@ -218,7 +218,7 @@ contract DaoWithProposals is DaoWithIco {
             }
         }
         uint percent = 0;
-        if(approve+disapprove > 0){ // If no one voted, just show 0%
+        if (approve+disapprove > 0) { // If no one voted, just show 0%
             percent = approve * 100 / (approve+disapprove);
         }
 

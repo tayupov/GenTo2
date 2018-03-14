@@ -93,6 +93,14 @@ export default class ProposalContainer extends React.Component {
     this.setState({ votingAllowed });
     this.setState({ executeAllowed });
   }
+  async componentDidMount() {
+    this.loadStateFromBlockchain()
+    onVote(this.props.address, this.props.proposalNumber, (err, eventData) => {
+      this.loadStateFromBlockchain()
+      console.log("onVote", eventData)
+      //TODO UX People: It would be lovely if a popup would show up indicating that somebody just voted
+    })
+  }
 
   async componentWillReceiveProps(nextProps) {
     this.setState({ loading: true })

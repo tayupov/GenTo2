@@ -1,32 +1,18 @@
 const GentoDao = artifacts.require("./GentoDao.sol");
-const DaoWithIco = artifacts.require("./DaoWithIco.sol")
 const GentoDaoDeployer = require("./util/GentoDaoDeployer.js")(GentoDao)
 
 const should = require('should')
 const expect = require('expect')
 
-let newProposalEventListener;
-
-async function getProposalID() {
-  let newProposalLog = await new Promise((resolve, reject) => newProposalEventListener.get(
-      (error, log) => error ? reject(error) : resolve(log)));
-  // check whether the proposal gets created
-  assert.equal(newProposalLog.length, 1, 'should be one new Proposal');
-  // returns the proposal log object with proposal id
-  return newProposalLog[0].args.proposalID;
-}
 
 contract('DaoWithICO', function(accounts) {
   let contract;
+  let proposalHelper;
 
   beforeEach(async function() {
     contract = await GentoDaoDeployer()
-    newProposalEventListener = contract.NewProposalCreated();
+    proposalHelper = require("./util/ProposalHelper.js")(contract, accounts)
   });
-
-  /**
-  METHODS
-  */
 
   // buy()
   it("tests that user become shareholer only if they buy some shares", async function() {
@@ -134,9 +120,8 @@ contract('DaoWithICO', function(accounts) {
     // set time after ICO
     await contract.setCurrentTime.sendTransaction(2200000)
     await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 345, 0, {from: accounts[1]})
-    let proposalID = await getProposalID();
-    await contract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
-    await contract.vote.sendTransaction(proposalID, true, {from: accounts[2]})
+    let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+    await proposalHelper.voteBulk(proposalID, {1: true, 2: true})
     expect(await contract.isIcoFinished.call()).toBe(true)
     // set time after proposal period
     await contract.setCurrentTime.sendTransaction(2300000)
@@ -144,10 +129,6 @@ contract('DaoWithICO', function(accounts) {
     expect(await contract.isIcoFinished.call()).toBe(true)
 
   })
-
-  /**
-  MODIFIER
-  */
 
   // icoRunning
   it("should not be possible to compute a buyPrice when the ICO is not running", async function() {
@@ -173,18 +154,16 @@ contract('DaoWithICO', function(accounts) {
   })
 
   // daoActive
-  it("should be not possible to vote if the DAO isn't active", async function() {
-    await contract.setCurrentTime.sendTransaction(1200000)
-    await contract.buy.sendTransaction({from: accounts[1], value: 100})
-    await contract.buy.sendTransaction({from: accounts[2], value: 200})
-    await contract.setCurrentTime.sendTransaction(2200000)
+  it("should not be possible to vote if the DAO isn't active", async function() {
+    await proposalHelper.simulateIco({1: 100, 2: 200});
     await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 345, 0, {from: accounts[1]})
-    let proposalID = await getProposalID();
+    let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
     await contract.setCurrentTime.sendTransaction(0)
     try {
-      await contract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
-      await contract.vote.sendTransaction(proposalID, true, {from: accounts[2]})
-    } catch(e) {
+        await contract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
+        should.fail("this transaction should have raised an error")
+    }
+    catch(e) {
       expect(e.message).toContain("VM Exception while processing transaction: ")
     }
   })
