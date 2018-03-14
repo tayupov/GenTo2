@@ -52,3 +52,19 @@ If you receive a PORT in use error (`Error: listen EADDRINUSE :::8555`), TestRPC
 ```bash
 fuser -k -n tcp 8555
 ```
+
+## Deploy to IPFS
+After cloning the repository, run
+```bash
+npm run build
+```
+
+If you have no local IPFS repository (~./ipfs), run
+```bash
+ipfs init
+```
+
+Finally, run
+```bash
+ipfs add -r /path/to/GenTo/build
+```
