@@ -25,7 +25,7 @@ npm i
 ```bash
 ganache-cli -m "<your words>"
 ```
-3. Build contract bytecode. This has to be done once and afterwards whenever ganache changed. This also deploys some  mockd ata to the blockchain, you can alter the mock data in the file solidity/migrationsToyData/daos.yml
+3. Build contract bytecode. This has to be done once and afterwards whenever ganache changed. This also deploys some  mock data to the blockchain, you can alter the mock data in the file solidity/migrationsToyData/daos.yml
 ```bash
 npm run rebuild:contracts
 ```
