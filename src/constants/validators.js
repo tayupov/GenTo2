@@ -1,6 +1,5 @@
 // dao general
 export const DAONAME = 'daoname'
-export const DAOWEBSITE = 'daowebsite'
 export const DAODESCRIPTION = 'daodescription'
 export const DAOPROPOSAL = 'daoProposal'
 
