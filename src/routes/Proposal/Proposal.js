@@ -59,7 +59,7 @@ export default class Proposal extends React.Component {
             </Table.Row> : null}
             {proposal.dmr > 0 ? <Table.Row>
               <Table.Cell>
-                <Label size='large'>Proposed dmr</Label>
+                <Label size='large'>Proposed Decision Maker Reward</Label>
               </Table.Cell>
               <Table.Cell>
                 <Label size='large'>{proposal.dmr} Ether</Label>
@@ -112,15 +112,7 @@ export default class Proposal extends React.Component {
               <Table.Cell>
                 <Label size='large'>{proposal.fieldOfWorkDescription}</Label>
               </Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell>
-                <Label size='large'>Dividend for Voting</Label>
-              </Table.Cell>
-              <Table.Cell>
-                <Label size='large'>{proposal.dividend} Wei</Label>
-              </Table.Cell>
-            </Table.Row>
+            </Table.Row>            
           </Table.Body>
         </Table>
       </div>

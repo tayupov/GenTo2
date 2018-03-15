@@ -21,7 +21,7 @@ export default class DAOFieldsOfWork extends React.Component {
         <Form>                  
           <Form.Field>
             <label>
-              Distribute the DMR between the Fields of Work
+              Distribute the Decison Maker Reward between the Fields of Work
               <Popup
                 trigger={<Icon name='help' color='grey' size='small' circular />}
                 header='A Field of Work describes an area of expertise.'
