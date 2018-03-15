@@ -1,16 +1,9 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import PropTypes from 'prop-types';
+import web3 from 'utils/web3';
+import Ico from './Ico';
 
 import { loadOrganization } from 'provider/DAOProvider';
-
-import web3 from 'utils/web3';
-import { isFunction } from 'utils/functional'
-
-import GentoDao from 'assets/contracts/GentoDao';
-import DaoWithIco from 'assets/contracts/DaoWithIco';
- 
-import Ico from './Ico';
 
 class IcoContainer extends Component {
 
@@ -195,75 +188,14 @@ class IcoContainer extends Component {
     }    
 
     buyToken = async (amount, etherUnit) => {
-
         const buyer = this.props.account;
         const value = web3.toWei(amount, etherUnit);
-        const ico = await loadOrganization(this.props.address);
-    
+        const ico = await loadOrganization(this.props.address);    
         await ico.buy.sendTransaction({from: buyer, value})
-
-        // web3.eth.estimateGas({
-        //     data: GentoDao.bytecode
-        // }, (err, gas) => {
-        //         ico.buy.call(
-        //             {
-        //                 from: buyer,
-        //                 data: GentoDao.bytecode,
-        //                 value,
-        //                 gas
-        //             }, (error, result) => {
-        //                 if(error) {
-        //                     this.props.notify('Error processing transaction.', 'error');
-        //                 }
-        //             }
-        //         ) 
-        //     })
         }
 
     listenForTokenBuy = async (cb) => {
-
-        const ico = await loadOrganization(this.props.address)
-        const transfers = await ico.ICOPurchase();
-        const totalSupply = await ico.remainingTokensForICOPurchase.call();
-
-        // export async function onVote(daoAddress, proposalNumber, cb) {
-        //     const GentoDAO = contract(GentoDAOArtifact);
-        //     GentoDAO.setProvider(web3.currentProvider);
-        //     const dao = await GentoDAO.at(daoAddress);
-        //     dao.Voted().watch((err, response) => {
-        //       if (err) {
-        //         return cb(err, null)
-        //       }
-        //       return cb(null, response.args)
-        //     });
-        //   }
-
-        // transfers.watch((error, result) => {
-
-        //     if(error) {
-        //         console.error(error);
-        //     } else {
-        //         if (this.state.auctionDetails) {
-        //             const remainingSupply = result.args.remainingSupply.toNumber();
-        //             const supplyPct = ((remainingSupply / totalSupply.toNumber()) * 100).toFixed(0);
-        //             const supplyString = `${remainingSupply} of ${totalSupply.toNumber()} left for sale`;
-        //             cb({
-        //                 supplyPct,
-        //                 supplyString
-        //             });
-        //         }
-        //         let amount = result.args.value.toNumber();
-                    
-        //         const transaction = JSON.parse(localStorage.getItem(result.transactionHash));
-
-        //         if (amount > 0 && !transaction) {
-        //             this.props.notify("Success! " + amount + " Token(s) purchased.", "success")
-        //             this.setMyTokenCount();
-        //             localStorage.setItem(result.transactionHash, JSON.stringify(result.transactionHash));
-        //             this.props.addDemoDao();
-        //         }
-        //     }
-        // })
+        // surprise surprise
     }
 
     render() {
@@ -279,13 +211,5 @@ class IcoContainer extends Component {
         )
     }
 }
-
-IcoContainer.propTypes = {
-    account: PropTypes.string.isRequired,
-    network: PropTypes.string.isRequired,
-    notify: PropTypes.func.isRequired
-}
-
-
 
 export default IcoContainer;

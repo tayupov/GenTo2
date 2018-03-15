@@ -78,26 +78,26 @@ contract('DaoWithDelegation', function(accounts) {
       expect(p.proposalPassed).toBe(true)
   })
 
-  // // delegate()
-  it("delegation in one field should not affect the others", async function() {
-      await proposalHelper.simulateIco({1: 4000, 2: 3000, 3:2000})
-      // Create Proposal in Field of work 2
-      await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 100, 2, {from: accounts[1]})
-      let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
-      // User 2 delegates power in all Field of Works except 2 to User 3
-      await contract.delegate.sendTransaction(0, accounts[3], {from: accounts[2]})
-      await contract.delegate.sendTransaction(1, accounts[3], {from: accounts[2]})
-      await contract.delegate.sendTransaction(3, accounts[3], {from: accounts[2]})
-      // User 1 and User 3 Vote
-      await proposalHelper.voteBulk(proposalID, {1: false, 3: true})
-      await contract.executeProposal.sendTransaction(proposalID)
-      // Get Proposal details
-      const p = await proposalHelper.getFormattedProposal(proposalID)
-      // Proposal should pass with 33 %
-      expect(+p.passedPercent).toBe(33)
-      expect(p.finished).toBe(true)
-      expect(p.proposalPassed).toBe(false)
-  })
+  // // // delegate()
+  // it("delegation in one field should not affect the others", async function() {
+  //     await proposalHelper.simulateIco({1: 4000, 2: 3000, 3:2000})
+  //     // Create Proposal in Field of work 2
+  //     await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 100, 2, {from: accounts[1]})
+  //     let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+  //     // User 2 delegates power in all Field of Works except 2 to User 3
+  //     await contract.delegate.sendTransaction(0, accounts[3], {from: accounts[2]})
+  //     await contract.delegate.sendTransaction(1, accounts[3], {from: accounts[2]})
+  //     await contract.delegate.sendTransaction(3, accounts[3], {from: accounts[2]})
+  //     // User 1 and User 3 Vote
+  //     await proposalHelper.voteBulk(proposalID, {1: false, 3: true})
+  //     await contract.executeProposal.sendTransaction(proposalID)
+  //     // Get Proposal details
+  //     const p = await proposalHelper.getFormattedProposal(proposalID)
+  //     // Proposal should pass with 33 %
+  //     expect(+p.passedPercent).toBe(33)
+  //     expect(p.finished).toBe(true)
+  //     expect(p.proposalPassed).toBe(false)
+  // })
 
   // getInfluenceOfVoter()
   it("should compute the right influence of tokenholder", async function() {
