@@ -9,7 +9,8 @@ const proposalFields = [
    "passedPercent",
    "fieldOfWork",
    "dividend",
-   "dmr"
+   "dmr",
+   "claimed"
  ]
 
  module.exports = (contract, accounts) => {

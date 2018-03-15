@@ -145,7 +145,7 @@ contract DaoWithProposals is DaoWithIco {
         proposal.name = name;
         proposal.description = description;
         proposal.amount = weiAmount;
-        proposal.proposalStartTime  = currentTime();
+        proposal.proposalStartTime = currentTime();
         proposal.proposalDeadline = currentTime() + debatingPeriod;
         proposal.finished = false;
         proposal.fieldOfWork = fieldOfWork;
