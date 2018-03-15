@@ -39,6 +39,12 @@ export default NODE_PATH=src
 npm start
 ```
 
+5. To repropagate the mockkdata for the DAO Descriptions
+```bash
+cd solidity
+node repropagateIPFSFiles.js
+```
+
 ## Testing contracts
 If you want to just run the test, execute
 ```bash
