@@ -52,7 +52,7 @@ export default class ProposalContainer extends React.Component {
       case 0: proposal.fieldOfWorkDescription = "Finance"; break
       case 1: proposal.fieldOfWorkDescription = "Organisational"; break
       case 2: proposal.fieldOfWorkDescription = "Product"; break
-      case 3: proposal.fieldOfWorkDescription = "Marketing"; break
+      case 3: proposal.fieldOfWorkDescription = "Partnership"; break
       default: proposal.fieldOfWorkDescription = "Unknown"
     }
 

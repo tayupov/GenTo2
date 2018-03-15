@@ -1,6 +1,5 @@
 // dao general
 export const DAONAME = 'daoname'
-export const DAOWEBSITE = 'daowebsite'
 export const DAODESCRIPTION = 'daodescription'
 export const DAOPROPOSAL = 'daoProposal'
 
@@ -15,7 +14,6 @@ export const MINPARTIC = 'minpartic'
 export const DECIDINGPERCENTAGE = 'decidingpercentage'
 
 // ico general
-export const TOKENNAME = 'tokenname'
 export const SYMBOL = 'symbol'
 export const TOTALSUPPLY = 'totalsupply'
 export const SALESTART = 'salestart'

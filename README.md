@@ -1,10 +1,19 @@
 # GenTo2
 
-GenTo is a platform that facilitates Initial Coins Offerings. It creates user-defined Smart Contracts and automatically deploys them to the blockchain – without the need to write a single line of code!
+GenTo is a platform that facilitates creating Decentralized Autonomous Organizations (DAOs). It creates user-defined Smart Contracts and automatically deploys them to the blockchain. The platform allows running an Initial Coin Offering for a DAO and implements basic governance mechanisms, that enable token holders to decide over the usage of the organizsation's funds. The application assets are deployed to the InterPlanetary File System. All of this without the need to write a single line of code!
 
-Hiding technical details from the user, we make Initial Coin Offerings accessible for a broader, non-technical audience. GenTo provides an intuitive web-based UI that guides the user through the contract creation process step by step.
+With the governance mechanisms we make investing in Initial Coin Offerings safer for investors.
+Hiding technical details from the user, we make creating Decentralized Autonomous Organizations accessible for a broader, non-technical audience. GenTo provides an intuitive web-based UI that guides the user through the contract creation process step by step.
 
 GenTo has been developed by a student group at the chair for Information Systems Engineering at Technical University of Berlin in collaboration with venture capitalist and startup advisor Globumbus.
+
+## Prerequisites
+Before running GenTo locally you have to get the following software
+
+* Node.js (v9.4.0 tested)
+* Ganache CLI (v6.1.0 tested)
+* MetaMask (v4.2.0 tested)
+* Truffle (v3.4.11 tested)
 
 ## Getting Started
 
@@ -12,13 +21,13 @@ GenTo has been developed by a student group at the chair for Information Systems
 ```bash
 npm i
 ```
-2. Start testrpc in another terminal window. Testrpc is your local development blockchain, **you need to start it whenever you run gento locally**.
+2. Start ganache in another terminal window. Ganache is your local development blockchain, **you need to start it whenever you run gento locally**.
 ```bash
-testrpc -m "<your words>"
+ganache-cli -m "<your words>"
 ```
-3. Build contract bytecode. This has to be done once and afterwards whenever testrpc changed
+3. Build contract bytecode. This has to be done once and afterwards whenever ganache changed. This also deploys some  mock data to the blockchain, you can alter the mock data in the file solidity/migrationsToyData/daos.yml
 ```bash
-npm run build:contracts
+npm run rebuild:contracts
 ```
 4. Start the app
 ```bash
@@ -33,8 +42,8 @@ npm start
 ## Testing contracts
 If you want to just run the test, execute
 ```bash
+ganache-cli
 #in another terminal:
-testrpc
 npm run test:truffle
 ```
 ### Coverage
@@ -46,7 +55,7 @@ npm run test:coverage
 ```
 After the tests ran through, you can find the reports in *GenTo2/coverage/index.html*.
 
-You do **not** need to start testrpc, as it runs it's own testrpc.
+You do **not** need to start testrpc/ganache, as it runs it's own testrpc.
 
 If you receive a PORT in use error (`Error: listen EADDRINUSE :::8555`), TestRPC might not have been properly shut down in a previous run. The following command kills the previous testrpc version:
 ```bash

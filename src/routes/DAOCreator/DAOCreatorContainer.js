@@ -19,19 +19,10 @@ export default class DAOCreatorContainer extends React.Component {
 			saleStart: null,
 			saleEnd: null,
 
-			// TODO: everything below is not part of the contract _yet_
-			website: null,
+			// TODO: everything below is not part of the contract _yet_			
 			description: null,
 			proposalIPFSHash: null,
 			proposalArrayBuffer: null,
-			financePoints: null,
-			productPoints: null,
-			orgPoints: null,
-			partnerPoints: null,
-			minPartic: null,
-			decidingPercentage: null,
-			tokenName: null,
-			selectedCurrency: null
 		}
 	}
 

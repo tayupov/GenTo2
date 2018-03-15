@@ -1,4 +1,4 @@
-import { DAONAME, DAOWEBSITE, DAODESCRIPTION, DAOPROPOSAL } from 'constants/validators';
+import { DAONAME, DAODESCRIPTION, DAOPROPOSAL } from 'constants/validators';
 
 const getArrayBufferFromFile = (proposalFile) => {
   return new Promise((resolve, reject) => {
@@ -12,8 +12,7 @@ const getArrayBufferFromFile = (proposalFile) => {
   An async function wraps the return value in a promise
 */
 export default async function validateDAOGeneral() {
-  const nameValue = document.getElementById(DAONAME).value;
-  const websiteValue = document.getElementById(DAOWEBSITE).value;
+  const nameValue = document.getElementById(DAONAME).value;  
   const descriptionValue = document.getElementById(DAODESCRIPTION).value;
 
   // prepare IPFS upload
@@ -23,7 +22,6 @@ export default async function validateDAOGeneral() {
   //TODO: validate
   return {
     name: nameValue,
-    website: websiteValue,
     description: descriptionValue,
     proposalArrayBuffer: proposalArrayBuffer
   }
