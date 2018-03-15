@@ -39,7 +39,6 @@ export default class ProposalContainer extends React.Component {
   async loadStateFromBlockchain() {
     const dao = await loadOrganization(this.props.address, this.props.account, true)
     this.setState({ dao: { claimPayout: dao.claimProposalPayout } })
-
     const proposal = await loadProposal(this.props.address, this.props.proposalNumber)
     const isShareHolderOfDao = await isShareholder(this.props.address, this.props.account)
     const vote = await loadVote(this.props.address, proposal, this.props.account)
@@ -107,14 +106,6 @@ export default class ProposalContainer extends React.Component {
     this.loadStateFromBlockchain()
   }
 
-  async componentDidMount() {
-    this.loadStateFromBlockchain()
-    onVote(this.props.address, this.props.proposalNumber, (err, eventData) => {
-      this.loadStateFromBlockchain()
-      //TODO UX People: It would be lovely if a popup would show up indicating that somebody just voted
-    })
-  }
-
   async approveCallback() {
     var res = await vote(this.props.address, this.props.proposalNumber, true, this.props.account)
 
@@ -153,7 +144,6 @@ export default class ProposalContainer extends React.Component {
     const proposal = element.proposal
     const claimPayout = this.state.dao.claimPayout
     const res = await claimPayout(proposal.proposalNumber, { from })
-    console.log(res)
   }
 
   render() {
