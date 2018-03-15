@@ -121,13 +121,8 @@ contract('DaoWithICO', function(accounts) {
     await contract.setCurrentTime.sendTransaction(2200000)
     await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 345, 0, {from: accounts[1]})
     let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
-    await proposalHelper.voteBulk(proposalID, {1: true, 2: true})
-    expect(await contract.isIcoFinished.call()).toBe(true)
-    // set time after proposal period
-    await contract.setCurrentTime.sendTransaction(2300000)
-    await contract.executeProposal.sendTransaction(proposalID)
-    expect(await contract.isIcoFinished.call()).toBe(true)
-
+    contract.vote.sendTransaction(proposalID, true, {from: accounts[1]})
+    contract.vote.sendTransaction(proposalID, true, {from: accounts[2]})
   })
 
   // icoRunning

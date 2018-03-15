@@ -4,7 +4,6 @@ const GentoDaoDeployer = require("./util/GentoDaoDeployer.js")(GentoDao)
 const should = require('should');
 const expect = require('expect');
 
-
 contract('DaoWithProposals', function(accounts) {
     let contract;
     let proposalHelper;
@@ -53,7 +52,7 @@ contract('DaoWithProposals', function(accounts) {
   it("should execute Proposals with 2/3 confirmed votes", async function() {
       await proposalHelper.simulateIco({1: 1000, 2: 1000, 3: 1000});
       await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 100, 2, {from: accounts[1]})
-      let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+      let proposalID = 0
       await proposalHelper.voteBulk(proposalID, {1: true, 2: true, 3: false})
       await contract.executeProposal.sendTransaction(proposalID)
       const p = await proposalHelper.getFormattedProposal(proposalID)
@@ -66,7 +65,7 @@ contract('DaoWithProposals', function(accounts) {
       await proposalHelper.simulateIco({1: 1000, 2: 1000, 3: 1000});
       // create a new Proposal
       await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 100, 2, {from: accounts[1]})
-      let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+      let proposalID = 0;
       await proposalHelper.voteBulk(proposalID, {1: true, 2: false, 3: false})
 
       await contract.executeProposal.sendTransaction(proposalID)
@@ -82,7 +81,9 @@ contract('DaoWithProposals', function(accounts) {
       await proposalHelper.simulateIco({1: 4000});
       // Create Proposal in Field of work 2
       await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 100, 2, {from: accounts[1]})
-      let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+      // this does not work
+      // let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+      let proposalID = 0
       // User 1 and User 3 Vote
       await contract.vote.sendTransaction(proposalID, false, {from: accounts[1]})
       expect(contract.vote.sendTransaction(proposalID, false, {from: accounts[2]})).rejects.toEqual(expect.any(Error))
@@ -94,7 +95,7 @@ contract('DaoWithProposals', function(accounts) {
     await proposalHelper.simulateIco({0: 10000, 1: 10000, 2: 10000});
     // create a new Proposal
     await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 100, 0, {from: accounts[1]})
-    let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+    let proposalID = 0;
     await proposalHelper.voteBulk(proposalID, {0: true, 1: false, 2: false})
     // execute the Proposal -> passed time is required
     await contract.executeProposal.sendTransaction(proposalID)
@@ -111,7 +112,7 @@ contract('DaoWithProposals', function(accounts) {
     await proposalHelper.simulateIco({0: 10000, 1: 10000, 2: 10000, 3: 10000, 4: 10000});
     // create a new Proposal
     await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[0], 100, 0, {from: accounts[0]})
-    let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+    let proposalID = 0;
     await proposalHelper.voteBulk(proposalID, {0: true, 1: true, 2: true, 3: false, 4: false})
     // execute the Proposals
     await contract.executeProposal.sendTransaction(proposalID)
@@ -128,7 +129,7 @@ contract('DaoWithProposals', function(accounts) {
     await proposalHelper.simulateIco({0: 10000, 1: 10000, 2: 10000});
 
     await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[2], 10, 0, {from: accounts[2]})
-    let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+    let proposalID = 0;
     await proposalHelper.voteBulk(proposalID, {0: true, 1: true, 2: false})
 
     await contract.executeProposal.sendTransaction(proposalID)
@@ -143,7 +144,7 @@ contract('DaoWithProposals', function(accounts) {
     await proposalHelper.simulateIco({1: 1000});
     //create a new Proposal
     await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 103, 2, {from: accounts[1]})
-    let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+    let proposalID = 0;
     await proposalHelper.voteBulk(proposalID, {1: true})
     await contract.executeProposal.sendTransaction(proposalID)
     const p = await proposalHelper.getFormattedProposal(proposalID)
@@ -162,7 +163,7 @@ contract('DaoWithProposals', function(accounts) {
     await proposalHelper.simulateIco({1: 100000});
     // create new proposal in FoW = 0
     await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[1], 29, 0, {from: accounts[1]})
-    let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+    let proposalID = 0;
     await contract.vote.sendTransaction(proposalID, false, {from: accounts[1]})
     // await proposalHelper.voteBulk(proposalID, {1: false})
     const p = await proposalHelper.getFormattedProposal(proposalID)
@@ -178,7 +179,7 @@ contract('DaoWithProposals', function(accounts) {
   it("should instantiate a new proposal", async function() {
     await proposalHelper.simulateIco({0: 100000});
     await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[0], 10, 0, {from: accounts[0]})
-    let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+    let proposalID = 0;
     await proposalHelper.voteBulk(proposalID, {0: true})
     const p = await proposalHelper.getFormattedProposal(proposalID)
     expect(+p.amount).toBe(10)
@@ -191,13 +192,13 @@ contract('DaoWithProposals', function(accounts) {
     await contract.newProposal.sendTransaction('Prop', 'Prop', accounts[0], 100, 0, {from: accounts[0]})
     expect(numberOfInitialProposals + 1).toBe(+await contract.getNumProposals())
   })
-/*
+
   // newDividendProposal()
   it("should be possible to create and to vote on a new dividend proposal", async function() {
     await proposalHelper.simulateIco({0: 100000, 1: 100000});
     await contract.newDividendProposal.sendTransaction('dividend', 'div desc', 100, {from: accounts[0]})
 
-    let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+    let proposalID = 0;
     await proposalHelper.voteBulk(proposalID, {0: true, 1: true})
     await contract.executeProposal.sendTransaction(proposalID)
     const p = await proposalHelper.getFormattedProposal(proposalID)
@@ -205,7 +206,7 @@ contract('DaoWithProposals', function(accounts) {
     expect(+p.amount).toBe(0)
     expect(p.name).toBe('dividend')
     expect(p.description).toBe('div desc')
-    expect(+p.proposalDeadline).toBe(2200600)
+    expect(+p.proposalDeadline).toBe(2286400)
     expect(p.finished).toBe(true)
     expect(p.proposalPassed).toBe(true)
     expect(+p.passedPercent).toBe(100)
@@ -217,7 +218,7 @@ contract('DaoWithProposals', function(accounts) {
   it("should be possible to create and to vote on a new decision maker reward proposal", async function() {
     await proposalHelper.simulateIco({0: 100000, 1: 100000});
     await contract.newDMRewardProposal.sendTransaction('dmr', 'dmr desc', 100, {from: accounts[0]})
-    let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+    let proposalID = 0;
     await proposalHelper.voteBulk(proposalID, {0: true, 1: true})
     await contract.executeProposal.sendTransaction(proposalID)
     const p = await proposalHelper.getFormattedProposal(proposalID)
@@ -225,7 +226,7 @@ contract('DaoWithProposals', function(accounts) {
     expect(+p.amount).toBe(0)
     expect(p.name).toBe('dmr')
     expect(p.description).toBe('dmr desc')
-    expect(+p.proposalDeadline).toBe(2200600)
+    expect(+p.proposalDeadline).toBe(2286400)
     expect(p.finished).toBe(true)
     expect(p.proposalPassed).toBe(true)
     expect(+p.passedPercent).toBe(100)
@@ -237,7 +238,7 @@ contract('DaoWithProposals', function(accounts) {
   it("should be not allowed to vote on the new proposal if the dao isn't created", async function() {
     await proposalHelper.simulateIco({0: 100000, 1: 100000});
     await contract.newDMRewardProposal.sendTransaction('dmr', 'dmr desc', 100, {from: accounts[0]})
-    let proposalID = (await proposalHelper.listenForEvent('NewProposalCreated')).proposalID;
+    let proposalID = 0;
     // reset the time between ico start and end
     await contract.setCurrentTime.sendTransaction(1200000)
     try {
